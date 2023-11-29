@@ -136,7 +136,7 @@
                         <li class="nav-item">
                             <ul>
                                 <li class="nav-item">
-                                    <Link href="/apps/chat" class="group" @click="toggleMobileMenu">
+                                    <Link href="/users" class="group" @click="toggleMobileMenu">
                                         <div class="flex items-center">
                                             <svg
                                                 class="group-hover:!text-primary shrink-0"

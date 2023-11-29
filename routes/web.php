@@ -16,11 +16,15 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('auth/boxed-signin');
+    return Inertia::render('auth/login');
 });
 
 Route::get('/dashboard', function () {
     return Inertia::render('apps/invoice/list');
+});
+
+Route::get('/users', function () {
+    return Inertia::render('admin/users');
 });
 
 //Route::get('/{any}', [AppController::class, 'index'])->where('any', '.*');

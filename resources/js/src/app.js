@@ -19,10 +19,10 @@ import AppLayout from './layouts/app.vue'
 const pinia = createPinia();
 const head = createHead();
 
-const appName = import.meta.env.VITE_APP_NAME || 'GyD';
+const appName = 'Service LATAM GyD';
 
 createInertiaApp({
-  title: (title) => `${title} - ${appName}`,
+  title: (title) => `${title} | ${appName}`,
   resolve: (name) => {
     const page = resolvePageComponent(`./views/${name}.vue`, import.meta.glob('./views/**/*.vue'));
     page.then((module) => {

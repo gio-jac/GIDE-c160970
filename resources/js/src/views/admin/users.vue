@@ -259,12 +259,13 @@ import { Head } from '@inertiajs/vue3';
 const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([
-    { field: "invoice", title: "Service ID" },
-    { field: "name", title: "Failure" },
-    { field: "email", title: "Eng. assigned" },
-    { field: "date", title: "Reported Date" },
-    { field: "amount", title: "Parts ammount" },
-    { field: "status", title: "Status" },
+    { field: "invoice", title: "EMP" },
+    { field: "name", title: "Name" },
+    { field: "email", title: "Paternal Surname" },
+    { field: "date", title: "Maternal Surname" },
+    { field: "amount", title: "Phone" },
+    { field: "status", title: "Access Type" },
+    { field: "status", title: "Title" },
     {
         field: "actions",
         title: "Actions",

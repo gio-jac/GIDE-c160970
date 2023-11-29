@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex, nofollow">
 
-    <title inertia>Loading... | Service LATAM GyD | {{ config('app.name', 'GyD') }}</title>
+    <title inertia>Loading... | Service LATAM GyD</title>
 
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
 
