@@ -1,4 +1,5 @@
 <template>
+    <AuthLayout>
     <div>
 
         <div
@@ -120,6 +121,7 @@
             </div>
         </div>
     </div>
+    </AuthLayout>
 </template>
 <script lang="ts" setup>
     import { computed, reactive } from 'vue';
@@ -128,6 +130,7 @@
     import { useAppStore } from '@/stores/index';
     import { router } from '@inertiajs/vue3';
     import { useMeta } from '@/composables/use-meta';
+    import AuthLayout from '@/layouts/auth-layout.vue';
     useMeta({ title: 'Login Boxed' });
 
     const store = useAppStore();
