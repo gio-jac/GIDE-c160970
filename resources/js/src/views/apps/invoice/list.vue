@@ -1,4 +1,5 @@
 <template>
+    <AppLayout>
     <div>
         <div class="panel px-0 pb-1.5 border-[#e0e6ed] dark:border-[#1b2e4b]">
             <div class="datatable invoice-table">
@@ -24,7 +25,7 @@
                             </svg>
                             Delete
                         </button>
-                        <router-link to="/apps/invoice/add" class="btn btn-primary gap-2">
+                        <Link href="/apps/invoice/add" class="btn btn-primary gap-2">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24px"
@@ -41,7 +42,7 @@
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
                             Add New
-                        </router-link>
+                        </Link>
                     </div>
                     <div class="ltr:ml-auto rtl:mr-auto">
                         <input v-model="search" type="text" class="form-input" placeholder="Search..." />
@@ -63,8 +64,8 @@
                     nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                 >
                     <template #invoice="data">
-                        <router-link to="/apps/invoice/preview" class="text-primary underline font-semibold hover:no-underline"
-                            >#{{ data.value.invoice }}</router-link
+                        <Link href="/apps/invoice/preview" class="text-primary underline font-semibold hover:no-underline"
+                            >#{{ data.value.invoice }}</Link
                         >
                     </template>
                     <template #name="data">
@@ -82,7 +83,7 @@
                     </template>
                     <template #actions="data">
                         <div class="flex gap-4 items-center justify-center">
-                            <router-link to="/apps/invoice/edit" class="hover:text-info">
+                            <Link href="/apps/invoice/edit" class="hover:text-info">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
                                     <path
                                         opacity="0.5"
@@ -103,8 +104,8 @@
                                         stroke-width="1.5"
                                     ></path>
                                 </svg>
-                            </router-link>
-                            <router-link to="/apps/invoice/preview" class="hover:text-primary">
+                            </Link>
+                            <Link href="/apps/invoice/preview" class="hover:text-primary">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                     <path
                                         opacity="0.5"
@@ -118,7 +119,7 @@
                                         stroke-width="1.5"
                                     ></path>
                                 </svg>
-                            </router-link>
+                            </Link>
                             <button type="button" class="hover:text-danger" @click="deleteRow(`${data.value.id}`)">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                     <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
@@ -144,12 +145,16 @@
             </div>
         </div>
     </div>
+    </AppLayout>
 </template>
 <script lang="ts" setup>
     import { ref } from 'vue';
     import Vue3Datatable from '@bhplugin/vue3-datatable';
     import { useMeta } from '@/composables/use-meta';
+    import AppLayout from '@/layouts/app-layout.vue';
+    import { Link } from '@inertiajs/vue3';
     useMeta({ title: 'Invoice List' });
+    
 
     const datatable: any = ref(null);
     const search = ref('');

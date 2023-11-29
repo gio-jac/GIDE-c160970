@@ -63,7 +63,7 @@
 
                 <!--  BEGIN CONTENT AREA  -->
                 <div class="p-6 animation">
-                    <router-view></router-view>
+                    <slot />
                 </div>
                 <!--  END CONTENT AREA  -->
 
