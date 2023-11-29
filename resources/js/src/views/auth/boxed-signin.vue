@@ -60,7 +60,7 @@
                             <h1 class="text-3xl font-extrabold text-[#00d4ff] uppercase !leading-snug text-primary md:text-4xl">Service LATAM</h1>
                             <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to login</p>
                         </div>
-                        <form class="space-y-5 dark:text-white" @submit.prevent="router.push('/dashboard')">
+                        <form class="space-y-5 dark:text-white" @submit.prevent="submit">
                             <div>
                                 <label for="Email">Email</label>
                                 <div class="relative text-white-dark">
@@ -126,10 +126,9 @@
     import { useI18n } from 'vue-i18n';
     import appSetting from '@/app-setting';
     import { useAppStore } from '@/stores/index';
-    import { useRouter } from 'vue-router';
+    import { router } from '@inertiajs/vue3';
     import { useMeta } from '@/composables/use-meta';
     useMeta({ title: 'Login Boxed' });
-    const router = useRouter();
 
     const store = useAppStore();
     // multi language
@@ -141,4 +140,8 @@
     const currentFlag = computed(() => {
         return `/assets/images/flags/${i18n.locale.toUpperCase()}.svg`;
     });
+
+    function submit() {
+        router.replace('/dashboard');
+    }
 </script>

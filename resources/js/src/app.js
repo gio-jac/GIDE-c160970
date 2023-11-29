@@ -14,6 +14,8 @@ import Popper from 'vue3-popper';
 import vue3JsonExcel from 'vue3-json-excel';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
+import AppLayout from './layouts/app.vue'
+
 const pinia = createPinia();
 const head = createHead();
 
@@ -21,7 +23,13 @@ const appName = import.meta.env.VITE_APP_NAME || 'GyD';
 
 createInertiaApp({
   title: (title) => `${title} - ${appName}`,
-  resolve: (name) => resolvePageComponent(`./views/${name}.vue`, import.meta.glob('./views/**/*.vue')),
+  resolve: (name) => {
+    const page = resolvePageComponent(`./views/${name}.vue`, import.meta.glob('./views/**/*.vue'));
+    page.then((module) => {
+      module.default.layout = AppLayout;
+    });
+    return page;
+  },
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
       .use(plugin)

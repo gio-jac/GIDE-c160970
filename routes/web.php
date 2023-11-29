@@ -16,6 +16,10 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
+    return Inertia::render('auth/boxed-signin');
+});
+
+Route::get('/dashboard', function () {
     return Inertia::render('apps/invoice/list');
 });
 

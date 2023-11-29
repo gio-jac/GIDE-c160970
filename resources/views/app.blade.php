@@ -17,7 +17,7 @@
     @inertiaHead
 </head>
 
-<body class="antialiased">
+<body>
     <noscript>
         <strong>No JS.</strong>
     </noscript>
