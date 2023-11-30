@@ -213,10 +213,10 @@
                                     <vue-collapsible :isOpen="activeDropdown === 'catalog'">
                                         <ul class="sub-menu text-gray-500">
                                             <li>
-                                                <Link href="/pages/knowledge-base" @click="toggleMobileMenu">Users: Titles</Link>
+                                                <Link href="/users/titles" @click="toggleMobileMenu">Users: Titles</Link>
                                             </li>
                                             <li>
-                                                <Link href="/pages/knowledge-base" @click="toggleMobileMenu">Users: Types</Link>
+                                                <Link href="/users/types" @click="toggleMobileMenu">Users: Types</Link>
                                             </li>
                                         </ul>
                                     </vue-collapsible>

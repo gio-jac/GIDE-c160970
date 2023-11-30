@@ -22,6 +22,11 @@ export default defineConfig({
             include: path.resolve("resources/js/src/locales/**"),
         }),
     ],
+    server: {
+        hmr: {
+            host: "localhost",
+        },
+    },
     resolve: {
         alias: {
             "@": path.resolve("./resources/js/src"),
