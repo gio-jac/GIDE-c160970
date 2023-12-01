@@ -1,6 +1,6 @@
 <template>
     <Head title="Users Types" />
-    <AppLayout>
+    <div>
         <div>
             <div
                 class="panel px-0 pb-1.5 border-[#e0e6ed] dark:border-[#1b2e4b]"
@@ -11,7 +11,7 @@
                     >
                         <div class="flex items-center gap-2">
                             <Link
-                                href="/apps/invoice/add"
+                                href="/users/types/create"
                                 class="btn btn-primary gap-2"
                             >
                                 <svg
@@ -92,7 +92,7 @@
                         <template #actions="data">
                             <div class="flex gap-4 items-center justify-center">
                                 <Link
-                                    href="/apps/invoice/edit"
+                                    :href="`/users/types/${data.value.id}/edit`"
                                     class="hover:text-info"
                                 >
                                     <svg
@@ -176,16 +176,19 @@
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </div>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import { useMeta } from "@/composables/use-meta";
 import AppLayout from "@/layouts/app-layout.vue";
-import { Link } from "@inertiajs/vue3";
-import { Head } from "@inertiajs/vue3";
+import SiteLayout from "@/layouts/app.vue";
+import { Head, Link, router } from "@inertiajs/vue3";
 //useMeta({ title: "Invoice List" });
+defineOptions({
+    layout: [SiteLayout, AppLayout],
+});
 const props = defineProps({
     types: {
         type: Array,
@@ -236,17 +239,7 @@ const tableOption = ref({
 const deleteRow = (item: any = null) => {
     if (confirm("Are you sure want to delete selected row ?")) {
         if (item) {
-            items.value = items.value.filter((d) => d.id != item);
-            datatable.value.clearSelectedRows();
-        } else {
-            let selectedRows = datatable.value.getSelectedRows();
-            const ids = selectedRows.map((d) => {
-                return d.id;
-            });
-            items.value = items.value.filter(
-                (d) => !ids.includes(d.id as never)
-            );
-            datatable.value.clearSelectedRows();
+            router.delete(`/users/types/${item}`);
         }
     }
 };

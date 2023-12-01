@@ -14,7 +14,7 @@ class UserTypeController extends Controller
     public function index()
     {
         $types = UserTypes::all();
-        return Inertia::render('admin/catalogs/users/users-types',[
+        return Inertia::render('admin/catalogs/users/types/users-types',[
             'types' => $types
         ]);
     }
@@ -24,7 +24,7 @@ class UserTypeController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('admin/catalogs/users/types/new');
     }
 
     /**
@@ -32,7 +32,12 @@ class UserTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        UserTypes::create($request->validate([
+            'tipo' => ['required', 'max:255', 'unique:user_types'],
+            'is_active' => ['required'],
+        ]));
+
+        return to_route('types.index');
     }
 
     /**
@@ -48,7 +53,10 @@ class UserTypeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $type = UserTypes::findOrFail($id);
+        return Inertia::render('admin/catalogs/users/types/edit',[
+            'type' => $type
+        ]);
     }
 
     /**
@@ -56,7 +64,13 @@ class UserTypeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $type = UserTypes::findOrFail($id);
+        $type->update($request->validate([
+            'tipo' => ['required', 'max:255', 'unique:user_types,tipo,'.$id],
+            'is_active' => ['required'],
+        ]));
+
+        return to_route('types.index');
     }
 
     /**
@@ -64,6 +78,11 @@ class UserTypeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $type = UserTypes::findOrFail($id);
+        $type->fill([
+            'is_active' => 0,
+        ]);
+        $type->save();
+        return to_route('types.index');
     }
 }

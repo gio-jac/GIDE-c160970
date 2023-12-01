@@ -1,6 +1,6 @@
 <template>
     <Head title="Users Titles" />
-    <AppLayout>
+    <div>
         <div>
             <div
                 class="panel px-0 pb-1.5 border-[#e0e6ed] dark:border-[#1b2e4b]"
@@ -245,15 +245,19 @@
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </div>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import { useMeta } from "@/composables/use-meta";
 import AppLayout from "@/layouts/app-layout.vue";
+import SiteLayout from "@/layouts/app.vue";
 import { Link } from "@inertiajs/vue3";
-import { Head } from '@inertiajs/vue3';
+import { Head } from "@inertiajs/vue3";
+defineOptions({
+    layout: [SiteLayout, AppLayout],
+});
 //useMeta({ title: "Invoice List" });
 
 const datatable: any = ref(null);

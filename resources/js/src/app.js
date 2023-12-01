@@ -26,7 +26,7 @@ createInertiaApp({
   resolve: (name) => {
     const page = resolvePageComponent(`./views/${name}.vue`, import.meta.glob('./views/**/*.vue'));
     page.then((module) => {
-      module.default.layout = AppLayout;
+      module.default.layout = module.default.layout || AppLayout;
     });
     return page;
   },
