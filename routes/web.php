@@ -4,6 +4,7 @@ use App\Http\Controllers\AppController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\UserTypeController;
+use App\Http\Controllers\UserTitleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,14 +26,10 @@ Route::get('/dashboard', function () {
 });
 
 Route::get('/users', function () {
-    return Inertia::render('admin/users');
-});
-
-Route::get('/users/titles', function () {
-    return Inertia::render('admin/catalogs/users/users-titles');
+    return Inertia::render('admin/users/users');
 });
 
 Route::resource('/users/types', UserTypeController::class);
-
+Route::resource('/users/titles', UserTitleController::class);
 
 //Route::get('/{any}', [AppController::class, 'index'])->where('any', '.*');

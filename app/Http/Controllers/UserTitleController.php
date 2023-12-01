@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserTypes;
+use App\Models\UserTitles;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class UserTypeController extends Controller
+class UserTitleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $types = UserTypes::all();
-        return Inertia::render('admin/users/types/index',[
-            'types' => $types
+        $titles = UserTitles::all();
+        return Inertia::render('admin/users/titles/index',[
+            'titles' => $titles
         ]);
     }
 
@@ -24,7 +24,7 @@ class UserTypeController extends Controller
      */
     public function create()
     {
-        return Inertia::render('admin/users/types/new');
+        return Inertia::render('admin/users/titles/new');
     }
 
     /**
@@ -32,12 +32,12 @@ class UserTypeController extends Controller
      */
     public function store(Request $request)
     {
-        UserTypes::create($request->validate([
-            'tipo' => ['required', 'max:255', 'unique:user_types'],
+        UserTitles::create($request->validate([
+            'titulo' => ['required', 'max:255', 'unique:user_titles'],
             'is_active' => ['required'],
         ]));
 
-        return to_route('types.index');
+        return to_route('titles.index');
     }
 
     /**
@@ -53,9 +53,9 @@ class UserTypeController extends Controller
      */
     public function edit(string $id)
     {
-        $type = UserTypes::findOrFail($id);
-        return Inertia::render('admin/users/types/edit',[
-            'type' => $type
+        $title = UserTitles::findOrFail($id);
+        return Inertia::render('admin/users/titles/edit',[
+            'title' => $title
         ]);
     }
 
@@ -64,13 +64,13 @@ class UserTypeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $type = UserTypes::findOrFail($id);
-        $type->update($request->validate([
-            'tipo' => ['required', 'max:255', 'unique:user_types,tipo,'.$id],
+        $title = UserTitles::findOrFail($id);
+        $title->update($request->validate([
+            'titulo' => ['required', 'max:255', 'unique:user_titles,titulo,'.$id],
             'is_active' => ['required'],
         ]));
 
-        return to_route('types.index');
+        return to_route('titles.index');
     }
 
     /**
@@ -78,10 +78,10 @@ class UserTypeController extends Controller
      */
     public function destroy(string $id)
     {
-        UserTypes::findOrFail($id)->update([
+        UserTitles::findOrFail($id)->update([
             'is_active' => false,
         ]);
         
-        return to_route('types.index');
+        return to_route('titles.index');
     }
 }

@@ -72,23 +72,6 @@
                                 >
                             </div>
                         </template>
-                        <template #amount="data">
-                            <div class="font-semibold text-left">
-                                {{ data.value.amount }}
-                            </div>
-                        </template>
-                        <template #status="data">
-                            <span
-                                class="badge"
-                                :class="[
-                                    data.value.status.toLowerCase() ===
-                                    'finished'
-                                        ? 'badge-outline-success'
-                                        : 'badge-outline-danger',
-                                ]"
-                                >{{ data.value.status }}</span
-                            >
-                        </template>
                         <template #actions="data">
                             <div class="flex gap-4 items-center justify-center">
                                 <Link
@@ -181,11 +164,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
-import { useMeta } from "@/composables/use-meta";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
-//useMeta({ title: "Invoice List" });
+
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
@@ -228,7 +210,7 @@ const tableOption = ref({
         limit: "",
     },
     resizableColumns: false,
-    sortable: ["invoice", "name", "email", "date", "amount", "status"],
+    sortable: ["tipo", "is_active"],
     sortIcon: {
         base: "sort-icon-none",
         up: "sort-icon-asc",
