@@ -213,10 +213,10 @@
                                     <vue-collapsible :isOpen="activeDropdown === 'catalogs'">
                                         <ul class="sub-menu text-gray-500">
                                             <li>
-                                                <Link href="/users/titles" @click="toggleMobileMenu">Users: Titles</Link>
+                                                <Link href="/users/titles" :class="{ 'active': $page.url.startsWith('/users/titles') }" @click="toggleMobileMenu">Users: Titles</Link>
                                             </li>
                                             <li>
-                                                <Link href="/users/types" @click="toggleMobileMenu">Users: Types</Link>
+                                                <Link href="/users/types" :class="{ 'active': $page.url.startsWith('/users/types') }" @click="toggleMobileMenu">Users: Types</Link>
                                             </li>
                                         </ul>
                                     </vue-collapsible>
@@ -530,8 +530,12 @@
     const activeDropdown: any = ref('');
     const subActive: any = ref('');
 
-    onMounted(() => {
-        const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
+onMounted(() => {
+    const pathname = window.location.pathname;
+    const parts = pathname.split('/');
+    const subpage = parts.slice(0, 3).join('/');
+        const selector = document.querySelector('.sidebar ul a[href="' + subpage + '"]');
+        console.log(selector);
         if (selector) {
             selector.classList.add('active');
             const ul: any = selector.closest('ul.sub-menu');
