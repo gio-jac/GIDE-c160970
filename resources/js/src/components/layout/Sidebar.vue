@@ -169,8 +169,8 @@
                                     <button
                                         type="button"
                                         class="nav-link group w-full"
-                                        :class="{ active: activeDropdown === 'catalog' }"
-                                        @click="activeDropdown === 'catalog' ? (activeDropdown = null) : (activeDropdown = 'catalog')"
+                                        :class="{ active: activeDropdown === 'catalogs' }"
+                                        @click="activeDropdown === 'catalogs' ? (activeDropdown = null) : (activeDropdown = 'catalogs')"
                                     >
                                         <div class="flex items-center">
                                             <svg
@@ -210,7 +210,7 @@
                                             </svg>
                                         </div>
                                     </button>
-                                    <vue-collapsible :isOpen="activeDropdown === 'catalog'">
+                                    <vue-collapsible :isOpen="activeDropdown === 'catalogs'">
                                         <ul class="sub-menu text-gray-500">
                                             <li>
                                                 <Link href="/users/titles" @click="toggleMobileMenu">Users: Titles</Link>
