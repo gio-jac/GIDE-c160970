@@ -17,17 +17,17 @@
                 </ol>
             </div>
             <form class="space-y-5" @submit.prevent="submit">
-                <div :class="{ 'has-error': errors.EMP }">
-                    <label for="formEMP">Employee ID</label>
+                <div :class="{ 'has-error': errors.emp }">
+                    <label for="formEmp">Employee ID</label>
                     <input
-                        id="formEMP"
+                        id="formEmp"
                         type="text"
                         placeholder="Enter Type Name"
                         class="form-input"
-                        v-model="form.EMP"
+                        v-model="form.emp"
                     />
-                    <template v-if="errors.EMP">
-                        <p class="text-danger mt-1">{{ errors.EMP }}</p>
+                    <template v-if="errors.emp">
+                        <p class="text-danger mt-1">{{ errors.emp }}</p>
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.nombre }">
@@ -186,7 +186,7 @@ const props = defineProps({
 });
 
 const form = reactive({
-    EMP: null,
+    emp: null,
     email: null,
     password: null,
     nombre: null,

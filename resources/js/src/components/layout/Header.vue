@@ -468,10 +468,10 @@
                                             </div>
                                             <div class="ltr:pl-4 rtl:pr-4 truncate">
                                                 <h4 class="text-base">
-                                                    Luis Ejemplo<!--<span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span>-->
+                                                    {{ user.name }}<!--<span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span>-->
                                                 </h4>
                                                 <a class="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;"
-                                                    >ejemplo@correo.com</a
+                                                    >{{ user.email }}</a
                                                 >
                                             </div>
                                         </div>
@@ -567,7 +567,7 @@
                                         </Link>
                                     </li>-->
                                     <li class="border-t border-white-light dark:border-white-light/10">
-                                        <Link href="/" class="text-danger !py-3" @click="close()">
+                                        <Link href="/logout" class="text-danger !py-3" @click="close()">
                                             <svg
                                                 class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90 shrink-0"
                                                 width="18"
@@ -1300,11 +1300,17 @@
     import { useI18n } from 'vue-i18n';
         
 
-    import { Link } from '@inertiajs/vue3';  import appSetting from '@/app-setting';
+import { Link, usePage } from '@inertiajs/vue3';
+import appSetting from '@/app-setting';
 
     import { useRoute } from 'vue-router';
-    import { useAppStore } from '@/stores/index';
-    const store = useAppStore();
+import { useAppStore } from '@/stores/index';
+    
+   
+const page = usePage();
+const user = computed(() => page.props.auth);
+
+const store = useAppStore();
     const route = useRoute();
     const search = ref(false);
 

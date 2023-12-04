@@ -127,6 +127,7 @@
                                             type="email"
                                             placeholder="Enter Email"
                                             class="form-input ps-10 placeholder:text-white-dark"
+                                            v-model="form.email"
                                         />
                                         <span
                                             class="absolute start-4 top-1/2 -translate-y-1/2"
@@ -149,6 +150,11 @@
                                             </svg>
                                         </span>
                                     </div>
+                                    <template v-if="errors.email">
+                                        <p class="text-danger mt-1">
+                                            {{ errors.email }}
+                                        </p>
+                                    </template>
                                 </div>
                                 <div>
                                     <label for="Password">Password</label>
@@ -158,6 +164,7 @@
                                             type="password"
                                             placeholder="Enter Password"
                                             class="form-input ps-10 placeholder:text-white-dark"
+                                            v-model="form.password"
                                         />
                                         <span
                                             class="absolute start-4 top-1/2 -translate-y-1/2"
@@ -192,6 +199,11 @@
                                             </svg>
                                         </span>
                                     </div>
+                                    <template v-if="errors.password">
+                                        <p class="text-danger mt-1">
+                                            {{ errors.password }}
+                                        </p>
+                                    </template>
                                 </div>
                                 <button
                                     type="submit"
@@ -217,7 +229,9 @@ import { useMeta } from "@/composables/use-meta";
 import AuthLayout from "@/layouts/auth-layout.vue";
 import { Head } from '@inertiajs/vue3';
 //useMeta({ title: "Login Boxed" });
-
+const props = defineProps({
+    errors: Object
+});
 const store = useAppStore();
 // multi language
 const i18n = reactive(useI18n());
@@ -229,7 +243,12 @@ const currentFlag = computed(() => {
     return `/assets/images/flags/${i18n.locale.toUpperCase()}.svg`;
 });
 
+const form = reactive({
+    email: null,
+    password: null,
+});
+
 function submit() {
-    router.replace("/dashboard");
+    router.post("/login", form);
 }
 </script>

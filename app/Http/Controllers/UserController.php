@@ -7,6 +7,7 @@ use App\Models\UserTitles;
 use App\Models\UserTypes;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -39,7 +40,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->merge(['is_active' => 1]);
+
+        $request->merge(['password' => Hash::make($request->input('password'))]);
+
+        User::create($request->validate([
+            'emp' => ['required', 'max:10'],
+            'email' => ['required','email', 'max:255'],
+            'password' => ['required', 'max:255'],
+            'nombre' => ['required', 'max:255'],
+            'apellido_paterno' => ['required', 'max:255'],
+            'apellido_materno' => ['required', 'max:255'],
+            'telefono' => ['max:255'],
+            'user_type_id' => ['required','exists:user_types,id'],
+            'user_title_id' => ['required','exists:user_titles,id'],
+            'is_active' => ['required'],
+        ]));
+
+        return to_route('users.index');
     }
 
     /**
