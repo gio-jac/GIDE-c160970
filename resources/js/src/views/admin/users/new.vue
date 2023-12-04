@@ -53,7 +53,9 @@
                         v-model="form.apellido_paterno"
                     />
                     <template v-if="errors.apellido_paterno">
-                        <p class="text-danger mt-1">{{ errors.apellido_paterno }}</p>
+                        <p class="text-danger mt-1">
+                            {{ errors.apellido_paterno }}
+                        </p>
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.apellido_materno }">
@@ -66,55 +68,93 @@
                         v-model="form.apellido_materno"
                     />
                     <template v-if="errors.apellido_materno">
-                        <p class="text-danger mt-1">{{ errors.apellido_materno }}</p>
+                        <p class="text-danger mt-1">
+                            {{ errors.apellido_materno }}
+                        </p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.telefono }">
+                    <label for="formTelefono">Phone</label>
+                    <input
+                        id="formTelefono"
+                        type="tel"
+                        placeholder="Enter Phone"
+                        class="form-input"
+                        v-model="form.telefono"
+                    />
+                    <template v-if="errors.telefono">
+                        <p class="text-danger mt-1">
+                            {{ errors.telefono }}
+                        </p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.email }">
+                    <label for="formEmail">Email</label>
+                    <input
+                        id="formEmail"
+                        type="email"
+                        placeholder="Enter Email"
+                        class="form-input"
+                        v-model="form.email"
+                    />
+                    <template v-if="errors.email">
+                        <p class="text-danger mt-1">
+                            {{ errors.email }}
+                        </p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.password }">
+                    <label for="formPassword">Password</label>
+                    <input
+                        id="formPassword"
+                        type="password"
+                        placeholder="Enter Password"
+                        class="form-input"
+                        v-model="form.password"
+                    />
+                    <template v-if="errors.password">
+                        <p class="text-danger mt-1">
+                            {{ errors.password }}
+                        </p>
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.user_type_id }">
                     <label for="formUserType">User Type</label>
-                    <div class="mb-5">
-                        <multiselect
-                            v-model="input1"
-                            :options="options"
-                            class="custom-multiselect"
-                            :searchable="false"
-                            :preselect-first="true"
-                            :allow-empty="false"
-                            selected-label=""
-                            select-label=""
-                            deselect-label=""
-                        ></multiselect>
+                    <div>
+                        <select
+                            id="formUserType"
+                            class="form-select text-white-dark"
+                            v-model="form.user_type_id"
+                            required
+                        >
+                            <option :value="null">Open this select menu</option>
+                            <option v-for="userType in props.catalogUserTypes" :key="userType.id" :value="userType.id">{{ userType.tipo }}</option>
+                        </select>
                     </div>
                     <template v-if="errors.user_type_id">
-                        <p class="text-danger mt-1">{{ errors.user_type_id }}</p>
+                        <p class="text-danger mt-1">
+                            {{ errors.user_type_id }}
+                        </p>
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.user_title_id }">
-                    <label for="formUserTitle">User Title</label>
-                    <input
-                        id="formUserTitle"
-                        type="text"
-                        placeholder="Enter Title"
-                        class="form-input"
-                        v-model="form.user_title_id"
-                    />
+                    <label for="formUserTitle">Title</label>
+                    <div>
+                        <select
+                            id="formUserTitle"
+                            class="form-select text-white-dark"
+                            v-model="form.user_title_id"
+                            required
+                        >
+                            <option :value="null">Open this select menu</option>
+                            <option v-for="userTitle in props.catalogUserTitles" :key="userTitle.id" :value="userTitle.id">{{ userTitle.titulo }}</option>
+                        </select>
+                    </div>
                     <template v-if="errors.user_title_id">
-                        <p class="text-danger mt-1">{{ errors.user_title_id }}</p>
+                        <p class="text-danger mt-1">
+                            {{ errors.user_title_id }}
+                        </p>
                     </template>
-                </div>
-                <div>
-                    <label for="formActive">Is assignable?</label>
-                    <label class="w-12 h-6 relative">
-                        <input
-                            type="checkbox"
-                            class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer"
-                            id="formActive"
-                            v-model="form.is_active"
-                        />
-                        <span
-                            for="formActive"
-                            class="bg-[#ebedf2] dark:bg-dark block h-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"
-                        ></span>
-                    </label>
                 </div>
                 <button type="submit" class="btn btn-primary !mt-6">Add</button>
             </form>
@@ -124,25 +164,40 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import Multiselect from '@suadelabs/vue3-multiselect';
+import Multiselect from "@suadelabs/vue3-multiselect";
 import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
 
-const input1 = ref('Orange');
-const options = ref(['Orange', 'White', 'Purple']);
-
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
-defineProps({ errors: Object });
+
+const props = defineProps({
+    catalogUserTypes: {
+        type: Array,
+        required: true,
+    },
+    catalogUserTitles: {
+        type: Array,
+        required: true,
+    },
+    errors: Object
+});
 
 const form = reactive({
-    tipo: null,
-    is_active: true,
+    EMP: null,
+    email: null,
+    password: null,
+    nombre: null,
+    apellido_paterno: null,
+    apellido_materno: null,
+    telefono: null,
+    user_type_id: null,
+    user_title_id: null,
 });
 
 function submit() {
-    router.post('/users/types', form);
+    router.post("/users", form);
 }
 </script>

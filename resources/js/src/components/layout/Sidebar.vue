@@ -535,7 +535,6 @@ onMounted(() => {
     const parts = pathname.split('/');
     const subpage = parts.slice(0, 3).join('/');
         const selector = document.querySelector('.sidebar ul a[href="' + subpage + '"]');
-        console.log(selector);
         if (selector) {
             selector.classList.add('active');
             const ul: any = selector.closest('ul.sub-menu');

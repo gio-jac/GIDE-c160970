@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserTitles;
+use App\Models\UserTypes;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -24,7 +26,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('admin/users/new');
+        $catalogUserTypes = UserTypes::where('is_active', 1)->get();
+        $catalogUserTitles = UserTitles::where('is_active', 1)->get();
+        return Inertia::render('admin/users/new',[
+            'catalogUserTypes' => $catalogUserTypes,
+            'catalogUserTitles' => $catalogUserTitles
+        ]);
     }
 
     /**
