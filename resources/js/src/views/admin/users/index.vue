@@ -1,6 +1,6 @@
 <template>
     <Head title="Users" />
-    <AppLayout>
+    <div>
         <div>
             <div
                 class="panel px-0 pb-1.5 border-[#e0e6ed] dark:border-[#1b2e4b]"
@@ -10,56 +10,8 @@
                         class="mb-4.5 px-5 flex md:items-center md:flex-row flex-col gap-5"
                     >
                         <div class="flex items-center gap-2">
-                            <button
-                                type="button"
-                                class="btn btn-danger gap-2"
-                                @click="deleteRow()"
-                            >
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-5 h-5"
-                                >
-                                    <path
-                                        d="M20.5001 6H3.5"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                    ></path>
-                                    <path
-                                        d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                    ></path>
-                                    <path
-                                        opacity="0.5"
-                                        d="M9.5 11L10 16"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                    ></path>
-                                    <path
-                                        opacity="0.5"
-                                        d="M14.5 11L14 16"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                    ></path>
-                                    <path
-                                        opacity="0.5"
-                                        d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                    ></path>
-                                </svg>
-                                Delete
-                            </button>
                             <Link
-                                href="/apps/invoice/add"
+                                href="/users/create"
                                 class="btn btn-primary gap-2"
                             >
                                 <svg
@@ -92,10 +44,10 @@
 
                     <vue3-datatable
                         ref="datatable"
-                        :rows="items"
+                        :rows="props.users"
                         :columns="cols"
-                        :totalRows="items?.length"
-                        :hasCheckbox="true"
+                        :totalRows="props.users?.length"
+                        :hasCheckbox="false"
                         :sortable="true"
                         :search="search"
                         skin="whitespace-nowrap bh-table-hover"
@@ -104,39 +56,26 @@
                         previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                         nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                     >
-                        <template #invoice="data">
-                            <Link
-                                href="/apps/invoice/preview"
-                                class="text-primary underline font-semibold hover:no-underline"
-                                >#{{ data.value.invoice }}</Link
-                            >
+                        <template #tipo="data">
+                            {{ data.value.tipo }}
                         </template>
-                        <template #name="data">
+                        <template #is_active="data">
                             <div class="flex items-center font-semibold">
-                                {{ data.value.name }}
+                                <span
+                                    class="badge"
+                                    :class="[
+                                        data.value.is_active === 1
+                                            ? 'bg-green-500'
+                                            : 'bg-red-500',
+                                    ]"
+                                    >&nbsp;</span
+                                >
                             </div>
-                        </template>
-                        <template #amount="data">
-                            <div class="font-semibold text-left">
-                                {{ data.value.amount }}
-                            </div>
-                        </template>
-                        <template #status="data">
-                            <span
-                                class="badge"
-                                :class="[
-                                    data.value.status.toLowerCase() ===
-                                    'finished'
-                                        ? 'badge-outline-success'
-                                        : 'badge-outline-danger',
-                                ]"
-                                >{{ data.value.status }}</span
-                            >
                         </template>
                         <template #actions="data">
                             <div class="flex gap-4 items-center justify-center">
                                 <Link
-                                    href="/apps/invoice/edit"
+                                    :href="`/users/${data.value.id}/edit`"
                                     class="hover:text-info"
                                 >
                                     <svg
@@ -162,31 +101,6 @@
                                         <path
                                             opacity="0.5"
                                             d="M16.6522 3.45508C16.6522 3.45508 16.7333 4.83381 17.9499 6.05034C19.1664 7.26687 20.5451 7.34797 20.5451 7.34797M10.1002 15.5876L8.4126 13.9"
-                                            stroke="currentColor"
-                                            stroke-width="1.5"
-                                        ></path>
-                                    </svg>
-                                </Link>
-                                <Link
-                                    href="/apps/invoice/preview"
-                                    class="hover:text-primary"
-                                >
-                                    <svg
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-5 h-5"
-                                    >
-                                        <path
-                                            opacity="0.5"
-                                            d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z"
-                                            stroke="currentColor"
-                                            stroke-width="1.5"
-                                        ></path>
-                                        <path
-                                            d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
                                             stroke="currentColor"
                                             stroke-width="1.5"
                                         ></path>
@@ -245,27 +159,30 @@
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </div>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
-import { useMeta } from "@/composables/use-meta";
 import AppLayout from "@/layouts/app-layout.vue";
-import { Link } from "@inertiajs/vue3";
-import { Head } from '@inertiajs/vue3';
-//useMeta({ title: "Invoice List" });
+import SiteLayout from "@/layouts/app.vue";
+import { Head, Link, router } from "@inertiajs/vue3";
+
+defineOptions({
+    layout: [SiteLayout, AppLayout],
+});
+const props = defineProps({
+    users: {
+        type: Array,
+        required: true,
+    },
+});
 
 const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([
-    { field: "invoice", title: "EMP" },
-    { field: "name", title: "Name" },
-    { field: "email", title: "Paternal Surname" },
-    { field: "date", title: "Maternal Surname" },
-    { field: "amount", title: "Phone" },
-    { field: "status", title: "Access Type" },
-    { field: "status", title: "Title" },
+    { field: "tipo", title: "Type" },
+    { field: "is_active", title: "Is assignable?" },
     {
         field: "actions",
         title: "Actions",
@@ -273,55 +190,8 @@ const cols = ref([
         headerClass: "justify-center",
     },
 ]);
-const items = ref([
-    {
-        id: 1,
-        invoice: "dffabc4f",
-        name: "Mecanica",
-        email: "Felipe Rivera",
-        date: "15 Dec 2020",
-        amount: "2275",
-        status: "Finished",
-    },
-    {
-        id: 2,
-        invoice: "cb7427f0",
-        name: "Mecanica",
-        email: "Mario Carvajal",
-        date: "20 Dec 2020",
-        amount: "1044",
-        status: "Finished",
-    },
-    {
-        id: 3,
-        invoice: "07978bf5",
-        name: "Mecanica",
-        email: "Orlando Calero",
-        date: "27 Dec 2020",
-        amount: "20",
-        status: "In process",
-    },
-    {
-        id: 4,
-        invoice: "572f2030",
-        name: "Mecanica",
-        email: "Anas Ordoñez",
-        date: "31 Dec 2020",
-        amount: "344",
-        status: "Finished",
-    },
-]);
 const searchText = ref("");
-const columns = ref([
-    "id",
-    "invoice",
-    "name",
-    "email",
-    "date",
-    "amount",
-    "status",
-    "actions",
-]);
+const columns = ref(["tipo", "is_active", "actions"]);
 const tableOption = ref({
     headings: {
         id: (h: any, row: any, index: number) => {
@@ -340,7 +210,7 @@ const tableOption = ref({
         limit: "",
     },
     resizableColumns: false,
-    sortable: ["invoice", "name", "email", "date", "amount", "status"],
+    sortable: ["tipo", "is_active"],
     sortIcon: {
         base: "sort-icon-none",
         up: "sort-icon-asc",
@@ -351,17 +221,7 @@ const tableOption = ref({
 const deleteRow = (item: any = null) => {
     if (confirm("Are you sure want to delete selected row ?")) {
         if (item) {
-            items.value = items.value.filter((d) => d.id != item);
-            datatable.value.clearSelectedRows();
-        } else {
-            let selectedRows = datatable.value.getSelectedRows();
-            const ids = selectedRows.map((d) => {
-                return d.id;
-            });
-            items.value = items.value.filter(
-                (d) => !ids.includes(d.id as never)
-            );
-            datatable.value.clearSelectedRows();
+            router.delete(`/users/${item}`);
         }
     }
 };

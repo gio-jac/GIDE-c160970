@@ -136,7 +136,7 @@
                         <li class="nav-item">
                             <ul>
                                 <li class="nav-item">
-                                    <Link href="/users" class="group" @click="toggleMobileMenu">
+                                    <Link href="/users" :class="{ 'active': $page.url==='/users' || $page.url==='/users/create' }" class="group" @click="toggleMobileMenu">
                                         <div class="flex items-center">
                                             <svg
                                                 class="group-hover:!text-primary shrink-0"
