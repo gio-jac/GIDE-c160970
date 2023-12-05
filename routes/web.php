@@ -30,8 +30,12 @@ Route::get('/dashboard', function () {
     return Inertia::render('apps/invoice/list');
 });
 
-Route::resource('/users/types', UserTypeController::class);
-Route::resource('/users/titles', UserTitleController::class);
-Route::resource('/users', UserController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('/users/types', UserTypeController::class);
+    Route::resource('/users/titles', UserTitleController::class);
+    Route::resource('/users', UserController::class);
+});
+
+
 
 //Route::get('/{any}', [AppController::class, 'index'])->where('any', '.*');

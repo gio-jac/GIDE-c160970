@@ -181,8 +181,12 @@ const props = defineProps({
 const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([
-    { field: "tipo", title: "Type" },
-    { field: "is_active", title: "Is assignable?" },
+    { field: "emp", title: "ID" },
+    { field: "nombre", title: "Name" },
+    { field: "apellido_paterno", title: "Paternal surname" },
+    { field: "telefono", title: "Phone" },
+    { field: "email", title: "Email" },
+    { field: "is_active", title: "Active" },
     {
         field: "actions",
         title: "Actions",
@@ -191,7 +195,7 @@ const cols = ref([
     },
 ]);
 const searchText = ref("");
-const columns = ref(["tipo", "is_active", "actions"]);
+const columns = ref(["emp", "nombre", "apellido_paterno", "telefono", "email", "is_active"]);
 const tableOption = ref({
     headings: {
         id: (h: any, row: any, index: number) => {
