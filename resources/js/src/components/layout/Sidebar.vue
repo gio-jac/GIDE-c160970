@@ -219,7 +219,7 @@
                                                     @click="subActive === 'users' ? (subActive = null) : (subActive = 'users')"
                                                 >
                                                     Users
-                                                    <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180" :class="{ '!rotate-90': subActive === 'error' }">
+                                                    <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180" :class="{ '!rotate-90': subActive === 'users' }">
                                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path
                                                                 opacity="0.5"
