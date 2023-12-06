@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserTypeController;
 use App\Http\Controllers\UserTitleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users/types', UserTypeController::class);
     Route::resource('/users/titles', UserTitleController::class);
     Route::resource('/users', UserController::class);
+    Route::resource('/parts', PartController::class);
 });
 
 
