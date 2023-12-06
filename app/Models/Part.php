@@ -17,6 +17,7 @@ class Part extends Model
     protected $fillable = [
         'num_part',
         'descripcion',
+        'is_active',
     ];
 
     /**

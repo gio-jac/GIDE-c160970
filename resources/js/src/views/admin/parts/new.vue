@@ -1,12 +1,12 @@
 <template>
-    <Head title="Users New Type" />
+    <Head title="New Part" />
     <div>
         <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b]">
             <div class="mb-5">
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/users">Users</Link></li>
+                    <li><Link href="/parts">Parts</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
@@ -17,144 +17,46 @@
                 </ol>
             </div>
             <form class="space-y-5" @submit.prevent="submit">
-                <div :class="{ 'has-error': errors.emp }">
-                    <label for="formEmp">Employee ID</label>
+                <div :class="{ 'has-error': errors.num_part }">
+                    <label for="formPartId">Part ID</label>
                     <input
-                        id="formEmp"
+                        id="formPartId"
                         type="text"
-                        placeholder="Enter Type Name"
+                        placeholder="Enter Part ID"
                         class="form-input"
-                        v-model="form.emp"
+                        v-model="form.num_part"
                     />
-                    <template v-if="errors.emp">
-                        <p class="text-danger mt-1">{{ errors.emp }}</p>
+                    <template v-if="errors.num_part">
+                        <p class="text-danger mt-1">{{ errors.num_part }}</p>
                     </template>
                 </div>
-                <div :class="{ 'has-error': errors.nombre }">
-                    <label for="formNombre">Name</label>
+                <div :class="{ 'has-error': errors.descripcion }">
+                    <label for="formDescription">Description</label>
                     <input
-                        id="formNombre"
+                        id="formDescription"
                         type="text"
-                        placeholder="Enter Name"
+                        placeholder="Enter description"
                         class="form-input"
-                        v-model="form.nombre"
+                        v-model="form.descripcion"
                     />
-                    <template v-if="errors.nombre">
-                        <p class="text-danger mt-1">{{ errors.nombre }}</p>
+                    <template v-if="errors.descripcion">
+                        <p class="text-danger mt-1">{{ errors.descripcion }}</p>
                     </template>
                 </div>
-                <div :class="{ 'has-error': errors.apellido_paterno }">
-                    <label for="formPaternalSurname">Paternal surname</label>
-                    <input
-                        id="formPaternalSurname"
-                        type="text"
-                        placeholder="Enter Paternal Surname"
-                        class="form-input"
-                        v-model="form.apellido_paterno"
-                    />
-                    <template v-if="errors.apellido_paterno">
-                        <p class="text-danger mt-1">
-                            {{ errors.apellido_paterno }}
-                        </p>
-                    </template>
-                </div>
-                <div :class="{ 'has-error': errors.apellido_materno }">
-                    <label for="formMaternalSurname">Maternal surname</label>
-                    <input
-                        id="formMaternalSurname"
-                        type="text"
-                        placeholder="Enter Maternal Surname"
-                        class="form-input"
-                        v-model="form.apellido_materno"
-                    />
-                    <template v-if="errors.apellido_materno">
-                        <p class="text-danger mt-1">
-                            {{ errors.apellido_materno }}
-                        </p>
-                    </template>
-                </div>
-                <div :class="{ 'has-error': errors.telefono }">
-                    <label for="formTelefono">Phone</label>
-                    <input
-                        id="formTelefono"
-                        type="tel"
-                        placeholder="Enter Phone"
-                        class="form-input"
-                        v-model="form.telefono"
-                    />
-                    <template v-if="errors.telefono">
-                        <p class="text-danger mt-1">
-                            {{ errors.telefono }}
-                        </p>
-                    </template>
-                </div>
-                <div :class="{ 'has-error': errors.email }">
-                    <label for="formEmail">Email</label>
-                    <input
-                        id="formEmail"
-                        type="email"
-                        placeholder="Enter Email"
-                        class="form-input"
-                        v-model="form.email"
-                    />
-                    <template v-if="errors.email">
-                        <p class="text-danger mt-1">
-                            {{ errors.email }}
-                        </p>
-                    </template>
-                </div>
-                <div :class="{ 'has-error': errors.password }">
-                    <label for="formPassword">Password</label>
-                    <input
-                        id="formPassword"
-                        type="password"
-                        placeholder="Enter Password"
-                        class="form-input"
-                        v-model="form.password"
-                    />
-                    <template v-if="errors.password">
-                        <p class="text-danger mt-1">
-                            {{ errors.password }}
-                        </p>
-                    </template>
-                </div>
-                <div :class="{ 'has-error': errors.user_type_id }">
-                    <label for="formUserType">User Type</label>
-                    <div>
-                        <select
-                            id="formUserType"
-                            class="form-select text-white-dark"
-                            v-model="form.user_type_id"
-                            required
-                        >
-                            <option :value="null">Open this select menu</option>
-                            <option v-for="userType in props.catalogUserTypes" :key="userType.id" :value="userType.id">{{ userType.tipo }}</option>
-                        </select>
-                    </div>
-                    <template v-if="errors.user_type_id">
-                        <p class="text-danger mt-1">
-                            {{ errors.user_type_id }}
-                        </p>
-                    </template>
-                </div>
-                <div :class="{ 'has-error': errors.user_title_id }">
-                    <label for="formUserTitle">Title</label>
-                    <div>
-                        <select
-                            id="formUserTitle"
-                            class="form-select text-white-dark"
-                            v-model="form.user_title_id"
-                            required
-                        >
-                            <option :value="null">Open this select menu</option>
-                            <option v-for="userTitle in props.catalogUserTitles" :key="userTitle.id" :value="userTitle.id">{{ userTitle.titulo }}</option>
-                        </select>
-                    </div>
-                    <template v-if="errors.user_title_id">
-                        <p class="text-danger mt-1">
-                            {{ errors.user_title_id }}
-                        </p>
-                    </template>
+                <div>
+                    <label for="formActive">Is assignable?</label>
+                    <label class="w-12 h-6 relative">
+                        <input
+                            type="checkbox"
+                            class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer"
+                            id="formActive"
+                            v-model="form.is_active"
+                        />
+                        <span
+                            for="formActive"
+                            class="bg-[#ebedf2] dark:bg-dark block h-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"
+                        ></span>
+                    </label>
                 </div>
                 <button type="submit" class="btn btn-primary !mt-6">Add</button>
             </form>
@@ -174,30 +76,16 @@ defineOptions({
 });
 
 const props = defineProps({
-    catalogUserTypes: {
-        type: Array,
-        required: true,
-    },
-    catalogUserTitles: {
-        type: Array,
-        required: true,
-    },
     errors: Object
 });
 
 const form = reactive({
-    emp: null,
-    email: null,
-    password: null,
-    nombre: null,
-    apellido_paterno: null,
-    apellido_materno: null,
-    telefono: null,
-    user_type_id: null,
-    user_title_id: null,
+    num_part: null,
+    descripcion: null,
+    is_active: true,
 });
 
 function submit() {
-    router.post("/users", form);
+    router.post("/parts", form);
 }
 </script>
