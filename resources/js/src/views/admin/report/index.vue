@@ -411,7 +411,7 @@
                                 />
                                 <path opacity="0.5" d="M7 8H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
-                            Save
+                            Save Report
                         </button>
 
                         <button type="button" class="btn btn-info w-full gap-2">
@@ -423,9 +423,9 @@
                                 />
                                 <path opacity="0.5" d="M6 18L21 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
-                            Send Invoice
+                            Close Report
                         </button>
-
+                        <!--
                         <router-link to="/apps/invoice/preview" class="btn btn-primary w-full gap-2">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0">
                                 <path
@@ -442,7 +442,7 @@
                             </svg>
                             Preview
                         </router-link>
-
+                        -->
                         <button type="button" class="btn btn-secondary w-full gap-2">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0">
                                 <path
@@ -460,7 +460,7 @@
                                     stroke-linejoin="round"
                                 ></path>
                             </svg>
-                            Download
+                            Download PDF
                         </button>
                     </div>
                 </div>
