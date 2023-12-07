@@ -3,19 +3,9 @@
         <div class="flex xl:flex-row flex-col gap-2.5">
             <div class="panel px-0 flex-1 py-6 ltr:xl:mr-6 rtl:xl:ml-6">
                 <div class="flex justify-between flex-wrap px-4">
-                    <div class="mb-6 lg:w-1/2 w-full">
-                        <div class="flex items-center text-black dark:text-white shrink-0">
-                            <img src="/assets/images/logo.svg" alt="" class="w-14" />
-                        </div>
-                        <div class="space-y-1 mt-6 text-gray-500 dark:text-gray-400">
-                            <div>13 Tetrick Road, Cypress Gardens, Florida, 33884, US</div>
-                            <div>vristo@gmail.com</div>
-                            <div>+1 (070) 123-4567</div>
-                        </div>
-                    </div>
                     <div class="lg:w-1/2 w-full lg:max-w-fit">
                         <div class="flex items-center">
-                            <label for="number" class="flex-1 ltr:mr-2 rtl:ml-2 mb-0">Invoice Number</label>
+                            <label for="number" class="flex-1 ltr:mr-2 rtl:ml-2 mb-0">Report ID</label>
                             <input
                                 id="number"
                                 type="text"
@@ -26,23 +16,18 @@
                             />
                         </div>
                         <div class="flex items-center mt-4">
-                            <label for="invoiceLabel" class="flex-1 ltr:mr-2 rtl:ml-2 mb-0">Invoice Label</label>
-                            <input
-                                id="invoiceLabel"
-                                type="text"
-                                name="inv-label"
-                                class="form-input lg:w-[250px] w-2/3"
-                                placeholder="Enter Invoice Label"
-                                v-model="params.title"
-                            />
-                        </div>
-                        <div class="flex items-center mt-4">
-                            <label for="startDate" class="flex-1 ltr:mr-2 rtl:ml-2 mb-0">Invoice Date</label>
-                            <input id="startDate" type="date" name="inv-date" class="form-input lg:w-[250px] w-2/3" v-model="params.invoiceDate" />
-                        </div>
-                        <div class="flex items-center mt-4">
-                            <label for="dueDate" class="flex-1 ltr:mr-2 rtl:ml-2 mb-0">Due Date</label>
-                            <input id="dueDate" type="date" name="due-date" class="form-input lg:w-[250px] w-2/3" v-model="params.dueDate" />
+                            <label for="formUserType" class="flex-1 ltr:mr-2 rtl:ml-2 mb-0">Machine Serial</label>
+                            <div>
+                                <select
+                                    id="formUserType"
+                                    class="form-select text-white-dark lg:w-[250px] w-2/3"
+                                    v-model="form.selectedMachine"
+                                    required
+                                >
+                                    <option :value="null">Open this select menu</option>
+                                    <option v-for="machine in catalogMachine" :key="machine.id" :value="machine">{{ machine.id }} - {{ machine.type }} - {{ machine.customer.name }}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -50,7 +35,7 @@
                 <div class="mt-8 px-4">
                     <div class="flex justify-between lg:flex-row flex-col">
                         <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
-                            <div class="text-lg">Bill To :-</div>
+                            <div class="text-lg">Customer Data</div>
                             <div class="mt-4 flex items-center">
                                 <label for="reciever-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Name</label>
                                 <input
@@ -58,285 +43,251 @@
                                     type="text"
                                     name="reciever-name"
                                     class="form-input flex-1"
-                                    v-model="params.to.name"
+                                    :value="form.selectedMachine?.customer.name" readonly
                                     placeholder="Enter Name"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
-                                <label for="reciever-email" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Email</label>
+                                <label for="reciever-email" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Address</label>
                                 <input
                                     id="reciever-email"
-                                    type="email"
+                                    type="text"
                                     name="reciever-email"
                                     class="form-input flex-1"
-                                    v-model="params.to.email"
+                                    :value="form.selectedMachine?.customer.address" readonly
                                     placeholder="Enter Email"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
-                                <label for="reciever-address" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Address</label>
+                                <label for="reciever-address" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Contact</label>
                                 <input
                                     id="reciever-address"
                                     type="text"
                                     name="reciever-address"
                                     class="form-input flex-1"
-                                    v-model="params.to.address"
+                                    :value="form.selectedMachine?.customer.contact" readonly
                                     placeholder="Enter Address"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label for="reciever-number" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Phone Number</label>
-                                <input
-                                    id="reciever-number"
-                                    type="text"
-                                    name="reciever-number"
-                                    class="form-input flex-1"
-                                    v-model="params.to.phone"
-                                    placeholder="Enter Phone number"
                                 />
                             </div>
                         </div>
                         <div class="lg:w-1/2 w-full">
-                            <div class="text-lg">Payment Details :-</div>
+                            <div class="text-lg">Machine Data</div>
                             <div class="flex items-center mt-4">
-                                <label for="acno" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Account Number</label>
+                                <label for="acno" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Serial</label>
                                 <input
                                     id="acno"
                                     type="text"
                                     name="acno"
                                     class="form-input flex-1"
-                                    v-model="params.bankInfo.no"
+                                    :value="form.selectedMachine?.id" readonly
                                     placeholder="Enter Account Number"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
-                                <label for="bank-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Bank Name</label>
+                                <label for="bank-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Type</label>
                                 <input
                                     id="bank-name"
                                     type="text"
                                     name="bank-name"
                                     class="form-input flex-1"
-                                    v-model="params.bankInfo.name"
+                                    :value="form.selectedMachine?.type" readonly
                                     placeholder="Enter Bank Name"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
-                                <label for="swift-code" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">SWIFT Number</label>
+                                <label for="swift-code" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Segment</label>
                                 <input
                                     id="swift-code"
                                     type="text"
                                     name="swift-code"
                                     class="form-input flex-1"
-                                    v-model="params.bankInfo.swiftCode"
+                                    :value="form.selectedMachine?.segment" readonly
                                     placeholder="Enter SWIFT Number"
                                 />
                             </div>
-                            <div class="flex items-center mt-4">
-                                <label for="iban-code" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">IBAN Number</label>
+                        </div>
+                    </div>
+                </div>
+                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
+                <div class="mt-8 px-4">
+                    <div class="flex justify-between lg:flex-row flex-col flex-wrap">
+                        <div class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6">
+                            <div class="mt-4 flex items-center">
+                                <label for="reciever-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Transport</label>
                                 <input
-                                    id="iban-code"
-                                    type="text"
-                                    name="iban-code"
+                                    id="reciever-name"
+                                    type="number"
+                                    name="reciever-name"
                                     class="form-input flex-1"
-                                    v-model="params.bankInfo.ibanNo"
-                                    placeholder="Enter IBAN Number"
+                                    placeholder="Enter Name"
+                                />
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="reciever-email" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Pieces</label>
+                                <input
+                                    id="reciever-email"
+                                    type="number"
+                                    name="reciever-email"
+                                    class="form-input flex-1"
+                                    placeholder="Enter Email"
+                                />
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="reciever-address" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">SO GD</label>
+                                <input
+                                    id="reciever-address"
+                                    type="number"
+                                    name="reciever-address"
+                                    class="form-input flex-1"
+                                    placeholder="Enter Address"
+                                />
+                            </div>
+                        </div>
+                        <div class="lg:w-1/2 w-full">
+                            <div class="flex items-center mt-4">
+                                <label for="acno" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Machine ON</label>
+                                <input
+                                    id="acno"
+                                    type="number"
+                                    name="acno"
+                                    class="form-input flex-1"
+                                    placeholder="Enter Account Number"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
-                                <label for="country" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Country</label>
-                                <select id="country" name="country" class="form-select flex-1" v-model="params.bankInfo.country">
-                                    <option value="">Choose Country</option>
-                                    <option value="United States">United States</option>
-                                    <option value="United Kingdom">United Kingdom</option>
-                                    <option value="Canada">Canada</option>
-                                    <option value="Australia">Australia</option>
-                                    <option value="Germany">Germany</option>
-                                    <option value="Sweden">Sweden</option>
-                                    <option value="Denmark">Denmark</option>
-                                    <option value="Norway">Norway</option>
-                                    <option value="New-Zealand">New Zealand</option>
-                                    <option value="Afghanistan">Afghanistan</option>
-                                    <option value="Albania">Albania</option>
-                                    <option value="Algeria">Algeria</option>
-                                    <option value="American-Samoa">Andorra</option>
-                                    <option value="Angola">Angola</option>
-                                    <option value="Antigua Barbuda">Antigua &amp; Barbuda</option>
-                                    <option value="Argentina">Argentina</option>
-                                    <option value="Armenia">Armenia</option>
-                                    <option value="Aruba">Aruba</option>
-                                    <option value="Austria">Austria</option>
-                                    <option value="Azerbaijan">Azerbaijan</option>
-                                    <option value="Bahamas">Bahamas</option>
-                                    <option value="Bahrain">Bahrain</option>
-                                    <option value="Bangladesh">Bangladesh</option>
-                                    <option value="Barbados">Barbados</option>
-                                    <option value="Belarus">Belarus</option>
-                                    <option value="Belgium">Belgium</option>
-                                    <option value="Belize">Belize</option>
-                                    <option value="Benin">Benin</option>
-                                    <option value="Bermuda">Bermuda</option>
-                                    <option value="Bhutan">Bhutan</option>
-                                    <option value="Bolivia">Bolivia</option>
-                                    <option value="Bosnia">Bosnia &amp; Herzegovina</option>
-                                    <option value="Botswana">Botswana</option>
-                                    <option value="Brazil">Brazil</option>
-                                    <option value="British">British Virgin Islands</option>
-                                    <option value="Brunei">Brunei</option>
-                                    <option value="Bulgaria">Bulgaria</option>
-                                    <option value="Burkina">Burkina Faso</option>
-                                    <option value="Burundi">Burundi</option>
-                                    <option value="Cambodia">Cambodia</option>
-                                    <option value="Cameroon">Cameroon</option>
-                                    <option value="Cape">Cape Verde</option>
-                                    <option value="Cayman">Cayman Islands</option>
-                                    <option value="Central-African">Central African Republic</option>
-                                    <option value="Chad">Chad</option>
-                                    <option value="Chile">Chile</option>
-                                    <option value="China">China</option>
-                                    <option value="Colombia">Colombia</option>
-                                    <option value="Comoros">Comoros</option>
-                                    <option value="Costa-Rica">Costa Rica</option>
-                                    <option value="Croatia">Croatia</option>
-                                    <option value="Cuba">Cuba</option>
-                                    <option value="Cyprus">Cyprus</option>
-                                    <option value="Czechia">Czechia</option>
-                                    <option value="Côte">Côte d'Ivoire</option>
-                                    <option value="Djibouti">Djibouti</option>
-                                    <option value="Dominica">Dominica</option>
-                                    <option value="Dominican">Dominican Republic</option>
-                                    <option value="Ecuador">Ecuador</option>
-                                    <option value="Egypt">Egypt</option>
-                                    <option value="El-Salvador">El Salvador</option>
-                                    <option value="Equatorial-Guinea">Equatorial Guinea</option>
-                                    <option value="Eritrea">Eritrea</option>
-                                    <option value="Estonia">Estonia</option>
-                                    <option value="Ethiopia">Ethiopia</option>
-                                    <option value="Fiji">Fiji</option>
-                                    <option value="Finland">Finland</option>
-                                    <option value="France">France</option>
-                                    <option value="Gabon">Gabon</option>
-                                    <option value="Georgia">Georgia</option>
-                                    <option value="Ghana">Ghana</option>
-                                    <option value="Greece">Greece</option>
-                                    <option value="Grenada">Grenada</option>
-                                    <option value="Guatemala">Guatemala</option>
-                                    <option value="Guernsey">Guernsey</option>
-                                    <option value="Guinea">Guinea</option>
-                                    <option value="Guinea-Bissau">Guinea-Bissau</option>
-                                    <option value="Guyana">Guyana</option>
-                                    <option value="Haiti">Haiti</option>
-                                    <option value="Honduras">Honduras</option>
-                                    <option value="Hong-Kong">Hong Kong SAR China</option>
-                                    <option value="Hungary">Hungary</option>
-                                    <option value="Iceland">Iceland</option>
-                                    <option value="India">India</option>
-                                    <option value="Indonesia">Indonesia</option>
-                                    <option value="Iran">Iran</option>
-                                    <option value="Iraq">Iraq</option>
-                                    <option value="Ireland">Ireland</option>
-                                    <option value="Israel">Israel</option>
-                                    <option value="Italy">Italy</option>
-                                    <option value="Jamaica">Jamaica</option>
-                                    <option value="Japan">Japan</option>
-                                    <option value="Jordan">Jordan</option>
-                                    <option value="Kazakhstan">Kazakhstan</option>
-                                    <option value="Kenya">Kenya</option>
-                                    <option value="Kuwait">Kuwait</option>
-                                    <option value="Kyrgyzstan">Kyrgyzstan</option>
-                                    <option value="Laos">Laos</option>
-                                    <option value="Latvia">Latvia</option>
-                                    <option value="Lebanon">Lebanon</option>
-                                    <option value="Lesotho">Lesotho</option>
-                                    <option value="Liberia">Liberia</option>
-                                    <option value="Libya">Libya</option>
-                                    <option value="Liechtenstein">Liechtenstein</option>
-                                    <option value="Lithuania">Lithuania</option>
-                                    <option value="Luxembourg">Luxembourg</option>
-                                    <option value="Macedonia">Macedonia</option>
-                                    <option value="Madagascar">Madagascar</option>
-                                    <option value="Malawi">Malawi</option>
-                                    <option value="Malaysia">Malaysia</option>
-                                    <option value="Maldives">Maldives</option>
-                                    <option value="Mali">Mali</option>
-                                    <option value="Malta">Malta</option>
-                                    <option value="Mauritania">Mauritania</option>
-                                    <option value="Mauritius">Mauritius</option>
-                                    <option value="Mexico">Mexico</option>
-                                    <option value="Moldova">Moldova</option>
-                                    <option value="Monaco">Monaco</option>
-                                    <option value="Mongolia">Mongolia</option>
-                                    <option value="Montenegro">Montenegro</option>
-                                    <option value="Morocco">Morocco</option>
-                                    <option value="Mozambique">Mozambique</option>
-                                    <option value="Myanmar">Myanmar (Burma)</option>
-                                    <option value="Namibia">Namibia</option>
-                                    <option value="Nepal">Nepal</option>
-                                    <option value="Netherlands">Netherlands</option>
-                                    <option value="Nicaragua">Nicaragua</option>
-                                    <option value="Niger">Niger</option>
-                                    <option value="Nigeria">Nigeria</option>
-                                    <option value="North-Korea">North Korea</option>
-                                    <option value="Oman">Oman</option>
-                                    <option value="Pakistan">Pakistan</option>
-                                    <option value="Palau">Palau</option>
-                                    <option value="Palestinian">Palestinian Territories</option>
-                                    <option value="Panama">Panama</option>
-                                    <option value="Papua">Papua New Guinea</option>
-                                    <option value="Paraguay">Paraguay</option>
-                                    <option value="Peru">Peru</option>
-                                    <option value="Philippines">Philippines</option>
-                                    <option value="Poland">Poland</option>
-                                    <option value="Portugal">Portugal</option>
-                                    <option value="Puerto">Puerto Rico</option>
-                                    <option value="Qatar">Qatar</option>
-                                    <option value="Romania">Romania</option>
-                                    <option value="Russia">Russia</option>
-                                    <option value="Rwanda">Rwanda</option>
-                                    <option value="Réunion">Réunion</option>
-                                    <option value="Samoa">Samoa</option>
-                                    <option value="San-Marino">San Marino</option>
-                                    <option value="Saudi-Arabia">Saudi Arabia</option>
-                                    <option value="Senegal">Senegal</option>
-                                    <option value="Serbia">Serbia</option>
-                                    <option value="Seychelles">Seychelles</option>
-                                    <option value="Sierra-Leone">Sierra Leone</option>
-                                    <option value="Singapore">Singapore</option>
-                                    <option value="Slovakia">Slovakia</option>
-                                    <option value="Slovenia">Slovenia</option>
-                                    <option value="Solomon-Islands">Solomon Islands</option>
-                                    <option value="Somalia">Somalia</option>
-                                    <option value="South-Africa">South Africa</option>
-                                    <option value="South-Korea">South Korea</option>
-                                    <option value="Spain">Spain</option>
-                                    <option value="Sri-Lanka">Sri Lanka</option>
-                                    <option value="Sudan">Sudan</option>
-                                    <option value="Suriname">Suriname</option>
-                                    <option value="Swaziland">Swaziland</option>
-                                    <option value="Switzerland">Switzerland</option>
-                                    <option value="Syria">Syria</option>
-                                    <option value="Sao-Tome-and-Principe">São Tomé &amp; Príncipe</option>
-                                    <option value="Tajikistan">Tajikistan</option>
-                                    <option value="Tanzania">Tanzania</option>
-                                    <option value="Thailand">Thailand</option>
-                                    <option value="Timor-Leste">Timor-Leste</option>
-                                    <option value="Togo">Togo</option>
-                                    <option value="Tonga">Tonga</option>
-                                    <option value="Trinidad-and-Tobago">Trinidad &amp; Tobago</option>
-                                    <option value="Tunisia">Tunisia</option>
-                                    <option value="Turkey">Turkey</option>
-                                    <option value="Turkmenistan">Turkmenistan</option>
-                                    <option value="Uganda">Uganda</option>
-                                    <option value="Ukraine">Ukraine</option>
-                                    <option value="UAE">United Arab Emirates</option>
-                                    <option value="Uruguay">Uruguay</option>
-                                    <option value="Uzbekistan">Uzbekistan</option>
-                                    <option value="Vanuatu">Vanuatu</option>
-                                    <option value="Venezuela">Venezuela</option>
-                                    <option value="Vietnam">Vietnam</option>
-                                    <option value="Yemen">Yemen</option>
-                                    <option value="Zambia">Zambia</option>
-                                    <option value="Zimbabwe">Zimbabwe</option>
+                                <label for="bank-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Travel time</label>
+                                <input
+                                    id="bank-name"
+                                    type="number"
+                                    name="bank-name"
+                                    class="form-input flex-1"
+                                    placeholder="Enter Bank Name"
+                                />
+                            </div>
+                            <div class="flex items-center mt-4">
+                                <label for="bank-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Type</label>
+                                
+                                <select
+                                    id="formUserTypeeeee"
+                                    class="form-select text-white-dark flex-1"
+                                    required
+                                >
+                                    <option value="1" selected>Contract</option>
+                                    <option value="2">Client</option>
                                 </select>
+                            
+                            </div>
+                        </div>
+                        <div class="w-full">
+                            <div class="flex items-center">
+                                <label for="swift-code" class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0">Error reported</label>
+                                <input
+                                    id="swift-code"
+                                    type="text"
+                                    name="swift-code"
+                                    class="form-input flex-1"
+                                    placeholder="Enter SWIFT Number"
+                                />
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="swift-code" class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0">Fault Symptom</label>
+                                <textarea id="ctnTextarea" rows="3" class="form-textarea flex-1" placeholder="Enter Textarea" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
+                <div class="mt-8 px-4">
+                    <div class="flex flex-wrap justify-evenly">
+                        <label class="inline-flex">
+                            <input type="radio" name="default_radio" class="form-radio" checked />
+                            <span>EMC</span>
+                        </label>
+                        <label class="inline-flex">
+                            <input type="radio" name="default_radio" class="form-radio" checked />
+                            <span>INST</span>
+                        </label>
+                        <label class="inline-flex">
+                            <input type="radio" name="default_radio" class="form-radio" checked />
+                            <span>SAT</span>
+                        </label>
+                        <label class="inline-flex">
+                            <input type="radio" name="default_radio" class="form-radio" checked />
+                            <span>DEIN</span>
+                        </label>
+                        <label class="inline-flex">
+                            <input type="radio" name="default_radio" class="form-radio" checked />
+                            <span>PM</span>
+                        </label>
+                        <label class="inline-flex">
+                            <input type="radio" name="default_radio" class="form-radio" checked />
+                            <span>SITE</span>
+                        </label>
+                        <label class="inline-flex">
+                            <input type="radio" name="default_radio" class="form-radio" checked />
+                            <span>SORT</span>
+                        </label>
+                    </div>
+                    <div class="w-full">
+                        <div class="mt-4 flex items-center">
+                            <label for="swift-code" class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0">Actions Taken</label>
+                            <textarea id="ctnTextarea" rows="3" class="form-textarea flex-1" placeholder="Enter Textarea" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
+                <div class="mt-8 px-4">
+                    <div class="flex justify-between lg:flex-row flex-col flex-wrap">
+                        <div class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6">
+                            <div class="mt-4 flex items-center">
+                                <label for="reciever-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Reported</label>
+                                <flat-pickr class="form-input flex-1" :config="dateTime"></flat-pickr>
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="reciever-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Arrival</label>
+                                <flat-pickr class="form-input flex-1" :config="dateTime"></flat-pickr>
+                            </div>
+                        </div>
+                        <div class="lg:w-1/2 w-full">
+                            <div class="mt-4 flex items-center">
+                                <label for="reciever-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Finished</label>
+                                <flat-pickr class="form-input flex-1" :config="dateTime"></flat-pickr>
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="reciever-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Departure</label>
+                                <flat-pickr class="form-input flex-1" :config="dateTime"></flat-pickr>
+                            </div>
+                        </div>
+                        <div class="w-full flex flex-wrap justify-evenly">
+                            <label class="inline-flex">
+                                <input type="radio" name="default_radio2" class="form-radio" checked />
+                                <span>Complete</span>
+                            </label>
+                            <label class="inline-flex">
+                                <input type="radio" name="default_radio2" class="form-radio" checked />
+                                <span>Incomplete</span>
+                            </label>
+                            <label class="inline-flex">
+                                <input type="radio" name="default_radio2" class="form-radio" checked />
+                                <span>Return</span>
+                            </label>
+                        </div>
+                        <div class="w-full">
+                            <div class="mt-4 flex items-center flex flex-wrap justify-evenly">
+                                <label class="inline-flex">
+                                    <input type="checkbox" class="form-checkbox rounded-full" checked />
+                                    <span>Test OK</span>
+                                </label>
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="bank-name" class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0">DT</label>
+                                <input
+                                    id="bank-name"
+                                    type="number"
+                                    name="bank-name"
+                                    class="form-input flex-1"
+                                    placeholder="Enter Bank Name"
+                                />
                             </div>
                         </div>
                     </div>
@@ -346,10 +297,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Item</th>
+                                    <th>Part Replaced</th>
+                                    <th class="w-1">Description</th>
                                     <th class="w-1">Quantity</th>
-                                    <th class="w-1">Price</th>
-                                    <th>Total</th>
                                     <th class="w-1"></th>
                                 </tr>
                             </thead>
@@ -363,11 +313,11 @@
                                     <tr class="align-top">
                                         <td>
                                             <input type="text" class="form-input min-w-[200px]" placeholder="Enter Item Name" v-model="item.title" />
-                                            <textarea class="form-textarea mt-4" placeholder="Enter Description" v-model="item.description"></textarea>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-input min-w-[200px]" placeholder="Enter Item Name" v-model="item.title" />
                                         </td>
                                         <td><input type="number" class="form-input w-32" placeholder="Quantity" v-model="item.quantity" min="0"/></td>
-                                        <td><input type="number" class="form-input w-32" placeholder="Price" v-model="item.amount" min="0"/></td>
-                                        <td>${{ item.amount * item.quantity }}</td>
                                         <td>
                                             <button type="button" @click="removeItem(item)">
                                                 <svg
@@ -391,33 +341,6 @@
                                 </template>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="flex justify-between sm:flex-row flex-col mt-6 px-4">
-                        <div class="sm:mb-0 mb-6">
-                            <button type="button" class="btn btn-primary" @click="addItem()">Add Item</button>
-                        </div>
-                        <div class="sm:w-2/5">
-                            <div class="flex items-center justify-between">
-                                <div>Subtotal</div>
-                                <div>$0.00</div>
-                            </div>
-                            <div class="flex items-center justify-between mt-4">
-                                <div>Tax(%)</div>
-                                <div>0%</div>
-                            </div>
-                            <div class="flex items-center justify-between mt-4">
-                                <div>Shipping Rate($)</div>
-                                <div>$0.00</div>
-                            </div>
-                            <div class="flex items-center justify-between mt-4">
-                                <div>Discount(%)</div>
-                                <div>0%</div>
-                            </div>
-                            <div class="flex items-center justify-between mt-4 font-semibold">
-                                <div>Total</div>
-                                <div>$0.00</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="mt-8 px-4">
@@ -546,12 +469,30 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
+import { useAppStore } from '@/stores/index';
     import AppLayout from "@/layouts/app-layout.vue";
-    import SiteLayout from "@/layouts/app.vue";
+import SiteLayout from "@/layouts/app.vue";
+import flatPickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
+const store = useAppStore();
     defineOptions({
         layout: [SiteLayout, AppLayout],
     });
+
+    const dateTime: any = ref({
+    enableTime: true,
+    dateFormat: 'Y-m-d H:i',
+    position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
+  });
+
+const catalogMachine = reactive([
+    {id: "173503410", type:"BPS C4",segment:"C", customer: {name: "Banco Central do Brazil", address: "Calzada Legaria 691 Col. Lomas de Sotelo Banxico CDMX", contact: "Gieselle Salavelia Hernandez Espindola"} }
+]);
+
+const form = reactive({
+    selectedMachine: null,
+});
 
     const items: any = ref([]);
     const selectedFile = ref(null);
