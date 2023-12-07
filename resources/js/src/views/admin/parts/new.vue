@@ -61,15 +61,40 @@
                 <button type="submit" class="btn btn-primary !mt-6">Add</button>
             </form>
         </div>
+
+        <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b] mt-5">
+            <form class="space-y-5">
+                <div class="custom-file-container" data-upload-id="myFirstImage">
+                    <div class="label-container"><label>Excel Upload </label> <a href="javascript:;" class="custom-file-container__image-clear" title="Clear Image">×</a></div>
+                    <label class="custom-file-container__custom-file">
+                        <input type="file" class="custom-file-container__custom-file__custom-file-input" />
+                        <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                        <span class="custom-file-container__custom-file__custom-file-control ltr:pr-20 rtl:pl-20"></span>
+                    </label>
+                    <div class="custom-file-container__image-preview" style="display:none;"></div>
+                </div>
+                <button type="submit" class="btn btn-primary !mt-6">Add</button>
+            </form>
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import Multiselect from "@suadelabs/vue3-multiselect";
 import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
+import FileUploadWithPreview from 'file-upload-with-preview';
+
+onMounted(() => {
+    new FileUploadWithPreview('myFirstImage', {
+        images: {
+            baseImage: '',
+            backgroundImage: '',
+        },
+    });
+});
 
 defineOptions({
     layout: [SiteLayout, AppLayout],

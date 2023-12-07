@@ -25,17 +25,21 @@ Route::get('/', function () {
 })->name('index');
 
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('apps/invoice/list');
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::resource('/users/types', UserTypeController::class);
     Route::resource('/users/titles', UserTitleController::class);
     Route::resource('/users', UserController::class);
     Route::resource('/parts', PartController::class);
+    Route::get('/report', function () {
+        return Inertia::render('admin/report/index');
+    });
 });
 
 

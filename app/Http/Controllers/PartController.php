@@ -32,7 +32,13 @@ class PartController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Part::create($request->validate([
+            'num_part' => ['required', 'max:255', 'unique:parts'],
+            'descripcion' => ['required', 'max:255'],
+            'is_active' => ['required'],
+        ]));
+
+        return to_route('parts.index');
     }
 
     /**
