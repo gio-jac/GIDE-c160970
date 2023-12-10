@@ -45,8 +45,8 @@ class UserController extends Controller
         $request->merge(['password' => Hash::make($request->input('password'))]);
 
         User::create($request->validate([
-            'emp' => ['required', 'max:10'],
-            'email' => ['required','email', 'max:255'],
+            'emp' => ['required', 'max:10','unique:users'],
+            'email' => ['required','email', 'max:255','unique:users'],
             'password' => ['required', 'max:255'],
             'nombre' => ['required', 'max:255'],
             'apellido_paterno' => ['required', 'max:255'],

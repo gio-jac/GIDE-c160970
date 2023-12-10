@@ -177,7 +177,7 @@ const props = defineProps({
         required: true,
     },
 });
-
+console.log(props.users);
 const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([

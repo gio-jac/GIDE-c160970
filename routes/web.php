@@ -8,6 +8,7 @@ use App\Http\Controllers\UserTypeController;
 use App\Http\Controllers\UserTitleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PartController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,9 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users/titles', UserTitleController::class);
     Route::resource('/users', UserController::class);
     Route::resource('/parts', PartController::class);
-    Route::get('/report', function () {
-        return Inertia::render('admin/report/index');
-    });
+    Route::resource('/report', ReportController::class);
 });
 
 
