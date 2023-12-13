@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Part;
+use App\Models\Code;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ReportController extends Controller
+class CodeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $catalogParts = Part::where('is_active', 1)->get();
-        return Inertia::render('admin/reports/index',[
-            'catalogParts' => $catalogParts
+        $codes = Code::all();
+        return Inertia::render('admin/reports/codes/index',[
+            'codes' => $codes
         ]);
     }
 
@@ -24,7 +24,7 @@ class ReportController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('admin/reports/codes/new');
     }
 
     /**
@@ -32,7 +32,13 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Code::create($request->validate([
+            'code' => ['required', 'max:255', 'unique:codes'],
+            'description' => ['required', 'max:255'],
+            'is_active' => ['required'],
+        ]));
+
+        return to_route('codes.index');
     }
 
     /**

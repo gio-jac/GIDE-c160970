@@ -9,6 +9,7 @@ use App\Http\Controllers\UserTitleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PartController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\CodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::resource('/parts', PartController::class);
     Route::post('/parts/excel', [PartController::class, 'storeExcel'])->name('parts.storeExcel');
-    Route::resource('/report', ReportController::class);
+    Route::resource('/reports/codes', CodeController::class);
+    Route::resource('/reports', ReportController::class);
 });
 
 
