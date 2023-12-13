@@ -63,11 +63,11 @@
         </div>
 
         <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b] mt-5">
-            <form class="space-y-5">
+            <form class="space-y-5" @submit.prevent="submitExcel">
                 <div class="custom-file-container" data-upload-id="myFirstImage">
                     <div class="label-container"><label>Excel Upload </label> <a href="javascript:;" class="custom-file-container__image-clear" title="Clear Image">×</a></div>
                     <label class="custom-file-container__custom-file">
-                        <input type="file" class="custom-file-container__custom-file__custom-file-input" />
+                        <input type="file" v-on:change="onFileChange" class="custom-file-container__custom-file__custom-file-input" />
                         <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
                         <span class="custom-file-container__custom-file__custom-file-control ltr:pr-20 rtl:pl-20"></span>
                     </label>
@@ -110,7 +110,21 @@ const form = reactive({
     is_active: true,
 });
 
+const formExcel = reactive({
+    your_file: null,
+});
+
 function submit() {
     router.post("/parts", form);
+}
+
+function onFileChange(e) {
+    var files = e.target.files || e.dataTransfer.files;
+    formExcel.your_file = files[0];
+}
+
+function submitExcel() {
+    //console.log(formExcel);
+    router.post("/parts/excel", formExcel);
 }
 </script>

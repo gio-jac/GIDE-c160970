@@ -89,6 +89,10 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        User::findOrFail($id)->update([
+            'is_active' => false,
+        ]);
+        
+        return to_route('users.index');
     }
 }

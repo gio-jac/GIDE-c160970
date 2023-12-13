@@ -26,6 +26,7 @@ class User extends Authenticatable
         'apellido_paterno',
         'apellido_materno',
         'telefono',
+        'is_active',
         'user_type_id',
         'user_title_id',
     ];

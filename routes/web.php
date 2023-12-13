@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users/titles', UserTitleController::class);
     Route::resource('/users', UserController::class);
     Route::resource('/parts', PartController::class);
+    Route::post('/parts/excel', [PartController::class, 'storeExcel'])->name('parts.storeExcel');
     Route::resource('/report', ReportController::class);
 });
 

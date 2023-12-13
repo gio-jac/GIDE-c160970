@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Part;
+use App\Imports\PartsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -37,6 +39,21 @@ class PartController extends Controller
             'descripcion' => ['required', 'max:255'],
             'is_active' => ['required'],
         ]));
+
+        return to_route('parts.index');
+    }
+
+    /**
+     * Store a newly created resource in storage coming from an excel file.
+     */
+    public function storeExcel(Request $request)
+    {
+        Excel::import(new PartsImport, request()->file('your_file'));
+        /*Part::create($request->validate([
+            'num_part' => ['required', 'max:255', 'unique:parts'],
+            'descripcion' => ['required', 'max:255'],
+            'is_active' => ['required'],
+        ]));*/
 
         return to_route('parts.index');
     }
