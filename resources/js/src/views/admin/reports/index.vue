@@ -7,13 +7,13 @@
                     <div class="w-full">
                         <div class="flex items-center">
                             <label
-                                for="formUserType"
+                                for="formMachine"
                                 class="w-[100px] text-right mb-0 mr-[10px]"
                                 >Machine Serial</label
                             >
 
                             <multiselect
-                                id="formUserType"
+                                id="formMachine"
                                 :options="catalogMachine"
                                 v-model="form.selectedMachine"
                                 class="custom-multiselect flex-1"
@@ -22,6 +22,33 @@
                                 :custom-label="
                                     ({ id, type, customer }) =>
                                         `${id} - ${type} - ${customer.name}`
+                                "
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex px-4 mt-4" v-if="user.type === 1">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formUser"
+                                class="w-[100px] text-right mb-0 mr-[10px]"
+                                >User</label
+                            >
+
+                            <multiselect
+                                id="formUser"
+                                :options="catalogUsers"
+                                v-model="form.selectedUser"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                placeholder="Select an option"
+                                :custom-label="
+                                    ({ emp, nombre, apellido_paterno }) =>
+                                        `${emp} - ${nombre} ${apellido_paterno}`
                                 "
                                 selected-label=""
                                 select-label=""
@@ -39,14 +66,14 @@
                             <div class="text-lg">Customer Data</div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-name"
+                                    for="formCustomerName"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Name</label
                                 >
                                 <input
-                                    id="reciever-name"
+                                    id="formCustomerName"
                                     type="text"
-                                    name="reciever-name"
+                                    name="formCustomerName"
                                     class="form-input flex-1"
                                     :value="form.selectedMachine?.customer.name"
                                     readonly
@@ -55,14 +82,14 @@
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-email"
+                                    for="formCustomerAddress"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Address</label
                                 >
                                 <input
-                                    id="reciever-email"
+                                    id="formCustomerAddress"
                                     type="text"
-                                    name="reciever-email"
+                                    name="formCustomerEmail"
                                     class="form-input flex-1"
                                     :value="
                                         form.selectedMachine?.customer.address
@@ -73,14 +100,14 @@
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-address"
+                                    for="formCustomerContact"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Contact</label
                                 >
                                 <input
-                                    id="reciever-address"
+                                    id="formCustomerContact"
                                     type="text"
-                                    name="reciever-address"
+                                    name="formCustomerContact"
                                     class="form-input flex-1"
                                     :value="
                                         form.selectedMachine?.customer.contact
@@ -94,14 +121,14 @@
                             <div class="text-lg">Machine Data</div>
                             <div class="flex items-center mt-4">
                                 <label
-                                    for="acno"
+                                    for="formMachineSerial"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Serial</label
                                 >
                                 <input
-                                    id="acno"
+                                    id="formMachineSerial"
                                     type="text"
-                                    name="acno"
+                                    name="formMachineSerial"
                                     class="form-input flex-1"
                                     :value="form.selectedMachine?.id"
                                     readonly
@@ -110,14 +137,14 @@
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
-                                    for="bank-name"
+                                    for="formMachineType"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Type</label
                                 >
                                 <input
-                                    id="bank-name"
+                                    id="formMachineType"
                                     type="text"
-                                    name="bank-name"
+                                    name="formMachineType"
                                     class="form-input flex-1"
                                     :value="form.selectedMachine?.type"
                                     readonly
@@ -126,14 +153,14 @@
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
-                                    for="swift-code"
+                                    for="formMachineSegment"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Segment</label
                                 >
                                 <input
-                                    id="swift-code"
+                                    id="formMachineSegment"
                                     type="text"
-                                    name="swift-code"
+                                    name="formMachineSegment"
                                     class="form-input flex-1"
                                     :value="form.selectedMachine?.segment"
                                     readonly
@@ -153,42 +180,42 @@
                         >
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-name"
+                                    for="formReportTransport"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Transport</label
                                 >
                                 <input
-                                    id="reciever-name"
+                                    id="formReportTransport"
                                     type="number"
-                                    name="reciever-name"
+                                    name="formReportTransport"
                                     class="form-input flex-1"
                                     placeholder="Enter Transport"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-email"
+                                    for="formReportPieces"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Pieces</label
                                 >
                                 <input
-                                    id="reciever-email"
+                                    id="formReportPieces"
                                     type="number"
-                                    name="reciever-email"
+                                    name="formReportPieces"
                                     class="form-input flex-1"
                                     placeholder="Enter Pieces"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-address"
+                                    for="formReportSOGD"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >SO GD</label
                                 >
                                 <input
-                                    id="reciever-address"
+                                    id="formReportSOGD"
                                     type="number"
-                                    name="reciever-address"
+                                    name="formReportSOGD"
                                     class="form-input flex-1"
                                     placeholder="Enter SO GD"
                                 />
@@ -197,41 +224,42 @@
                         <div class="lg:w-1/2 w-full">
                             <div class="flex items-center mt-4">
                                 <label
-                                    for="acno"
+                                    for="formReportOnTime"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Machine ON</label
                                 >
                                 <input
-                                    id="acno"
+                                    id="formReportOnTime"
                                     type="number"
-                                    name="acno"
+                                    name="formReportOnTime"
                                     class="form-input flex-1"
                                     placeholder="Machine time ON"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
-                                    for="bank-name"
+                                    for="formReportTravelTime"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Travel time (Min.)</label
                                 >
                                 <input
-                                    id="bank-name"
+                                    id="formReportTravelTime"
                                     type="number"
-                                    name="bank-name"
+                                    name="formReportTravelTime"
                                     class="form-input flex-1"
                                     placeholder="Enter Travel Time"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
-                                    for="bank-name"
+                                    for="formReportType"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Type</label
                                 >
 
                                 <select
-                                    id="formUserTypeeeee"
+                                    id="formReportType"
+                                    name="formReportType"
                                     class="form-select text-white-dark flex-1"
                                     required
                                 >
@@ -243,26 +271,27 @@
                         <div class="w-full">
                             <div class="flex items-center">
                                 <label
-                                    for="swift-code"
+                                    for="formReportError"
                                     class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
                                     >Error reported</label
                                 >
                                 <input
-                                    id="swift-code"
+                                    id="formReportError"
                                     type="text"
-                                    name="swift-code"
+                                    name="formReportError"
                                     class="form-input flex-1"
                                     placeholder="Enter Error Reported"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="swift-code"
+                                    for="formReportSymptom"
                                     class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
                                     >Fault Symptom</label
                                 >
                                 <textarea
-                                    id="ctnTextarea"
+                                    id="formReportSymptom"
+                                    name="formReportSymptom"
                                     rows="3"
                                     class="form-textarea flex-1"
                                     placeholder="Enter Fault Symptom"
@@ -278,7 +307,7 @@
                         <label v-for="(code,index) in catalogCodes" :key="index" class="inline-flex">
                             <input
                                 type="radio"
-                                name="default_radio"
+                                name="formReportCode"
                                 class="form-radio"
                                 :value="code"
                                 v-model="form.selectedCode"
@@ -289,12 +318,13 @@
                     <div class="w-full">
                         <div class="mt-4 flex items-center">
                             <label
-                                for="swift-code"
+                                for="formReportActions"
                                 class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
                                 >Actions Taken</label
                             >
                             <textarea
-                                id="ctnTextarea"
+                                id="formReportActions"
+                                name="formReportActions"
                                 rows="3"
                                 class="form-textarea flex-1"
                                 placeholder="Enter Actions Taken"
@@ -313,22 +343,26 @@
                         >
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-name"
+                                    for="formReportReportedTime"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Reported</label
                                 >
                                 <flat-pickr
+                                    id="formReportReportedTime"
+                                    name="formReportReportedTime"
                                     class="form-input flex-1"
                                     :config="dateTime"
                                 ></flat-pickr>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-name"
+                                    for="formReportTimeArrival"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Arrival</label
                                 >
                                 <flat-pickr
+                                    id="formReportTimeArrival"
+                                    name="formReportTimeArrival"
                                     class="form-input flex-1"
                                     :config="dateTime"
                                 ></flat-pickr>
@@ -337,54 +371,41 @@
                         <div class="lg:w-1/2 w-full">
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-name"
+                                    for="formReportTimeFinished"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Finished</label
                                 >
                                 <flat-pickr
+                                    id="formReportTimeFinished"
+                                    name="formReportTimeFinished"
                                     class="form-input flex-1"
                                     :config="dateTime"
                                 ></flat-pickr>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="reciever-name"
+                                    for="formReportTimeDeparture"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Departure</label
                                 >
                                 <flat-pickr
+                                    id="formReportTimeDeparture"
+                                    name="formReportTimeDeparture"
                                     class="form-input flex-1"
                                     :config="dateTime"
                                 ></flat-pickr>
                             </div>
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly">
-                            <label class="inline-flex">
+                            <label v-for="(status,index) in catalogStatus" :key="index" class="inline-flex">
                                 <input
                                     type="radio"
-                                    name="default_radio2"
+                                    name="formReportStatus"
                                     class="form-radio"
-                                    checked
+                                    :value="status"
+                                    v-model="form.selectedStatus"
                                 />
-                                <span>Complete</span>
-                            </label>
-                            <label class="inline-flex">
-                                <input
-                                    type="radio"
-                                    name="default_radio2"
-                                    class="form-radio"
-                                    checked
-                                />
-                                <span>Incomplete</span>
-                            </label>
-                            <label class="inline-flex">
-                                <input
-                                    type="radio"
-                                    name="default_radio2"
-                                    class="form-radio"
-                                    checked
-                                />
-                                <span>Return</span>
+                                <span>{{ status.status }}</span>
                             </label>
                         </div>
                         <div class="w-1/3 m-auto">
@@ -402,14 +423,14 @@
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="bank-name"
+                                    for="formReportDT"
                                     class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
                                     >DT</label
                                 >
                                 <input
-                                    id="bank-name"
+                                    id="formReportDT"
                                     type="number"
-                                    name="bank-name"
+                                    name="formReportDT"
                                     class="form-input flex-1"
                                     placeholder="Enter DT"
                                 />
@@ -423,13 +444,13 @@
                     <div class="w-full">
                         <div class="flex items-center">
                             <label
-                                for="formUserType2"
+                                for="formReportParts"
                                 class="w-[100px] text-right mb-0 mr-[10px]"
                                 >Parts</label
                             >
 
                             <multiselect
-                                id="formUserType2"
+                                id="formReportParts"
                                 :options="props.catalogParts"
                                 v-model="form.selectedPart"
                                 class="custom-multiselect flex-1"
@@ -687,8 +708,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, reactive } from "vue";
-import { Head } from "@inertiajs/vue3";
+import { ref, onMounted, reactive, computed } from "vue";
+import { Head, usePage } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
@@ -697,6 +718,10 @@ import Multiselect from "@suadelabs/vue3-multiselect";
 import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 import "flatpickr/dist/flatpickr.css";
 const store = useAppStore();
+
+const page = usePage();
+const user = computed(() => page.props.auth);
+
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
@@ -707,6 +732,14 @@ const props = defineProps({
         required: true,
     },
     catalogCodes: {
+        type: Array,
+        required: true,
+    },
+    catalogUsers: {
+        type: Array,
+        required: true,
+    },
+    catalogStatus: {
         type: Array,
         required: true,
     },
@@ -758,6 +791,8 @@ const form = reactive({
     selectedPart: null,
     addNewPart: [],
     selectedCode: null,
+    selectedUser: null,
+    selectedStatus: null,
 });
 
 const items: any = ref([]);

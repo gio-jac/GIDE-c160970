@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Part;
 use App\Models\Code;
 use App\Models\User;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -18,10 +19,12 @@ class ReportController extends Controller
         $catalogParts = Part::where('is_active', 1)->get();
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
+        $catalogStatus = Status::where('is_active', 1)->get();
         return Inertia::render('admin/reports/index',[
             'catalogParts' => $catalogParts,
             'catalogCodes' => $catalogCodes,
             'catalogUsers' => $catalogUsers,
+            'catalogStatus' => $catalogStatus,
         ]);
     }
 
