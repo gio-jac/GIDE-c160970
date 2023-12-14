@@ -213,7 +213,7 @@
                                 <label
                                     for="bank-name"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Travel time</label
+                                    >Travel time (Min.)</label
                                 >
                                 <input
                                     id="bank-name"
@@ -275,68 +275,15 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="flex flex-wrap justify-evenly">
-                        <label class="inline-flex">
+                        <label v-for="(code,index) in catalogCodes" :key="index" class="inline-flex">
                             <input
                                 type="radio"
                                 name="default_radio"
                                 class="form-radio"
-                                checked
+                                :value="code"
+                                v-model="form.selectedCode"
                             />
-                            <span>EMC</span>
-                        </label>
-                        <label class="inline-flex">
-                            <input
-                                type="radio"
-                                name="default_radio"
-                                class="form-radio"
-                                checked
-                            />
-                            <span>INST</span>
-                        </label>
-                        <label class="inline-flex">
-                            <input
-                                type="radio"
-                                name="default_radio"
-                                class="form-radio"
-                                checked
-                            />
-                            <span>SAT</span>
-                        </label>
-                        <label class="inline-flex">
-                            <input
-                                type="radio"
-                                name="default_radio"
-                                class="form-radio"
-                                checked
-                            />
-                            <span>DEIN</span>
-                        </label>
-                        <label class="inline-flex">
-                            <input
-                                type="radio"
-                                name="default_radio"
-                                class="form-radio"
-                                checked
-                            />
-                            <span>PM</span>
-                        </label>
-                        <label class="inline-flex">
-                            <input
-                                type="radio"
-                                name="default_radio"
-                                class="form-radio"
-                                checked
-                            />
-                            <span>SITE</span>
-                        </label>
-                        <label class="inline-flex">
-                            <input
-                                type="radio"
-                                name="default_radio"
-                                class="form-radio"
-                                checked
-                            />
-                            <span>SORT</span>
+                            <span>{{ code.code }}</span>
                         </label>
                     </div>
                     <div class="w-full">
@@ -759,6 +706,10 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    catalogCodes: {
+        type: Array,
+        required: true,
+    },
 });
 
 const dateTime: any = ref({
@@ -805,7 +756,8 @@ const catalogMachine = reactive([
 const form = reactive({
     selectedMachine: null,
     selectedPart: null,
-    addNewPart: []
+    addNewPart: [],
+    selectedCode: null,
 });
 
 const items: any = ref([]);

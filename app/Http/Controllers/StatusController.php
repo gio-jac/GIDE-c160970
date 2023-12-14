@@ -2,26 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Part;
-use App\Models\Code;
-use App\Models\User;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ReportController extends Controller
+class StatusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $catalogParts = Part::where('is_active', 1)->get();
-        $catalogCodes = Code::where('is_active', 1)->get();
-        $catalogUsers = User::where('is_active', 1)->get();
-        return Inertia::render('admin/reports/index',[
-            'catalogParts' => $catalogParts,
-            'catalogCodes' => $catalogCodes,
-            'catalogUsers' => $catalogUsers,
+        $status = Status::all();
+        return Inertia::render('admin/reports/statuses/index',[
+            'status' => $status
         ]);
     }
 
@@ -30,7 +24,7 @@ class ReportController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('admin/reports/statuses/new');
     }
 
     /**
@@ -38,7 +32,13 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Status::create($request->validate([
+            'status' => ['required', 'max:255', 'unique:statuses'],
+            'description' => ['required', 'max:255'],
+            'is_active' => ['required'],
+        ]));
+
+        return to_route('statuses.index');
     }
 
     /**
@@ -70,6 +70,10 @@ class ReportController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Status::findOrFail($id)->update([
+            'is_active' => false,
+        ]);
+        
+        return to_route('statuses.index');
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <Head title="Users" />
+    <Head title="Reports Status" />
     <div>
         <div>
             <div
@@ -11,7 +11,7 @@
                     >
                         <div class="flex items-center gap-2">
                             <Link
-                                href="/users/create"
+                                href="/reports/statuses/create"
                                 class="btn btn-primary gap-2"
                             >
                                 <svg
@@ -44,9 +44,9 @@
 
                     <vue3-datatable
                         ref="datatable"
-                        :rows="props.users"
+                        :rows="props.status"
                         :columns="cols"
-                        :totalRows="props.users?.length"
+                        :totalRows="props.status?.length"
                         :hasCheckbox="false"
                         :sortable="true"
                         :search="search"
@@ -75,7 +75,7 @@
                         <template #actions="data">
                             <div class="flex gap-4 items-center justify-center">
                                 <Link
-                                    :href="`/users/${data.value.id}/edit`"
+                                    :href="`/reports/statuses/${data.value.id}/edit`"
                                     class="hover:text-info"
                                 >
                                     <svg
@@ -172,21 +172,18 @@ defineOptions({
     layout: [SiteLayout, AppLayout],
 });
 const props = defineProps({
-    users: {
+    status: {
         type: Array,
         required: true,
     },
 });
-//console.log(props.users);
+
 const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([
-    { field: "emp", title: "ID" },
-    { field: "nombre", title: "Name" },
-    { field: "apellido_paterno", title: "Paternal surname" },
-    { field: "telefono", title: "Phone" },
-    { field: "email", title: "Email" },
-    { field: "is_active", title: "Active" },
+    { field: "status", title: "Status" },
+    { field: "description", title: "Description" },
+    { field: "is_active", title: "Is assignable?" },
     {
         field: "actions",
         title: "Actions",
@@ -195,7 +192,7 @@ const cols = ref([
     },
 ]);
 const searchText = ref("");
-const columns = ref(["emp", "nombre", "apellido_paterno", "telefono", "email", "is_active"]);
+const columns = ref(["titulo", "is_active", "actions"]);
 const tableOption = ref({
     headings: {
         id: (h: any, row: any, index: number) => {
@@ -214,7 +211,7 @@ const tableOption = ref({
         limit: "",
     },
     resizableColumns: false,
-    sortable: ["tipo", "is_active"],
+    sortable: ["titulo", "is_active"],
     sortIcon: {
         base: "sort-icon-none",
         up: "sort-icon-asc",
@@ -225,7 +222,7 @@ const tableOption = ref({
 const deleteRow = (item: any = null) => {
     if (confirm("Are you sure want to delete selected row ?")) {
         if (item) {
-            router.delete(`/users/${item}`);
+            router.delete(`/reports/statuses/${item}`);
         }
     }
 };

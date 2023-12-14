@@ -70,6 +70,10 @@ class CodeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Code::findOrFail($id)->update([
+            'is_active' => false,
+        ]);
+        
+        return to_route('codes.index');
     }
 }

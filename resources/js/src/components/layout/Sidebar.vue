@@ -119,7 +119,7 @@
                             </vue-collapsible>
                         </li>-->
 
-                        <h2 class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
+                        <h2 v-if="user.type === 1" class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                             <svg
                                 class="w-4 h-5 flex-none hidden"
                                 viewBox="0 0 24 24"
@@ -133,7 +133,7 @@
                             </svg>
                             <span><!--{{ $t('apps') }}-->ADMIN</span>
                         </h2>
-                        <li class="nav-item">
+                        <li v-if="user.type === 1" class="nav-item">
                             <ul>
                                 <li class="nav-item">
                                     <Link href="/users" :class="{ 'active': $page.url==='/users' || $page.url==='/users/create' }" class="group" @click="toggleMobileMenu">
@@ -340,7 +340,7 @@
                                                             <Link href="/reports/failures" :class="{ 'active': $page.url.startsWith('/reports/failures') }" target="_blank">Failures</Link>
                                                         </li>
                                                         <li @click="toggleMobileMenu">
-                                                            <Link href="/reports/status" :class="{ 'active': $page.url.startsWith('/reports/status') }" target="_blank">Status</Link>
+                                                            <Link href="/reports/statuses" :class="{ 'active': $page.url.startsWith('/reports/statuses') }" target="_blank">Status</Link>
                                                         </li>
                                                     </ul>
                                                 </vue-collapsible>
@@ -369,7 +369,7 @@
                             </ul>
                         </li>
 
-                        <h2 class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
+                        <h2 v-if="user.type === 2" class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                             <svg
                                 class="w-4 h-5 flex-none hidden"
                                 viewBox="0 0 24 24"
@@ -384,7 +384,7 @@
                             <span><!--{{ $t('apps') }}-->ENGINEER</span>
                         </h2>
 
-                        <li class="nav-item">
+                        <li v-if="user.type === 2" class="nav-item">
                             <ul>
                                 <li class="nav-item">
                                     <Link href="/apps/chat" class="group" @click="toggleMobileMenu">
@@ -486,14 +486,16 @@
 </template>
 
 <script lang="ts" setup>
-    import { ref, onMounted } from 'vue';
-    import { Link } from '@inertiajs/vue3'; 
+    import { ref, onMounted, computed } from 'vue';
+    import { Link, usePage } from '@inertiajs/vue3'; 
     import { useAppStore } from '@/stores/index';
     import VueCollapsible from 'vue-height-collapsible/vue3';
     const store = useAppStore();
     
     const activeDropdown: any = ref('');
-    const subActive: any = ref('');
+const subActive: any = ref('');
+const page = usePage();
+const user = computed(() => page.props.auth);
 
 onMounted(() => {
     const pathname = window.location.pathname;

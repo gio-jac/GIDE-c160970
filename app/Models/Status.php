@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Code extends Model
+class Status extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class Code extends Model
      */
     protected $fillable = [
         'id',
-        'code',
+        'status',
         'description',
         'is_active',
     ];
