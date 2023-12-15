@@ -1,18 +1,37 @@
 <template>
     <div :class="{ 'dark text-white-dark': store.semidark }">
-        <nav class="sidebar fixed min-h-screen h-full top-0 bottom-0 w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] z-50 transition-all duration-300">
+        <nav
+            class="sidebar fixed min-h-screen h-full top-0 bottom-0 w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] z-50 transition-all duration-300"
+        >
             <div class="bg-white dark:bg-[#0e1726] h-full">
                 <div class="flex justify-between items-center px-4 py-3">
                     <Link href="/" class="main-logo flex items-center shrink-0">
-                        <img class="w-40 ml-[5px] flex-none" src="/assets/images/icon/Creating Confidence.svg" alt="" />                        
+                        <img
+                            class="w-40 ml-[5px] flex-none"
+                            src="/assets/images/icon/Creating Confidence.svg"
+                            alt=""
+                        />
                     </Link>
                     <a
                         href="javascript:;"
                         class="collapse-icon w-8 h-8 rounded-full flex items-center hover:bg-gray-500/10 dark:hover:bg-dark-light/10 dark:text-white-light transition duration-300 rtl:rotate-180 hover:text-primary"
                         @click="store.toggleSidebar()"
                     >
-                        <svg class="w-5 h-5 m-auto" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <svg
+                            class="w-5 h-5 m-auto"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M13 19L7 12L13 5"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
                             <path
                                 opacity="0.5"
                                 d="M16.9998 19L10.9998 12L16.9998 5"
@@ -33,7 +52,11 @@
                 >
                     <ul class="relative font-semibold space-y-0.5 p-4 py-0">
                         <li class="nav-item">
-                            <Link href="/" class="group" @click="toggleMobileMenu">
+                            <Link
+                                href="/"
+                                class="group"
+                                @click="toggleMobileMenu"
+                            >
                                 <div class="flex items-center">
                                     <svg
                                         class="group-hover:!text-primary shrink-0"
@@ -54,14 +77,15 @@
                                         />
                                     </svg>
 
-                                    <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"><!--{{
+                                    <span
+                                        class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                        ><!--{{
                                         $t('chat')
-                                    }}-->Homepage</span>
+                                    }}-->Homepage</span
+                                    >
                                 </div>
                             </Link>
                         </li>
-
-
 
                         <!--
                         <li class="menu nav-item">
@@ -119,7 +143,10 @@
                             </vue-collapsible>
                         </li>-->
 
-                        <h2 v-if="user.type === 1" class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
+                        <h2
+                            v-if="user.type === 1"
+                            class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1"
+                        >
                             <svg
                                 class="w-4 h-5 flex-none hidden"
                                 viewBox="0 0 24 24"
@@ -136,7 +163,16 @@
                         <li v-if="user.type === 1" class="nav-item">
                             <ul>
                                 <li class="nav-item">
-                                    <Link href="/users" :class="{ 'active': $page.url==='/users' || $page.url==='/users/create' }" class="group" @click="toggleMobileMenu">
+                                    <Link
+                                        href="/users"
+                                        :class="{
+                                            active:
+                                                $page.url === '/users' ||
+                                                $page.url === '/users/create',
+                                        }"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
                                         <div class="flex items-center">
                                             <svg
                                                 class="group-hover:!text-primary shrink-0"
@@ -159,14 +195,25 @@
                                                 />
                                             </svg>
 
-                                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                Users    
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                Users
                                             </span>
                                         </div>
                                     </Link>
                                 </li>
                                 <li class="nav-item">
-                                    <Link href="/reports" :class="{ 'active': $page.url==='/reports' }" class="group" @click="toggleMobileMenu">
+                                    <Link
+                                        href="/reports"
+                                        :class="{
+                                            active:
+                                                $page.url === '/reports' ||
+                                                $page.url === '/reports/create',
+                                        }"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
                                         <div class="flex items-center">
                                             <svg
                                                 class="group-hover:!text-primary shrink-0"
@@ -189,14 +236,25 @@
                                                 />
                                             </svg>
 
-                                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                Report    
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                Report
                                             </span>
                                         </div>
                                     </Link>
                                 </li>
                                 <li class="nav-item">
-                                    <Link href="/parts" :class="{ 'active': $page.url.startsWith('/parts') }" class="group" @click="toggleMobileMenu">
+                                    <Link
+                                        href="/parts"
+                                        :class="{
+                                            active: $page.url.startsWith(
+                                                '/parts'
+                                            ),
+                                        }"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
                                         <div class="flex items-center">
                                             <svg
                                                 class="group-hover:!text-primary shrink-0"
@@ -219,8 +277,10 @@
                                                 />
                                             </svg>
 
-                                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                Parts    
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                Parts
                                             </span>
                                         </div>
                                     </Link>
@@ -229,8 +289,15 @@
                                     <button
                                         type="button"
                                         class="nav-link group w-full"
-                                        :class="{ active: activeDropdown === 'catalogs' }"
-                                        @click="activeDropdown === 'catalogs' ? (activeDropdown = null) : (activeDropdown = 'catalogs')"
+                                        :class="{
+                                            active:
+                                                activeDropdown === 'catalogs',
+                                        }"
+                                        @click="
+                                            activeDropdown === 'catalogs'
+                                                ? (activeDropdown = null)
+                                                : (activeDropdown = 'catalogs')
+                                        "
                                     >
                                         <div class="flex items-center">
                                             <svg
@@ -262,25 +329,67 @@
                                                 />
                                             </svg>
 
-                                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Catalogs</span>
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                                >Catalogs</span
+                                            >
                                         </div>
-                                        <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'catalog' }">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <div
+                                            class="rtl:rotate-180"
+                                            :class="{
+                                                '!rotate-90':
+                                                    activeDropdown ===
+                                                    'catalog',
+                                            }"
+                                        >
+                                            <svg
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M9 5L15 12L9 19"
+                                                    stroke="currentColor"
+                                                    stroke-width="1.5"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
                                             </svg>
                                         </div>
                                     </button>
-                                    <vue-collapsible :isOpen="activeDropdown === 'catalogs'">
+                                    <vue-collapsible
+                                        :isOpen="activeDropdown === 'catalogs'"
+                                    >
                                         <ul class="sub-menu text-gray-500">
                                             <li class="menu nav-item">
                                                 <button
                                                     type="button"
                                                     class="w-full before:bg-gray-300 before:w-[5px] before:h-[5px] before:rounded ltr:before:mr-2 rtl:before:ml-2 dark:text-[#888ea8] hover:bg-gray-100 dark:hover:bg-gray-900"
-                                                    @click="subActive === 'users' ? (subActive = null) : (subActive = 'users')"
+                                                    @click="
+                                                        subActive === 'users'
+                                                            ? (subActive = null)
+                                                            : (subActive =
+                                                                  'users')
+                                                    "
                                                 >
                                                     Users
-                                                    <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180" :class="{ '!rotate-90': subActive === 'users' }">
-                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <div
+                                                        class="ltr:ml-auto rtl:mr-auto rtl:rotate-180"
+                                                        :class="{
+                                                            '!rotate-90':
+                                                                subActive ===
+                                                                'users',
+                                                        }"
+                                                    >
+                                                        <svg
+                                                            width="16"
+                                                            height="16"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
                                                             <path
                                                                 opacity="0.5"
                                                                 d="M6.25 19C6.25 19.3139 6.44543 19.5946 6.73979 19.7035C7.03415 19.8123 7.36519 19.7264 7.56944 19.4881L13.5694 12.4881C13.8102 12.2073 13.8102 11.7928 13.5694 11.5119L7.56944 4.51194C7.36519 4.27364 7.03415 4.18773 6.73979 4.29662C6.44543 4.40551 6.25 4.68618 6.25 5.00004L6.25 19Z"
@@ -296,13 +405,46 @@
                                                     </div>
                                                 </button>
 
-                                                <vue-collapsible :isOpen="subActive === 'users'">
-                                                    <ul :unmount="false" class="sub-menu text-gray-500">
-                                                        <li @click="toggleMobileMenu">
-                                                            <Link href="/users/titles" :class="{ 'active': $page.url.startsWith('/users/titles') }" target="_blank">Titles</Link>
+                                                <vue-collapsible
+                                                    :isOpen="
+                                                        subActive === 'users'
+                                                    "
+                                                >
+                                                    <ul
+                                                        :unmount="false"
+                                                        class="sub-menu text-gray-500"
+                                                    >
+                                                        <li
+                                                            @click="
+                                                                toggleMobileMenu
+                                                            "
+                                                        >
+                                                            <Link
+                                                                href="/users/titles"
+                                                                :class="{
+                                                                    active: $page.url.startsWith(
+                                                                        '/users/titles'
+                                                                    ),
+                                                                }"
+                                                                target="_blank"
+                                                                >Titles</Link
+                                                            >
                                                         </li>
-                                                        <li @click="toggleMobileMenu">
-                                                            <Link href="/users/types" :class="{ 'active': $page.url.startsWith('/users/types') }" target="_blank">Types</Link>
+                                                        <li
+                                                            @click="
+                                                                toggleMobileMenu
+                                                            "
+                                                        >
+                                                            <Link
+                                                                href="/users/types"
+                                                                :class="{
+                                                                    active: $page.url.startsWith(
+                                                                        '/users/types'
+                                                                    ),
+                                                                }"
+                                                                target="_blank"
+                                                                >Types</Link
+                                                            >
                                                         </li>
                                                     </ul>
                                                 </vue-collapsible>
@@ -311,11 +453,29 @@
                                                 <button
                                                     type="button"
                                                     class="w-full before:bg-gray-300 before:w-[5px] before:h-[5px] before:rounded ltr:before:mr-2 rtl:before:ml-2 dark:text-[#888ea8] hover:bg-gray-100 dark:hover:bg-gray-900"
-                                                    @click="subActive === 'reports' ? (subActive = null) : (subActive = 'reports')"
+                                                    @click="
+                                                        subActive === 'reports'
+                                                            ? (subActive = null)
+                                                            : (subActive =
+                                                                  'reports')
+                                                    "
                                                 >
                                                     Reports
-                                                    <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180" :class="{ '!rotate-90': subActive === 'reports' }">
-                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <div
+                                                        class="ltr:ml-auto rtl:mr-auto rtl:rotate-180"
+                                                        :class="{
+                                                            '!rotate-90':
+                                                                subActive ===
+                                                                'reports',
+                                                        }"
+                                                    >
+                                                        <svg
+                                                            width="16"
+                                                            height="16"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
                                                             <path
                                                                 opacity="0.5"
                                                                 d="M6.25 19C6.25 19.3139 6.44543 19.5946 6.73979 19.7035C7.03415 19.8123 7.36519 19.7264 7.56944 19.4881L13.5694 12.4881C13.8102 12.2073 13.8102 11.7928 13.5694 11.5119L7.56944 4.51194C7.36519 4.27364 7.03415 4.18773 6.73979 4.29662C6.44543 4.40551 6.25 4.68618 6.25 5.00004L6.25 19Z"
@@ -331,37 +491,107 @@
                                                     </div>
                                                 </button>
 
-                                                <vue-collapsible :isOpen="subActive === 'reports'">
-                                                    <ul :unmount="false" class="sub-menu text-gray-500">
-                                                        <li @click="toggleMobileMenu">
-                                                            <Link href="/reports/codes" :class="{ 'active': $page.url.startsWith('/reports/codes') }" target="_blank">Codes</Link>
+                                                <vue-collapsible
+                                                    :isOpen="
+                                                        subActive === 'reports'
+                                                    "
+                                                >
+                                                    <ul
+                                                        :unmount="false"
+                                                        class="sub-menu text-gray-500"
+                                                    >
+                                                        <li
+                                                            @click="
+                                                                toggleMobileMenu
+                                                            "
+                                                        >
+                                                            <Link
+                                                                href="/reports/codes"
+                                                                :class="{
+                                                                    active: $page.url.startsWith(
+                                                                        '/reports/codes'
+                                                                    ),
+                                                                }"
+                                                                target="_blank"
+                                                                >Codes</Link
+                                                            >
                                                         </li>
-                                                        <li @click="toggleMobileMenu">
-                                                            <Link href="/reports/failures" :class="{ 'active': $page.url.startsWith('/reports/failures') }" target="_blank">Failures</Link>
+                                                        <li
+                                                            @click="
+                                                                toggleMobileMenu
+                                                            "
+                                                        >
+                                                            <Link
+                                                                href="/reports/failures"
+                                                                :class="{
+                                                                    active: $page.url.startsWith(
+                                                                        '/reports/failures'
+                                                                    ),
+                                                                }"
+                                                                target="_blank"
+                                                                >Failures</Link
+                                                            >
                                                         </li>
-                                                        <li @click="toggleMobileMenu">
-                                                            <Link href="/reports/statuses" :class="{ 'active': $page.url.startsWith('/reports/statuses') }" target="_blank">Status</Link>
+                                                        <li
+                                                            @click="
+                                                                toggleMobileMenu
+                                                            "
+                                                        >
+                                                            <Link
+                                                                href="/reports/statuses"
+                                                                :class="{
+                                                                    active: $page.url.startsWith(
+                                                                        '/reports/statuses'
+                                                                    ),
+                                                                }"
+                                                                target="_blank"
+                                                                >Status</Link
+                                                            >
                                                         </li>
                                                     </ul>
                                                 </vue-collapsible>
                                             </li>
                                             <li>
-                                                <a href="/apps/invoice/list" @click="toggleMobileMenu">Machines</a>
+                                                <a
+                                                    href="/apps/invoice/list"
+                                                    @click="toggleMobileMenu"
+                                                    >Machines</a
+                                                >
                                             </li>
                                             <li>
-                                                <a href="/apps/invoice/list" @click="toggleMobileMenu">Models</a>
+                                                <a
+                                                    href="/apps/invoice/list"
+                                                    @click="toggleMobileMenu"
+                                                    >Models</a
+                                                >
                                             </li>
                                             <li>
-                                                <a href="/apps/invoice/list" @click="toggleMobileMenu">Customers</a>
+                                                <a
+                                                    href="/apps/invoice/list"
+                                                    @click="toggleMobileMenu"
+                                                    >Customers</a
+                                                >
                                             </li>
                                             <li>
-                                                <a href="/apps/invoice/list" @click="toggleMobileMenu">Regions</a>
+                                                <a
+                                                    href="/apps/invoice/list"
+                                                    @click="toggleMobileMenu"
+                                                    >Regions</a
+                                                >
                                             </li>
                                             <li>
-                                                <a href="/apps/invoice/list" @click="toggleMobileMenu">Parts</a>
+                                                <a
+                                                    href="/apps/invoice/list"
+                                                    @click="toggleMobileMenu"
+                                                    >Parts</a
+                                                >
                                             </li>
                                             <li>
-                                                <a href="/apps/invoice/list" @click="toggleMobileMenu">Assignments</a>
+                                                <a
+                                                    href="/apps/invoice/list"
+                                                    @click="toggleMobileMenu"
+                                                    >Assignments</a
+                                                >
                                             </li>
                                         </ul>
                                     </vue-collapsible>
@@ -369,7 +599,10 @@
                             </ul>
                         </li>
 
-                        <h2 v-if="user.type === 2" class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
+                        <h2
+                            v-if="user.type === 2"
+                            class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1"
+                        >
                             <svg
                                 class="w-4 h-5 flex-none hidden"
                                 viewBox="0 0 24 24"
@@ -387,7 +620,16 @@
                         <li v-if="user.type === 2" class="nav-item">
                             <ul>
                                 <li class="nav-item">
-                                    <Link href="/apps/chat" class="group" @click="toggleMobileMenu">
+                                    <Link
+                                        href="/reports"
+                                        :class="{
+                                            active:
+                                                $page.url === '/reports' ||
+                                                $page.url === '/reports/create',
+                                        }"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
                                         <div class="flex items-center">
                                             <svg
                                                 class="group-hover:!text-primary shrink-0"
@@ -410,14 +652,20 @@
                                                 />
                                             </svg>
 
-                                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                My reports    
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                My reports
                                             </span>
                                         </div>
                                     </Link>
                                 </li>
                                 <li class="nav-item">
-                                    <Link href="/apps/chat" class="group" @click="toggleMobileMenu">
+                                    <Link
+                                        href="/apps/chat"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
                                         <div class="flex items-center">
                                             <svg
                                                 class="group-hover:!text-primary shrink-0"
@@ -440,14 +688,20 @@
                                                 />
                                             </svg>
 
-                                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                Active reports    
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                Active reports
                                             </span>
                                         </div>
                                     </Link>
                                 </li>
                                 <li class="nav-item">
-                                    <Link href="/apps/chat" class="group" @click="toggleMobileMenu">
+                                    <Link
+                                        href="/apps/chat"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
                                         <div class="flex items-center">
                                             <svg
                                                 class="group-hover:!text-primary shrink-0"
@@ -470,8 +724,10 @@
                                                 />
                                             </svg>
 
-                                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                Finished reports    
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                Finished reports
                                             </span>
                                         </div>
                                     </Link>
@@ -486,40 +742,43 @@
 </template>
 
 <script lang="ts" setup>
-    import { ref, onMounted, computed } from 'vue';
-    import { Link, usePage } from '@inertiajs/vue3'; 
-    import { useAppStore } from '@/stores/index';
-    import VueCollapsible from 'vue-height-collapsible/vue3';
-    const store = useAppStore();
-    
-    const activeDropdown: any = ref('');
-const subActive: any = ref('');
+import { ref, onMounted, computed } from "vue";
+import { Link, usePage } from "@inertiajs/vue3";
+import { useAppStore } from "@/stores/index";
+import VueCollapsible from "vue-height-collapsible/vue3";
+const store = useAppStore();
+
+const activeDropdown: any = ref("");
+const subActive: any = ref("");
 const page = usePage();
 const user = computed(() => page.props.auth);
 
 onMounted(() => {
     const pathname = window.location.pathname;
-    const parts = pathname.split('/');
-    const subpage = parts.slice(0, 3).join('/');
-        const selector = document.querySelector('.sidebar ul a[href="' + subpage + '"]');
-        if (selector) {
-            selector.classList.add('active');
-            const ul: any = selector.closest('ul.sub-menu');
-            if (ul) {
-                let ele: any = ul.closest('li.menu').querySelectorAll('.nav-link') || [];
-                if (ele.length) {
-                    ele = ele[0];
-                    setTimeout(() => {
-                        ele.click();
-                    });
-                }
+    const parts = pathname.split("/");
+    const subpage = parts.slice(0, 3).join("/");
+    const selector = document.querySelector(
+        '.sidebar ul a[href="' + subpage + '"]'
+    );
+    if (selector) {
+        selector.classList.add("active");
+        const ul: any = selector.closest("ul.sub-menu");
+        if (ul) {
+            let ele: any =
+                ul.closest("li.menu").querySelectorAll(".nav-link") || [];
+            if (ele.length) {
+                ele = ele[0];
+                setTimeout(() => {
+                    ele.click();
+                });
             }
         }
-    });
+    }
+});
 
-    const toggleMobileMenu = () => {
-        if (window.innerWidth < 1024) {
-            store.toggleSidebar();
-        }
-    };
+const toggleMobileMenu = () => {
+    if (window.innerWidth < 1024) {
+        store.toggleSidebar();
+    }
+};
 </script>

@@ -1,481 +1,19 @@
 <template>
-    <Head title="New Report" />
+    <Head title="Reports" />
     <div>
-        <div class="flex xl:flex-row flex-col gap-2.5">
-            <div class="panel px-0 flex-1 py-6 ltr:xl:mr-6 rtl:xl:ml-6">
-                <div class="flex px-4">
-                    <div class="w-full">
-                        <div class="flex items-center">
-                            <label
-                                for="formMachine"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >Machine Serial</label
-                            >
-
-                            <multiselect
-                                id="formMachine"
-                                :options="props.catalogMachines"
-                                v-model="form.selectedMachine"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                placeholder="Select an option"
-                                :custom-label="
-                                    ({ serial, machine_model }) =>
-                                        `${serial} - ${machine_model.model}`
-                                "
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex px-4 mt-4" v-if="user.type === 1">
-                    <div class="w-full">
-                        <div class="flex items-center">
-                            <label
-                                for="formUser"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >User</label
-                            >
-
-                            <multiselect
-                                id="formUser"
-                                :options="catalogUsers"
-                                v-model="form.selectedUser"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                placeholder="Select an option"
-                                :custom-label="
-                                    ({ emp, nombre, apellido_paterno }) =>
-                                        `${emp} - ${nombre} ${apellido_paterno}`
-                                "
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                        </div>
-                    </div>
-                </div>
-                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
-                <div class="mt-8 px-4">
-                    <div class="flex justify-between lg:flex-row flex-col">
-                        <div
-                            class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6"
-                        >
-                            <div class="text-lg">Customer Data</div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formCustomerName"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Name</label
-                                >
-                                <input
-                                    id="formCustomerName"
-                                    type="text"
-                                    name="formCustomerName"
-                                    class="form-input flex-1"
-                                    value=""
-                                    readonly
-                                    placeholder="Enter Name"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formCustomerAddress"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Address</label
-                                >
-                                <input
-                                    id="formCustomerAddress"
-                                    type="text"
-                                    name="formCustomerEmail"
-                                    class="form-input flex-1"
-                                    value=""
-                                    readonly
-                                    placeholder="Enter Email"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formCustomerContact"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Contact</label
-                                >
-                                <input
-                                    id="formCustomerContact"
-                                    type="text"
-                                    name="formCustomerContact"
-                                    class="form-input flex-1"
-                                    value=""
-                                    readonly
-                                    placeholder="Enter Contact"
-                                />
-                            </div>
-                        </div>
-                        <div class="lg:w-1/2 w-full">
-                            <div class="text-lg">Machine Data</div>
-                            <div class="flex items-center mt-4">
-                                <label
-                                    for="formMachineSerial"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Serial</label
-                                >
-                                <input
-                                    id="formMachineSerial"
-                                    type="text"
-                                    name="formMachineSerial"
-                                    class="form-input flex-1"
-                                    :value="form.selectedMachine?.serial"
-                                    readonly
-                                    placeholder="Enter Serial"
-                                />
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <label
-                                    for="formMachineType"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Type</label
-                                >
-                                <input
-                                    id="formMachineType"
-                                    type="text"
-                                    name="formMachineType"
-                                    class="form-input flex-1"
-                                    :value="form.selectedMachine?.machine_model.model"
-                                    readonly
-                                    placeholder="Enter Type"
-                                />
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <label
-                                    for="formMachineSegment"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Segment</label
-                                >
-                                <input
-                                    id="formMachineSegment"
-                                    type="text"
-                                    name="formMachineSegment"
-                                    class="form-input flex-1"
-                                    :value="form.selectedMachine?.machine_model.model_segment.segment"
-                                    readonly
-                                    placeholder="Enter Segment"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
-                <div class="mt-8 px-4">
+        <div>
+            <div
+                class="panel px-0 pb-1.5 border-[#e0e6ed] dark:border-[#1b2e4b]"
+            >
+                <div class="datatable invoice-table">
                     <div
-                        class="flex justify-between lg:flex-row flex-col flex-wrap"
+                        class="mb-4.5 px-5 flex md:items-center md:flex-row flex-col gap-5"
                     >
-                        <div
-                            class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6"
-                        >
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportTransport"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Transport</label
-                                >
-                                <input
-                                    id="formReportTransport"
-                                    type="number"
-                                    v-model="postForm.transport"
-                                    name="formReportTransport"
-                                    class="form-input flex-1"
-                                    placeholder="Enter Transport"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportPieces"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Pieces</label
-                                >
-                                <input
-                                    id="formReportPieces"
-                                    type="number"
-                                    v-model="postForm.pieces"
-                                    name="formReportPieces"
-                                    class="form-input flex-1"
-                                    placeholder="Enter Pieces"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportSOGD"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >SO GD</label
-                                >
-                                <input
-                                    id="formReportSOGD"
-                                    type="number"
-                                    v-model="postForm.sogd"
-                                    name="formReportSOGD"
-                                    class="form-input flex-1"
-                                    placeholder="Enter SO GD"
-                                />
-                            </div>
-                        </div>
-                        <div class="lg:w-1/2 w-full">
-                            <div class="flex items-center mt-4">
-                                <label
-                                    for="formReportOnTime"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Machine ON</label
-                                >
-                                <input
-                                    id="formReportOnTime"
-                                    type="number"
-                                    v-model="postForm.time_on"
-                                    name="formReportOnTime"
-                                    class="form-input flex-1"
-                                    placeholder="Machine time ON"
-                                />
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <label
-                                    for="formReportTravelTime"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Travel time (Min.)</label
-                                >
-                                <input
-                                    id="formReportTravelTime"
-                                    type="number"
-                                    v-model="postForm.travel_time"
-                                    name="formReportTravelTime"
-                                    class="form-input flex-1"
-                                    placeholder="Enter Travel Time"
-                                />
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <label
-                                    for="formReportType"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Type</label
-                                >
-
-                                <select
-                                    id="formReportType"
-                                    name="formReportType"
-                                    v-model="postForm.report_type_id"
-                                    class="form-select text-white-dark flex-1"
-                                    required
-                                >
-                                    <option value="1" selected>Contract</option>
-                                    <option value="2">Client</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="w-full">
-                            <div class="flex items-center">
-                                <label
-                                    for="formReportError"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                    >Error reported</label
-                                >
-                                <input
-                                    id="formReportError"
-                                    type="text"
-                                    v-model="postForm.reported_error"
-                                    name="formReportError"
-                                    class="form-input flex-1"
-                                    placeholder="Enter Error Reported"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportSymptom"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                    >Fault Symptom</label
-                                >
-                                <textarea
-                                    id="formReportSymptom"
-                                    name="formReportSymptom"
-                                    rows="3"
-                                    v-model="postForm.fault_symptom"
-                                    class="form-textarea flex-1"
-                                    placeholder="Enter Fault Symptom"
-                                    required
-                                ></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
-                <div class="mt-8 px-4">
-                    <div class="flex flex-wrap justify-evenly">
-                        <label v-for="(code,index) in catalogCodes" :key="index" class="inline-flex">
-                            <input
-                                type="radio"
-                                name="formReportCode"
-                                class="form-radio"
-                                :value="code.id"
-                                v-model="postForm.code_id"
-                            />
-                            <span>{{ code.code }}</span>
-                        </label>
-                    </div>
-                    <div class="w-full">
-                        <div class="mt-4 flex items-center">
-                            <label
-                                for="formReportActions"
-                                class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                >Actions Taken</label
+                        <div class="flex items-center gap-2">
+                            <Link
+                                href="/reports/create"
+                                class="btn btn-primary gap-2"
                             >
-                            <textarea
-                                id="formReportActions"
-                                name="formReportActions"
-                                v-model="postForm.actions_taken"
-                                rows="3"
-                                class="form-textarea flex-1"
-                                placeholder="Enter Actions Taken"
-                                required
-                            ></textarea>
-                        </div>
-                    </div>
-                </div>
-                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
-                <div class="mt-8 px-4">
-                    <div
-                        class="flex justify-between lg:flex-row flex-col flex-wrap"
-                    >
-                        <div
-                            class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6"
-                        >
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportReportedTime"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Reported</label
-                                >
-                                <flat-pickr
-                                    id="formReportReportedTime"
-                                    name="formReportReportedTime"
-                                    v-model="postForm.reported"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportTimeArrival"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Arrival</label
-                                >
-                                <flat-pickr
-                                    id="formReportTimeArrival"
-                                    name="formReportTimeArrival"
-                                    v-model="postForm.arrival"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
-                        </div>
-                        <div class="lg:w-1/2 w-full">
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportTimeFinished"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Finished</label
-                                >
-                                <flat-pickr
-                                    id="formReportTimeFinished"
-                                    name="formReportTimeFinished"
-                                    v-model="postForm.finished"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportTimeDeparture"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Departure</label
-                                >
-                                <flat-pickr
-                                    id="formReportTimeDeparture"
-                                    name="formReportTimeDeparture"
-                                    v-model="postForm.departure"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
-                        </div>
-                        <div class="w-full flex flex-wrap justify-evenly">
-                            <label v-for="(status,index) in catalogStatus" :key="index" class="inline-flex">
-                                <input
-                                    type="radio"
-                                    name="formReportStatus"
-                                    class="form-radio"
-                                    :value="status.id"
-                                    v-model="postForm.status_id"
-                                />
-                                <span>{{ status.status }}</span>
-                            </label>
-                        </div>
-                        <div class="w-1/3 m-auto">
-                            <div
-                                class="mt-4 flex items-center flex flex-wrap justify-evenly"
-                            >
-                                <label class="inline-flex">
-                                    <input
-                                        type="checkbox"
-                                        v-model="postForm.is_tested"
-                                        class="form-checkbox rounded-full"
-                                        checked
-                                    />
-                                    <span>Test OK</span>
-                                </label>
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportDT"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                    >DT</label
-                                >
-                                <input
-                                    id="formReportDT"
-                                    type="number"
-                                    v-model="postForm.dt"
-                                    name="formReportDT"
-                                    class="form-input flex-1"
-                                    placeholder="Enter DT"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
-                <div class="mt-8">
-                    <div class="flex px-4">
-                    <div class="w-full">
-                        <div class="flex items-center">
-                            <label
-                                for="formReportParts"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >Parts</label
-                            >
-
-                            <multiselect
-                                id="formReportParts"
-                                :options="props.catalogParts"
-                                v-model="form.selectedPart"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                placeholder="Select an option"
-                                :custom-label="
-                                    ({ num_part, descripcion }) =>
-                                        `${num_part} - ${descripcion}`
-                                "
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                            <button class="btn btn-secondary gap-2" @click="addNewPart">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24px"
@@ -491,403 +29,214 @@
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                 </svg>
-                            </button>
+                                Add New
+                            </Link>
+                        </div>
+                        <div class="ltr:ml-auto rtl:mr-auto">
+                            <input
+                                v-model="search"
+                                type="text"
+                                class="form-input"
+                                placeholder="Search..."
+                            />
                         </div>
                     </div>
-                </div>
-                    <div class="table-responsive mt-4">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Part Replaced</th>
-                                    <th class="w-1/3">Description</th>
-                                    <th class="w-1/3">Quantity</th>
-                                    <th class="w-1"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <template v-if="postForm.service_parts.length <= 0">
-                                    <tr>
-                                        <td
-                                            colspan="5"
-                                            class="!text-center font-semibold"
-                                        >
-                                            No Item Available
-                                        </td>
-                                    </tr>
-                                </template>
-                                <template v-for="(item, i) in postForm.service_parts" :key="i">
-                                    <tr class="align-top">
-                                        <td>
-                                            {{ item.num_part }}
-                                        </td>
-                                        <td>
-                                            {{ item.descripcion }}
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="number"
-                                                class="form-input w-32"
-                                                placeholder="Quantity"
-                                                v-model="item.quantity"
-                                                value="1"
-                                                min="0"
-                                            />
-                                        </td>
-                                        <td>
-                                            <button
-                                                type="button"
-                                                @click="removeItem(item)"
-                                            >
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="24px"
-                                                    height="24px"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="1.5"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    class="w-5 h-5"
-                                                >
-                                                    <line
-                                                        x1="18"
-                                                        y1="6"
-                                                        x2="6"
-                                                        y2="18"
-                                                    ></line>
-                                                    <line
-                                                        x1="6"
-                                                        y1="6"
-                                                        x2="18"
-                                                        y2="18"
-                                                    ></line>
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="mt-8 px-4">
-                    <div>
-                        <label for="notes">Notes</label>
-                        <textarea
-                            id="notes"
-                            name="notes"
-                            class="form-textarea min-h-[130px]"
-                            placeholder="Notes...."
-                            v-model="postForm.notes"
-                        ></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="xl:w-96 w-full xl:mt-0 mt-6">
-                <div class="panel mb-5">
-                    <div class="text-lg">Lastest reports</div>
-                    <div class="flex flex-wrap justify-evenly text-center">
-                        <button type="button" class="btn btn-outline-primary my-2">4d25f6c6</button>
-                        <button type="button" class="btn btn-outline-primary my-2">80dffdc4</button>
-                        <button type="button" class="btn btn-outline-primary my-2">b5048b20</button>
-                        <button type="button" class="btn btn-outline-primary my-2">62b7e603</button>
-                        <button type="button" class="btn btn-outline-primary my-2">5c44f51b</button>
-                        <button type="button" class="btn btn-outline-primary my-2">6e4283bc</button>
-                        <button type="button" class="btn btn-outline-primary my-2">3f7dad51</button>
-                        <button type="button" class="btn btn-outline-primary my-2">152b38ec</button>
-                        <button type="button" class="btn btn-outline-primary my-2">c217f4ef</button>
-                        <button type="button" class="btn btn-outline-primary my-2">b0684858</button>
-                    </div>
-                    <div class="w-full text-center mt-8">
-                        <a href="#">Show all</a>
-                    </div>
-                </div>
-                <div class="panel sticky top-[75px] left-0">
-                    <div
-                        class="grid xl:grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4"
-                    >
-                        <button
-                            type="button"
-                            class="btn btn-success w-full gap-2"
-                            @click="submit"
-                        >
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0"
-                            >
-                                <path
-                                    d="M3.46447 20.5355C4.92893 22 7.28595 22 12 22C16.714 22 19.0711 22 20.5355 20.5355C22 19.0711 22 16.714 22 12C22 11.6585 22 11.4878 21.9848 11.3142C21.9142 10.5049 21.586 9.71257 21.0637 9.09034C20.9516 8.95687 20.828 8.83317 20.5806 8.58578L15.4142 3.41944C15.1668 3.17206 15.0431 3.04835 14.9097 2.93631C14.2874 2.414 13.4951 2.08581 12.6858 2.01515C12.5122 2 12.3415 2 12 2C7.28595 2 4.92893 2 3.46447 3.46447C2 4.92893 2 7.28595 2 12C2 16.714 2 19.0711 3.46447 20.5355Z"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                />
-                                <path
-                                    d="M17 22V21C17 19.1144 17 18.1716 16.4142 17.5858C15.8284 17 14.8856 17 13 17H11C9.11438 17 8.17157 17 7.58579 17.5858C7 18.1716 7 19.1144 7 21V22"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                />
-                                <path
-                                    opacity="0.5"
-                                    d="M7 8H13"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                    stroke-linecap="round"
-                                />
-                            </svg>
-                            Save Report
-                        </button>
 
-                        <button type="button" class="btn btn-info w-full gap-2">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0"
-                            >
-                                <path
-                                    d="M17.4975 18.4851L20.6281 9.09373C21.8764 5.34874 22.5006 3.47624 21.5122 2.48782C20.5237 1.49939 18.6511 2.12356 14.906 3.37189L5.57477 6.48218C3.49295 7.1761 2.45203 7.52305 2.13608 8.28637C2.06182 8.46577 2.01692 8.65596 2.00311 8.84963C1.94433 9.67365 2.72018 10.4495 4.27188 12.0011L4.55451 12.2837C4.80921 12.5384 4.93655 12.6658 5.03282 12.8075C5.22269 13.0871 5.33046 13.4143 5.34393 13.7519C5.35076 13.9232 5.32403 14.1013 5.27057 14.4574C5.07488 15.7612 4.97703 16.4131 5.0923 16.9147C5.32205 17.9146 6.09599 18.6995 7.09257 18.9433C7.59255 19.0656 8.24576 18.977 9.5522 18.7997L9.62363 18.79C9.99191 18.74 10.1761 18.715 10.3529 18.7257C10.6738 18.745 10.9838 18.8496 11.251 19.0285C11.3981 19.1271 11.5295 19.2585 11.7923 19.5213L12.0436 19.7725C13.5539 21.2828 14.309 22.0379 15.1101 21.9985C15.3309 21.9877 15.5479 21.9365 15.7503 21.8474C16.4844 21.5244 16.8221 20.5113 17.4975 18.4851Z"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                />
-                                <path
-                                    opacity="0.5"
-                                    d="M6 18L21 3"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                    stroke-linecap="round"
-                                />
-                            </svg>
-                            Close Report
-                        </button>
-                        <!--
-                        <router-link to="/apps/invoice/preview" class="btn btn-primary w-full gap-2">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0">
-                                <path
-                                    opacity="0.5"
-                                    d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                ></path>
-                                <path
-                                    d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                ></path>
-                            </svg>
-                            Preview
-                        </router-link>
-                        -->
-                        <button
-                            type="button"
-                            class="btn btn-secondary w-full gap-2"
-                        >
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0"
-                            >
-                                <path
-                                    opacity="0.5"
-                                    d="M17 9.00195C19.175 9.01406 20.3529 9.11051 21.1213 9.8789C22 10.7576 22 12.1718 22 15.0002V16.0002C22 18.8286 22 20.2429 21.1213 21.1215C20.2426 22.0002 18.8284 22.0002 16 22.0002H8C5.17157 22.0002 3.75736 22.0002 2.87868 21.1215C2 20.2429 2 18.8286 2 16.0002L2 15.0002C2 12.1718 2 10.7576 2.87868 9.87889C3.64706 9.11051 4.82497 9.01406 7 9.00195"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                    stroke-linecap="round"
-                                ></path>
-                                <path
-                                    d="M12 2L12 15M12 15L9 11.5M12 15L15 11.5"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                ></path>
-                            </svg>
-                            Download PDF
-                        </button>
-                    </div>
+                    <vue3-datatable
+                        ref="datatable"
+                        :rows="props.reports"
+                        :columns="cols"
+                        :totalRows="props.reports?.length"
+                        :hasCheckbox="false"
+                        :sortable="true"
+                        :search="search"
+                        skin="whitespace-nowrap bh-table-hover"
+                        firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+                        lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg> '
+                        previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+                        nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+                    >
+                        <template #id="data">
+                            {{ data.value.id }}
+                        </template>
+                        <template #machine="data">
+                            {{ data.value.machine.serial }}
+                        </template>
+                        <template #model="data">
+                            {{ data.value.machine.machine_model.model }}
+                        </template>
+                        <template #status="data">
+                            {{ data.value.status.status }}
+                        </template>
+                        <template #is_active="data">
+                            <div class="flex items-center font-semibold">
+                                <span
+                                    class="badge"
+                                    :class="[
+                                        data.value.is_active === 1
+                                            ? 'bg-green-500'
+                                            : 'bg-red-500',
+                                    ]"
+                                    >&nbsp;</span
+                                >
+                            </div>
+                        </template>
+                        <template #actions="data">
+                            <div class="flex gap-4 items-center justify-center">
+                                <Link
+                                    :href="`/reports/${data.value.id}/edit`"
+                                    class="hover:text-info"
+                                >
+                                    <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4.5 h-4.5"
+                                    >
+                                        <path
+                                            opacity="0.5"
+                                            d="M22 10.5V12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2H13.5"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                            stroke-linecap="round"
+                                        ></path>
+                                        <path
+                                            d="M17.3009 2.80624L16.652 3.45506L10.6872 9.41993C10.2832 9.82394 10.0812 10.0259 9.90743 10.2487C9.70249 10.5114 9.52679 10.7957 9.38344 11.0965C9.26191 11.3515 9.17157 11.6225 8.99089 12.1646L8.41242 13.9L8.03811 15.0229C7.9492 15.2897 8.01862 15.5837 8.21744 15.7826C8.41626 15.9814 8.71035 16.0508 8.97709 15.9619L10.1 15.5876L11.8354 15.0091C12.3775 14.8284 12.6485 14.7381 12.9035 14.6166C13.2043 14.4732 13.4886 14.2975 13.7513 14.0926C13.9741 13.9188 14.1761 13.7168 14.5801 13.3128L20.5449 7.34795L21.1938 6.69914C22.2687 5.62415 22.2687 3.88124 21.1938 2.80624C20.1188 1.73125 18.3759 1.73125 17.3009 2.80624Z"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                        ></path>
+                                        <path
+                                            opacity="0.5"
+                                            d="M16.6522 3.45508C16.6522 3.45508 16.7333 4.83381 17.9499 6.05034C19.1664 7.26687 20.5451 7.34797 20.5451 7.34797M10.1002 15.5876L8.4126 13.9"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                        ></path>
+                                    </svg>
+                                </Link>
+                                <!--
+                                <button
+                                    type="button"
+                                    class="hover:text-danger"
+                                    @click="deleteRow(`${data.value.id}`)"
+                                >
+                                    <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-5 h-5"
+                                    >
+                                        <path
+                                            d="M20.5001 6H3.5"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                            stroke-linecap="round"
+                                        ></path>
+                                        <path
+                                            d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                            stroke-linecap="round"
+                                        ></path>
+                                        <path
+                                            opacity="0.5"
+                                            d="M9.5 11L10 16"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                            stroke-linecap="round"
+                                        ></path>
+                                        <path
+                                            opacity="0.5"
+                                            d="M14.5 11L14 16"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                            stroke-linecap="round"
+                                        ></path>
+                                        <path
+                                            opacity="0.5"
+                                            d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                        ></path>
+                                    </svg>
+                                </button>-->
+                            </div>
+                        </template>
+                    </vue3-datatable>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
 <script lang="ts" setup>
-import { ref, onMounted, reactive, computed } from "vue";
-import { Head, usePage } from "@inertiajs/vue3";
-import { useAppStore } from "@/stores/index";
+import { ref } from "vue";
+import Vue3Datatable from "@bhplugin/vue3-datatable";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
-import flatPickr from "vue-flatpickr-component";
-import Multiselect from "@suadelabs/vue3-multiselect";
-import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
-import "flatpickr/dist/flatpickr.css";
-const store = useAppStore();
-
-const page = usePage();
-const user = computed(() => page.props.auth);
+import { Head, Link, router } from "@inertiajs/vue3";
 
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
-
 const props = defineProps({
-    catalogParts: {
-        type: Array,
-        required: true,
-    },
-    catalogCodes: {
-        type: Array,
-        required: true,
-    },
-    catalogUsers: {
-        type: Array,
-        required: true,
-    },
-    catalogStatus: {
-        type: Array,
-        required: true,
-    },
-    catalogMachines: {
+    reports: {
         type: Array,
         required: true,
     },
 });
 
-console.log(props.catalogMachines);
+console.log(props.reports);
 
-const dateTime: any = ref({
-    enableTime: true,
-    dateFormat: "Y-m-d H:i",
-    position: store.rtlClass === "rtl" ? "auto right" : "auto left",
-});
-
-const form = reactive({
-    selectedMachine: null,
-    selectedPart: null,
-    addNewPart: [],
-    selectedCode: null,
-    selectedUser: null,
-    selectedStatus: null,
-});
-
-const postForm = reactive({
-    machine_id: null,
-    user_id: null,
-    transport: null,
-    pieces: null,
-    sogd: null,
-    time_on: null,
-    travel_time: null,
-    report_type_id: 1,
-    reported_error: null,
-    fault_symptom: "",
-    code_id: null,
-    actions_taken: "",
-    reported: null,
-    arrival: null,
-    finished: null,
-    departure: null,
-    status_id: null,
-    is_tested: null,
-    dt: null,
-    notes: "",
-    service_parts: []
-});
-
-const items: any = ref([]);
-const selectedFile = ref(null);
-const params = ref({
-    title: "",
-    invoiceNo: "",
-    to: {
-        name: "",
-        email: "",
-        address: "",
-        phone: "",
+const datatable: any = ref(null);
+const search = ref("");
+const cols = ref([
+    { field: "id", title: "ID" },
+    { field: "machine", title: "Machine" },
+    { field: "model", title: "Model" },
+    { field: "status", title: "Status" },
+    {
+        field: "actions",
+        title: "Actions",
+        sort: false,
+        headerClass: "justify-center",
     },
-
-    invoiceDate: "",
-    dueDate: "",
-    bankInfo: {
-        no: "",
-        name: "",
-        swiftCode: "",
-        country: "",
-        ibanNo: "",
-    },
-    notes: "",
-});
-const currencyList = ref([
-    "USD - US Dollar",
-    "GBP - British Pound",
-    "IDR - Indonesian Rupiah",
-    "INR - Indian Rupee",
-    "BRL - Brazilian Real",
-    "EUR - Germany (Euro)",
-    "TRY - Turkish Lira",
 ]);
-const selectedCurrency = ref("USD - US Dollar");
-const tax = ref<number>(0);
-const discount = ref<number>(0);
-const shippingCharge = ref<number>(0);
-const paymentMethod = ref("");
-
-onMounted(() => {
-    //set default data
-    items.value.push({
-        id: 1,
-        title: "",
-        description: "",
-        rate: 0,
-        quantity: 0,
-        amount: 0,
-    });
+const searchText = ref("");
+const columns = ref(["titulo", "is_active", "actions"]);
+const tableOption = ref({
+    headings: {
+        id: (h: any, row: any, index: number) => {
+            return "#";
+        },
+    },
+    perPage: 10,
+    perPageValues: [10, 20, 30, 50, 100],
+    skin: "table-hover",
+    columnsClasses: { actions: "actions !text-center w-1" },
+    pagination: { show: true, nav: "scroll", chunk: 10 },
+    texts: {
+        count: "Showing {from} to {to} of {count} entries",
+        filter: "",
+        filterPlaceholder: "Search...",
+        limit: "",
+    },
+    resizableColumns: false,
+    sortable: ["titulo", "is_active"],
+    sortIcon: {
+        base: "sort-icon-none",
+        up: "sort-icon-asc",
+        down: "sort-icon-desc",
+    },
 });
 
-const addItem = () => {
-    let maxId = 0;
-    if (items.value && items.value.length) {
-        maxId = items.value.reduce(
-            (max: number, character: any) =>
-                character.id > max ? character.id : max,
-            items.value[0].id
-        );
+const deleteRow = (item: any = null) => {
+    if (confirm("Are you sure want to delete selected row ?")) {
+        if (item) {
+            router.delete(`/reports/${item}`);
+        }
     }
-    items.value.push({
-        id: maxId + 1,
-        title: "",
-        description: "",
-        rate: 0,
-        quantity: 0,
-        amount: 0,
-    });
 };
-
-const showMachineLabel = (option) => {
-    return "test";
-};
-
-const removeItem = (item: any = null) => {
-    postForm.service_parts = postForm.service_parts.filter((d: any) => d.id != item.id);
-};
-
-const addNewPart = () => {
-    console.log(form.selectedPart);
-    postForm.service_parts.push(form.selectedPart);
-};
-
-function submit() {
-    postForm.machine_id = form.selectedMachine.id;
-    postForm.user_id = form.selectedUser.id;
-    console.log(postForm);
-}
 </script>
