@@ -39,7 +39,7 @@ class ReportController extends Controller
         $catalogParts = Part::where('is_active', 1)->get();
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
-        $catalogMachines = Machine::where('is_active', 1)->with('machine_model.model_segment')->get();
+        $catalogMachines = Machine::where('is_active', 1)->with(['machine_model.model_segment','data_client', 'data_client.client'])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
 
         return Inertia::render('admin/reports/new',[
@@ -92,7 +92,7 @@ class ReportController extends Controller
 
         $report->parts()->createMany($dataParts);
 
-        return "ok";
+        return to_route('reports.index');
     }
 
     /**

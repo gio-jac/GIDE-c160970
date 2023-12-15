@@ -75,7 +75,7 @@
                                     type="text"
                                     name="formCustomerName"
                                     class="form-input flex-1"
-                                    value=""
+                                    :value="form.selectedMachine?.data_client.client.name"
                                     readonly
                                     placeholder="Enter Name"
                                 />
@@ -91,7 +91,7 @@
                                     type="text"
                                     name="formCustomerEmail"
                                     class="form-input flex-1"
-                                    value=""
+                                    :value="form.selectedMachine?.data_client.address"
                                     readonly
                                     placeholder="Enter Email"
                                 />
@@ -107,7 +107,7 @@
                                     type="text"
                                     name="formCustomerContact"
                                     class="form-input flex-1"
-                                    value=""
+                                    :value="form.selectedMachine?.data_client.contact"
                                     readonly
                                     placeholder="Enter Contact"
                                 />

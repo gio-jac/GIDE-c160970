@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('serial')->unique();
             $table->integer('transport_hours')->default(0);
             $table->unsignedBigInteger('machine_model_id');
+            $table->unsignedBigInteger('data_client_id');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->foreign('machine_model_id')->references('id')->on('machine_models');
+            $table->foreign('data_client_id')->references('id')->on('data_clients');
         });
     }
 
