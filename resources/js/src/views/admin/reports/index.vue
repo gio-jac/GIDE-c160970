@@ -14,14 +14,14 @@
 
                             <multiselect
                                 id="formMachine"
-                                :options="catalogMachine"
+                                :options="props.catalogMachines"
                                 v-model="form.selectedMachine"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 placeholder="Select an option"
                                 :custom-label="
-                                    ({ id, type, customer }) =>
-                                        `${id} - ${type} - ${customer.name}`
+                                    ({ serial, machine_model }) =>
+                                        `${serial} - ${machine_model.model}`
                                 "
                                 selected-label=""
                                 select-label=""
@@ -75,7 +75,7 @@
                                     type="text"
                                     name="formCustomerName"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.customer.name"
+                                    value=""
                                     readonly
                                     placeholder="Enter Name"
                                 />
@@ -91,9 +91,7 @@
                                     type="text"
                                     name="formCustomerEmail"
                                     class="form-input flex-1"
-                                    :value="
-                                        form.selectedMachine?.customer.address
-                                    "
+                                    value=""
                                     readonly
                                     placeholder="Enter Email"
                                 />
@@ -109,9 +107,7 @@
                                     type="text"
                                     name="formCustomerContact"
                                     class="form-input flex-1"
-                                    :value="
-                                        form.selectedMachine?.customer.contact
-                                    "
+                                    value=""
                                     readonly
                                     placeholder="Enter Contact"
                                 />
@@ -130,7 +126,7 @@
                                     type="text"
                                     name="formMachineSerial"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.id"
+                                    :value="form.selectedMachine?.serial"
                                     readonly
                                     placeholder="Enter Serial"
                                 />
@@ -146,7 +142,7 @@
                                     type="text"
                                     name="formMachineType"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.type"
+                                    :value="form.selectedMachine?.machine_model.model"
                                     readonly
                                     placeholder="Enter Type"
                                 />
@@ -162,7 +158,7 @@
                                     type="text"
                                     name="formMachineSegment"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.segment"
+                                    :value="form.selectedMachine?.machine_model.model_segment.segment"
                                     readonly
                                     placeholder="Enter Segment"
                                 />
@@ -187,6 +183,7 @@
                                 <input
                                     id="formReportTransport"
                                     type="number"
+                                    v-model="postForm.transport"
                                     name="formReportTransport"
                                     class="form-input flex-1"
                                     placeholder="Enter Transport"
@@ -201,6 +198,7 @@
                                 <input
                                     id="formReportPieces"
                                     type="number"
+                                    v-model="postForm.pieces"
                                     name="formReportPieces"
                                     class="form-input flex-1"
                                     placeholder="Enter Pieces"
@@ -215,6 +213,7 @@
                                 <input
                                     id="formReportSOGD"
                                     type="number"
+                                    v-model="postForm.sogd"
                                     name="formReportSOGD"
                                     class="form-input flex-1"
                                     placeholder="Enter SO GD"
@@ -231,6 +230,7 @@
                                 <input
                                     id="formReportOnTime"
                                     type="number"
+                                    v-model="postForm.time_on"
                                     name="formReportOnTime"
                                     class="form-input flex-1"
                                     placeholder="Machine time ON"
@@ -245,6 +245,7 @@
                                 <input
                                     id="formReportTravelTime"
                                     type="number"
+                                    v-model="postForm.travel_time"
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
                                     placeholder="Enter Travel Time"
@@ -260,6 +261,7 @@
                                 <select
                                     id="formReportType"
                                     name="formReportType"
+                                    v-model="postForm.report_type_id"
                                     class="form-select text-white-dark flex-1"
                                     required
                                 >
@@ -278,6 +280,7 @@
                                 <input
                                     id="formReportError"
                                     type="text"
+                                    v-model="postForm.reported_error"
                                     name="formReportError"
                                     class="form-input flex-1"
                                     placeholder="Enter Error Reported"
@@ -293,6 +296,7 @@
                                     id="formReportSymptom"
                                     name="formReportSymptom"
                                     rows="3"
+                                    v-model="postForm.fault_symptom"
                                     class="form-textarea flex-1"
                                     placeholder="Enter Fault Symptom"
                                     required
@@ -309,8 +313,8 @@
                                 type="radio"
                                 name="formReportCode"
                                 class="form-radio"
-                                :value="code"
-                                v-model="form.selectedCode"
+                                :value="code.id"
+                                v-model="postForm.code_id"
                             />
                             <span>{{ code.code }}</span>
                         </label>
@@ -325,6 +329,7 @@
                             <textarea
                                 id="formReportActions"
                                 name="formReportActions"
+                                v-model="postForm.actions_taken"
                                 rows="3"
                                 class="form-textarea flex-1"
                                 placeholder="Enter Actions Taken"
@@ -350,6 +355,7 @@
                                 <flat-pickr
                                     id="formReportReportedTime"
                                     name="formReportReportedTime"
+                                    v-model="postForm.reported"
                                     class="form-input flex-1"
                                     :config="dateTime"
                                 ></flat-pickr>
@@ -363,6 +369,7 @@
                                 <flat-pickr
                                     id="formReportTimeArrival"
                                     name="formReportTimeArrival"
+                                    v-model="postForm.arrival"
                                     class="form-input flex-1"
                                     :config="dateTime"
                                 ></flat-pickr>
@@ -378,6 +385,7 @@
                                 <flat-pickr
                                     id="formReportTimeFinished"
                                     name="formReportTimeFinished"
+                                    v-model="postForm.finished"
                                     class="form-input flex-1"
                                     :config="dateTime"
                                 ></flat-pickr>
@@ -391,6 +399,7 @@
                                 <flat-pickr
                                     id="formReportTimeDeparture"
                                     name="formReportTimeDeparture"
+                                    v-model="postForm.departure"
                                     class="form-input flex-1"
                                     :config="dateTime"
                                 ></flat-pickr>
@@ -402,8 +411,8 @@
                                     type="radio"
                                     name="formReportStatus"
                                     class="form-radio"
-                                    :value="status"
-                                    v-model="form.selectedStatus"
+                                    :value="status.id"
+                                    v-model="postForm.status_id"
                                 />
                                 <span>{{ status.status }}</span>
                             </label>
@@ -415,6 +424,7 @@
                                 <label class="inline-flex">
                                     <input
                                         type="checkbox"
+                                        v-model="postForm.is_tested"
                                         class="form-checkbox rounded-full"
                                         checked
                                     />
@@ -430,6 +440,7 @@
                                 <input
                                     id="formReportDT"
                                     type="number"
+                                    v-model="postForm.dt"
                                     name="formReportDT"
                                     class="form-input flex-1"
                                     placeholder="Enter DT"
@@ -495,7 +506,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <template v-if="items.length <= 0">
+                                <template v-if="postForm.service_parts.length <= 0">
                                     <tr>
                                         <td
                                             colspan="5"
@@ -505,7 +516,7 @@
                                         </td>
                                     </tr>
                                 </template>
-                                <template v-for="(item, i) in form.addNewPart" :key="i">
+                                <template v-for="(item, i) in postForm.service_parts" :key="i">
                                     <tr class="align-top">
                                         <td>
                                             {{ item.num_part }}
@@ -519,6 +530,7 @@
                                                 class="form-input w-32"
                                                 placeholder="Quantity"
                                                 v-model="item.quantity"
+                                                value="1"
                                                 min="0"
                                             />
                                         </td>
@@ -568,7 +580,7 @@
                             name="notes"
                             class="form-textarea min-h-[130px]"
                             placeholder="Notes...."
-                            v-model="params.notes"
+                            v-model="postForm.notes"
                         ></textarea>
                     </div>
                 </div>
@@ -599,6 +611,7 @@
                         <button
                             type="button"
                             class="btn btn-success w-full gap-2"
+                            @click="submit"
                         >
                             <svg
                                 width="24"
@@ -743,48 +756,19 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    catalogMachines: {
+        type: Array,
+        required: true,
+    },
 });
+
+console.log(props.catalogMachines);
 
 const dateTime: any = ref({
     enableTime: true,
     dateFormat: "Y-m-d H:i",
     position: store.rtlClass === "rtl" ? "auto right" : "auto left",
 });
-
-const catalogMachine = reactive([
-    {
-        id: "173503410",
-        type: "BPS C4",
-        segment: "C",
-        customer: {
-            name: "Banco Central do Brazil",
-            address: "Calzada Legaria 691 Col. Lomas de Sotelo Banxico CDMX",
-            contact: "Gieselle Salavelia Hernandez Espindola",
-        },
-    },
-    {
-        id: "M01000071",
-        type: "PRONOTE 1.5",
-        segment: "C",
-        customer: {
-            name: "BANAMEX",
-            address:
-                "Isabel La Católica 44, Centro Histórico de la Cdad. de México CDMX",
-            contact: "Serafin Llorente Valenzuela",
-        },
-    },
-    {
-        id: "173503412",
-        type: "BPS C4",
-        segment: "C",
-        customer: {
-            name: "BANAMEX",
-            address:
-                "Isabel La Católica 44, Centro Histórico de la Cdad. de México CDMX",
-            contact: "Serafin Llorente Valenzuela",
-        },
-    },
-]);
 
 const form = reactive({
     selectedMachine: null,
@@ -793,6 +777,30 @@ const form = reactive({
     selectedCode: null,
     selectedUser: null,
     selectedStatus: null,
+});
+
+const postForm = reactive({
+    machine_id: null,
+    user_id: null,
+    transport: null,
+    pieces: null,
+    sogd: null,
+    time_on: null,
+    travel_time: null,
+    report_type_id: 1,
+    reported_error: null,
+    fault_symptom: "",
+    code_id: null,
+    actions_taken: "",
+    reported: null,
+    arrival: null,
+    finished: null,
+    departure: null,
+    status_id: null,
+    is_tested: null,
+    dt: null,
+    notes: "",
+    service_parts: []
 });
 
 const items: any = ref([]);
@@ -869,11 +877,17 @@ const showMachineLabel = (option) => {
 };
 
 const removeItem = (item: any = null) => {
-    items.value = items.value.filter((d: any) => d.id != item.id);
+    postForm.service_parts = postForm.service_parts.filter((d: any) => d.id != item.id);
 };
 
 const addNewPart = () => {
     console.log(form.selectedPart);
-    form.addNewPart.push(form.selectedPart);
+    postForm.service_parts.push(form.selectedPart);
 };
+
+function submit() {
+    postForm.machine_id = form.selectedMachine.id;
+    postForm.user_id = form.selectedUser.id;
+    console.log(postForm);
+}
 </script>
