@@ -57,6 +57,31 @@
                         </div>
                     </div>
                 </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formShift"
+                                class="w-[100px] text-right mb-0 mr-[10px]"
+                                >Shift</label
+                            >
+
+                            <multiselect
+                                id="formShift"
+                                :options="props.catalogShifts"
+                                v-model="form.selectedShift"
+                                class="custom-multiselect flex-1"
+                                :searchable="false"
+                                placeholder="Select an option"
+                                :custom-label="({ name }) => `${name}`"
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
+                    </div>
+                </div>
+
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="flex justify-between lg:flex-row flex-col">
@@ -75,7 +100,10 @@
                                     type="text"
                                     name="formCustomerName"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.data_client.client.name"
+                                    :value="
+                                        form.selectedMachine?.data_client.client
+                                            .name
+                                    "
                                     readonly
                                     placeholder="Enter Name"
                                 />
@@ -91,7 +119,10 @@
                                     type="text"
                                     name="formCustomerEmail"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.data_client.address"
+                                    :value="
+                                        form.selectedMachine?.data_client
+                                            .address
+                                    "
                                     readonly
                                     placeholder="Enter Email"
                                 />
@@ -107,7 +138,10 @@
                                     type="text"
                                     name="formCustomerContact"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.data_client.contact"
+                                    :value="
+                                        form.selectedMachine?.data_client
+                                            .contact
+                                    "
                                     readonly
                                     placeholder="Enter Contact"
                                 />
@@ -842,10 +876,12 @@ const props = defineProps({
         type: Array,
         required: true,
     },
-    report:{type:Object,required:true}
+    catalogShifts: {
+        type: Array,
+        required: true,
+    },
+    report: { type: Object, required: true },
 });
-
-console.log(props.report);
 
 const dateTime: any = ref({
     enableTime: true,
@@ -856,6 +892,7 @@ const dateTime: any = ref({
 const form = reactive({
     selectedMachine: null,
     selectedPart: null,
+    selectedShift: null,
     addNewPart: [],
     selectedCode: null,
     selectedUser: null,
@@ -867,9 +904,16 @@ const items: any = ref([]);
 onMounted(() => {
     //set default data
     console.log(props.report);
-    form.selectedMachine = props.catalogMachines.filter((data) => data.id === props.report.machine_id)[0];
-    if(props.report.user_id)
-        form.selectedUser = props.catalogUsers.filter((data) => data.id === props.report.user_id)[0];
+    form.selectedMachine = props.catalogMachines.filter(
+        (data) => data.id === props.report.machine_id
+    )[0];
+    if (props.report.user_id)
+        form.selectedUser = props.catalogUsers.filter(
+            (data) => data.id === props.report.user_id
+        )[0];
+    form.selectedShift = props.catalogShifts.filter(
+        (data) => data.id === props.report.shift_id
+    )[0];
     postForm.transport = props.report.transport;
     postForm.pieces = props.report.pieces;
     postForm.sogd = props.report.sogd;
@@ -889,7 +933,13 @@ onMounted(() => {
     postForm.dt = props.report.dt;
     postForm.notes = props.report.notes;
     for (let part of props.report.parts) {
-        postForm.service_parts.push({id:part.part.id, descripcion:part.part.descripcion,is_active:part.part.is_active,num_part:part.part.num_part,quantity:part.quantity});
+        postForm.service_parts.push({
+            id: part.part.id,
+            descripcion: part.part.descripcion,
+            is_active: part.part.is_active,
+            num_part: part.part.num_part,
+            quantity: part.quantity,
+        });
     }
 });
 
@@ -930,6 +980,7 @@ const addNewPart = () => {
 const postForm = reactive({
     machine_id: null,
     user_id: null,
+    shift_id: null,
     transport: null,
     pieces: null,
     sogd: null,
@@ -952,13 +1003,12 @@ const postForm = reactive({
 });
 
 function submit() {
-    if (form.selectedMachine)
-        postForm.machine_id = form.selectedMachine.id;
+    if (form.selectedMachine) postForm.machine_id = form.selectedMachine.id;
 
-    if (form.selectedUser)
-        postForm.user_id = form.selectedUser.id;
-    
-//router.post("/reports", postForm);
-    
+    if (form.selectedUser) postForm.user_id = form.selectedUser.id;
+
+    if (form.selectedShift) postForm.shift_id = form.selectedShift.id;
+
+    //router.post("/reports", postForm);
 }
 </script>

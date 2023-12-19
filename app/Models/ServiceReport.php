@@ -51,6 +51,11 @@ class ServiceReport extends Model
         return $this->hasOne(Machine::class, 'id', 'machine_id');
     }
 
+    public function shift(): HasOne
+    {
+        return $this->hasOne(Shift::class, 'id', 'shift_id');
+    }
+
     public function parts(): HasMany
     {
         return $this->hasMany(ServiceParts::class, 'service_report_id', 'id');

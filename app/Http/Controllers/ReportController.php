@@ -112,11 +112,12 @@ class ReportController extends Controller
      */
     public function edit(string $id)
     {
-        $report = ServiceReport::with(['status','machine','parts','parts.part'])->findOrFail($id);
+        $report = ServiceReport::with(['status','machine','parts','parts.part','shift'])->findOrFail($id);
 
         $catalogParts = Part::where('is_active', 1)->get();
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
+        $catalogShifts = Shift::where('is_active', 1)->get();
         $catalogMachines = Machine::where('is_active', 1)->with(['machine_model.model_segment','data_client', 'data_client.client'])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         return Inertia::render('admin/reports/edit',[
@@ -125,6 +126,7 @@ class ReportController extends Controller
             'catalogUsers' => $catalogUsers,
             'catalogStatus' => $catalogStatus,
             'catalogMachines' => $catalogMachines,
+            'catalogShifts' => $catalogShifts,
             'report' => $report,
         ]);
     }
