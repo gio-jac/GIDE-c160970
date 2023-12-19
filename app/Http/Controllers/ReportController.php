@@ -66,6 +66,7 @@ class ReportController extends Controller
         $report = ServiceReport::create($request->validate([
             'user_id' => ['required'],
             'machine_id' => ['required'],
+            'shift_id' => ['required'],
             'transport' => ['required'],
             'pieces' => ['required'],
             'sogd' => ['required'],
