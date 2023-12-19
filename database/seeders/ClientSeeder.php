@@ -13,8 +13,10 @@ class ClientSeeder extends Seeder
      */
     public function run(): void
     {
+        //Mexico
         Client::create(['name' => "ARMSTRONG"]);
         Client::create(['name' => "BANAMEX"]);
+        Client::create(['name' => "BANXICO"]);
         Client::create(['name' => "COMETRA"]);
         Client::create(['name' => "GRUMER"]);
         Client::create(['name' => "SEGURITEC"]);
@@ -22,6 +24,6 @@ class ClientSeeder extends Seeder
         Client::create(['name' => "SERPAPROSA"]);
         Client::create(['name' => "T. LOCK"]);
         Client::create(['name' => "TECNOVAL"]);
-        Client::create(['name' => "BANXICO"]);
+        
     }
 }
