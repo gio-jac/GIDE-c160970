@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('machine_id');
+            $table->unsignedBigInteger('shift_id');
             $table->integer('transport')->default(0);
             $table->integer('pieces')->default(0);
             $table->integer('sogd')->default(0);
@@ -39,6 +40,7 @@ return new class extends Migration
             $table->foreign('machine_id')->references('id')->on('machines');
             $table->foreign('code_id')->references('id')->on('codes');
             $table->foreign('status_id')->references('id')->on('statuses');
+            $table->foreign('shift_id')->references('id')->on('shifts');
         });
     }
 

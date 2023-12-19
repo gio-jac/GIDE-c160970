@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Status;
 use App\Models\Machine;
 use App\Models\ServiceReport;
+use App\Models\Shift;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,7 @@ class ReportController extends Controller
         $catalogParts = Part::where('is_active', 1)->get();
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
+        $catalogShifts = Shift::where('is_active', 1)->get();
         $catalogMachines = Machine::where('is_active', 1)->with(['machine_model.model_segment','data_client', 'data_client.client'])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
 
@@ -48,6 +50,7 @@ class ReportController extends Controller
             'catalogUsers' => $catalogUsers,
             'catalogStatus' => $catalogStatus,
             'catalogMachines' => $catalogMachines,
+            'catalogShifts' => $catalogShifts,
         ]);
     }
 

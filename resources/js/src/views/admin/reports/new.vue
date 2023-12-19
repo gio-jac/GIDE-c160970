@@ -57,6 +57,34 @@
                         </div>
                     </div>
                 </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formShift"
+                                class="w-[100px] text-right mb-0 mr-[10px]"
+                                >Shift</label
+                            >
+
+                            <multiselect
+                                id="formShift"
+                                :options="props.catalogShifts"
+                                v-model="form.selectedShift"
+                                class="custom-multiselect flex-1"
+                                :searchable="false"
+                                placeholder="Select an option"
+                                :custom-label="
+                                    ({ name }) =>
+                                        `${name}`
+                                "
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
+                    </div>
+                </div>
+
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="flex justify-between lg:flex-row flex-col">
@@ -75,7 +103,10 @@
                                     type="text"
                                     name="formCustomerName"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.data_client.client.name"
+                                    :value="
+                                        form.selectedMachine?.data_client.client
+                                            .name
+                                    "
                                     readonly
                                     placeholder="Enter Name"
                                 />
@@ -91,7 +122,10 @@
                                     type="text"
                                     name="formCustomerEmail"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.data_client.address"
+                                    :value="
+                                        form.selectedMachine?.data_client
+                                            .address
+                                    "
                                     readonly
                                     placeholder="Enter Email"
                                 />
@@ -107,7 +141,10 @@
                                     type="text"
                                     name="formCustomerContact"
                                     class="form-input flex-1"
-                                    :value="form.selectedMachine?.data_client.contact"
+                                    :value="
+                                        form.selectedMachine?.data_client
+                                            .contact
+                                    "
                                     readonly
                                     placeholder="Enter Contact"
                                 />
@@ -842,9 +879,11 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    catalogShifts: {
+        type: Array,
+        required: true,
+    },
 });
-
-console.log(props.catalogMachines);
 
 const dateTime: any = ref({
     enableTime: true,
@@ -854,6 +893,7 @@ const dateTime: any = ref({
 
 const form = reactive({
     selectedMachine: null,
+    selectedShift: null,
     selectedPart: null,
     addNewPart: [],
     selectedCode: null,
@@ -948,6 +988,7 @@ const addNewPart = () => {
 const postForm = reactive({
     machine_id: null,
     user_id: null,
+    shift_id: null,
     transport: null,
     pieces: null,
     sogd: null,
@@ -970,13 +1011,12 @@ const postForm = reactive({
 });
 
 function submit() {
-    if (form.selectedMachine)
-        postForm.machine_id = form.selectedMachine.id;
+    if (form.selectedMachine) postForm.machine_id = form.selectedMachine.id;
 
-    if (form.selectedUser)
-        postForm.user_id = form.selectedUser.id;
-    
+    if (form.selectedUser) postForm.user_id = form.selectedUser.id;
+
+    if (form.selectedShift) postForm.shift_id = form.selectedShift.id;
+
     router.post("/reports", postForm);
-    
 }
 </script>
