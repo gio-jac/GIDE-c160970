@@ -17,10 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('machine_id');
             $table->unsignedBigInteger('shift_id');
             $table->integer('transport')->default(0);
-            $table->integer('pieces')->default(0);
-            $table->integer('sogd')->default(0);
-            $table->integer('time_on')->default(0);
-            $table->integer('travel_time')->default(0);
+            $table->string('pieces');
+            $table->string('sogd');
+            $table->decimal('time_on', 8, 2)->default(0);
+            $table->string('travel_time');
             $table->unsignedBigInteger('report_type_id');
             $table->string('reported_error');
             $table->string('fault_symptom');

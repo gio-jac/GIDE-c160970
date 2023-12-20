@@ -237,7 +237,7 @@
                                 >
                                 <input
                                     id="formReportPieces"
-                                    type="number"
+                                    type="text"
                                     v-model="postForm.pieces"
                                     name="formReportPieces"
                                     class="form-input flex-1"
@@ -252,7 +252,7 @@
                                 >
                                 <input
                                     id="formReportSOGD"
-                                    type="number"
+                                    type="text"
                                     v-model="postForm.sogd"
                                     name="formReportSOGD"
                                     class="form-input flex-1"
@@ -269,6 +269,8 @@
                                 >
                                 <input
                                     id="formReportOnTime"
+                                    step="0.01" 
+                                    pattern="\d+(\.\d{1,2})?"
                                     type="number"
                                     v-model="postForm.time_on"
                                     name="formReportOnTime"
@@ -280,11 +282,11 @@
                                 <label
                                     for="formReportTravelTime"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Travel time (Min.)</label
+                                    >Travel time</label
                                 >
                                 <input
                                     id="formReportTravelTime"
-                                    type="number"
+                                    type="text"
                                     v-model="postForm.travel_time"
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
@@ -313,32 +315,32 @@
                         <div class="w-full">
                             <div class="flex items-center">
                                 <label
-                                    for="formReportError"
+                                    for="formFaultSymptom"
                                     class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                    >Error reported</label
+                                    >Fault Symptom</label
                                 >
                                 <input
-                                    id="formReportError"
+                                    id="formFaultSymptom"
                                     type="text"
-                                    v-model="postForm.reported_error"
-                                    name="formReportError"
+                                    v-model="postForm.fault_symptom"
+                                    name="formFaultSymptom"
                                     class="form-input flex-1"
-                                    placeholder="Enter Error Reported"
+                                    placeholder="Enter Fault Symptom"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="formReportSymptom"
+                                    for="formReportedError"
                                     class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                    >Fault Symptom</label
+                                    >Reported Error</label
                                 >
                                 <textarea
-                                    id="formReportSymptom"
-                                    name="formReportSymptom"
+                                    id="formReportedError"
+                                    name="formReportedError"
                                     rows="3"
-                                    v-model="postForm.fault_symptom"
+                                    v-model="postForm.reported_error"
                                     class="form-textarea flex-1"
-                                    placeholder="Enter Fault Symptom"
+                                    placeholder="Enter Reported Error"
                                     required
                                 ></textarea>
                             </div>
@@ -640,12 +642,12 @@
                 </div>
                 <div class="mt-8 px-4">
                     <div>
-                        <label for="notes">Notes</label>
+                        <label for="notes">Remarks</label>
                         <textarea
                             id="notes"
                             name="notes"
                             class="form-textarea min-h-[130px]"
-                            placeholder="Notes...."
+                            placeholder="Remarks...."
                             v-model="postForm.notes"
                         ></textarea>
                     </div>
@@ -987,8 +989,8 @@ const postForm = reactive({
     time_on: null,
     travel_time: null,
     report_type_id: 1,
-    reported_error: null,
-    fault_symptom: "",
+    reported_error: "",
+    fault_symptom: null,
     code_id: null,
     actions_taken: "",
     reported: null,

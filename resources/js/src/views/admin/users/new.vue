@@ -1,5 +1,5 @@
 <template>
-    <Head title="Users New Type" />
+    <Head title="Users New" />
     <div>
         <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b]">
             <div class="mb-5">
