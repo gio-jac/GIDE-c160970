@@ -38,6 +38,7 @@ class ServiceReport extends Model
         'is_tested',
         'dt',
         'notes',
+        'signature_client_name',
         'is_active',
     ];
 

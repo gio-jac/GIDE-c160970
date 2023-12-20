@@ -73,10 +73,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
                                 placeholder="Select an option"
-                                :custom-label="
-                                    ({ name }) =>
-                                        `${name}`
-                                "
+                                :custom-label="({ name }) => `${name}`"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
@@ -272,7 +269,7 @@
                                 >
                                 <input
                                     id="formReportOnTime"
-                                    step="0.01" 
+                                    step="0.01"
                                     pattern="\d+(\.\d{1,2})?"
                                     type="number"
                                     v-model="postForm.time_on"
@@ -365,7 +362,12 @@
                                 :value="code.id"
                                 v-model="postForm.code_id"
                             />
-                            <span>{{ code.code }}</span>
+                            <div class="flex flex-col">
+                                <span>{{ code.code }}</span>
+                                <span v-if="postForm.code_id === code.id" class="text-xs">{{
+                                    code.description
+                                }}</span>
+                            </div>
                         </label>
                     </div>
                     <div class="w-full">
@@ -653,6 +655,30 @@
                             placeholder="Remarks...."
                             v-model="postForm.notes"
                         ></textarea>
+                    </div>
+                </div>
+                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
+                <div class="mt-8 px-4">
+                    <div
+                        class="flex justify-between lg:flex-row flex-col flex-wrap"
+                    >
+                        <div class="w-full">
+                            <div class="flex items-center">
+                                <label
+                                    for="formCustomerSignatureName"
+                                    class="ltr:mr-2 rtl:ml-2 w-1/4 mb-0"
+                                    >Customer Signature Name</label
+                                >
+                                <input
+                                    id="formCustomerSignatureName"
+                                    type="text"
+                                    v-model="postForm.signature_client_name"
+                                    name="formCustomerSignatureName"
+                                    class="form-input flex-1"
+                                    placeholder="Enter Customer Name"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1006,6 +1032,7 @@ const postForm = reactive({
     finished: null,
     departure: null,
     status_id: null,
+    signature_client_name: null,
     is_tested: null,
     dt: null,
     notes: "",

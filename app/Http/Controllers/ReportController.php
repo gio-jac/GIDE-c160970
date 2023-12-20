@@ -85,6 +85,7 @@ class ReportController extends Controller
             'is_tested' => ['required'],
             'dt' => [],
             'notes' => [],
+            'signature_client_name' => [],
         ]));
 
         $partsArray = $request->all()['service_parts'];

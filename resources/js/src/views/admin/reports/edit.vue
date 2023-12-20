@@ -362,7 +362,12 @@
                                 :value="code.id"
                                 v-model="postForm.code_id"
                             />
-                            <span>{{ code.code }}</span>
+                            <div class="flex flex-col">
+                                <span>{{ code.code }}</span>
+                                <span v-if="postForm.code_id === code.id" class="text-xs">{{
+                                    code.description
+                                }}</span>
+                            </div>
                         </label>
                     </div>
                     <div class="w-full">
@@ -652,6 +657,30 @@
                         ></textarea>
                     </div>
                 </div>
+                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
+                <div class="mt-8 px-4">
+                    <div
+                        class="flex justify-between lg:flex-row flex-col flex-wrap"
+                    >
+                        <div class="w-full">
+                            <div class="flex items-center">
+                                <label
+                                    for="formCustomerSignatureName"
+                                    class="ltr:mr-2 rtl:ml-2 w-1/4 mb-0"
+                                    >Customer Signature Name</label
+                                >
+                                <input
+                                    id="formCustomerSignatureName"
+                                    type="text"
+                                    v-model="postForm.signature_client_name"
+                                    name="formCustomerSignatureName"
+                                    class="form-input flex-1"
+                                    placeholder="Enter Customer Name"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="xl:w-96 w-full xl:mt-0 mt-6">
                 <div class="panel mb-5" v-if="user.type === 2">
@@ -931,6 +960,7 @@ onMounted(() => {
     postForm.finished = props.report.finished;
     postForm.departure = props.report.departure;
     postForm.status_id = props.report.status_id;
+    postForm.signature_client_name = props.report.signature_client_name;
     postForm.is_tested = props.report.is_tested === 1 ? true : false;
     postForm.dt = props.report.dt;
     postForm.notes = props.report.notes;
@@ -999,6 +1029,7 @@ const postForm = reactive({
     departure: null,
     status_id: null,
     is_tested: null,
+    signature_client_name: null,
     dt: null,
     notes: "",
     service_parts: [],

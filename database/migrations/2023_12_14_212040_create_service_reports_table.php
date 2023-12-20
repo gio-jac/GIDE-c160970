@@ -34,6 +34,7 @@ return new class extends Migration
             $table->boolean('is_tested')->default(false);
             $table->integer('dt')->default(0);
             $table->string('notes');
+            $table->string('signature_client_name');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
