@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Part;
 use App\Models\Code;
 use App\Models\User;
@@ -146,5 +146,18 @@ class ReportController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * PDF Creation.
+     */
+    public function pdfReport(string $id)
+    {
+        $report = ServiceReport::with(['status','machine','parts','parts.part','shift'])->findOrFail($id);
+        $dato = [
+            ['atributo1' => $id, 'atributo2' => 'Styde.net']
+        ];
+        $pdf = Pdf::loadView('reporte',['datos' => $dato, 'report' => $report]);
+        return $pdf->download('invoice.pdf');
     }
 }

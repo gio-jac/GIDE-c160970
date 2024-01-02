@@ -158,8 +158,7 @@
                                     name="formCustomerEmail"
                                     class="form-input flex-1"
                                     :value="
-                                        form.selectedMachine?.data_client
-                                            .email
+                                        form.selectedMachine?.data_client.email
                                     "
                                     readonly
                                     placeholder="Enter Email"
@@ -177,8 +176,7 @@
                                     name="formCustomerPhone"
                                     class="form-input flex-1"
                                     :value="
-                                        form.selectedMachine?.data_client
-                                            .phone
+                                        form.selectedMachine?.data_client.phone
                                     "
                                     readonly
                                     placeholder="Enter Phone"
@@ -402,9 +400,11 @@
                             />
                             <div class="flex flex-col">
                                 <span>{{ code.code }}</span>
-                                <span v-if="postForm.code_id === code.id" class="text-xs">{{
-                                    code.description
-                                }}</span>
+                                <span
+                                    v-if="postForm.code_id === code.id"
+                                    class="text-xs"
+                                    >{{ code.description }}</span
+                                >
                             </div>
                         </label>
                     </div>
@@ -829,26 +829,25 @@
 
                         <button type="button" class="btn btn-info w-full gap-2">
                             <svg
-                                width="20"
-                                height="20"
+                                width="24"
+                                height="24"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
                                 class="w-6 h-6"
                             >
-                                <circle
+                                <path
                                     opacity="0.5"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
+                                    d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
                                     stroke="currentColor"
                                     stroke-width="1.5"
-                                ></circle>
+                                ></path>
                                 <path
-                                    d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5"
+                                    d="M8.5 12.5L10.5 14.5L15.5 9.5"
                                     stroke="currentColor"
                                     stroke-width="1.5"
                                     stroke-linecap="round"
+                                    stroke-linejoin="round"
                                 ></path>
                             </svg>
                             Close Report
@@ -871,8 +870,8 @@
                             Preview
                         </router-link>
                         -->
-                        <button
-                            type="button"
+                        <a
+                            href=""
                             class="btn btn-secondary w-full gap-2"
                         >
                             <svg
@@ -899,7 +898,7 @@
                                 ></path>
                             </svg>
                             Download PDF
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -909,7 +908,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, reactive, computed } from "vue";
-import { Head, usePage, router } from "@inertiajs/vue3";
+import { Head, usePage, router, Link } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
