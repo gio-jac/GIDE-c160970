@@ -13,11 +13,7 @@ class UserTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        UserTypes::create([
-            'tipo' => "Admin",
-        ]);
-        UserTypes::create([
-            'tipo' => "Engineer",
-        ]);
+        UserTypes::create(['tipo' => "Admin"]);
+        UserTypes::create(['tipo' => "Engineer"]);
     }
 }
