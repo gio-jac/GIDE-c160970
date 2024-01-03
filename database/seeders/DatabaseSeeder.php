@@ -19,6 +19,12 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             CodeSeeder::class,
             ShiftSeeder::class,
+            ModelSegmentsSeeder::class,
+            StatusSeeder::class,
+            UserSeeder::class,
+            DataClientsSeeder::class,
+            MachineModelsSeeder::class,
+            MachineSeeder::class,
         ]);
     }
 }
