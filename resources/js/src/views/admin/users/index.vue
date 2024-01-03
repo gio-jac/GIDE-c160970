@@ -186,6 +186,7 @@ const cols = ref([
     { field: "apellido_paterno", title: "Paternal surname" },
     { field: "telefono", title: "Phone" },
     { field: "email", title: "Email" },
+    { field: "country.name", title: "Country" },
     { field: "is_active", title: "Active" },
     {
         field: "actions",
