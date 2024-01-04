@@ -721,72 +721,13 @@
                 </div>
             </div>
             <div class="xl:w-96 w-full xl:mt-0 mt-6">
-                <div class="panel mb-5" v-if="user.type === 2">
-                    <div class="text-lg">Active reports</div>
-                    <div class="flex flex-wrap justify-evenly text-center">
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            4d25f6c6
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            80dffdc4
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            b5048b20
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            62b7e603
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            5c44f51b
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            6e4283bc
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            3f7dad51
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            152b38ec
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            c217f4ef
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            b0684858
-                        </button>
+                <div class="panel mb-5" v-if="user.type === 2 && props.latestReports.length > 0">
+                    <div class="text-lg">Latest Reports</div>
+                    <div class="flex flex-wrap">
+                        <Link v-for="(report,index) in props.latestReports" class="my-1 hover:text-sky-400" :href="`/reports/${report.id}/edit`" :key="index">{{ report.machine.serial }} - {{ report.machine.data_client.client.name }}</Link>
                     </div>
                     <div class="w-full text-center mt-8">
-                        <a href="#">Show all</a>
+                        <Link href="/reports">Show all</Link>
                     </div>
                 </div>
                 <div class="panel sticky top-[75px] left-0">
@@ -908,7 +849,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, reactive, computed } from "vue";
-import { Head, usePage, router } from "@inertiajs/vue3";
+import { Head, usePage, router, Link } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
@@ -947,6 +888,10 @@ const props = defineProps({
         required: true,
     },
     catalogShifts: {
+        type: Array,
+        required: true,
+    },
+    latestReports: {
         type: Array,
         required: true,
     },

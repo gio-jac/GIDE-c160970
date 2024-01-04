@@ -114,6 +114,7 @@ class ReportController extends Controller
     public function edit(string $id)
     {
         $report = ServiceReport::with(['status','machine','parts','parts.part','shift'])->findOrFail($id);
+        $latestReports = ServiceReport::where('user_id', Auth::user()->id)->with(['machine','machine.data_client','machine.data_client.client'])->latest()->take(5)->get();
 
         $catalogParts = Part::where('is_active', 1)->get();
         $catalogCodes = Code::where('is_active', 1)->get();
@@ -129,6 +130,7 @@ class ReportController extends Controller
             'catalogMachines' => $catalogMachines,
             'catalogShifts' => $catalogShifts,
             'report' => $report,
+            'latestReports' => $latestReports,
         ]);
     }
 
@@ -153,11 +155,12 @@ class ReportController extends Controller
      */
     public function pdfReport(string $id)
     {
-        $report = ServiceReport::with(['status','machine','parts','parts.part','shift'])->findOrFail($id);
+        $report = ServiceReport::with(['status','machine','machine.machine_model','parts','parts.part','shift'])->findOrFail($id);
         $dato = [
             ['atributo1' => $id, 'atributo2' => 'Styde.net']
         ];
         $pdf = Pdf::loadView('reporte',['datos' => $dato, 'report' => $report]);
+        //return view('reporte', ['datos' => $dato, 'report' => $report]);
         return $pdf->download('invoice.pdf');
     }
 }

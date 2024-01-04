@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\UserTitles;
 use App\Models\UserTypes;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
@@ -17,8 +18,10 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with(['country'])->get();
+        $catalogCountry = Country::where('is_active', 1)->get();
         return Inertia::render('admin/users/index',[
-            'users' => $users
+            'users' => $users,
+            'catalogCountry' => $catalogCountry
         ]);
     }
 

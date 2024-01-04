@@ -32,7 +32,20 @@
                                 Add New
                             </Link>
                         </div>
-                        <div class="ltr:ml-auto rtl:mr-auto">
+                        <div class="ltr:ml-auto rtl:mr-auto flex">
+                            <select
+                                class="form-select text-white-dark"
+                                @change="handleSelectChange"
+                            >
+                                <option value="">All</option>
+                                <option
+                                    v-for="country in props.catalogCountry"
+                                    :key="country.id"
+                                    :value="country.id"
+                                >
+                                    {{ country.name }}
+                                </option>
+                            </select>
                             <input
                                 v-model="search"
                                 type="text"
@@ -44,12 +57,13 @@
 
                     <vue3-datatable
                         ref="datatable"
-                        :rows="props.users"
+                        :rows="currentData"
                         :columns="cols"
-                        :totalRows="props.users?.length"
+                        :totalRows="currentData?.length"
                         :hasCheckbox="false"
                         :sortable="true"
                         :search="search"
+                        :columnFilter="true"
                         skin="whitespace-nowrap bh-table-hover"
                         firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                         lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg> '
@@ -162,7 +176,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
@@ -176,27 +190,39 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    catalogCountry: {
+        type: Array,
+        required: true,
+    },
 });
-//console.log(props.users);
+const currentData: any = ref(null);
 const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([
-    { field: "emp", title: "ID" },
-    { field: "nombre", title: "Name" },
-    { field: "apellido_paterno", title: "Paternal surname" },
-    { field: "telefono", title: "Phone" },
-    { field: "email", title: "Email" },
-    { field: "country.name", title: "Country" },
-    { field: "is_active", title: "Active" },
+    { field: "emp", title: "ID", filter: false },
+    { field: "nombre", title: "Name", filter: false },
+    { field: "apellido_paterno", title: "Paternal surname", filter: false },
+    { field: "telefono", title: "Phone", filter: false },
+    { field: "email", title: "Email", filter: false },
+    { field: "country.name", title: "Country", filter: false },
+    { field: "is_active", title: "Active", filter: false },
     {
         field: "actions",
         title: "Actions",
         sort: false,
+        filter: false,
         headerClass: "justify-center",
     },
 ]);
 const searchText = ref("");
-const columns = ref(["emp", "nombre", "apellido_paterno", "telefono", "email", "is_active"]);
+const columns = ref([
+    "emp",
+    "nombre",
+    "apellido_paterno",
+    "telefono",
+    "email",
+    "is_active",
+]);
 const tableOption = ref({
     headings: {
         id: (h: any, row: any, index: number) => {
@@ -223,11 +249,22 @@ const tableOption = ref({
     },
 });
 
+onMounted(() => {
+    currentData.value = [...props.users];
+});
+
 const deleteRow = (item: any = null) => {
     if (confirm("Are you sure want to delete selected row ?")) {
         if (item) {
             router.delete(`/users/${item}`);
         }
     }
+};
+
+const handleSelectChange = (event) => {
+    const selectedValue = event.target.value === "" ? null : parseInt(event.target.value);
+    currentData.value = selectedValue
+        ? props.users.filter((objeto) => objeto.country_id === selectedValue)
+        : [...props.users];
 };
 </script>
