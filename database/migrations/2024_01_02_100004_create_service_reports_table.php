@@ -23,7 +23,9 @@ return new class extends Migration
             $table->string('travel_time');
             $table->unsignedBigInteger('report_type_id');
             $table->string('reported_error');
-            $table->string('fault_symptom');
+            $table->unsignedBigInteger('module_id');
+            $table->unsignedBigInteger('failure_id');
+            $table->unsignedBigInteger('failure_type_id');
             $table->unsignedBigInteger('code_id');
             $table->string('actions_taken');
             $table->timestamp('reported')->nullable();
@@ -34,7 +36,7 @@ return new class extends Migration
             $table->boolean('is_tested')->default(false);
             $table->integer('dt')->default(0);
             $table->string('notes');
-            $table->string('signature_client_name');
+            $table->string('signature_client_name')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
@@ -42,6 +44,9 @@ return new class extends Migration
             $table->foreign('code_id')->references('id')->on('codes');
             $table->foreign('status_id')->references('id')->on('statuses');
             $table->foreign('shift_id')->references('id')->on('shifts');
+            $table->foreign('module_id')->references('id')->on('modules');
+            $table->foreign('failure_id')->references('id')->on('failures');
+            $table->foreign('failure_type_id')->references('id')->on('failure_types');
         });
     }
 

@@ -27,7 +27,9 @@ class ServiceReport extends Model
         'travel_time',
         'report_type_id',
         'reported_error',
-        'fault_symptom',
+        'module_id',
+        'failure_id',
+        'failure_type_id',
         'code_id',
         'actions_taken',
         'reported',
@@ -60,5 +62,25 @@ class ServiceReport extends Model
     public function parts(): HasMany
     {
         return $this->hasMany(ServiceParts::class, 'service_report_id', 'id');
+    }
+
+    public function module(): HasOne
+    {
+        return $this->hasOne(Module::class, 'id', 'module_id');
+    }
+
+    public function failure(): HasOne
+    {
+        return $this->hasOne(Failure::class, 'id', 'failure_id');
+    }
+
+    public function failureType(): HasOne
+    {
+        return $this->hasOne(FailureType::class, 'id', 'failure_type_id');
+    }
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

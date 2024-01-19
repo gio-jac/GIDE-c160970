@@ -349,20 +349,76 @@
                             </div>
                         </div>
                         <div class="w-full">
-                            <div class="flex items-center">
-                                <label
-                                    for="formFaultSymptom"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                    >Fault Symptom</label
-                                >
-                                <input
-                                    id="formFaultSymptom"
-                                    type="text"
-                                    v-model="postForm.fault_symptom"
-                                    name="formFaultSymptom"
-                                    class="form-input flex-1"
-                                    placeholder="Enter Fault Symptom"
-                                />
+                            <div class="flex justify-evenly">
+                                <div>
+                                    <label for="formModule"
+                                        >Module</label
+                                    >
+                                    <select
+                                        id="formModule"
+                                        name="formModule"
+                                        class="form-select text-white-dark"
+                                        v-model="form.selectedModule"
+                                        required
+                                    >
+                                        <option :value="null">
+                                            Open this select menu
+                                        </option>
+                                        <option
+                                            v-for="tmodule in form.selectedMachine?.machine_model.modules"
+                                            :key="tmodule.id"
+                                            :value="tmodule"
+                                        >
+                                            {{ tmodule.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="formFailures"
+                                        >Failures</label
+                                    >
+                                    <select
+                                        id="formFailures"
+                                        name="formFailures"
+                                        class="form-select text-white-dark"
+                                        v-model="form.selectedFailure"
+                                        required
+                                    >
+                                        <option :value="null">
+                                            Open this select menu
+                                        </option>
+                                        <option
+                                            v-for="failure in form.selectedModule?.failures"
+                                            :key="failure.id"
+                                            :value="failure"
+                                        >
+                                            {{ failure.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="formTypes"
+                                        >Types</label
+                                    >
+                                    <select
+                                        id="formTypes"
+                                        name="formTypes"
+                                        class="form-select text-white-dark"
+                                        v-model="postForm.failure_type_id"
+                                        required
+                                    >
+                                        <option :value="null">
+                                            Open this select menu
+                                        </option>
+                                        <option
+                                            v-for="failuretype in form.selectedFailure?.types"
+                                            :key="failuretype.id"
+                                            :value="failuretype.id"
+                                        >
+                                            {{ failuretype.name }}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
@@ -724,7 +780,9 @@
                 <div class="panel mb-5" v-if="user.type === 2 && props.latestReports.length > 0">
                     <div class="text-lg">Latest Reports</div>
                     <div class="flex flex-wrap">
-                        <Link v-for="(report,index) in props.latestReports" class="my-1 hover:text-sky-400" :href="`/reports/${report.id}/edit`" :key="index">{{ report.machine.serial }} - {{ report.machine.data_client.client.name }}</Link>
+                        <Link v-for="(report,index) in props.latestReports" class="my-1 hover:text-sky-400" :href="`/reports/${report.id}/edit`" :key="index">
+                            {{ report.id }} - {{ report.machine.serial }} - {{ report.machine.data_client.client.name }}
+                        </Link>
                     </div>
                     <div class="w-full text-center mt-8">
                         <Link href="/reports">Show all</Link>
@@ -906,8 +964,10 @@ const dateTime: any = ref({
 
 const form = reactive({
     selectedMachine: null,
-    selectedPart: null,
+    selectedModule: null,
+    selectedFailure: null,
     selectedShift: null,
+    selectedPart: null,
     addNewPart: [],
     selectedCode: null,
     selectedUser: null,
@@ -936,7 +996,14 @@ onMounted(() => {
     postForm.travel_time = props.report.travel_time;
     postForm.report_type_id = props.report.report_type_id;
     postForm.reported_error = props.report.reported_error;
-    postForm.fault_symptom = props.report.fault_symptom;
+    form.selectedModule = form.selectedMachine.machine_model.modules.filter(
+        (data) => data.id === props.report.module_id
+    )[0];
+    form.selectedFailure = form.selectedModule.failures.filter(
+        (data) => data.id === props.report.failure_id
+    )[0];
+    postForm.failure_type_id = props.report.failure_type_id;
+    console.log(form.selectedFailure);
     postForm.code_id = props.report.code_id;
     postForm.actions_taken = props.report.actions_taken;
     postForm.reported = props.report.reported;
@@ -1003,8 +1070,10 @@ const postForm = reactive({
     time_on: null,
     travel_time: null,
     report_type_id: 1,
+    module_id: null,
+    failure_id: null,
+    failure_type_id: null,
     reported_error: "",
-    fault_symptom: null,
     code_id: null,
     actions_taken: "",
     reported: null,
@@ -1012,8 +1081,8 @@ const postForm = reactive({
     finished: null,
     departure: null,
     status_id: null,
-    is_tested: null,
     signature_client_name: null,
+    is_tested: null,
     dt: null,
     notes: "",
     service_parts: [],
@@ -1025,6 +1094,11 @@ function submit() {
     if (form.selectedUser) postForm.user_id = form.selectedUser.id;
 
     if (form.selectedShift) postForm.shift_id = form.selectedShift.id;
+
+    if (form.selectedModule) postForm.module_id = form.selectedModule.id;
+
+    if (form.selectedFailure) postForm.failure_id = form.selectedFailure.id;
+
 
     //router.post("/reports", postForm);
 }

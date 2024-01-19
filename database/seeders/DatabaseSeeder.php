@@ -28,6 +28,9 @@ class DatabaseSeeder extends Seeder
             UserColombiaSeeder::class,
             UserJamaicaSeeder::class,
             DataClientsSeeder::class,
+            FailureTypeSeeder::class,
+            FailureSeeder::class,
+            ModuleSeeder::class,
             MachineModelsSeeder::class,
             MachineSeeder::class,
         ]);

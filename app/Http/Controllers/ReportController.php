@@ -41,9 +41,16 @@ class ReportController extends Controller
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
         $catalogShifts = Shift::where('is_active', 1)->get();
-        $catalogMachines = Machine::where('is_active', 1)->with(['machine_model.model_segment','data_client', 'data_client.client'])->get();
+        $catalogMachines = Machine::where('is_active', 1)->with([
+            'machine_model.model_segment',
+            'data_client',
+            'data_client.client',
+            'machine_model.modules',
+            'machine_model.modules.failures',
+            'machine_model.modules.failures.types',
+        ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
-
+        
         return Inertia::render('admin/reports/new',[
             'catalogParts' => $catalogParts,
             'catalogCodes' => $catalogCodes,
@@ -74,7 +81,9 @@ class ReportController extends Controller
             'travel_time' => ['required'],
             'report_type_id' => ['required'],
             'reported_error' => ['required'],
-            'fault_symptom' => ['required'],
+            'module_id' => ['required'],
+            'failure_id' => ['required'],
+            'failure_type_id' => ['required'],
             'code_id' => ['required'],
             'actions_taken' => [],
             'reported' => ['required'],
@@ -113,14 +122,21 @@ class ReportController extends Controller
      */
     public function edit(string $id)
     {
-        $report = ServiceReport::with(['status','machine','parts','parts.part','shift'])->findOrFail($id);
+        $report = ServiceReport::with(['status','machine','parts','parts.part','shift','module','failure','failureType'])->findOrFail($id);
         $latestReports = ServiceReport::where('user_id', Auth::user()->id)->with(['machine','machine.data_client','machine.data_client.client'])->latest()->take(5)->get();
 
         $catalogParts = Part::where('is_active', 1)->get();
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
         $catalogShifts = Shift::where('is_active', 1)->get();
-        $catalogMachines = Machine::where('is_active', 1)->with(['machine_model.model_segment','data_client', 'data_client.client'])->get();
+        $catalogMachines = Machine::where('is_active', 1)->with([
+            'machine_model.model_segment',
+            'data_client',
+            'data_client.client',
+            'machine_model.modules',
+            'machine_model.modules.failures',
+            'machine_model.modules.failures.types',
+        ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         return Inertia::render('admin/reports/edit',[
             'catalogParts' => $catalogParts,
@@ -155,12 +171,11 @@ class ReportController extends Controller
      */
     public function pdfReport(string $id)
     {
-        $report = ServiceReport::with(['status','machine','machine.machine_model','parts','parts.part','shift'])->findOrFail($id);
-        $dato = [
-            ['atributo1' => $id, 'atributo2' => 'Styde.net']
-        ];
-        $pdf = Pdf::loadView('reporte',['datos' => $dato, 'report' => $report]);
-        //return view('reporte', ['datos' => $dato, 'report' => $report]);
+        $report = ServiceReport::with(['status','machine','machine.machine_model','parts','parts.part','shift','module','failure','failureType', 'user'])->findOrFail($id);
+        $catalogCodes = Code::where('is_active', 1)->get();
+        
+        $pdf = Pdf::loadView('reporte',['catalogCodes' => $catalogCodes, 'report' => $report]);
+        //return view('reporte', ['catalogCodes' => $catalogCodes, 'report' => $report]);
         return $pdf->download('invoice.pdf');
     }
 }
