@@ -42,7 +42,7 @@
             <td style="width:70%;text-align: left;">
                 <p style="font-weight: normal;font-size:15px;">SERVICE REPORT</p>
                 <p style="font-weight: normal;">REPORT ID:
-                    <?= $report->id ?>
+                    {{ $report->id }}
                 </p>
             </td>
             <td style="width:30%;">
@@ -54,11 +54,11 @@
         <tr>
             <td style="width:40%;">
                 CUSTOMER NAME:<br>
-                <?= $report->machine->data_client->client->name ?>
+                {{ $report->machine->data_client->client->name }}
             </td>
             <td style="width:60%;">
                 ADDRESS:<br>
-                <?= $report->machine->data_client->address ?>
+                {{ $report->machine->data_client->address }}
             </td>
         </tr>
     </table>
@@ -66,19 +66,19 @@
         <tr>
             <td style="width:50%;">
                 CONTACT:<br>
-                <?= $report->machine->data_client->contact ?>
+                {{ $report->machine->data_client->contact }}
             </td>
             <td>
                 MACHINE MODEL:<br>
-                <?= $report->machine->machine_model->model ?>
+                {{ $report->machine->machine_model->model }}
             </td>
             <td>
                 S/N:<br>
-                <?= $report->machine->serial ?>
+                {{ $report->machine->serial }}
             </td>
             <td>
                 TRANSPORT:<br>
-                <?= $report->transport ?>
+                {{ $report->transport }}
             </td>
         </tr>
     </table>
@@ -86,23 +86,23 @@
         <tr>
             <td>
                 PIECES:<br>
-                <?= $report->pieces ?>
+                {{ $report->pieces }}
             </td>
             <td>
                 MACHINE ON:<br>
-                <?= $report->time_on ?>
+                {{ $report->time_on }}
             </td>
             <td>
                 TRAVEL TIME:<br>
-                <?= $report->travel_time ?>
+                {{ $report->travel_time }}
             </td>
-            <?php
+            @php
                 $reportTypeId = $report->report_type_id;
-            ?>
-            <td class="centered-cell<?php echo $reportTypeId === 1 ? ' highlighted' : '' ?>">
+            @endphp
+            <td class="centered-cell{{ $reportTypeId === 1 ? ' highlighted' : '' }}">
                 CONTRACT
             </td>
-            <td class="centered-cell<?php echo $reportTypeId === 2 ? ' highlighted' : '' ?>">
+            <td class="centered-cell{{ $reportTypeId === 2 ? ' highlighted' : '' }}">
                 CLIENT
             </td>
         </tr>
@@ -111,44 +111,44 @@
         <tr>
             <td>
                 SO GD:<br>
-                <?= $report->sogd ?>
+                {{ $report->sogd }}
             </td>
             <td>
                 MODULE:<br>
-                <?= $report->module->name ?>
+                {{ $report->module->name }}
             </td>
             <td>
                 FAILURE:<br>
-                <?= $report->failure->name ?>
+                {{ $report->failure->name }}
             </td>
             <td>
                 FAULT SYMPTOM:<br>
-                <?= $report->failureType->name ?>
+                {{ $report->failureType->name }}
             </td>
         </tr>
     </table>
     <div class="tblStyle reportedError">
         REPORTED ERROR:<br>
-        <?= $report->reported_error ?>
+        {{ $report->reported_error }}
     </div>
 
     <table style="margin:7px 0;">
         <tr>
-            <?php
-            $codeId = $report->code_id;
-        ?>
-            <?php foreach ($catalogCodes as $code) : ?>
-            <td>
-                <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
-                    class="defaultBorder<?php echo $code->id === $codeId ? ' highlighted' : '' ?>"></div>
-                <?= $code->code ?>
-            </td>
-            <?php endforeach; ?>
+            @php
+                $codeId = $report->code_id;
+            @endphp
+            @foreach ($catalogCodes as $code)
+                <td>
+                    <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
+                        class="defaultBorder{{ $code->id === $codeId ? ' highlighted' : '' }}"></div>
+                    {{ $code->code }}
+                </td>
+            @endforeach
         </tr>
     </table>
     <div class="tblStyle reportedError">
         ACTIONS TAKEN:<br>
-        <?= $report->actions_taken ?>
+        {{ $report->actions_taken }}
     </div>
 
     <table style="text-align:center;margin:7px 0;">
@@ -159,12 +159,12 @@
             <td class="defaultBorder" colspan="2">DEPARTURE TIME</td>
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
-                    class="defaultBorder<?php echo $report->status_id === 1 ? ' highlighted' : '' ?>"></div>
+                    class="defaultBorder{{ $report->status_id === 1 ? ' highlighted' : '' }}"></div>
                 COMPLETE
             </td>
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
-                    class="defaultBorder<?php echo $report->is_tested === 1 ? ' highlighted' : '' ?>"></div>
+                    class="defaultBorder{{ $report->is_tested === 1 ? ' highlighted' : '' }}"></div>
                 TEST OK
             </td>
         </tr>
@@ -179,60 +179,60 @@
             <td class="defaultBorder">HOUR</td>
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;margin-left:-3px;"
-                    class="defaultBorder<?php echo $report->status_id === 2 ? ' highlighted' : '' ?>"></div>
+                    class="defaultBorder{{ $report->status_id === 2 ? ' highlighted' : '' }}"></div>
                 INCOMPLT
             </td>
             <td class="defaultBorder">DT</td>
         </tr>
         <tr>
-            <?php
-            if (!function_exists('formatDateTime')) {
-                function formatDateTime($dateTime) {
-                    $dateTimeParts = explode(" ", $dateTime);
-                    $dateParts = explode("-", $dateTimeParts[0]);
-                    $dateTimeParts[0] = $dateParts[2].'-'.$dateParts[1].'-'.$dateParts[0];
-                    $dateTimeParts[1] = substr($dateTimeParts[1], 0, 5);
-                    return $dateTimeParts;
+            @php
+                if (!function_exists('formatDateTime')) {
+                    function formatDateTime($dateTime) {
+                        $dateTimeParts = explode(" ", $dateTime);
+                        $dateParts = explode("-", $dateTimeParts[0]);
+                        $dateTimeParts[0] = $dateParts[2].'-'.$dateParts[1].'-'.$dateParts[0];
+                        $dateTimeParts[1] = substr($dateTimeParts[1], 0, 5);
+                        return $dateTimeParts;
+                    }
                 }
-            }
 
-            $reported = formatDateTime($report->reported);
-            $arrival = formatDateTime($report->arrival);
-            $finished = formatDateTime($report->finished);
-            $departure = formatDateTime($report->departure);
-            ?>
+                $reported = formatDateTime($report->reported);
+                $arrival = formatDateTime($report->arrival);
+                $finished = formatDateTime($report->finished);
+                $departure = formatDateTime($report->departure);
+            @endphp
 
             <td class="defaultBorder">
-                <?= $reported[0] ?>
+                {{ $reported[0] }}
             </td>
             <td class="defaultBorder">
-                <?= $reported[1] ?>
+                {{ $reported[1] }}
             </td>
             <td class="defaultBorder">
-                <?= $arrival[0] ?>
+                {{ $arrival[0] }}
             </td>
             <td class="defaultBorder">
-                <?= $arrival[1] ?>
+                {{ $arrival[1] }}
             </td>
             <td class="defaultBorder">
-                <?= $finished[0] ?>
+                {{ $finished[0] }}
             </td>
             <td class="defaultBorder">
-                <?= $finished[1] ?>
+                {{ $finished[1] }}
             </td>
             <td class="defaultBorder">
-                <?= $departure[0] ?>
+                {{ $departure[0] }}
             </td>
             <td class="defaultBorder">
-                <?= $departure[1] ?>
+                {{ $departure[1] }}
             </td>
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;margin-left:-13px;"
-                    class="defaultBorder<?php echo $report->status_id === 3 ? ' highlighted' : '' ?>"></div>
+                    class="defaultBorder{{ $report->status_id === 3 ? ' highlighted' : '' }}"></div>
                 RETURN
             </td>
             <td class="defaultBorder">
-                <?= $report->dt ?>
+                {{ $report->dt }}
             </td>
         </tr>
     </table>
@@ -244,13 +244,13 @@
             <th>QTY</th>
         </tr>
         @foreach($report->parts as $part)
-        @if($loop->index % 2 != 0)
-        <tr style="text-align:center;">
-            <td>{{$part->part->num_part}}</td>
-            <td>{{$part->part->descripcion}}</td>
-            <td>{{$part->quantity}}</td>
-        </tr>
-        @endif
+            @if($loop->index % 2 != 0)
+            <tr style="text-align:center;">
+                <td>{{$part->part->num_part}}</td>
+                <td>{{$part->part->descripcion}}</td>
+                <td>{{$part->quantity}}</td>
+            </tr>
+            @endif
         @endforeach
     </table>
 
@@ -261,30 +261,30 @@
             <th>QTY</th>
         </tr>
         @foreach($report->parts as $part)
-        @if($loop->index % 2 == 0)
-        <tr style="text-align:center;">
-            <td>{{$part->part->num_part}}</td>
-            <td>{{$part->part->descripcion}}</td>
-            <td>{{$part->quantity}}</td>
-        </tr>
-        @endif
+            @if($loop->index % 2 == 0)
+            <tr style="text-align:center;">
+                <td>{{$part->part->num_part}}</td>
+                <td>{{$part->part->descripcion}}</td>
+                <td>{{$part->quantity}}</td>
+            </tr>
+            @endif
         @endforeach
     </table>
     <div style="clear: both;"></div>
     <div class="tblStyle reportedError" style="margin:7px 0;">
         REMARKS:<br>
-        <?= $report->notes ?>
+        {{ $report->notes }}
     </div>
     
     <div style="position: absolute; bottom: 0;width:100%;">
         <div class="defaultBorder" style="float: left;width: 48%;height:100px;">
             PERFOMED BY:
-            <div style="width:100%;text-align:center;margin-top:70px;"><?= $report->user->nombre ?> <?= $report->user->apellido_paterno ?> <?= $report->user->apellido_materno ?></div>
+            <div style="width:100%;text-align:center;margin-top:70px;">{{ $report->user->nombre }} {{ $report->user->apellido_paterno }} {{ $report->user->apellido_materno }}</div>
         </div>
 
         <div class="defaultBorder" style="float: right;width: 48%;height:100px;">
             CUSTOMER SIGNATURE:
-            <div style="width:100%;text-align:center;margin-top:70px;"><?= empty($report->signature_client_name) ? $report->machine->data_client->contact : $report->signature_client_name ?></div>
+            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name) ? $report->machine->data_client->contact : $report->signature_client_name }}</div>
         </div>
         <div style="clear: both;"></div>
     </div>
