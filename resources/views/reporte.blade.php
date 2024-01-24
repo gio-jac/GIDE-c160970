@@ -114,6 +114,14 @@
                 <?= $report->sogd ?>
             </td>
             <td>
+                MODULE:<br>
+                <?= $report->module->name ?>
+            </td>
+            <td>
+                FAILURE:<br>
+                <?= $report->failure->name ?>
+            </td>
+            <td>
                 FAULT SYMPTOM:<br>
                 <?= $report->failureType->name ?>
             </td>

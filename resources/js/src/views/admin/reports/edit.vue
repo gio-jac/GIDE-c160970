@@ -358,16 +358,16 @@
                                         id="formModule"
                                         name="formModule"
                                         class="form-select text-white-dark"
-                                        v-model="form.selectedModule"
+                                        v-model="postForm.module_id"
                                         required
                                     >
                                         <option :value="null">
                                             Open this select menu
                                         </option>
                                         <option
-                                            v-for="tmodule in form.selectedMachine?.machine_model.modules"
+                                            v-for="tmodule in props.catalogModule"
                                             :key="tmodule.id"
-                                            :value="tmodule"
+                                            :value="tmodule.id"
                                         >
                                             {{ tmodule.name }}
                                         </option>
@@ -381,16 +381,16 @@
                                         id="formFailures"
                                         name="formFailures"
                                         class="form-select text-white-dark"
-                                        v-model="form.selectedFailure"
+                                        v-model="postForm.failure_id"
                                         required
                                     >
                                         <option :value="null">
                                             Open this select menu
                                         </option>
                                         <option
-                                            v-for="failure in form.selectedModule?.failures"
+                                            v-for="failure in props.catalogFailures"
                                             :key="failure.id"
-                                            :value="failure"
+                                            :value="failure.id"
                                         >
                                             {{ failure.name }}
                                         </option>
@@ -411,7 +411,7 @@
                                             Open this select menu
                                         </option>
                                         <option
-                                            v-for="failuretype in form.selectedFailure?.types"
+                                            v-for="failuretype in props.catalogTypes"
                                             :key="failuretype.id"
                                             :value="failuretype.id"
                                         >
@@ -949,6 +949,18 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    catalogModule: {
+        type: Array,
+        required: true,
+    },
+    catalogFailures: {
+        type: Array,
+        required: true,
+    },
+    catalogTypes: {
+        type: Array,
+        required: true,
+    },
     latestReports: {
         type: Array,
         required: true,
@@ -996,14 +1008,18 @@ onMounted(() => {
     postForm.travel_time = props.report.travel_time;
     postForm.report_type_id = props.report.report_type_id;
     postForm.reported_error = props.report.reported_error;
-    form.selectedModule = form.selectedMachine.machine_model.modules.filter(
+    postForm.reported_error = props.report.reported_error;
+    postForm.module_id = props.report.module_id;
+    postForm.failure_id = props.report.failure_id;
+    postForm.failure_type_id = props.report.failure_type_id;
+    /*form.selectedModule = form.selectedMachine.machine_model.modules.filter(
         (data) => data.id === props.report.module_id
     )[0];
     form.selectedFailure = form.selectedModule.failures.filter(
         (data) => data.id === props.report.failure_id
     )[0];
     postForm.failure_type_id = props.report.failure_type_id;
-    console.log(form.selectedFailure);
+    console.log(form.selectedFailure);*/
     postForm.code_id = props.report.code_id;
     postForm.actions_taken = props.report.actions_taken;
     postForm.reported = props.report.reported;
@@ -1095,9 +1111,9 @@ function submit() {
 
     if (form.selectedShift) postForm.shift_id = form.selectedShift.id;
 
-    if (form.selectedModule) postForm.module_id = form.selectedModule.id;
+    //if (form.selectedModule) postForm.module_id = form.selectedModule.id;
 
-    if (form.selectedFailure) postForm.failure_id = form.selectedFailure.id;
+    //if (form.selectedFailure) postForm.failure_id = form.selectedFailure.id;
 
 
     //router.post("/reports", postForm);

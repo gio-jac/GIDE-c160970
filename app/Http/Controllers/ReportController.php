@@ -9,6 +9,9 @@ use App\Models\Status;
 use App\Models\Machine;
 use App\Models\ServiceReport;
 use App\Models\Shift;
+use App\Models\Module;
+use App\Models\Failure;
+use App\Models\FailureType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -41,13 +44,13 @@ class ReportController extends Controller
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
         $catalogShifts = Shift::where('is_active', 1)->get();
+        $catalogModule = Module::where('is_active', 1)->get();
+        $catalogFailures = Failure::where('is_active', 1)->get();
+        $catalogTypes = FailureType::where('is_active', 1)->get();
         $catalogMachines = Machine::where('is_active', 1)->with([
             'machine_model.model_segment',
             'data_client',
             'data_client.client',
-            'machine_model.modules',
-            'machine_model.modules.failures',
-            'machine_model.modules.failures.types',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         
@@ -58,6 +61,9 @@ class ReportController extends Controller
             'catalogStatus' => $catalogStatus,
             'catalogMachines' => $catalogMachines,
             'catalogShifts' => $catalogShifts,
+            'catalogModule' => $catalogModule,
+            'catalogFailures' => $catalogFailures,
+            'catalogTypes' => $catalogTypes,
         ]);
     }
 
@@ -129,13 +135,13 @@ class ReportController extends Controller
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
         $catalogShifts = Shift::where('is_active', 1)->get();
+        $catalogModule = Module::where('is_active', 1)->get();
+        $catalogFailures = Failure::where('is_active', 1)->get();
+        $catalogTypes = FailureType::where('is_active', 1)->get();
         $catalogMachines = Machine::where('is_active', 1)->with([
             'machine_model.model_segment',
             'data_client',
             'data_client.client',
-            'machine_model.modules',
-            'machine_model.modules.failures',
-            'machine_model.modules.failures.types',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         return Inertia::render('admin/reports/edit',[
@@ -145,6 +151,9 @@ class ReportController extends Controller
             'catalogStatus' => $catalogStatus,
             'catalogMachines' => $catalogMachines,
             'catalogShifts' => $catalogShifts,
+            'catalogModule' => $catalogModule,
+            'catalogFailures' => $catalogFailures,
+            'catalogTypes' => $catalogTypes,
             'report' => $report,
             'latestReports' => $latestReports,
         ]);

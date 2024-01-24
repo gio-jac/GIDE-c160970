@@ -15,8 +15,8 @@ class MachineModels extends Model
     {
         return $this->hasOne(ModelSegments::class, 'id', 'model_segment_id');
     }
-
+    /*
     public function modules(): BelongsToMany{
         return $this->belongsToMany(Module::class, 'models_modules', 'machine_model_id', 'module_id')->withTimestamps();
-    }
+    }*/
 }

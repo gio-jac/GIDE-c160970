@@ -53,7 +53,7 @@ class MachineModelsSeeder extends Seeder
         MachineModels::create(['model' => "BPS 200",'model_segment_id' => 2]);
 
         $modelo = MachineModels::create(['model' => "BPS X9",'model_segment_id' => 3]);
-        $modelo->modules()->attach([1,2,3,4,5,6,7,8,9]);
+        //$modelo->modules()->attach([1,2,3,4,5,6,7,8,9]);
 
         MachineModels::create(['model' => "BPS 2000",'model_segment_id' => 3]);
         MachineModels::create(['model' => "BPS 3000",'model_segment_id' => 3]);

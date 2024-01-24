@@ -365,7 +365,7 @@
                                             Open this select menu
                                         </option>
                                         <option
-                                            v-for="tmodule in form.selectedMachine?.machine_model.modules"
+                                            v-for="tmodule in props.catalogModule"
                                             :key="tmodule.id"
                                             :value="tmodule"
                                         >
@@ -388,7 +388,7 @@
                                             Open this select menu
                                         </option>
                                         <option
-                                            v-for="failure in form.selectedModule?.failures"
+                                            v-for="failure in props.catalogFailures"
                                             :key="failure.id"
                                             :value="failure"
                                         >
@@ -411,7 +411,7 @@
                                             Open this select menu
                                         </option>
                                         <option
-                                            v-for="failuretype in form.selectedFailure?.types"
+                                            v-for="failuretype in props.catalogTypes"
                                             :key="failuretype.id"
                                             :value="failuretype.id"
                                         >
@@ -1000,6 +1000,18 @@ const props = defineProps({
         required: true,
     },
     catalogShifts: {
+        type: Array,
+        required: true,
+    },
+    catalogModule: {
+        type: Array,
+        required: true,
+    },
+    catalogFailures: {
+        type: Array,
+        required: true,
+    },
+    catalogTypes: {
         type: Array,
         required: true,
     },

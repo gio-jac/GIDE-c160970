@@ -14,30 +14,30 @@ class ModuleSeeder extends Seeder
     public function run(): void
     {
         $row = Module::create(['name' => "Loading"]);
-        $row->failures()->attach([1,2,3,4,6]);
+        //$row->failures()->attach([1,2,3,4,6]);
 
         $row = Module::create(['name' => "Input"]);
-        $row->failures()->attach([1,2,3,4,5,6]);
+        //$row->failures()->attach([1,2,3,4,5,6]);
 
         $row = Module::create(['name' => "Base"]);
-        $row->failures()->attach([1,2,3,4,5,6]);
+        //$row->failures()->attach([1,2,3,4,5,6]);
 
         $row = Module::create(['name' => "Reject"]);
-        $row->failures()->attach([1,2,3,4,5,6]);
+        //$row->failures()->attach([1,2,3,4,5,6]);
 
         $row = Module::create(['name' => "Delivery"]);
-        $row->failures()->attach([1,2,3,4,5,6]);
+        //$row->failures()->attach([1,2,3,4,5,6]);
 
         $row = Module::create(['name' => "Shredder"]);
-        $row->failures()->attach([1,2,3,4,5,6]);
+        //$row->failures()->attach([1,2,3,4,5,6]);
 
         $row = Module::create(['name' => "SBU"]);
-        $row->failures()->attach([1,2,3]);
+        //$row->failures()->attach([1,2,3]);
 
         $row = Module::create(['name' => "Dustovac"]);
-        $row->failures()->attach([1,2]);
+        //$row->failures()->attach([1,2]);
 
         $row = Module::create(['name' => "UPS"]);
-        $row->failures()->attach([2,3]);
+        //$row->failures()->attach([2,3]);
     }
 }
