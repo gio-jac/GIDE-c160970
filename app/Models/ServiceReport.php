@@ -42,6 +42,7 @@ class ServiceReport extends Model
         'notes',
         'signature_client_name',
         'is_active',
+        'branch_id',
     ];
 
     public function status(): HasOne
@@ -77,6 +78,11 @@ class ServiceReport extends Model
     public function failureType(): HasOne
     {
         return $this->hasOne(FailureType::class, 'id', 'failure_type_id');
+    }
+
+    public function branch(): HasOne
+    {
+        return $this->hasOne(Branch::class, 'id', 'branch_id');
     }
 
     public function user(): HasOne

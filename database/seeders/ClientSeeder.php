@@ -24,6 +24,7 @@ class ClientSeeder extends Seeder
         Client::create(['name' => "SERPAPROSA"]);
         Client::create(['name' => "T. LOCK"]);
         Client::create(['name' => "TECNOVAL"]);
-        
+        Client::create(['name' => "PANAMERICANO"]);
+        Client::create(['name' => "TAMEME"]);
     }
 }

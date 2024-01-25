@@ -40,7 +40,6 @@ class MachineModelsSeeder extends Seeder
         MachineModels::create(['model' => "PRONOTE VM",'model_segment_id' => 1]);
         MachineModels::create(['model' => "PRONOTE VM 3.1",'model_segment_id' => 1]);
         MachineModels::create(['model' => "NUMERON",'model_segment_id' => 1]);
-
         MachineModels::create(['model' => "BPS M3",'model_segment_id' => 2]);
         MachineModels::create(['model' => "BPS M5",'model_segment_id' => 2]);
         MachineModels::create(['model' => "BPS M5 UPGRADE",'model_segment_id' => 2]);
@@ -51,10 +50,7 @@ class MachineModelsSeeder extends Seeder
         MachineModels::create(['model' => "BPS 500",'model_segment_id' => 2]);
         MachineModels::create(['model' => "BPS 1000",'model_segment_id' => 2]);
         MachineModels::create(['model' => "BPS 200",'model_segment_id' => 2]);
-
-        $modelo = MachineModels::create(['model' => "BPS X9",'model_segment_id' => 3]);
-        //$modelo->modules()->attach([1,2,3,4,5,6,7,8,9]);
-
+        MachineModels::create(['model' => "BPS X9",'model_segment_id' => 3]);
         MachineModels::create(['model' => "BPS 2000",'model_segment_id' => 3]);
         MachineModels::create(['model' => "BPS 3000",'model_segment_id' => 3]);
         MachineModels::create(['model' => "OBIS 3",'model_segment_id' => 3]);

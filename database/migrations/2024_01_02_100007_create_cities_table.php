@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_clients', function (Blueprint $table) {
+        Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('client_id');
-            $table->string('address')->default("N/A");
-            $table->string('contact')->default("N/A");
-            $table->string('email')->default("N/A");
-            $table->string('phone')->default("N/A");
+            $table->string('name')->unique();
+            $table->unsignedBigInteger('state_id');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('state_id')->references('id')->on('states');
         });
     }
 
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_clients');
+        Schema::dropIfExists('cities');
     }
 };

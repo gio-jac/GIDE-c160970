@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('machines', function (Blueprint $table) {
+        Schema::create('branches', function (Blueprint $table) {
             $table->id();
-            $table->string('serial')->unique();
-            $table->integer('transport_hours')->default(0);
+            $table->string('address')->default("N/A");
+            $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('branch_manager_id');
             $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('machine_model_id');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            $table->foreign('machine_model_id')->references('id')->on('machine_models');
+            $table->foreign('city_id')->references('id')->on('cities');
+            $table->foreign('branch_manager_id')->references('id')->on('branch_managers');
             $table->foreign('client_id')->references('id')->on('clients');
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('machines');
+        Schema::dropIfExists('branches');
     }
 };

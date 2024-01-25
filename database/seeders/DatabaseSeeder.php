@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             UserTitleSeeder::class,
             ClientSeeder::class,
             CountrySeeder::class,
+            StateSeeder::class,
+            CitySeeder::class,
             CodeSeeder::class,
             ShiftSeeder::class,
             ModelSegmentsSeeder::class,
@@ -27,12 +29,13 @@ class DatabaseSeeder extends Seeder
             UserChileSeeder::class,
             UserColombiaSeeder::class,
             UserJamaicaSeeder::class,
-            DataClientsSeeder::class,
             FailureTypeSeeder::class,
             FailureSeeder::class,
             ModuleSeeder::class,
             MachineModelsSeeder::class,
             MachineSeeder::class,
+            BranchManagerSeeder::class,
+            BranchSeeder::class,
         ]);
     }
 }
