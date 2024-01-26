@@ -88,7 +88,41 @@
                         <div
                             class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6"
                         >
-                            <div class="text-lg">Customer Data</div>
+                            <div class="text-lg">Branches</div>
+                            <select
+                                id="formBranches"
+                                name="formBranches"
+                                class="form-select text-white-dark"
+                                v-model="form.selectedBranch"
+                                required
+                            >
+                                <option :value="null">
+                                    Open this select menu
+                                </option>
+                                <option
+                                    v-for="branch in form.selectedMachine
+                                        ?.client.branches"
+                                    :key="branch.id"
+                                    :value="branch"
+                                >
+                                    {{ branch.address }}
+                                </option>
+                            </select>
+                            <div class="mt-4 flex items-center">
+                                <label
+                                    for="formClient"
+                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
+                                    >Client</label
+                                >
+                                <input
+                                    id="formClient"
+                                    type="text"
+                                    name="formClient"
+                                    class="form-input flex-1"
+                                    readonly
+                                    :value="form.selectedMachine?.client.name"
+                                />
+                            </div>
                             <div class="mt-4 flex items-center">
                                 <label
                                     for="formCustomerName"
@@ -100,50 +134,10 @@
                                     type="text"
                                     name="formCustomerName"
                                     class="form-input flex-1"
-                                    :value="
-                                        form.selectedMachine?.data_client.client
-                                            .name
-                                    "
                                     readonly
-                                    placeholder="Enter Name"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formCustomerAddress"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Address</label
-                                >
-                                <input
-                                    id="formCustomerAddress"
-                                    type="text"
-                                    name="formCustomerEmail"
-                                    class="form-input flex-1"
                                     :value="
-                                        form.selectedMachine?.data_client
-                                            .address
+                                        form.selectedBranch?.branch_manager.name
                                     "
-                                    readonly
-                                    placeholder="Enter Email"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formCustomerContact"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Contact</label
-                                >
-                                <input
-                                    id="formCustomerContact"
-                                    type="text"
-                                    name="formCustomerContact"
-                                    class="form-input flex-1"
-                                    :value="
-                                        form.selectedMachine?.data_client
-                                            .contact
-                                    "
-                                    readonly
-                                    placeholder="Enter Contact"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
@@ -157,11 +151,11 @@
                                     type="email"
                                     name="formCustomerEmail"
                                     class="form-input flex-1"
-                                    :value="
-                                        form.selectedMachine?.data_client.email
-                                    "
                                     readonly
-                                    placeholder="Enter Email"
+                                    :value="
+                                        form.selectedBranch?.branch_manager
+                                            .email
+                                    "
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
@@ -175,11 +169,11 @@
                                     type="tel"
                                     name="formCustomerPhone"
                                     class="form-input flex-1"
-                                    :value="
-                                        form.selectedMachine?.data_client.phone
-                                    "
                                     readonly
-                                    placeholder="Enter Phone"
+                                    :value="
+                                        form.selectedBranch?.branch_manager
+                                            .phone
+                                    "
                                 />
                             </div>
                         </div>
@@ -351,9 +345,7 @@
                         <div class="w-full">
                             <div class="flex justify-evenly">
                                 <div>
-                                    <label for="formModule"
-                                        >Module</label
-                                    >
+                                    <label for="formModule">Error</label>
                                     <select
                                         id="formModule"
                                         name="formModule"
@@ -374,9 +366,7 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="formFailures"
-                                        >Failures</label
-                                    >
+                                    <label for="formFailures">Cause</label>
                                     <select
                                         id="formFailures"
                                         name="formFailures"
@@ -397,9 +387,7 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="formTypes"
-                                        >Types</label
-                                    >
+                                    <label for="formTypes">Solution</label>
                                     <select
                                         id="formTypes"
                                         name="formTypes"
@@ -777,11 +765,20 @@
                 </div>
             </div>
             <div class="xl:w-96 w-full xl:mt-0 mt-6">
-                <div class="panel mb-5" v-if="user.type === 2 && props.latestReports.length > 0">
+                <div
+                    class="panel mb-5"
+                    v-if="user.type === 2 && props.latestReports.length > 0"
+                >
                     <div class="text-lg">Latest Reports</div>
                     <div class="flex flex-wrap">
-                        <Link v-for="(report,index) in props.latestReports" class="my-1 hover:text-sky-400" :href="`/reports/${report.id}/edit`" :key="index">
-                            {{ report.id }} - {{ report.machine.serial }} - {{ report.machine.data_client.client.name }}
+                        <Link
+                            v-for="(report, index) in props.latestReports"
+                            class="my-1 hover:text-sky-400"
+                            :href="`/reports/${report.id}/edit`"
+                            :key="index"
+                        >
+                            {{ report.id }} - {{ report.machine.serial }} -
+                            {{ report.machine.data_client.client.name }}
                         </Link>
                     </div>
                     <div class="w-full text-center mt-8">
@@ -976,6 +973,7 @@ const dateTime: any = ref({
 
 const form = reactive({
     selectedMachine: null,
+    selectedBranch: null,
     selectedModule: null,
     selectedFailure: null,
     selectedShift: null,
@@ -1001,13 +999,15 @@ onMounted(() => {
     form.selectedShift = props.catalogShifts.filter(
         (data) => data.id === props.report.shift_id
     )[0];
+    form.selectedBranch = form.selectedMachine?.client.branches.filter(
+        (data) => data.id === props.report.branch_id
+    )[0];
     postForm.transport = props.report.transport;
     postForm.pieces = props.report.pieces;
     postForm.sogd = props.report.sogd;
     postForm.time_on = props.report.time_on;
     postForm.travel_time = props.report.travel_time;
     postForm.report_type_id = props.report.report_type_id;
-    postForm.reported_error = props.report.reported_error;
     postForm.reported_error = props.report.reported_error;
     postForm.module_id = props.report.module_id;
     postForm.failure_id = props.report.failure_id;
@@ -1086,6 +1086,7 @@ const postForm = reactive({
     time_on: null,
     travel_time: null,
     report_type_id: 1,
+    branch_id: null,
     module_id: null,
     failure_id: null,
     failure_type_id: null,
@@ -1111,10 +1112,11 @@ function submit() {
 
     if (form.selectedShift) postForm.shift_id = form.selectedShift.id;
 
-    //if (form.selectedModule) postForm.module_id = form.selectedModule.id;
+    if (form.selectedModule) postForm.module_id = form.selectedModule.id;
 
-    //if (form.selectedFailure) postForm.failure_id = form.selectedFailure.id;
+    if (form.selectedFailure) postForm.failure_id = form.selectedFailure.id;
 
+    if (form.selectedBranch) postForm.branch_id = form.selectedBranch.id;
 
     //router.post("/reports", postForm);
 }

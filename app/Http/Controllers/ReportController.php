@@ -49,8 +49,9 @@ class ReportController extends Controller
         $catalogTypes = FailureType::where('is_active', 1)->get();
         $catalogMachines = Machine::where('is_active', 1)->with([
             'machine_model.model_segment',
-            'data_client',
-            'data_client.client',
+            'client',
+            'client.branches',
+            'client.branches.branchManager',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         
@@ -83,6 +84,7 @@ class ReportController extends Controller
             'transport' => ['required'],
             'pieces' => ['required'],
             'sogd' => ['required'],
+            'branch_id' => ['required'],
             'time_on' => ['required'],
             'travel_time' => ['required'],
             'report_type_id' => ['required'],
@@ -140,8 +142,9 @@ class ReportController extends Controller
         $catalogTypes = FailureType::where('is_active', 1)->get();
         $catalogMachines = Machine::where('is_active', 1)->with([
             'machine_model.model_segment',
-            'data_client',
-            'data_client.client',
+            'client',
+            'client.branches',
+            'client.branches.branchManager',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         return Inertia::render('admin/reports/edit',[

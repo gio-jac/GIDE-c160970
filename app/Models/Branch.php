@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Branch extends Model
 {
@@ -20,8 +21,8 @@ class Branch extends Model
         return $this->hasOne(BranchManager::class, 'id', 'branch_manager_id');
     }
 
-    public function client(): HasOne
+    public function client(): BelongsTo
     {
-        return $this->hasOne(Client::class, 'id', 'client_id');
+        return $this->belongsTo(Client::class, 'client_id', 'id');
     }
 }
