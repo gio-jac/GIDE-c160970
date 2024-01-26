@@ -183,7 +183,20 @@ class ReportController extends Controller
      */
     public function pdfReport(string $id)
     {
-        $report = ServiceReport::with(['status','machine','machine.machine_model','parts','parts.part','shift','module','failure','failureType', 'user'])->findOrFail($id);
+        $report = ServiceReport::with([
+            'status',
+            'machine',
+            'machine.machine_model',
+            'parts','parts.part',
+            'shift',
+            'module',
+            'failure',
+            'failureType', 
+            'user',
+            'branch',
+            'branch.client',
+            'branch.branchManager',
+        ])->findOrFail($id);
         $catalogCodes = Code::where('is_active', 1)->get();
         
         $pdf = Pdf::loadView('reporte',['catalogCodes' => $catalogCodes, 'report' => $report]);

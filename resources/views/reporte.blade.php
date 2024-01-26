@@ -54,11 +54,11 @@
         <tr>
             <td style="width:40%;">
                 CUSTOMER NAME:<br>
-                {{ $report->machine->data_client->client->name }}
+                {{ $report->branch->client->name }}
             </td>
             <td style="width:60%;">
                 ADDRESS:<br>
-                {{ $report->machine->data_client->address }}
+                {{ $report->branch->address }}
             </td>
         </tr>
     </table>
@@ -66,7 +66,7 @@
         <tr>
             <td style="width:50%;">
                 CONTACT:<br>
-                {{ $report->machine->data_client->contact }}
+                {{ $report->branch->branchManager->name }}
             </td>
             <td>
                 MACHINE MODEL:<br>
@@ -284,7 +284,7 @@
 
         <div class="defaultBorder" style="float: right;width: 48%;height:100px;">
             CUSTOMER SIGNATURE:
-            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name) ? $report->machine->data_client->contact : $report->signature_client_name }}</div>
+            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name) ? $report->branch->branchManager->name : $report->signature_client_name }}</div>
         </div>
         <div style="clear: both;"></div>
     </div>
