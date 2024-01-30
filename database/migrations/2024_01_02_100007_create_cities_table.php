@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->unsignedBigInteger('state_id');
+            $table->unsignedBigInteger('country_id');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            $table->foreign('state_id')->references('id')->on('states');
+            $table->foreign('country_id')->references('id')->on('countries');
         });
     }
 
