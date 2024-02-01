@@ -89,4 +89,19 @@ class PartController extends Controller
     {
         //
     }
+
+    public function autocomplete(Request $request)
+    {
+        $search = $request->input('query');
+
+        $results = Part::query()
+            ->where('is_active', true)
+            ->where(function ($query) use ($search) {
+                $query->where('num_part', 'LIKE', "%{$search}%")
+                    ->orWhere('descripcion', 'LIKE', "%{$search}%");
+            })
+            ->get();
+
+        return response()->json($results);
+    }
 }

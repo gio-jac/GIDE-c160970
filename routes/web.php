@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/reports/codes', CodeController::class);
     Route::get('/reports/{report}/file', [ReportController::class, 'pdfReport'])->name('reports.file');
     Route::resource('/reports', ReportController::class);
+    Route::post('/parts/autocomplete', [PartController::class, 'autocomplete'])->name('parts.autocomplete');
 });
 
 

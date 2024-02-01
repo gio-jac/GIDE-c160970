@@ -598,8 +598,9 @@
                                 >
 
                                 <multiselect
+                                    @search-change="selectPartChange"
                                     id="formReportParts"
-                                    :options="props.catalogParts"
+                                    :options="catalogParts"
                                     v-model="form.selectedPart"
                                     class="custom-multiselect flex-1"
                                     :searchable="true"
@@ -608,6 +609,7 @@
                                         ({ num_part, descripcion }) =>
                                             `${num_part} - ${descripcion}`
                                     "
+                                    :preserveSearch="true"
                                     selected-label=""
                                     select-label=""
                                     deselect-label=""
@@ -961,16 +963,12 @@ const store = useAppStore();
 
 const page = usePage();
 const user = computed(() => page.props.auth);
-
+const catalogParts = ref([]);
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
 
 const props = defineProps({
-    catalogParts: {
-        type: Array,
-        required: true,
-    },
     catalogCodes: {
         type: Array,
         required: true,
@@ -1138,6 +1136,38 @@ const postForm = reactive({
     notes: "",
     service_parts: [],
 });
+
+let timeoutId = ref(null);
+function selectPartChange(searchQuery, id) {
+    catalogParts.value = [];
+    if (searchQuery.length <= 0) {
+        if (timeoutId.value) clearTimeout(timeoutId.value);
+        return;
+    }
+
+    if (timeoutId.value) clearTimeout(timeoutId.value);
+    
+    timeoutId.value = setTimeout(() => {
+        fetch("/parts/autocomplete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+            body: JSON.stringify({ query: searchQuery }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                catalogParts.value = data;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }, 1500);
+}
 
 function submit() {
     if (form.selectedMachine) postForm.machine_id = form.selectedMachine.id;
