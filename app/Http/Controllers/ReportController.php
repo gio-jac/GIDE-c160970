@@ -40,7 +40,7 @@ class ReportController extends Controller
      */
     public function create()
     {
-        $catalogParts = Part::where('is_active', 1)->get();
+        //$catalogParts = Part::where('is_active', 1)->get();
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
         $catalogShifts = Shift::where('is_active', 1)->get();
@@ -56,7 +56,6 @@ class ReportController extends Controller
         $catalogStatus = Status::where('is_active', 1)->get();
         
         return Inertia::render('admin/reports/new',[
-            'catalogParts' => $catalogParts,
             'catalogCodes' => $catalogCodes,
             'catalogUsers' => $catalogUsers,
             'catalogStatus' => $catalogStatus,
@@ -88,6 +87,7 @@ class ReportController extends Controller
             'time_on' => ['required'],
             'travel_time' => ['required'],
             'report_type_id' => ['required'],
+            'branch_manager_id' => ['required'],
             'reported_error' => ['required'],
             'module_id' => ['required'],
             'failure_id' => ['required'],

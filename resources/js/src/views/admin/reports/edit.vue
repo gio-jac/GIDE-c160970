@@ -108,6 +108,25 @@
                                     {{ branch.address }}
                                 </option>
                             </select>
+                            <div class="text-lg">Contacts</div>
+                            <select
+                                id="formContacts"
+                                name="formContacts"
+                                class="form-select text-white-dark"
+                                v-model="form.selectedContact"
+                                required
+                            >
+                                <option :value="null">
+                                    Open this select menu
+                                </option>
+                                <option
+                                    v-for="contact in form.selectedBranch?.branch_managers"
+                                    :key="contact.id"
+                                    :value="contact"
+                                >
+                                    {{ contact.name }}
+                                </option>
+                            </select>
                             <div class="mt-4 flex items-center">
                                 <label
                                     for="formClient"
@@ -136,7 +155,7 @@
                                     class="form-input flex-1"
                                     readonly
                                     :value="
-                                        form.selectedBranch?.branch_manager.name
+                                        form.selectedContact?.name
                                     "
                                 />
                             </div>
@@ -153,8 +172,7 @@
                                     class="form-input flex-1"
                                     readonly
                                     :value="
-                                        form.selectedBranch?.branch_manager
-                                            .email
+                                        form.selectedContact?.email
                                     "
                                 />
                             </div>
@@ -171,8 +189,7 @@
                                     class="form-input flex-1"
                                     readonly
                                     :value="
-                                        form.selectedBranch?.branch_manager
-                                            .phone
+                                        form.selectedContact?.phone
                                     "
                                 />
                             </div>
@@ -976,6 +993,7 @@ const form = reactive({
     selectedBranch: null,
     selectedModule: null,
     selectedFailure: null,
+    selectedContact: null,
     selectedShift: null,
     selectedPart: null,
     addNewPart: [],
@@ -1001,6 +1019,9 @@ onMounted(() => {
     )[0];
     form.selectedBranch = form.selectedMachine?.client.branches.filter(
         (data) => data.id === props.report.branch_id
+    )[0];
+    form.selectedContact = form.selectedBranch?.branch_managers.filter(
+        (data) => data.id === props.report.branch_manager_id
     )[0];
     postForm.transport = props.report.transport;
     postForm.pieces = props.report.pieces;
@@ -1088,6 +1109,7 @@ const postForm = reactive({
     report_type_id: 1,
     branch_id: null,
     module_id: null,
+    branch_manager_id: null,
     failure_id: null,
     failure_type_id: null,
     reported_error: "",
@@ -1117,6 +1139,8 @@ function submit() {
     if (form.selectedFailure) postForm.failure_id = form.selectedFailure.id;
 
     if (form.selectedBranch) postForm.branch_id = form.selectedBranch.id;
+
+    if (form.selectedContact) postForm.branch_manager_id = form.selectedContact.id;
 
     //router.post("/reports", postForm);
 }

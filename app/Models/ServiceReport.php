@@ -28,6 +28,7 @@ class ServiceReport extends Model
         'report_type_id',
         'reported_error',
         'module_id',
+        'branch_manager_id',
         'failure_id',
         'failure_type_id',
         'code_id',
@@ -58,6 +59,11 @@ class ServiceReport extends Model
     public function shift(): HasOne
     {
         return $this->hasOne(Shift::class, 'id', 'shift_id');
+    }
+
+    public function branchManager(): HasOne
+    {
+        return $this->hasOne(BranchManager::class, 'id', 'branch_manager_id');
     }
 
     public function parts(): HasMany

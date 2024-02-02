@@ -28,6 +28,7 @@ return new class extends Migration
             $table->unsignedBigInteger('failure_type_id');
             $table->unsignedBigInteger('code_id');
             $table->unsignedBigInteger('branch_id');
+            $table->unsignedBigInteger('branch_manager_id');
             $table->string('actions_taken');
             $table->timestamp('reported')->nullable();
             $table->timestamp('arrival')->nullable();
@@ -49,6 +50,7 @@ return new class extends Migration
             $table->foreign('failure_id')->references('id')->on('failures');
             $table->foreign('failure_type_id')->references('id')->on('failure_types');
             $table->foreign('branch_id')->references('id')->on('branches');
+            $table->foreign('branch_manager_id')->references('id')->on('branch_managers');
         });
     }
 
