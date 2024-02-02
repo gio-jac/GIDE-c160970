@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Branch extends Model
 {
@@ -16,9 +17,9 @@ class Branch extends Model
         return $this->hasOne(City::class, 'id', 'city_id');
     }
 
-    public function branchManager(): HasOne
+    public function branchManagers(): HasMany
     {
-        return $this->hasOne(BranchManager::class, 'id', 'branch_manager_id');
+        return $this->hasMany(BranchManager::class, 'branch_id', 'id');
     }
 
     public function client(): BelongsTo

@@ -33,8 +33,8 @@ class DatabaseSeeder extends Seeder
             ModuleSeeder::class,
             MachineModelsSeeder::class,
             MachineSeeder::class,
-            BranchManagerSeeder::class,
             BranchSeeder::class,
+            BranchManagerSeeder::class,
         ]);
     }
 }

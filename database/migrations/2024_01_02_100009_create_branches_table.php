@@ -15,12 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('address')->default("N/A");
             $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('branch_manager_id');
             $table->unsignedBigInteger('client_id');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->foreign('city_id')->references('id')->on('cities');
-            $table->foreign('branch_manager_id')->references('id')->on('branch_managers');
             $table->foreign('client_id')->references('id')->on('clients');
         });
     }

@@ -51,7 +51,7 @@ class ReportController extends Controller
             'machine_model.model_segment',
             'client',
             'client.branches',
-            'client.branches.branchManager',
+            'client.branches.branchManagers',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         
@@ -144,7 +144,7 @@ class ReportController extends Controller
             'machine_model.model_segment',
             'client',
             'client.branches',
-            'client.branches.branchManager',
+            'client.branches.branchManagers',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         return Inertia::render('admin/reports/edit',[
@@ -195,7 +195,7 @@ class ReportController extends Controller
             'user',
             'branch',
             'branch.client',
-            'branch.branchManager',
+            'branch.branchManagers',
         ])->findOrFail($id);
         $catalogCodes = Code::where('is_active', 1)->get();
         

@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('name')->default("N/A");
             $table->string('email')->default("N/A");
             $table->string('phone')->default("N/A");
+            $table->unsignedBigInteger('branch_id');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->foreign('branch_id')->references('id')->on('branches');
         });
     }
 
