@@ -17,7 +17,7 @@ class UserJamaicaSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'emp' => null,
+            'emp' => "E03920",
             'email' => "garnetantonio.bailey@gi-de.com",
             'password' => Hash::make("111"),
             'nombre' =>  "Antonio",
@@ -28,7 +28,7 @@ class UserJamaicaSeeder extends Seeder
             'country_id' => $this->country_id,
         ]);
         User::create([
-            'emp' => null,
+            'emp' => "E03674",
             'email' => "albert.thompson@gi-de.com",
             'password' => Hash::make("111"),
             'nombre' =>  "Albert",

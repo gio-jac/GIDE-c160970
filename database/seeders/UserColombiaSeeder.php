@@ -17,7 +17,7 @@ class UserColombiaSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'emp' => null,
+            'emp' => "E03917",
             'email' => "camilo.montana@gi-de.com",
             'password' => Hash::make("111"),
             'nombre' =>  "Camilo",
@@ -29,7 +29,7 @@ class UserColombiaSeeder extends Seeder
             'country_id' => $this->country_id,
         ]);
         User::create([
-            'emp' => null,
+            'emp' => "E03919",
             'email' => "oscar.cabrera@gi-de.com",
             'password' => Hash::make("111"),
             'nombre' =>  "Oscar Andres",
@@ -41,7 +41,7 @@ class UserColombiaSeeder extends Seeder
             'country_id' => $this->country_id,
         ]);
         User::create([
-            'emp' => null,
+            'emp' => "E03918",
             'email' => "david.castro@gi-de.com",
             'password' => Hash::make("111"),
             'nombre' =>  "David Leonardo",
