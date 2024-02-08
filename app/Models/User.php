@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -18,9 +19,17 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'id',
+        'emp',
+        'nombre',
         'email',
         'password',
+        'apellido_paterno',
+        'apellido_materno',
+        'telefono',
+        'is_active',
+        'user_type_id',
+        'user_title_id',
     ];
 
     /**
@@ -39,6 +48,11 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        
     ];
+
+    public function country(): HasOne
+    {
+        return $this->hasOne(Country::class, 'id', 'country_id');
+    }
 }

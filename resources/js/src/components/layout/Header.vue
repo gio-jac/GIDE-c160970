@@ -3,9 +3,9 @@
         <div class="shadow-sm">
             <div class="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-[#0e1726]">
                 <div class="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
-                    <router-link to="/" class="main-logo flex items-center shrink-0">
+                    <Link href="/" class="main-logo flex items-center shrink-0">
                         <img class="w-40 ltr:-ml-1 rtl:-mr-1 inline" src="/assets/images/icon/Creating Confidence.svg" alt="" />
-                    </router-link>
+                    </Link>
 
                     <a
                         href="javascript:;"
@@ -37,7 +37,7 @@
                                     <path opacity="0.5" d="M17 4V2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                     <path opacity="0.5" d="M2 9H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                 </svg>
-                            </router-link>
+                            </Link>
                         </li>
                         <li>
                             <router-link
@@ -64,7 +64,7 @@
                                         stroke-width="1.5"
                                     />
                                 </svg>
-                            </router-link>
+                            </Link>
                         </li>
                         <li>
                             <router-link
@@ -81,7 +81,7 @@
                                         stroke-linecap="round"
                                     />
                                 </svg>
-                            </router-link>
+                            </Link>
                         </li>
                     </ul>
                 </div>-->
@@ -455,7 +455,7 @@
                             <button type="button" class="relative group block">
                                 <img
                                     class="w-9 h-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
-                                    src="/assets/images/user-profile.jpeg"
+                                    src="/assets/images/Png.png"
                                     alt=""
                                 />
                             </button>
@@ -464,20 +464,20 @@
                                     <li>
                                         <div class="flex items-center px-4 py-4">
                                             <div class="flex-none">
-                                                <img class="rounded-md w-10 h-10 object-cover" src="/assets/images/user-profile.jpeg" alt="" />
+                                                <img class="rounded-md w-10 h-10 object-cover" src="/assets/images/Png.png" alt="" />
                                             </div>
                                             <div class="ltr:pl-4 rtl:pr-4 truncate">
                                                 <h4 class="text-base">
-                                                    Luis Ejemplo<!--<span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span>-->
+                                                    {{ user.name }}<!--<span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span>-->
                                                 </h4>
                                                 <a class="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;"
-                                                    >ejemplo@correo.com</a
+                                                    >{{ user.email }}</a
                                                 >
                                             </div>
                                         </div>
                                     </li><!--
                                     <li>
-                                        <router-link to="/users/profile" class="dark:hover:text-white" @click="close()">
+                                        <Link href="/users/profile" class="dark:hover:text-white" @click="close()">
                                             <svg
                                                 class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0"
                                                 width="18"
@@ -496,10 +496,10 @@
                                             </svg>
 
                                             Profile
-                                        </router-link>
+                                        </Link>
                                     </li>--><!--
                                     <li>
-                                        <router-link to="/apps/mailbox" class="dark:hover:text-white" @click="close()">
+                                        <Link href="/apps/mailbox" class="dark:hover:text-white" @click="close()">
                                             <svg
                                                 class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0"
                                                 width="18"
@@ -523,10 +523,10 @@
                                             </svg>
 
                                             Inbox
-                                        </router-link>
+                                        </Link>
                                     </li>--><!--
                                     <li>
-                                        <router-link to="/auth/boxed-lockscreen" class="dark:hover:text-white" @click="close()">
+                                        <Link href="/auth/boxed-lockscreen" class="dark:hover:text-white" @click="close()">
                                             <svg
                                                 class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0"
                                                 width="18"
@@ -564,10 +564,10 @@
                                             </svg>
 
                                             Lock Screen
-                                        </router-link>
+                                        </Link>
                                     </li>-->
                                     <li class="border-t border-white-light dark:border-white-light/10">
-                                        <router-link to="/" class="text-danger !py-3" @click="close()">
+                                        <Link href="/logout" class="text-danger !py-3" @click="close()">
                                             <svg
                                                 class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90 shrink-0"
                                                 width="18"
@@ -593,7 +593,7 @@
                                             </svg>
 
                                             Sign Out
-                                        </router-link>
+                                        </Link>
                                     </li>
                                 </ul>
                             </template>
@@ -631,16 +631,16 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <router-link to="/">{{ $t('sales') }}</router-link>
+                            <Link href="/">{{ $t('sales') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/analytics">{{ $t('analytics') }}</router-link>
+                            <Link href="/analytics">{{ $t('analytics') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/finance">{{ $t('finance') }}</router-link>
+                            <Link href="/finance">{{ $t('finance') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/crypto">{{ $t('crypto') }}</router-link>
+                            <Link href="/crypto">{{ $t('crypto') }}</Link>
                         </li>
                     </ul>
                 </li>
@@ -694,22 +694,22 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <router-link to="/apps/chat">{{ $t('chat') }}</router-link>
+                            <Link href="/apps/chat">{{ $t('chat') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/apps/mailbox">{{ $t('mailbox') }}</router-link>
+                            <Link href="/apps/mailbox">{{ $t('mailbox') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/apps/todolist">{{ $t('todo_list') }}</router-link>
+                            <Link href="/apps/todolist">{{ $t('todo_list') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/apps/notes">{{ $t('notes') }}</router-link>
+                            <Link href="/apps/notes">{{ $t('notes') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/apps/scrumboard">{{ $t('scrumboard') }}</router-link>
+                            <Link href="/apps/scrumboard">{{ $t('scrumboard') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/apps/contacts">{{ $t('contacts') }}</router-link>
+                            <Link href="/apps/contacts">{{ $t('contacts') }}</Link>
                         </li>
                         <li class="relative">
                             <a href="javascript:;"
@@ -724,21 +724,21 @@
                                 class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden"
                             >
                                 <li>
-                                    <router-link to="/apps/invoice/list">{{ $t('list') }}</router-link>
+                                    <Link href="/apps/invoice/list">{{ $t('list') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/apps/invoice/preview">{{ $t('preview') }}</router-link>
+                                    <Link href="/apps/invoice/preview">{{ $t('preview') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/apps/invoice/add">{{ $t('add') }}</router-link>
+                                    <Link href="/apps/invoice/add">{{ $t('add') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/apps/invoice/edit">{{ $t('edit') }}</router-link>
+                                    <Link href="/apps/invoice/edit">{{ $t('edit') }}</Link>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <router-link to="/apps/calendar">{{ $t('calendar') }}</router-link>
+                            <Link href="/apps/calendar">{{ $t('calendar') }}</Link>
                         </li>
                     </ul>
                 </li>
@@ -771,46 +771,46 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <router-link to="/components/tabs">{{ $t('tabs') }}</router-link>
+                            <Link href="/components/tabs">{{ $t('tabs') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/accordions">{{ $t('accordions') }}</router-link>
+                            <Link href="/components/accordions">{{ $t('accordions') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/modals">{{ $t('modals') }}</router-link>
+                            <Link href="/components/modals">{{ $t('modals') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/cards">{{ $t('cards') }}</router-link>
+                            <Link href="/components/cards">{{ $t('cards') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/carousel">{{ $t('carousel') }}</router-link>
+                            <Link href="/components/carousel">{{ $t('carousel') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/countdown">{{ $t('countdown') }}</router-link>
+                            <Link href="/components/countdown">{{ $t('countdown') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/counter">{{ $t('counter') }}</router-link>
+                            <Link href="/components/counter">{{ $t('counter') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/sweetalert">{{ $t('sweet_alerts') }}</router-link>
+                            <Link href="/components/sweetalert">{{ $t('sweet_alerts') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/timeline">{{ $t('timeline') }}</router-link>
+                            <Link href="/components/timeline">{{ $t('timeline') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/notifications">{{ $t('notifications') }}</router-link>
+                            <Link href="/components/notifications">{{ $t('notifications') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/media-object">{{ $t('media_object') }}</router-link>
+                            <Link href="/components/media-object">{{ $t('media_object') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/list-group">{{ $t('list_group') }}</router-link>
+                            <Link href="/components/list-group">{{ $t('list_group') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/pricing-table">{{ $t('pricing_tables') }}</router-link>
+                            <Link href="/components/pricing-table">{{ $t('pricing_tables') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/components/lightbox">{{ $t('lightbox') }}</router-link>
+                            <Link href="/components/lightbox">{{ $t('lightbox') }}</Link>
                         </li>
                     </ul>
                 </li>
@@ -840,58 +840,58 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <router-link to="/elements/alerts">{{ $t('alerts') }}</router-link>
+                            <Link href="/elements/alerts">{{ $t('alerts') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/avatar">{{ $t('avatar') }}</router-link>
+                            <Link href="/elements/avatar">{{ $t('avatar') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/badges">{{ $t('badges') }}</router-link>
+                            <Link href="/elements/badges">{{ $t('badges') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/breadcrumbs">{{ $t('breadcrumbs') }}</router-link>
+                            <Link href="/elements/breadcrumbs">{{ $t('breadcrumbs') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/buttons">{{ $t('buttons') }}</router-link>
+                            <Link href="/elements/buttons">{{ $t('buttons') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/buttons-group">{{ $t('button_groups') }}</router-link>
+                            <Link href="/elements/buttons-group">{{ $t('button_groups') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/color-library">{{ $t('color_library') }}</router-link>
+                            <Link href="/elements/color-library">{{ $t('color_library') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/dropdown">{{ $t('dropdown') }}</router-link>
+                            <Link href="/elements/dropdown">{{ $t('dropdown') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/infobox">{{ $t('infobox') }}</router-link>
+                            <Link href="/elements/infobox">{{ $t('infobox') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/jumbotron">{{ $t('jumbotron') }}</router-link>
+                            <Link href="/elements/jumbotron">{{ $t('jumbotron') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/loader">{{ $t('loader') }}</router-link>
+                            <Link href="/elements/loader">{{ $t('loader') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/pagination">{{ $t('pagination') }}</router-link>
+                            <Link href="/elements/pagination">{{ $t('pagination') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/popovers">{{ $t('popovers') }}</router-link>
+                            <Link href="/elements/popovers">{{ $t('popovers') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/progress-bar">{{ $t('progress_bar') }}</router-link>
+                            <Link href="/elements/progress-bar">{{ $t('progress_bar') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/search">{{ $t('search') }}</router-link>
+                            <Link href="/elements/search">{{ $t('search') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/tooltips">{{ $t('tooltips') }}</router-link>
+                            <Link href="/elements/tooltips">{{ $t('tooltips') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/treeview">{{ $t('treeview') }}</router-link>
+                            <Link href="/elements/treeview">{{ $t('treeview') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/elements/typography">{{ $t('typography') }}</router-link>
+                            <Link href="/elements/typography">{{ $t('typography') }}</Link>
                         </li>
                     </ul>
                 </li>
@@ -930,7 +930,7 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <router-link to="/tables">{{ $t('tables') }}</router-link>
+                            <Link href="/tables">{{ $t('tables') }}</Link>
                         </li>
                         <li class="relative">
                             <a href="javascript:;"
@@ -945,46 +945,46 @@
                                 class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden"
                             >
                                 <li>
-                                    <router-link to="/datatables/basic">{{ $t('basic') }}</router-link>
+                                    <Link href="/datatables/basic">{{ $t('basic') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/advanced">{{ $t('advanced') }}</router-link>
+                                    <Link href="/datatables/advanced">{{ $t('advanced') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/skin">{{ $t('skin') }}</router-link>
+                                    <Link href="/datatables/skin">{{ $t('skin') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/order-sorting">{{ $t('order_sorting') }}</router-link>
+                                    <Link href="/datatables/order-sorting">{{ $t('order_sorting') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/columns-filter">{{ $t('columns_filter') }}</router-link>
+                                    <Link href="/datatables/columns-filter">{{ $t('columns_filter') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/multi-column">{{ $t('multi_column') }}</router-link>
+                                    <Link href="/datatables/multi-column">{{ $t('multi_column') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/multiple-tables">{{ $t('multiple_tables') }}</router-link>
+                                    <Link href="/datatables/multiple-tables">{{ $t('multiple_tables') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/alt-pagination">{{ $t('alt_pagination') }}</router-link>
+                                    <Link href="/datatables/alt-pagination">{{ $t('alt_pagination') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/checkbox">{{ $t('checkbox') }}</router-link>
+                                    <Link href="/datatables/checkbox">{{ $t('checkbox') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/range-search">{{ $t('range_search') }}</router-link>
+                                    <Link href="/datatables/range-search">{{ $t('range_search') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/export">{{ $t('export') }}</router-link>
+                                    <Link href="/datatables/export">{{ $t('export') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/sticky-header">{{ $t('sticky_header') }}</router-link>
+                                    <Link href="/datatables/sticky-header">{{ $t('sticky_header') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/clone-header">{{ $t('clone_header') }}</router-link>
+                                    <Link href="/datatables/clone-header">{{ $t('clone_header') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/datatables/column-chooser">{{ $t('column_chooser') }}</router-link>
+                                    <Link href="/datatables/column-chooser">{{ $t('column_chooser') }}</Link>
                                 </li>
                             </ul>
                         </li>
@@ -1024,49 +1024,49 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <router-link to="/forms/basic">{{ $t('basic') }}</router-link>
+                            <Link href="/forms/basic">{{ $t('basic') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/input-group">{{ $t('input_group') }}</router-link>
+                            <Link href="/forms/input-group">{{ $t('input_group') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/layouts">{{ $t('layouts') }}</router-link>
+                            <Link href="/forms/layouts">{{ $t('layouts') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/validation">{{ $t('validation') }}</router-link>
+                            <Link href="/forms/validation">{{ $t('validation') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/input-mask">{{ $t('input_mask') }}</router-link>
+                            <Link href="/forms/input-mask">{{ $t('input_mask') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/select2">{{ $t('select2') }}</router-link>
+                            <Link href="/forms/select2">{{ $t('select2') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/touchspin">{{ $t('touchspin') }}</router-link>
+                            <Link href="/forms/touchspin">{{ $t('touchspin') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/checkbox-radio">{{ $t('checkbox_and_radio') }}</router-link>
+                            <Link href="/forms/checkbox-radio">{{ $t('checkbox_and_radio') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/switches">{{ $t('switches') }}</router-link>
+                            <Link href="/forms/switches">{{ $t('switches') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/wizards">{{ $t('wizards') }}</router-link>
+                            <Link href="/forms/wizards">{{ $t('wizards') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/file-upload">{{ $t('file_upload') }}</router-link>
+                            <Link href="/forms/file-upload">{{ $t('file_upload') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/quill-editor">{{ $t('quill_editor') }}</router-link>
+                            <Link href="/forms/quill-editor">{{ $t('quill_editor') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/markdown-editor">{{ $t('markdown_editor') }}</router-link>
+                            <Link href="/forms/markdown-editor">{{ $t('markdown_editor') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/date-picker">{{ $t('date_and_range_picker') }}</router-link>
+                            <Link href="/forms/date-picker">{{ $t('date_and_range_picker') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/forms/clipboard">{{ $t('clipboard') }}</router-link>
+                            <Link href="/forms/clipboard">{{ $t('clipboard') }}</Link>
                         </li>
                     </ul>
                 </li>
@@ -1116,33 +1116,33 @@
                                 class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden"
                             >
                                 <li>
-                                    <router-link to="/users/profile">{{ $t('profile') }}</router-link>
+                                    <Link href="/users/profile">{{ $t('profile') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/users/user-account-settings">{{ $t('account_settings') }}</router-link>
+                                    <Link href="/users/user-account-settings">{{ $t('account_settings') }}</Link>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <router-link to="/pages/knowledge-base">{{ $t('knowledge_base') }}</router-link>
+                            <Link href="/pages/knowledge-base">{{ $t('knowledge_base') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/pages/contact-us-boxed" target="_blank">{{ $t('contact_us_boxed') }}</router-link>
+                            <Link href="/pages/contact-us-boxed" target="_blank">{{ $t('contact_us_boxed') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/pages/contact-us-cover" target="_blank">{{ $t('contact_us_cover') }}</router-link>
+                            <Link href="/pages/contact-us-cover" target="_blank">{{ $t('contact_us_cover') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/pages/faq">FAQ</router-link>
+                            <Link href="/pages/faq">FAQ</Link>
                         </li>
                         <li>
-                            <router-link to="/pages/coming-soon-boxed" target="_blank">{{ $t('coming_soon_boxed') }}</router-link>
+                            <Link href="/pages/coming-soon-boxed" target="_blank">{{ $t('coming_soon_boxed') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/pages/coming-soon-cover" target="_blank">{{ $t('coming_soon_cover') }}</router-link>
+                            <Link href="/pages/coming-soon-cover" target="_blank">{{ $t('coming_soon_cover') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/pages/maintenence" target="_blank">{{ $t('maintenence') }}</router-link>
+                            <Link href="/pages/maintenence" target="_blank">{{ $t('maintenence') }}</Link>
                         </li>
                         <li class="relative">
                             <a href="javascript:;"
@@ -1157,13 +1157,13 @@
                                 class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden"
                             >
                                 <li>
-                                    <router-link to="/pages/error404" target="_blank">{{ $t('404') }}</router-link>
+                                    <Link href="/pages/error404" target="_blank">{{ $t('404') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/pages/error500" target="_blank">{{ $t('500') }}</router-link>
+                                    <Link href="/pages/error500" target="_blank">{{ $t('500') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/pages/error503" target="_blank">{{ $t('503') }}</router-link>
+                                    <Link href="/pages/error503" target="_blank">{{ $t('503') }}</Link>
                                 </li>
                             </ul>
                         </li>
@@ -1180,10 +1180,10 @@
                                 class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden"
                             >
                                 <li>
-                                    <router-link to="/auth/cover-login" target="_blank">{{ $t('login_cover') }}</router-link>
+                                    <Link href="/auth/cover-login" target="_blank">{{ $t('login_cover') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/auth/boxed-signin" target="_blank">{{ $t('login_boxed') }}</router-link>
+                                    <Link href="/auth/boxed-signin" target="_blank">{{ $t('login_boxed') }}</Link>
                                 </li>
                             </ul>
                         </li>
@@ -1200,10 +1200,10 @@
                                 class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden"
                             >
                                 <li>
-                                    <router-link to="/auth/cover-register" target="_blank">{{ $t('register_cover') }}</router-link>
+                                    <Link href="/auth/cover-register" target="_blank">{{ $t('register_cover') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/auth/boxed-signup" target="_blank">{{ $t('register_boxed') }}</router-link>
+                                    <Link href="/auth/boxed-signup" target="_blank">{{ $t('register_boxed') }}</Link>
                                 </li>
                             </ul>
                         </li>
@@ -1220,10 +1220,10 @@
                                 class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden"
                             >
                                 <li>
-                                    <router-link to="/auth/cover-password-reset" target="_blank">{{ $t('recover_id_cover') }}</router-link>
+                                    <Link href="/auth/cover-password-reset" target="_blank">{{ $t('recover_id_cover') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/auth/boxed-password-reset" target="_blank">{{ $t('recover_id_boxed') }}</router-link>
+                                    <Link href="/auth/boxed-password-reset" target="_blank">{{ $t('recover_id_boxed') }}</Link>
                                 </li>
                             </ul>
                         </li>
@@ -1240,10 +1240,10 @@
                                 class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden"
                             >
                                 <li>
-                                    <router-link to="/auth/cover-lockscreen" target="_blank">{{ $t('unlock_cover') }}</router-link>
+                                    <Link href="/auth/cover-lockscreen" target="_blank">{{ $t('unlock_cover') }}</Link>
                                 </li>
                                 <li>
-                                    <router-link to="/auth/boxed-lockscreen" target="_blank">{{ $t('unlock_boxed') }}</router-link>
+                                    <Link href="/auth/boxed-lockscreen" target="_blank">{{ $t('unlock_boxed') }}</Link>
                                 </li>
                             </ul>
                         </li>
@@ -1274,16 +1274,16 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <router-link to="/dragndrop">{{ $t('drag_and_drop') }}</router-link>
+                            <Link href="/dragndrop">{{ $t('drag_and_drop') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/charts">{{ $t('charts') }}</router-link>
+                            <Link href="/charts">{{ $t('charts') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/font-icons">{{ $t('font_icons') }}</router-link>
+                            <Link href="/font-icons">{{ $t('font_icons') }}</Link>
                         </li>
                         <li>
-                            <router-link to="/widgets">{{ $t('widgets') }}</router-link>
+                            <Link href="/widgets">{{ $t('widgets') }}</Link>
                         </li>
                         <li>
                             <a href="https://vristo.sbthemes.com" target="_blank">{{ $t('documentation') }}</a>
@@ -1298,12 +1298,19 @@
 <script lang="ts" setup>
     import { ref, onMounted, computed, reactive, watch } from 'vue';
     import { useI18n } from 'vue-i18n';
+        
 
-    import appSetting from '@/app-setting';
+import { Link, usePage } from '@inertiajs/vue3';
+import appSetting from '@/app-setting';
 
     import { useRoute } from 'vue-router';
-    import { useAppStore } from '@/stores/index';
-    const store = useAppStore();
+import { useAppStore } from '@/stores/index';
+    
+   
+const page = usePage();
+const user = computed(() => page.props.auth);
+
+const store = useAppStore();
     const route = useRoute();
     const search = ref(false);
 

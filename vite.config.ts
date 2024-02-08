@@ -7,12 +7,13 @@ import laravel from "laravel-vite-plugin";
 export default defineConfig({
     plugins: [
         laravel({
-            input: ["resources/js/src/main.ts"],
+            input: ["resources/js/src/app.js"],
             refresh: true,
         }),
         vue({
             template: {
                 transformAssetUrls: {
+                    base: null,
                     includeAbsolute: false,
                 },
             },
@@ -21,6 +22,11 @@ export default defineConfig({
             include: path.resolve("resources/js/src/locales/**"),
         }),
     ],
+    server: {
+        hmr: {
+            host: "localhost",
+        },
+    },
     resolve: {
         alias: {
             "@": path.resolve("./resources/js/src"),
