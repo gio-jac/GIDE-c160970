@@ -79,6 +79,7 @@ class ReportController extends Controller
         $report = ServiceReport::create($request->validate([
             'user_id' => ['required'],
             'machine_id' => ['required'],
+            'machine2_id' => ['required'],
             'shift_id' => ['required'],
             'transport' => ['required'],
             'pieces' => ['required'],
@@ -133,7 +134,8 @@ class ReportController extends Controller
         $report = ServiceReport::with(['status','machine','parts','parts.part','shift','module','failure','failureType'])->findOrFail($id);
         $latestReports = ServiceReport::where('user_id', Auth::user()->id)->with(['machine','machine.data_client','machine.data_client.client'])->latest()->take(5)->get();
 
-        $catalogParts = Part::where('is_active', 1)->get();
+        //$catalogParts = Part::where('is_active', 1)->get();
+        $catalogParts = [];
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
         $catalogShifts = Shift::where('is_active', 1)->get();

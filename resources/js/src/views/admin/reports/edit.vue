@@ -28,6 +28,29 @@
                                 deselect-label=""
                             ></multiselect>
                         </div>
+                        <div class="flex items-center mt-4" v-if="form.selectedMachine?.client.multiple === 1">
+                            <label
+                                for="formMachine2"
+                                class="w-[100px] text-right mb-0 mr-[10px]"
+                                >Machine Serial</label
+                            >
+
+                            <multiselect
+                                id="formMachine2"
+                                :options="props.catalogMachines"
+                                v-model="form.selectedMachine2"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                placeholder="Select an option"
+                                :custom-label="
+                                    ({ serial, machine_model }) =>
+                                        `${serial} - ${machine_model.model}`
+                                "
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4" v-if="user.type === 1">
@@ -990,6 +1013,7 @@ const dateTime: any = ref({
 
 const form = reactive({
     selectedMachine: null,
+    selectedMachine2: null,
     selectedBranch: null,
     selectedModule: null,
     selectedFailure: null,
@@ -1009,6 +1033,9 @@ onMounted(() => {
     console.log(props.report);
     form.selectedMachine = props.catalogMachines.filter(
         (data) => data.id === props.report.machine_id
+    )[0];
+    form.selectedMachine2 = props.catalogMachines.filter(
+        (data) => data.id === props.report.machine2_id
     )[0];
     if (props.report.user_id)
         form.selectedUser = props.catalogUsers.filter(
@@ -1099,6 +1126,7 @@ const addNewPart = () => {
 
 const postForm = reactive({
     machine_id: null,
+    machine2_id: null,
     user_id: null,
     shift_id: null,
     transport: null,
@@ -1129,6 +1157,8 @@ const postForm = reactive({
 
 function submit() {
     if (form.selectedMachine) postForm.machine_id = form.selectedMachine.id;
+
+    if (form.selectedMachine2) postForm.machine2_id = form.selectedMachine2.id;
 
     if (form.selectedUser) postForm.user_id = form.selectedUser.id;
 

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('machine_id');
+            $table->unsignedBigInteger('machine2_id');
             $table->unsignedBigInteger('shift_id');
             $table->integer('transport')->default(0);
             $table->string('pieces');
@@ -43,6 +44,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('machine_id')->references('id')->on('machines');
+            $table->foreign('machine2_id')->references('id')->on('machines');//pendiente optimizar relacion muchos a muchos
             $table->foreign('code_id')->references('id')->on('codes');
             $table->foreign('status_id')->references('id')->on('statuses');
             $table->foreign('shift_id')->references('id')->on('shifts');

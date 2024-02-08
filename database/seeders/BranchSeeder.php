@@ -141,5 +141,7 @@ class BranchSeeder extends Seeder
         Branch::create(['address' => 'Av. 12 Ote. 3208 Col, Zona Sin Asignación de Nombre de Col 41, Resurgimiento Cd. Nte, 09030 Heroica Puebla de Zaragoza, Pue.', 'city_id' => 56, 'client_id' => 7]);
         Branch::create(['address' => 'Calzada Manuel Clouthier 5274, Colonia Campestre, Las Bajadas, 91775 Veracruz, Ver.', 'city_id' => 78, 'client_id' => 7]);
         Branch::create(['address' => 'Niño Perdido 331, Delegación Santa María Totoltepec, 52120 San Pedro Totoltepec, Méx.', 'city_id' => 71, 'client_id' => 7]);
+
+        Branch::create(['address' => 'TEST: Niño Perdido 331, Delegación Santa María Totoltepec, 52120 San Pedro Totoltepec, Méx.', 'city_id' => 71, 'client_id' => 3]);
     }
 }

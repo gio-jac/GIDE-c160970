@@ -133,6 +133,6 @@ class BranchManagerSeeder extends Seeder
         BranchManager::create(['name' => 'CLEOTILDE PEREZ', 'email' => 'cleotilde.perez@tlock.mx', 'phone' => '22 2616 0397', 'branch_id' => 118]);
         BranchManager::create(['name' => 'JERÓNIMO FRANCISCO CRUZ ALFARO', 'email' => 'jeronimo.cruz@tlock.mx', 'phone' => '55 1018 0107', 'branch_id' => 119]);
         BranchManager::create(['name' => 'OFELIA LÓPEZ GARCÍA', 'email' => 'ofelia.lopez@tlock.mx', 'phone' => '55 7947 1098', 'branch_id' => 120]);
-
+        BranchManager::create(['name' => 'TEST: OFELIA LÓPEZ GARCÍA', 'email' => 'ofelia.lopez@tlock.mx', 'phone' => '55 7947 1098', 'branch_id' => 121]);
     }
 }

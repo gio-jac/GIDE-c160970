@@ -199,7 +199,7 @@ const currentData: any = ref(null);
 const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([
-    { field: "emp", title: "ID", filter: false },
+    { field: "emp", title: "EMP ID", filter: false },
     { field: "nombre", title: "Name", filter: false },
     { field: "apellido_paterno", title: "Paternal surname", filter: false },
     { field: "telefono", title: "Phone", filter: false },

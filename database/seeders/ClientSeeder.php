@@ -16,7 +16,7 @@ class ClientSeeder extends Seeder
         //Mexico
         Client::create(['name' => "ARMSTRONG"]);
         Client::create(['name' => "BANAMEX"]);
-        Client::create(['name' => "BANXICO"]);
+        Client::create(['name' => "BANXICO", 'multiple' => true]);
         Client::create(['name' => "COMETRA"]);
         Client::create(['name' => "GRUMER"]);
         Client::create(['name' => "SEGURITEC"]);
