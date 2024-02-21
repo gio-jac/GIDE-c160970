@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('machine_id');
-            $table->unsignedBigInteger('machine2_id');
+            $table->unsignedBigInteger('machine2_id')->nullable();
             $table->unsignedBigInteger('shift_id');
             $table->integer('transport')->default(0);
             $table->string('pieces');

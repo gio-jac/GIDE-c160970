@@ -11,6 +11,7 @@ use App\Http\Controllers\PartController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\ExpensesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/{report}/file', [ReportController::class, 'pdfReport'])->name('reports.file');
     Route::resource('/reports', ReportController::class);
     Route::post('/parts/autocomplete', [PartController::class, 'autocomplete'])->name('parts.autocomplete');
+    Route::resource('/expenses', ExpensesController::class);
 });
 
 
