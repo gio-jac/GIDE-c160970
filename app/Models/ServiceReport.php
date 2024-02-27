@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -18,20 +19,14 @@ class ServiceReport extends Model
      */
     protected $fillable = [
         'user_id',
-        'machine_id',
-        'machine2_id',
         'shift_id',
-        'transport',
         'pieces',
         'sogd',
         'time_on',
         'travel_time',
         'report_type_id',
         'reported_error',
-        'module_id',
         'branch_manager_id',
-        'failure_id',
-        'failure_type_id',
         'code_id',
         'actions_taken',
         'reported',
@@ -40,7 +35,6 @@ class ServiceReport extends Model
         'departure',
         'status_id',
         'is_tested',
-        'dt',
         'notes',
         'signature_client_name',
         'is_active',
@@ -50,11 +44,6 @@ class ServiceReport extends Model
     public function status(): HasOne
     {
         return $this->hasOne(Status::class, 'id', 'status_id');
-    }
-
-    public function machine(): HasOne
-    {
-        return $this->hasOne(Machine::class, 'id', 'machine_id');
     }
 
     public function shift(): HasOne
@@ -72,21 +61,6 @@ class ServiceReport extends Model
         return $this->hasMany(ServiceParts::class, 'service_report_id', 'id');
     }
 
-    public function module(): HasOne
-    {
-        return $this->hasOne(Module::class, 'id', 'module_id');
-    }
-
-    public function failure(): HasOne
-    {
-        return $this->hasOne(Failure::class, 'id', 'failure_id');
-    }
-
-    public function failureType(): HasOne
-    {
-        return $this->hasOne(FailureType::class, 'id', 'failure_type_id');
-    }
-
     public function branch(): HasOne
     {
         return $this->hasOne(Branch::class, 'id', 'branch_id');
@@ -95,5 +69,10 @@ class ServiceReport extends Model
     public function user(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function machines(): BelongsToMany
+    {
+        return $this->belongsToMany(Machine::class, 'service_report_machine');
     }
 }

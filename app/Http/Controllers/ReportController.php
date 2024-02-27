@@ -52,6 +52,10 @@ class ReportController extends Controller
             'client',
             'client.branches',
             'client.branches.branchManagers',
+            'production_line',
+            'production_line.machines',
+            'production_line.machines.machine_model',
+            'production_line.machines.machine_model.model_segment',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         

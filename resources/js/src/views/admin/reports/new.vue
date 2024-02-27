@@ -28,29 +28,6 @@
                                 deselect-label=""
                             ></multiselect>
                         </div>
-                        <div class="flex items-center mt-4" v-if="form.selectedMachine?.client.multiple === 1">
-                            <label
-                                for="formMachine2"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >Machine Serial</label
-                            >
-
-                            <multiselect
-                                id="formMachine2"
-                                :options="props.catalogMachines"
-                                v-model="form.selectedMachine2"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                placeholder="Select an option"
-                                :custom-label="
-                                    ({ serial, machine_model }) =>
-                                        `${serial} - ${machine_model.model}`
-                                "
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                        </div>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4" v-if="user.type === 1">
@@ -104,6 +81,244 @@
                         </div>
                     </div>
                 </div>
+                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
+                <div class="mt-8 px-4">
+                    <div class="text-lg">Machines</div>
+                    <template v-if="form.selectedMachine">
+                        <div
+                            v-if="
+                                form.selectedMachine.production_line &&
+                                form.selectedMachine.production_line.machines
+                                    .length > 0
+                            "
+                        >
+                            <div
+                                v-for="machine in form.selectedMachine
+                                    .production_line.machines"
+                                :key="machine.id"
+                                class="bg-gray-100 rounded-md p-4 mb-4"
+                            >
+                                <div class="text-center font-semibold">
+                                    Serial: {{ machine.serial }} -
+                                    {{ machine.machine_model.model }} -
+                                    {{ machine.machine_model.model_segment.segment }}
+                                </div>
+                                <div class="w-full">
+                                    <div class="flex justify-evenly flex-wrap">
+                                        <div class="py-2">
+                                            <label for="formModule"
+                                                >Error</label
+                                            >
+                                            <select
+                                                id="formModule"
+                                                name="formModule"
+                                                class="form-select text-white-dark"
+                                                v-model="form.selectedModule"
+                                                required
+                                            >
+                                                <option :value="null">
+                                                    Open this select menu
+                                                </option>
+                                                <option
+                                                    v-for="tmodule in props.catalogModule"
+                                                    :key="tmodule.id"
+                                                    :value="tmodule"
+                                                >
+                                                    {{ tmodule.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="formFailures"
+                                                >Cause</label
+                                            >
+                                            <select
+                                                id="formFailures"
+                                                name="formFailures"
+                                                class="form-select text-white-dark"
+                                                v-model="form.selectedFailure"
+                                                required
+                                            >
+                                                <option :value="null">
+                                                    Open this select menu
+                                                </option>
+                                                <option
+                                                    v-for="failure in props.catalogFailures"
+                                                    :key="failure.id"
+                                                    :value="failure"
+                                                >
+                                                    {{ failure.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="formTypes"
+                                                >Solution</label
+                                            >
+                                            <select
+                                                id="formTypes"
+                                                name="formTypes"
+                                                class="form-select text-white-dark"
+                                                v-model="
+                                                    postForm.failure_type_id
+                                                "
+                                                required
+                                            >
+                                                <option :value="null">
+                                                    Open this select menu
+                                                </option>
+                                                <option
+                                                    v-for="failuretype in props.catalogTypes"
+                                                    :key="failuretype.id"
+                                                    :value="failuretype.id"
+                                                >
+                                                    {{ failuretype.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="formReportTransport"
+                                                >Transport</label
+                                            >
+                                            <input
+                                                id="formReportTransport"
+                                                type="number"
+                                                v-model="postForm.transport"
+                                                name="formReportTransport"
+                                                class="form-input text-white-dark"
+                                                placeholder="Enter Transport"
+                                            />
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="formReportDT"
+                                                >DT (Min.)</label
+                                            >
+                                            <input
+                                                id="formReportDT"
+                                                type="number"
+                                                v-model="postForm.dt"
+                                                name="formReportDT"
+                                                class="form-input text-white-dark"
+                                                placeholder="Enter DT"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div class="bg-gray-100 rounded-md p-4">
+                                <div class="text-center font-semibold">
+                                    Serial: {{ form.selectedMachine.serial }} -
+                                    {{
+                                        form.selectedMachine.machine_model.model
+                                    }} - {{ form.selectedMachine.machine_model.model_segment.segment }}
+                                </div>
+                                <div class="w-full">
+                                    <div class="flex justify-evenly flex-wrap">
+                                        <div class="py-2">
+                                            <label for="formModule"
+                                                >Error</label
+                                            >
+                                            <select
+                                                id="formModule"
+                                                name="formModule"
+                                                class="form-select text-white-dark"
+                                                v-model="form.selectedModule"
+                                                required
+                                            >
+                                                <option :value="null">
+                                                    Open this select menu
+                                                </option>
+                                                <option
+                                                    v-for="tmodule in props.catalogModule"
+                                                    :key="tmodule.id"
+                                                    :value="tmodule"
+                                                >
+                                                    {{ tmodule.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="formFailures"
+                                                >Cause</label
+                                            >
+                                            <select
+                                                id="formFailures"
+                                                name="formFailures"
+                                                class="form-select text-white-dark"
+                                                v-model="form.selectedFailure"
+                                                required
+                                            >
+                                                <option :value="null">
+                                                    Open this select menu
+                                                </option>
+                                                <option
+                                                    v-for="failure in props.catalogFailures"
+                                                    :key="failure.id"
+                                                    :value="failure"
+                                                >
+                                                    {{ failure.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="formTypes"
+                                                >Solution</label
+                                            >
+                                            <select
+                                                id="formTypes"
+                                                name="formTypes"
+                                                class="form-select text-white-dark"
+                                                v-model="
+                                                    postForm.failure_type_id
+                                                "
+                                                required
+                                            >
+                                                <option :value="null">
+                                                    Open this select menu
+                                                </option>
+                                                <option
+                                                    v-for="failuretype in props.catalogTypes"
+                                                    :key="failuretype.id"
+                                                    :value="failuretype.id"
+                                                >
+                                                    {{ failuretype.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="formReportTransport"
+                                                >Transport</label
+                                            >
+                                            <input
+                                                id="formReportTransport"
+                                                type="number"
+                                                v-model="postForm.transport"
+                                                name="formReportTransport"
+                                                class="form-input text-white-dark"
+                                                placeholder="Enter Transport"
+                                            />
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="formReportDT"
+                                                >DT (Min.)</label
+                                            >
+                                            <input
+                                                id="formReportDT"
+                                                type="number"
+                                                v-model="postForm.dt"
+                                                name="formReportDT"
+                                                class="form-input text-white-dark"
+                                                placeholder="Enter DT"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
 
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
@@ -143,7 +358,8 @@
                                     Open this select menu
                                 </option>
                                 <option
-                                    v-for="contact in form.selectedBranch?.branch_managers"
+                                    v-for="contact in form.selectedBranch
+                                        ?.branch_managers"
                                     :key="contact.id"
                                     :value="contact"
                                 >
@@ -177,9 +393,7 @@
                                     name="formCustomerName"
                                     class="form-input flex-1"
                                     readonly
-                                    :value="
-                                        form.selectedContact?.name
-                                    "
+                                    :value="form.selectedContact?.name"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
@@ -194,9 +408,7 @@
                                     name="formCustomerEmail"
                                     class="form-input flex-1"
                                     readonly
-                                    :value="
-                                        form.selectedContact?.email
-                                    "
+                                    :value="form.selectedContact?.email"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
@@ -211,9 +423,7 @@
                                     name="formCustomerPhone"
                                     class="form-input flex-1"
                                     readonly
-                                    :value="
-                                        form.selectedContact?.phone
-                                    "
+                                    :value="form.selectedContact?.phone"
                                 />
                             </div>
                         </div>
@@ -284,21 +494,6 @@
                         <div
                             class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6"
                         >
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportTransport"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Transport</label
-                                >
-                                <input
-                                    id="formReportTransport"
-                                    type="number"
-                                    v-model="postForm.transport"
-                                    name="formReportTransport"
-                                    class="form-input flex-1"
-                                    placeholder="Enter Transport"
-                                />
-                            </div>
                             <div class="mt-4 flex items-center">
                                 <label
                                     for="formReportPieces"
@@ -382,73 +577,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="w-full">
-                            <div class="flex justify-evenly">
-                                <div>
-                                    <label for="formModule">Error</label>
-                                    <select
-                                        id="formModule"
-                                        name="formModule"
-                                        class="form-select text-white-dark"
-                                        v-model="form.selectedModule"
-                                        required
-                                    >
-                                        <option :value="null">
-                                            Open this select menu
-                                        </option>
-                                        <option
-                                            v-for="tmodule in props.catalogModule"
-                                            :key="tmodule.id"
-                                            :value="tmodule"
-                                        >
-                                            {{ tmodule.name }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="formFailures">Cause</label>
-                                    <select
-                                        id="formFailures"
-                                        name="formFailures"
-                                        class="form-select text-white-dark"
-                                        v-model="form.selectedFailure"
-                                        required
-                                    >
-                                        <option :value="null">
-                                            Open this select menu
-                                        </option>
-                                        <option
-                                            v-for="failure in props.catalogFailures"
-                                            :key="failure.id"
-                                            :value="failure"
-                                        >
-                                            {{ failure.name }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="formTypes">Solution</label>
-                                    <select
-                                        id="formTypes"
-                                        name="formTypes"
-                                        class="form-select text-white-dark"
-                                        v-model="postForm.failure_type_id"
-                                        required
-                                    >
-                                        <option :value="null">
-                                            Open this select menu
-                                        </option>
-                                        <option
-                                            v-for="failuretype in props.catalogTypes"
-                                            :key="failuretype.id"
-                                            :value="failuretype.id"
-                                        >
-                                            {{ failuretype.name }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex items-center">
+                        <div class="w-full mt-4">
+                            <div class="flex items-center">
                                 <label
                                     for="formReportedError"
                                     class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
@@ -607,21 +737,6 @@
                                     />
                                     <span>Test OK</span>
                                 </label>
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportDT"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/4 mb-0"
-                                    >DT (Min.)</label
-                                >
-                                <input
-                                    id="formReportDT"
-                                    type="number"
-                                    v-model="postForm.dt"
-                                    name="formReportDT"
-                                    class="form-input flex-1"
-                                    placeholder="Enter DT"
-                                />
                             </div>
                         </div>
                     </div>
@@ -990,7 +1105,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, reactive, computed } from "vue";
+import { ref, onMounted, reactive, computed, watch } from "vue";
 import { Head, usePage, router, Link } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
 import AppLayout from "@/layouts/app-layout.vue";
@@ -1065,6 +1180,19 @@ const form = reactive({
     selectedUser: null,
     selectedStatus: null,
 });
+
+watch(
+    () => form.selectedMachine,
+    (newVal, oldVal) => {
+        if (newVal) {
+            const newTotalMachine =
+                newVal.production_line?.machines.length || 1;
+            console.log(
+                `There are ${newTotalMachine} machines in production line`
+            );
+        }
+    }
+);
 
 const items: any = ref([]);
 const selectedFile = ref(null);
@@ -1190,7 +1318,7 @@ function selectPartChange(searchQuery, id) {
     }
 
     if (timeoutId.value) clearTimeout(timeoutId.value);
-    
+
     timeoutId.value = setTimeout(() => {
         fetch("/parts/autocomplete", {
             method: "POST",
@@ -1228,7 +1356,8 @@ function submit() {
 
     if (form.selectedBranch) postForm.branch_id = form.selectedBranch.id;
 
-    if (form.selectedContact) postForm.branch_manager_id = form.selectedContact.id;
+    if (form.selectedContact)
+        postForm.branch_manager_id = form.selectedContact.id;
 
     router.post("/reports", postForm);
 }

@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('machines', function (Blueprint $table) {
             $table->id();
             $table->string('serial')->unique();
-            $table->integer('transport_hours')->default(0);
+            $table->unsignedBigInteger('production_line_id')->nullable();
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('machine_model_id');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->foreign('machine_model_id')->references('id')->on('machine_models');
             $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('production_line_id')->references('id')->on('production_lines');
         });
     }
 
