@@ -16,7 +16,7 @@ class ModelSegmentsSeeder extends Seeder
     {
         ModelSegments::create(['segment' => "C"]);
         ModelSegments::create(['segment' => "M"]);
-        ModelSegments::create(['segment' => "X"]);
+        ModelSegments::create(['segment' => "X", 'is_multi_transport' => true, 'is_multi_signature' => true]);
         ModelSegments::create(['segment' => "BANKNOTE PAKING SYSTEM"]);
         ModelSegments::create(['segment' => "BANKNOTE DESTRUCTION SYSTEMS"]);
         ModelSegments::create(['segment' => "AIR SUPPLY"]);

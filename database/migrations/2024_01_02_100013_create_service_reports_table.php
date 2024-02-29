@@ -32,7 +32,8 @@ return new class extends Migration
             $table->unsignedBigInteger('status_id');
             $table->boolean('is_tested')->default(false);
             $table->string('notes');
-            $table->string('signature_client_name')->nullable();
+            $table->string('signature_client_name_1')->nullable();
+            $table->string('signature_client_name_2')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
