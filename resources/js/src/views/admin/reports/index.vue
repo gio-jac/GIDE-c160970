@@ -59,11 +59,8 @@
                         <template #id="data">
                             {{ data.value.id }}
                         </template>
-                        <template #machine="data">
-                            {{ data.value.machine.serial }}
-                        </template>
-                        <template #model="data">
-                            {{ data.value.machine.machine_model.model }}
+                        <template #machines="data">
+                            {{ data.value.machines.length }}
                         </template>
                         <template #status="data">
                             {{ data.value.status.status }}
@@ -226,8 +223,7 @@ const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([
     { field: "id", title: "ID" },
-    { field: "machine", title: "Machine" },
-    { field: "model", title: "Model" },
+    { field: "machines", title: "Machines #" },
     { field: "status", title: "Status" },
     {
         field: "actions",

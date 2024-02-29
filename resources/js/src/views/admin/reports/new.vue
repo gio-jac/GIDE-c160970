@@ -1069,15 +1069,15 @@
                         <div class="w-full">
                             <div class="flex items-center">
                                 <label
-                                    for="formCustomerSignatureName"
+                                    for="formCustomerSignatureName1"
                                     class="ltr:mr-2 rtl:ml-2 w-1/4 mb-0"
                                     >Customer Signature Name</label
                                 >
                                 <input
-                                    id="formCustomerSignatureName"
+                                    id="formCustomerSignatureName1"
                                     type="text"
-                                    v-model="postForm.signature_client_name"
-                                    name="formCustomerSignatureName"
+                                    v-model="postForm.signature_client_name_1"
+                                    name="formCustomerSignatureName1"
                                     class="form-input flex-1"
                                     placeholder="Enter Customer Name"
                                 />
@@ -1092,15 +1092,15 @@
                         >
                             <div class="flex items-center">
                                 <label
-                                    for="formCustomerSignatureName"
+                                    for="formCustomerSignatureName2"
                                     class="ltr:mr-2 rtl:ml-2 w-1/4 mb-0"
                                     >Customer Signature Name</label
                                 >
                                 <input
-                                    id="formCustomerSignatureName"
+                                    id="formCustomerSignatureName2"
                                     type="text"
-                                    v-model="postForm.signature_client_name"
-                                    name="formCustomerSignatureName"
+                                    v-model="postForm.signature_client_name_2"
+                                    name="formCustomerSignatureName2"
                                     class="form-input flex-1"
                                     placeholder="Enter Customer Name"
                                 />
@@ -1494,7 +1494,6 @@ watch(
 );
 
 const postForm = reactive({
-    machines: [] as Array<any>,
     user_id: null,
     shift_id: null,
     pieces: null,
@@ -1512,9 +1511,11 @@ const postForm = reactive({
     finished: null,
     departure: null,
     status_id: null,
-    signature_client_name: null,
+    signature_client_name_1: null,
+    signature_client_name_2: null,
     is_tested: null,
     notes: "",
+    machines: [] as Array<any>,
     service_parts: [],
 });
 
@@ -1561,6 +1562,6 @@ function submit() {
         postForm.branch_manager_id = form.selectedContact.id;
 
     console.log(postForm);
-    //router.post("/reports", postForm);
+    router.post("/reports", postForm);
 }
 </script>

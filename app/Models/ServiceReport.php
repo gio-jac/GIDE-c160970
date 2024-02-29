@@ -73,6 +73,6 @@ class ServiceReport extends Model
 
     public function machines(): BelongsToMany
     {
-        return $this->belongsToMany(Machine::class, 'service_report_machine');
+        return $this->belongsToMany(Machine::class, 'service_report_machine')->withTimestamps();
     }
 }

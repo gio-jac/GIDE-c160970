@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('module_id');
             $table->unsignedBigInteger('failure_id');
             $table->unsignedBigInteger('failure_type_id');
-            $table->time('transport_time_1', $precision = 0);
-            $table->time('transport_time_2', $precision = 0);
+            $table->time('transport_time_1', $precision = 0)->nullable();
+            $table->time('transport_time_2', $precision = 0)->nullable();
             $table->integer('transport_1')->default(0);
             $table->integer('transport_2')->default(0);
             $table->integer('dt')->default(0);
