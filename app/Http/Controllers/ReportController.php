@@ -191,22 +191,28 @@ class ReportController extends Controller
     {
         $report = ServiceReport::with([
             'status',
-            'machine',
-            'machine.machine_model',
+            'machines',
+            'machines.machine_model',
             'parts','parts.part',
             'shift',
-            'module',
-            'failure',
-            'failureType', 
             'user',
             'branch',
             'branch.client',
             'branch.branchManagers',
         ])->findOrFail($id);
+        
+        foreach($report->machines as &$machine){
+            $machine->pivot->module = Module::findOrFail($machine->pivot->module_id);
+            $machine->pivot->failure = Failure::findOrFail($machine->pivot->failure_id);
+            $machine->pivot->failure_type = FailureType::findOrFail($machine->pivot->failure_type_id);
+        }
         $catalogCodes = Code::where('is_active', 1)->get();
         
-        $pdf = Pdf::loadView('reporte',['catalogCodes' => $catalogCodes, 'report' => $report]);
-        //return view('reporte', ['catalogCodes' => $catalogCodes, 'report' => $report]);
-        return $pdf->download('invoice.pdf');
+        if(count($report->machines) === 1){
+            $pdf = Pdf::loadView('reporte',['catalogCodes' => $catalogCodes, 'report' => $report]);
+            //return response()->json($report);
+            return $pdf->download('invoice.pdf');
+        }
+        return redirect()->back();
     }
 }

@@ -66,15 +66,15 @@
         <tr>
             <td style="width:50%;">
                 CONTACT:<br>
-                {{ $report->branch->branchManager->name }}
+                {{ $report->branch->branchManagers[0]->name }}
             </td>
             <td>
                 MACHINE MODEL:<br>
-                {{ $report->machine->machine_model->model }}
+                {{ $report->machines[0]->machine_model->model }}
             </td>
             <td>
                 S/N:<br>
-                {{ $report->machine->serial }}
+                {{ $report->machines[0]->serial }}
             </td>
             <td>
                 TRANSPORT:<br>
@@ -115,15 +115,15 @@
             </td>
             <td>
                 MODULE:<br>
-                {{ $report->module->name }}
+                {{ $report->machines[0]->pivot->module->name }}
             </td>
             <td>
                 FAILURE:<br>
-                {{ $report->failure->name }}
+                {{ $report->machines[0]->pivot->failure->name }}
             </td>
             <td>
                 FAULT SYMPTOM:<br>
-                {{ $report->failureType->name }}
+                {{ $report->machines[0]->pivot->failure_type->name }}
             </td>
         </tr>
     </table>
@@ -284,7 +284,7 @@
 
         <div class="defaultBorder" style="float: right;width: 48%;height:100px;">
             CUSTOMER SIGNATURE:
-            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name) ? $report->branch->branchManager->name : $report->signature_client_name }}</div>
+            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name_1) ? $report->branch->branchManagers[0]->name : $report->signature_client_name_1 }}</div>
         </div>
         <div style="clear: both;"></div>
     </div>
