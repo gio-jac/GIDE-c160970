@@ -553,42 +553,42 @@
                                             </li>
                                             <li>
                                                 <a
-                                                    href="/apps/invoice/list"
+                                                    href="#"
                                                     @click="toggleMobileMenu"
                                                     >Machines</a
                                                 >
                                             </li>
                                             <li>
                                                 <a
-                                                    href="/apps/invoice/list"
+                                                    href="#"
                                                     @click="toggleMobileMenu"
                                                     >Models</a
                                                 >
                                             </li>
                                             <li>
                                                 <a
-                                                    href="/apps/invoice/list"
+                                                    href="#"
                                                     @click="toggleMobileMenu"
                                                     >Customers</a
                                                 >
                                             </li>
                                             <li>
                                                 <a
-                                                    href="/apps/invoice/list"
+                                                    href="#"
                                                     @click="toggleMobileMenu"
                                                     >Regions</a
                                                 >
                                             </li>
                                             <li>
                                                 <a
-                                                    href="/apps/invoice/list"
+                                                    href="#"
                                                     @click="toggleMobileMenu"
                                                     >Parts</a
                                                 >
                                             </li>
                                             <li>
                                                 <a
-                                                    href="/apps/invoice/list"
+                                                    href="#"
                                                     @click="toggleMobileMenu"
                                                     >Assignments</a
                                                 >
