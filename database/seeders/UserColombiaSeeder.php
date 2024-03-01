@@ -19,7 +19,7 @@ class UserColombiaSeeder extends Seeder
         User::create([
             'emp' => "E03917",
             'email' => "camilo.montana@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Camilo",
             'apellido_paterno' => "Montaña",
             'apellido_materno' => "Hoyos",
@@ -31,7 +31,7 @@ class UserColombiaSeeder extends Seeder
         User::create([
             'emp' => "E03919",
             'email' => "oscar.cabrera@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Oscar Andres",
             'apellido_paterno' => "Cabrera",
             'apellido_materno' => "Escobar",
@@ -43,7 +43,7 @@ class UserColombiaSeeder extends Seeder
         User::create([
             'emp' => "E03918",
             'email' => "david.castro@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "David Leonardo",
             'apellido_paterno' => "Castro",
             'apellido_materno' => "Manso",
