@@ -19,7 +19,7 @@ class UserChileSeeder extends Seeder
         User::create([
             'emp' => null,
             'email' => "frankie.segura@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Frankie",
             'apellido_paterno' => "Andres",
             'apellido_materno' => "Segura",
@@ -30,7 +30,7 @@ class UserChileSeeder extends Seeder
         User::create([
             'emp' => null,
             'email' => "adrianmiguel.vegatoledo@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Adrian",
             'apellido_paterno' => "Vega",
             'apellido_materno' => "Toledo",
@@ -41,7 +41,7 @@ class UserChileSeeder extends Seeder
         User::create([
             'emp' => null,
             'email' => "eduardoivan.godoyfernandez@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Eduardo",
             'apellido_paterno' => "Ivan",
             'apellido_materno' => "Godoy",
@@ -52,7 +52,7 @@ class UserChileSeeder extends Seeder
         User::create([
             'emp' => null,
             'email' => "mario.sotolongo@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Mario",
             'apellido_paterno' => "Miguel",
             'apellido_materno' => "Sotolongo",
@@ -63,7 +63,7 @@ class UserChileSeeder extends Seeder
         User::create([
             'emp' => null,
             'email' => "sergio.monteroosorio@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Sergio",
             'apellido_paterno' => "Montero",
             'apellido_materno' => "Osorio",
@@ -74,7 +74,7 @@ class UserChileSeeder extends Seeder
         User::create([
             'emp' => null,
             'email' => "daniloandres.armengolbaeza@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Danilo",
             'apellido_paterno' => "Andres",
             'apellido_materno' => "Armengol",
@@ -85,7 +85,7 @@ class UserChileSeeder extends Seeder
         User::create([
             'emp' => null,
             'email' => "enzoemilio.fuentescastro@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Enzo",
             'apellido_paterno' => "Emilio",
             'apellido_materno' => "Fuentes",
@@ -96,7 +96,7 @@ class UserChileSeeder extends Seeder
         User::create([
             'emp' => null,
             'email' => "alisonmichelle.leonleon@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Alison",
             'apellido_paterno' => "Michelle",
             'apellido_materno' => "León",
@@ -107,7 +107,7 @@ class UserChileSeeder extends Seeder
         User::create([
             'emp' => null,
             'email' => "tulio.brillay@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Tulio",
             'apellido_paterno' => "Brillay",
             'apellido_materno' => "Navarro",
