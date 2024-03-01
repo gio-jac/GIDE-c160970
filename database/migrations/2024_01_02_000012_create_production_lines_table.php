@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('model_segments', function (Blueprint $table) {
+        Schema::create('production_lines', function (Blueprint $table) {
             $table->id();
-            $table->string('segment')->unique();
-            $table->boolean('is_active')->default(false);
-            $table->boolean('is_multi_transport')->default(false);
-            $table->boolean('is_multi_signature')->default(false);
+            $table->string('name')->unique();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('model_segments');
+        Schema::dropIfExists('production_lines');
     }
 };

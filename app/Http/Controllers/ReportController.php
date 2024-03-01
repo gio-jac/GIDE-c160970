@@ -15,6 +15,7 @@ use App\Models\FailureType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -25,7 +26,7 @@ class ReportController extends Controller
     {
         $userAuth = Auth::user();
         if($userAuth->user_type_id === 1){
-            $reports = ServiceReport::with(['machine.machine_model','status'])->get();
+            $reports = ServiceReport::with(['machines.machine_model','status'])->get();
         }else{
             $reports = ServiceReport::where('user_id', $userAuth->id)->with(['machine.machine_model','status'])->get();
         }
@@ -52,6 +53,10 @@ class ReportController extends Controller
             'client',
             'client.branches',
             'client.branches.branchManagers',
+            'production_line',
+            'production_line.machines',
+            'production_line.machines.machine_model',
+            'production_line.machines.machine_model.model_segment',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         
@@ -76,45 +81,57 @@ class ReportController extends Controller
         if($userAuth->user_type_id === 2){
             $request->merge(['user_id' => $userAuth->id]);
         }
-        $report = ServiceReport::create($request->validate([
-            'user_id' => ['required'],
-            'machine_id' => ['required'],
-            'machine2_id' => ['required'],
-            'shift_id' => ['required'],
-            'transport' => ['required'],
-            'pieces' => ['required'],
-            'sogd' => ['required'],
-            'branch_id' => ['required'],
-            'time_on' => ['required'],
-            'travel_time' => ['required'],
-            'report_type_id' => ['required'],
-            'branch_manager_id' => ['required'],
-            'reported_error' => ['required'],
-            'module_id' => ['required'],
-            'failure_id' => ['required'],
-            'failure_type_id' => ['required'],
-            'code_id' => ['required'],
-            'actions_taken' => [],
-            'reported' => ['required'],
-            'arrival' => [],
-            'finished' => [],
-            'departure' => [],
-            'status_id' => ['required'],
-            'is_tested' => ['required'],
-            'dt' => [],
-            'notes' => [],
-            'signature_client_name' => [],
-        ]));
 
-        $partsArray = $request->all()['service_parts'];
+        
+            $report = ServiceReport::create($request->validate([
+                'user_id' => ['required'],
+                'shift_id' => ['required'],
+                'pieces' => ['required'],
+                'sogd' => ['required'],
+                'time_on' => ['required'],
+                'travel_time' => ['required'],
+                'report_type_id' => ['required'],
+                'branch_id' => ['required'],
+                'branch_manager_id' => ['required'],
+                'reported_error' => ['required'],
+                'code_id' => ['required'],
+                'actions_taken' => [],
+                'reported' => ['required'],
+                'arrival' => [],
+                'finished' => [],
+                'departure' => [],
+                'status_id' => ['required'],
+                'signature_client_name_1' => [],
+                'signature_client_name_2' => [],
+                'is_tested' => ['required'],
+                'notes' => [],
+            ]));
 
-        $dataParts = [];
-        foreach($partsArray as $part) {
-            $dataParts[] = ["part_id" => $part["id"], "quantity" => empty($part["quantity"]) ? 0 : $part["quantity"]];
-        }
+            //machines: [] as Array<any>,
+            foreach($request->all()['machines'] as $machine) {
+                $report->machines()->attach($machine["machine_id"],[
+                    "module_id" => $machine["module_id"],
+                    "failure_id" => $machine["failure_id"],
+                    "failure_type_id" => $machine["failure_type_id"],
+                    "transport_time_1" => $machine["transport_time_1"],
+                    "transport_time_2" => $machine["transport_time_2"],
+                    "transport_1" => $machine["transport_1"] ?? 0,
+                    "transport_2" => $machine["transport_2"] ?? 0,
+                    "dt" => $machine["dt"],
+                ]);
+            }
+            //$report->machines()->createMany($dataMachines);
 
-        $report->parts()->createMany($dataParts);
+            //service_parts: [],
+            $partsArray = $request->all()['service_parts'];
 
+            $dataParts = [];
+            foreach($partsArray as $part) {
+                $dataParts[] = ["part_id" => $part["id"], "quantity" => empty($part["quantity"]) ? 0 : $part["quantity"]];
+            }
+            $report->parts()->createMany($dataParts);
+            
+        
         return to_route('reports.index');
     }
 
@@ -131,7 +148,15 @@ class ReportController extends Controller
      */
     public function edit(string $id)
     {
-        $report = ServiceReport::with(['status','machine','parts','parts.part','shift','module','failure','failureType'])->findOrFail($id);
+        $report = ServiceReport::with([
+            'status',
+            'machines',
+            'machines.production_line',
+            'machines.production_line.machines',
+            'parts',
+            'parts.part',
+            'shift',
+        ])->findOrFail($id);
         $latestReports = ServiceReport::where('user_id', Auth::user()->id)->with(['machine','machine.data_client','machine.data_client.client'])->latest()->take(5)->get();
 
         //$catalogParts = Part::where('is_active', 1)->get();
@@ -147,6 +172,10 @@ class ReportController extends Controller
             'client',
             'client.branches',
             'client.branches.branchManagers',
+            'production_line',
+            'production_line.machines',
+            'production_line.machines.machine_model',
+            'production_line.machines.machine_model.model_segment',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         return Inertia::render('admin/reports/edit',[
@@ -187,22 +216,28 @@ class ReportController extends Controller
     {
         $report = ServiceReport::with([
             'status',
-            'machine',
-            'machine.machine_model',
+            'machines',
+            'machines.machine_model',
             'parts','parts.part',
             'shift',
-            'module',
-            'failure',
-            'failureType', 
             'user',
             'branch',
             'branch.client',
             'branch.branchManagers',
         ])->findOrFail($id);
+        
+        foreach($report->machines as &$machine){
+            $machine->pivot->module = Module::findOrFail($machine->pivot->module_id);
+            $machine->pivot->failure = Failure::findOrFail($machine->pivot->failure_id);
+            $machine->pivot->failure_type = FailureType::findOrFail($machine->pivot->failure_type_id);
+        }
         $catalogCodes = Code::where('is_active', 1)->get();
         
-        $pdf = Pdf::loadView('reporte',['catalogCodes' => $catalogCodes, 'report' => $report]);
-        //return view('reporte', ['catalogCodes' => $catalogCodes, 'report' => $report]);
-        return $pdf->download('invoice.pdf');
+        if(count($report->machines) === 1){
+            $pdf = Pdf::loadView('reporte',['catalogCodes' => $catalogCodes, 'report' => $report]);
+            //return response()->json($report);
+            return $pdf->download('invoice.pdf');
+        }
+        return redirect()->back();
     }
 }
