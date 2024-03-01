@@ -148,7 +148,15 @@ class ReportController extends Controller
      */
     public function edit(string $id)
     {
-        $report = ServiceReport::with(['status','machine','parts','parts.part','shift','module','failure','failureType'])->findOrFail($id);
+        $report = ServiceReport::with([
+            'status',
+            'machines',
+            'machines.production_line',
+            'machines.production_line.machines',
+            'parts',
+            'parts.part',
+            'shift',
+        ])->findOrFail($id);
         $latestReports = ServiceReport::where('user_id', Auth::user()->id)->with(['machine','machine.data_client','machine.data_client.client'])->latest()->take(5)->get();
 
         //$catalogParts = Part::where('is_active', 1)->get();
@@ -164,6 +172,10 @@ class ReportController extends Controller
             'client',
             'client.branches',
             'client.branches.branchManagers',
+            'production_line',
+            'production_line.machines',
+            'production_line.machines.machine_model',
+            'production_line.machines.machine_model.model_segment',
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         return Inertia::render('admin/reports/edit',[
