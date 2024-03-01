@@ -112,6 +112,7 @@
                                         ></path>
                                     </svg>
                                 </Link>
+                                <!--
                                 <Link
                                     :href="`/expenses`"
                                     class="hover:text-info"
@@ -143,7 +144,7 @@
                                             stroke-width="1.5"
                                         ></path>
                                     </svg>
-                                </Link>
+                                </Link>-->
                                 <!--
                                 <button
                                     type="button"
