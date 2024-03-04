@@ -212,8 +212,7 @@ class ReportController extends Controller
     /**
      * PDF Creation.
      */
-    public function pdfReport(string $id)
-    {
+    public function pdfReport(string $id) {
         $report = ServiceReport::with([
             'status',
             'machines',
@@ -233,11 +232,9 @@ class ReportController extends Controller
         }
         $catalogCodes = Code::where('is_active', 1)->get();
         
-        if(count($report->machines) === 1){
-            $pdf = Pdf::loadView('reporte',['catalogCodes' => $catalogCodes, 'report' => $report]);
-            //return response()->json($report);
-            return $pdf->download('invoice.pdf');
-        }
-        return redirect()->back();
+        $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';
+        $pdf = Pdf::loadView($view, ['catalogCodes' => $catalogCodes, 'report' => $report]);
+
+        return $pdf->download('invoice.pdf');
     }
 }
