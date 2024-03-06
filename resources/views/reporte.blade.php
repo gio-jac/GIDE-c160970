@@ -46,7 +46,7 @@
                 </p>
             </td>
             <td style="width:30%;">
-                <img style="max-width:100%;" src="{{public_path('assets/images/icon/Creating Confidence.svg')}}">
+                <img style="max-width:100%;" src="{{public_path('assets/images/icon/GD_Logo_BWM_pos_600.png')}}">
             </td>
         </tr>
     </table>
@@ -244,7 +244,7 @@
             <th>QTY</th>
         </tr>
         @foreach($report->parts as $part)
-            @if($loop->index % 2 != 0)
+            @if($loop->index % 2 != 1)
             <tr style="text-align:center;">
                 <td>{{$part->part->num_part}}</td>
                 <td>{{$part->part->descripcion}}</td>
@@ -261,7 +261,7 @@
             <th>QTY</th>
         </tr>
         @foreach($report->parts as $part)
-            @if($loop->index % 2 == 0)
+            @if($loop->index % 2 == 1)
             <tr style="text-align:center;">
                 <td>{{$part->part->num_part}}</td>
                 <td>{{$part->part->descripcion}}</td>

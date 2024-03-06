@@ -25,6 +25,10 @@
             height: 75.8px;
         }
 
+        .countTime{
+            background-color: #dedede;
+        }
+
         .centered-cell {
             text-align: center;
             width: 75px;
@@ -39,204 +43,131 @@
 <body>
     <table>
         <tr>
-            <td style="width:70%;text-align: left;">
-                <p style="font-weight: normal;font-size:15px;">SERVICE REPORT</p>
+            <td style="width:50%; text-align:center;">
+                <img style="max-width:50%;" src="{{public_path('assets/images/icon/GD_Logo_BWM_pos_600.png')}}">
+            </td>
+            <td style="width:50%;text-align: center;">
                 <p style="font-weight: normal;">REPORT ID:
                     {{ $report->id }}
                 </p>
             </td>
-            <td style="width:30%;">
-                <img style="max-width:100%;" src="{{public_path('assets/images/icon/Creating Confidence.svg')}}">
-            </td>
         </tr>
     </table>
-    <table class="tblStyle">
-        <tr>
-            <td style="width:40%;">
-                CUSTOMER NAME:<br>
-                {{ $report->branch->client->name }}
-            </td>
-            <td style="width:60%;">
-                ADDRESS:<br>
-                {{ $report->branch->address }}
-            </td>
-        </tr>
-    </table>
-    <table class="tblStyle">
-        <tr>
-            <td style="width:50%;">
-                CONTACT:<br>
-                {{ $report->branch->branchManagers[0]->name }}
-            </td>
-            <td>
-                MACHINE MODEL:<br>
-                {{ $report->machines[0]->machine_model->model }}
-            </td>
-            <td>
-                S/N:<br>
-                {{ $report->machines[0]->serial }}
-            </td>
-            <td>
-                TRANSPORT:<br>
-                {{ $report->transport }}
-            </td>
-        </tr>
-    </table>
-    <table class="tblStyle">
-        <tr>
-            <td>
-                PIECES:<br>
-                {{ $report->pieces }}
-            </td>
-            <td>
-                MACHINE ON:<br>
-                {{ $report->time_on }}
-            </td>
-            <td>
-                TRAVEL TIME:<br>
-                {{ $report->travel_time }}
-            </td>
-            @php
-                $reportTypeId = $report->report_type_id;
-            @endphp
-            <td class="centered-cell{{ $reportTypeId === 1 ? ' highlighted' : '' }}">
-                CONTRACT
-            </td>
-            <td class="centered-cell{{ $reportTypeId === 2 ? ' highlighted' : '' }}">
-                CLIENT
-            </td>
-        </tr>
-    </table>
-    <table class="tblStyle">
-        <tr>
-            <td>
-                SO GD:<br>
-                {{ $report->sogd }}
-            </td>
-            <td>
-                MODULE:<br>
-                {{ $report->machines[0]->pivot->module->name }}
-            </td>
-            <td>
-                FAILURE:<br>
-                {{ $report->machines[0]->pivot->failure->name }}
-            </td>
-            <td>
-                FAULT SYMPTOM:<br>
-                {{ $report->machines[0]->pivot->failure_type->name }}
-            </td>
-        </tr>
-    </table>
-    <div class="tblStyle reportedError">
-        REPORTED ERROR:<br>
-        {{ $report->reported_error }}
-    </div>
 
-    <table style="margin:7px 0;">
+    <table class="tblStyle" style="float: left;width: 56%;">
         <tr>
-            @php
-                $codeId = $report->code_id;
-            @endphp
-            @foreach ($catalogCodes as $code)
-                <td>
-                    <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
-                        class="defaultBorder{{ $code->id === $codeId ? ' highlighted' : '' }}"></div>
-                    {{ $code->code }}
-                </td>
-            @endforeach
+            <td style="min-width:100px;text-align:center;">Cliente:</td>
+            <td>{{ $report->branch->client->name }}</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">Direccion:</td>
+            <td>{{ $report->branch->address }}</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">Telefono:</td>
+            <td>{{ $report->branch->branchManagers[0]->phone }}</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">No. serie:</td>
+            <td>
+                {{ implode(', ', $report->machines->pluck('serial')->toArray()) }}
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">Equipos:</td>
+            <td>
+                {{ implode(', ', $report->machines->pluck('machine_model.model')->toArray()) }}
+            </td>
         </tr>
     </table>
+
+    <table class="tblStyle" style="float: right;width: 40%;">
+    @php
+        $codeId = $report->code_id;
+    @endphp
+    @foreach ($catalogCodes as $code)
+        <tr class="{{ $code->id === $codeId ? ' highlighted' : '' }}">
+            <td>{{ $code->code }}</td>
+            <td>{{ $code->description }}</td>
+        </tr>
+    @endforeach
+    </table>
+    <div style="clear: both;"></div>
+    <p style="margin-bottom:0px;">Descripcion del problema:</p>
+    <table class="tblStyle">
+        @foreach ($report->machines as $machines)
+        <tr>
+            <td>{{ $machines->serial }}</td>
+            <td>{{ $machines->pivot->module->name }}</td>
+            <td>{{ $machines->pivot->failure->name }}</td>
+            <td>{{ $machines->pivot->failure_type->name }}</td>
+        </tr>
+        @endforeach
+    </table>
+    <p style="margin-bottom:0px;">Solución/Comentarios:</p>
     <div class="tblStyle reportedError">
-        ACTIONS TAKEN:<br>
         {{ $report->actions_taken }}
     </div>
 
-    <table style="text-align:center;margin:7px 0;">
-        <tr>
-            <td class="defaultBorder" colspan="2">REPORTED</td>
-            <td class="defaultBorder" colspan="2">ARRIVAL TIME</td>
-            <td class="defaultBorder" colspan="2">FINISH TIME</td>
-            <td class="defaultBorder" colspan="2">DEPARTURE TIME</td>
-            <td>
-                <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
-                    class="defaultBorder{{ $report->status_id === 1 ? ' highlighted' : '' }}"></div>
-                COMPLETE
-            </td>
-            <td>
-                <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
-                    class="defaultBorder{{ $report->is_tested === 1 ? ' highlighted' : '' }}"></div>
-                TEST OK
-            </td>
-        </tr>
-        <tr>
-            <td class="defaultBorder">DATE</td>
-            <td class="defaultBorder">HOUR</td>
-            <td class="defaultBorder">DATE</td>
-            <td class="defaultBorder">HOUR</td>
-            <td class="defaultBorder">DATE</td>
-            <td class="defaultBorder">HOUR</td>
-            <td class="defaultBorder">DATE</td>
-            <td class="defaultBorder">HOUR</td>
-            <td>
-                <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;margin-left:-3px;"
-                    class="defaultBorder{{ $report->status_id === 2 ? ' highlighted' : '' }}"></div>
-                INCOMPLT
-            </td>
-            <td class="defaultBorder">DT</td>
-        </tr>
-        <tr>
-            @php
-                if (!function_exists('formatDateTime')) {
-                    function formatDateTime($dateTime) {
-                        $dateTimeParts = explode(" ", $dateTime);
-                        $dateParts = explode("-", $dateTimeParts[0]);
-                        $dateTimeParts[0] = $dateParts[2].'-'.$dateParts[1].'-'.$dateParts[0];
-                        $dateTimeParts[1] = substr($dateTimeParts[1], 0, 5);
-                        return $dateTimeParts;
-                    }
+    <div style="clear: both;"></div>
+        <p></p>
+    <table style="float: left;width: 40%;text-align:center;">
+        @php
+            if (!function_exists('formatDateTime2')) {
+                function formatDateTime2($dateTime) {
+                    $dateTimeParts = explode(" ", $dateTime);
+                    $dateParts = explode("-", $dateTimeParts[0]);
+                    $months = array(1 => 'Ene', 2 => 'Feb', 3 => 'Mar', 4 => 'Abr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Ago', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dic');
+                    $monthName = $months[(int)$dateParts[1]]; // Convertir el número del mes a nombre
+                    $dateTimeParts[0] = $dateParts[2].'-'.$monthName.'-'.$dateParts[0];
+                    $dateTimeParts[1] = substr($dateTimeParts[1], 0, 5);
+                    return $dateTimeParts;
                 }
-
-                $reported = formatDateTime($report->reported);
-                $arrival = formatDateTime($report->arrival);
-                $finished = formatDateTime($report->finished);
-                $departure = formatDateTime($report->departure);
-            @endphp
-
-            <td class="defaultBorder">
-                {{ $reported[0] }}
-            </td>
-            <td class="defaultBorder">
-                {{ $reported[1] }}
-            </td>
-            <td class="defaultBorder">
-                {{ $arrival[0] }}
-            </td>
-            <td class="defaultBorder">
-                {{ $arrival[1] }}
-            </td>
-            <td class="defaultBorder">
-                {{ $finished[0] }}
-            </td>
-            <td class="defaultBorder">
-                {{ $finished[1] }}
-            </td>
-            <td class="defaultBorder">
-                {{ $departure[0] }}
-            </td>
-            <td class="defaultBorder">
-                {{ $departure[1] }}
-            </td>
-            <td>
-                <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;margin-left:-13px;"
-                    class="defaultBorder{{ $report->status_id === 3 ? ' highlighted' : '' }}"></div>
-                RETURN
-            </td>
-            <td class="defaultBorder">
-                {{ $report->dt }}
-            </td>
-        </tr>
+            }
+            $arrival = formatDateTime2($report->arrival);
+            $finished = formatDateTime2($report->finished);
+        @endphp
+        <tr>
+            <td class="defaultBorder" colspan="2">Llegada al sitio</td>
+            <td class="defaultBorder" colspan="2">Cierre del reporte</td>
+        </tr>   
+        <tr>
+            <td class="defaultBorder">Fecha</td>
+            <td class="defaultBorder">Hora</td>
+            <td class="defaultBorder">Fecha</td>
+            <td class="defaultBorder">Hora</td>
+        </tr> 
+        <tr>
+            <td class="defaultBorder">{{ $arrival[0] }}</td>
+            <td class="defaultBorder">{{ $arrival[1] }}</td>
+            <td class="defaultBorder">{{ $finished[0] }}</td>
+            <td class="defaultBorder">{{ $finished[1] }}</td>
+        </tr> 
     </table>
 
+    <table class="tblStyle" style="float: right;width: 58%;text-align:center;">
+        <tr>
+            <td></td>
+            <td>Transporte</td>
+            <td>Cantidad</td>
+            <td>Total</td>
+        </tr>
+        @foreach ($report->machines as $machine)
+        <tr @if($loop->index % 2 == 1) class="countTime" @endif>
+            <td rowspan="2">{{ $machine->serial }}</td>
+            <td>{{ $machine->pivot->transport_time_1 }}</td>
+            <td>{{ $machine->pivot->transport_1 }}</td>
+            <td rowspan="2">{{ $machine->pivot->transport_1 + $machine->pivot->transport_2 }}</td>
+        </tr>
+        <tr @if($loop->index % 2 == 1) class="countTime" @endif>
+            <td>{{ $machine->pivot->transport_time_2 }}</td>
+            <td>{{ $machine->pivot->transport_2 }}</td>
+        </tr>
+        @endforeach
+    </table>
+    
+    <div style="clear: both;"></div>
+    <p></p>
     <table class="tblStyle" style="float: left;width: 48%;">
         <tr>
             <th>PART REPLACED</th>
@@ -244,7 +175,7 @@
             <th>QTY</th>
         </tr>
         @foreach($report->parts as $part)
-            @if($loop->index % 2 != 0)
+            @if($loop->index % 2 != 1)
             <tr style="text-align:center;">
                 <td>{{$part->part->num_part}}</td>
                 <td>{{$part->part->descripcion}}</td>
@@ -261,7 +192,7 @@
             <th>QTY</th>
         </tr>
         @foreach($report->parts as $part)
-            @if($loop->index % 2 == 0)
+            @if($loop->index % 2 == 1)
             <tr style="text-align:center;">
                 <td>{{$part->part->num_part}}</td>
                 <td>{{$part->part->descripcion}}</td>
@@ -271,21 +202,39 @@
         @endforeach
     </table>
     <div style="clear: both;"></div>
-    <div class="tblStyle reportedError" style="margin:7px 0;">
-        REMARKS:<br>
-        {{ $report->notes }}
-    </div>
-    
+    <p style="margin-bottom:0px;">Tiempos muertos:</p>
+    @foreach ($report->machines as $machine)
+        <table class="tblStyle" style="float: left;width: 200px;margin-right:10px;margin-bottom:10px;text-align:center;">
+            <tr>
+                <td style="width:100px;">{{ $machine->serial }}</td>
+                <td>{{ $machine->pivot->dt }}</td>
+            </tr>
+        </table>
+    @endforeach
+    <div style="clear: both;"></div>
+        
     <div style="position: absolute; bottom: 0;width:100%;">
-        <div class="defaultBorder" style="float: left;width: 48%;height:100px;">
+        @php 
+            $signatureNumber = !empty($report->signature_client_name_2) ? 3 : 2;
+            $widthPercentage = 92 / $signatureNumber;
+            $widthcss = $widthPercentage . "%";
+        @endphp
+        <div class="defaultBorder" style="float: left;width: {{ $widthcss }};height:100px;margin:0px 10px;text-align:center;">
             PERFOMED BY:
             <div style="width:100%;text-align:center;margin-top:70px;">{{ $report->user->nombre }} {{ $report->user->apellido_paterno }} {{ $report->user->apellido_materno }}</div>
         </div>
 
-        <div class="defaultBorder" style="float: right;width: 48%;height:100px;">
-            CUSTOMER SIGNATURE:
+        <div class="defaultBorder" style="float: left;width: {{ $widthcss }};height:100px;margin:0px 10px;text-align:center;">
+            OPERADOR {{ $report->machines[0]->serial }}:
             <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name_1) ? $report->branch->branchManagers[0]->name : $report->signature_client_name_1 }}</div>
         </div>
+        
+        @if($signatureNumber === 3)
+        <div class="defaultBorder" style="float: left;width: {{ $widthcss }};height:100px;margin:0px 10px;text-align:center;">
+            OPERADOR {{ $report->machines[1]->serial }}:
+            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name_2) ? $report->branch->branchManagers[0]->name : $report->signature_client_name_2 }}</div>
+        </div>
+        @endif
         <div style="clear: both;"></div>
     </div>
 </body>

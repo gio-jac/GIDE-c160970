@@ -231,7 +231,7 @@ class ReportController extends Controller
             $machine->pivot->failure_type = FailureType::findOrFail($machine->pivot->failure_type_id);
         }
         $catalogCodes = Code::where('is_active', 1)->get();
-        
+        //return response()->json($report);
         $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';
         $pdf = Pdf::loadView($view, ['catalogCodes' => $catalogCodes, 'report' => $report]);
 

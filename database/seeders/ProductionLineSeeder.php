@@ -13,6 +13,8 @@ class ProductionLineSeeder extends Seeder
      */
     public function run(): void
     {
-        ProductionLine::create(['name'=> 'TEST PRODUCTION LINE 1']);
+        ProductionLine::create(['name'=> 'Piso 1']);
+        ProductionLine::create(['name'=> 'Planta baja']);
+        ProductionLine::create(['name'=> 'GDL']);
     }
 }
