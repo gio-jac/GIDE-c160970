@@ -8,7 +8,7 @@
                     <Link href="/" class="main-logo flex items-center shrink-0">
                         <img
                             class="w-40 ml-[5px] flex-none"
-                            src="/assets/images/icon/Creating Confidence.svg"
+                            src="/assets/images/icon/GD_Logo_BWM_pos_600.png"
                             alt=""
                         />
                     </Link>

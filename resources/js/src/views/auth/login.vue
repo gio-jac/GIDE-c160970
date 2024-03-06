@@ -14,7 +14,7 @@
                         <div class="absolute top-6 start-6">
                             <img
                                 class="w-40 ltr:-ml-1 rtl:-mr-1 inline"
-                                src="/assets/images/icon/Creating Confidence.svg"
+                                src="/assets/images/icon/GD_Logo_BWM_pos_600.png"
                                 alt=""
                             />
                         </div>

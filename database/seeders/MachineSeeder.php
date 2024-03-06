@@ -37,12 +37,12 @@ class MachineSeeder extends Seeder
         Machine::create(['serial' => 'M01000214', 'client_id' => 3, 'machine_model_id' => 31]);
         Machine::create(['serial' => 'M01000315', 'client_id' => 3, 'machine_model_id' => 31]);
         Machine::create(['serial' => 'M01000316', 'client_id' => 3, 'machine_model_id' => 31]);
-        Machine::create(['serial' => 'X01000009', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 1]);
-        Machine::create(['serial' => 'X01000011', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 1]);
-        Machine::create(['serial' => 'X01000027', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 1]);
-        Machine::create(['serial' => 'X01000039', 'client_id' => 3, 'machine_model_id' => 38]);
-        Machine::create(['serial' => 'X01000061', 'client_id' => 3, 'machine_model_id' => 38]);
-        Machine::create(['serial' => 'X01000062', 'client_id' => 3, 'machine_model_id' => 38]);
+        Machine::create(['serial' => 'X01000009', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 3]);
+        Machine::create(['serial' => 'X01000011', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 3]);
+        Machine::create(['serial' => 'X01000027', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 2]);
+        Machine::create(['serial' => 'X01000039', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 2]);
+        Machine::create(['serial' => 'X01000061', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 1]);
+        Machine::create(['serial' => 'X01000062', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 1]);
         Machine::create(['serial' => '10020CV001912', 'client_id' => 4, 'machine_model_id' => 10]);
         Machine::create(['serial' => '10020CV001930', 'client_id' => 4, 'machine_model_id' => 10]);
         Machine::create(['serial' => '10020CV001932', 'client_id' => 4, 'machine_model_id' => 10]);
