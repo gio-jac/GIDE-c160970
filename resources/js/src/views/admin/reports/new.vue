@@ -1528,20 +1528,17 @@ function selectPartChange(searchQuery, id) {
     }
 
     if (timeoutId.value) clearTimeout(timeoutId.value);
-
     timeoutId.value = setTimeout(() => {
         fetch("/parts/autocomplete", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute("content"),
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': page.props.csrf
+                // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({ query: searchQuery }),
         })
-            .then((response) => response.json())
+            .then((response) => response.json() )
             .then((data) => {
                 catalogParts.value = data;
             })
