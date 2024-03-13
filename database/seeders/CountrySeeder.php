@@ -13,10 +13,10 @@ class CountrySeeder extends Seeder
      */
     public function run(): void
     {
-        Country::create(['name' => "Brasil"]);
-        Country::create(['name' => "Mexico"]);
-        Country::create(['name' => "Chile"]);
-        Country::create(['name' => "Colombia"]);
-        Country::create(['name' => "Jamaica"]);
+        Country::create(['name' => "Brasil", 'code' => 'BR']);
+        Country::create(['name' => "Mexico", 'code' => 'MX']);
+        Country::create(['name' => "Chile", 'code' => 'CL']);
+        Country::create(['name' => "Colombia", 'code' => 'CO']);
+        Country::create(['name' => "Jamaica", 'code' => 'JM']);
     }
 }

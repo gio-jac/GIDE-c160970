@@ -48,7 +48,7 @@
             </td>
             <td style="width:50%;text-align: center;">
                 <p style="font-weight: normal;">REPORT ID:
-                    {{ $report->id }}
+                    {{ $report->complete_id }}
                 </p>
             </td>
         </tr>

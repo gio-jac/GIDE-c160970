@@ -42,7 +42,7 @@
             <td style="width:70%;text-align: left;">
                 <p style="font-weight: normal;font-size:15px;">SERVICE REPORT</p>
                 <p style="font-weight: normal;">REPORT ID:
-                    {{ $report->id }}
+                    {{ $report->complete_id }}
                 </p>
             </td>
             <td style="width:30%;">

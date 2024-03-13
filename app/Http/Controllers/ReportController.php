@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\Part;
+use App\Models\Branch;
 use App\Models\Code;
 use App\Models\User;
 use App\Models\Status;
@@ -82,54 +82,72 @@ class ReportController extends Controller
             $request->merge(['user_id' => $userAuth->id]);
         }
 
+        $branch = Branch::with(['city.country','client'])->findOrFail($request['branch_id']);
+        $codigoPais = $branch->city->country->code;
         
-            $report = ServiceReport::create($request->validate([
-                'user_id' => ['required'],
-                'shift_id' => ['required'],
-                'pieces' => ['required'],
-                'sogd' => ['required'],
-                'time_on' => ['required'],
-                'travel_time' => ['required'],
-                'report_type_id' => ['required'],
-                'branch_id' => ['required'],
-                'branch_manager_id' => ['required'],
-                'reported_error' => ['required'],
-                'code_id' => ['required'],
-                'actions_taken' => [],
-                'reported' => ['required'],
-                'arrival' => [],
-                'finished' => [],
-                'departure' => [],
-                'status_id' => ['required'],
-                'signature_client_name_1' => [],
-                'signature_client_name_2' => [],
-                'is_tested' => ['required'],
-                'notes' => [],
-            ]));
+        $cliente = $branch->client;
+        $totalReports = $cliente->branches->sum(function ($branch) {
+            return $branch->reports->count();
+        });
+        $totalReports = sprintf("%05d", $totalReports + 1);
 
-            //machines: [] as Array<any>,
-            foreach($request->all()['machines'] as $machine) {
-                $report->machines()->attach($machine["machine_id"],[
-                    "module_id" => $machine["module_id"],
-                    "failure_id" => $machine["failure_id"],
-                    "failure_type_id" => $machine["failure_type_id"],
-                    "transport_time_1" => $machine["transport_time_1"],
-                    "transport_time_2" => $machine["transport_time_2"],
-                    "transport_1" => $machine["transport_1"] ?? 0,
-                    "transport_2" => $machine["transport_2"] ?? 0,
-                    "dt" => $machine["dt"],
-                ]);
-            }
-            //$report->machines()->createMany($dataMachines);
+        $fechaActual = date('Y-m-d');
 
-            //service_parts: [],
-            $partsArray = $request->all()['service_parts'];
+        $nombreCliente = str_replace(' ','-',strtoupper($cliente->name));
 
-            $dataParts = [];
-            foreach($partsArray as $part) {
-                $dataParts[] = ["part_id" => $part["id"], "quantity" => empty($part["quantity"]) ? 0 : $part["quantity"]];
-            }
-            $report->parts()->createMany($dataParts);
+        $machineModel = Machine::with('machine_model')->findOrFail($request['machines'][0]['machine_id'])->machine_model->model;
+        $machineModel = str_replace(' ','-',strtoupper($machineModel));
+
+        $completeId = $codigoPais."-".$totalReports."-".$fechaActual."-".$nombreCliente."-".$machineModel;
+        $request->merge(['complete_id' => $completeId]);
+        $report = ServiceReport::create($request->validate([
+            'user_id' => ['required'],
+            'complete_id' => ['required'],
+            'shift_id' => ['required'],
+            'pieces' => ['required'],
+            'sogd' => ['required'],
+            'time_on' => ['required'],
+            'travel_time' => ['required'],
+            'report_type_id' => ['required'],
+            'branch_id' => ['required'],
+            'branch_manager_id' => ['required'],
+            'reported_error' => ['required'],
+            'code_id' => ['required'],
+            'actions_taken' => [],
+            'reported' => ['required'],
+            'arrival' => [],
+            'finished' => [],
+            'departure' => [],
+            'status_id' => ['required'],
+            'signature_client_name_1' => [],
+            'signature_client_name_2' => [],
+            'is_tested' => ['required'],
+            'notes' => [],
+        ]));
+
+        //machines: [] as Array<any>,
+        foreach($request->all()['machines'] as $machine) {
+            $report->machines()->attach($machine["machine_id"],[
+                "module_id" => $machine["module_id"],
+                "failure_id" => $machine["failure_id"],
+                "failure_type_id" => $machine["failure_type_id"],
+                "transport_time_1" => $machine["transport_time_1"],
+                "transport_time_2" => $machine["transport_time_2"],
+                "transport_1" => $machine["transport_1"] ?? 0,
+                "transport_2" => $machine["transport_2"] ?? 0,
+                "dt" => $machine["dt"],
+            ]);
+        }
+        //$report->machines()->createMany($dataMachines);
+
+        //service_parts: [],
+        $partsArray = $request->all()['service_parts'];
+
+        $dataParts = [];
+        foreach($partsArray as $part) {
+            $dataParts[] = ["part_id" => $part["id"], "quantity" => empty($part["quantity"]) ? 0 : $part["quantity"]];
+        }
+        $report->parts()->createMany($dataParts);
             
         
         return to_route('reports.index');
@@ -235,6 +253,6 @@ class ReportController extends Controller
         $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';
         $pdf = Pdf::loadView($view, ['catalogCodes' => $catalogCodes, 'report' => $report]);
 
-        return $pdf->download('invoice.pdf');
+        return $pdf->download($report->complete_id.'.pdf');
     }
 }
