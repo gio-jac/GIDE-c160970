@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('service_reports', function (Blueprint $table) {
             $table->id();
+            $table->string('complete_id')->unique();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('shift_id');
             $table->string('pieces');
