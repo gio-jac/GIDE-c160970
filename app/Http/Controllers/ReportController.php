@@ -78,27 +78,20 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         $userAuth = Auth::user();
-        if($userAuth->user_type_id === 2){
-            $request->merge(['user_id' => $userAuth->id]);
-        }
+        $request->merge($userAuth->user_type_id === 2 ? ['user_id' => $userAuth->id] : []);
 
-        $branch = Branch::with(['city.country','client'])->findOrFail($request['branch_id']);
-        $codigoPais = $branch->city->country->code;
+        $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($request['branch_id']);
         
-        $cliente = $branch->client;
-        $totalReports = $cliente->branches->sum(function ($branch) {
-            return $branch->reports->count();
-        });
-        $totalReports = sprintf("%05d", $totalReports + 1);
-
-        $fechaActual = date('Y-m-d');
-
-        $nombreCliente = str_replace(' ','-',strtoupper($cliente->name));
-
-        $machineModel = Machine::with('machine_model')->findOrFail($request['machines'][0]['machine_id'])->machine_model->model;
-        $machineModel = str_replace(' ','-',strtoupper($machineModel));
-
-        $completeId = $codigoPais."-".$totalReports."-".$fechaActual."-".$nombreCliente."-".$machineModel;
+        $totalReports = sprintf("%05d", $branch->client->branches->sum(fn($b) => $b->reports->count()) + 1);
+        $currentDate = now()->toDateString();
+        
+        $completeId = collect([
+            $branch->city->country->code,
+            $totalReports,
+            $currentDate,
+            str_replace(' ', '-', strtoupper($branch->client->name)),
+            str_replace(' ', '-', strtoupper(Machine::findOrFail($request['machines'][0]['machine_id'])->machine_model->model))
+        ])->implode('-');
         $request->merge(['complete_id' => $completeId]);
         $report = ServiceReport::create($request->validate([
             'user_id' => ['required'],
