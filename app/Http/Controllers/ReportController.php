@@ -209,7 +209,36 @@ class ReportController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $userAuth = Auth::user();
+        $request->merge($userAuth->user_type_id === 2 ? ['user_id' => $userAuth->id] : []);
+        $report = ServiceReport::findOrFail($id);
+
+        $report->update($request->validate([
+            'user_id' => ['required'],
+            'shift_id' => ['required'],
+            'pieces' => ['required'],
+            'sogd' => ['required'],
+            'time_on' => ['required'],
+            'travel_time' => ['required'],
+            'report_type_id' => ['required'],
+            'branch_id' => ['required'],
+            'branch_manager_id' => ['required'],
+            'reported_error' => ['required'],
+            'code_id' => ['required'],
+            'actions_taken' => [],
+            'reported' => ['required'],
+            'arrival' => [],
+            'finished' => [],
+            'departure' => [],
+            'status_id' => ['required'],
+            'signature_client_name_1' => [],
+            'signature_client_name_2' => [],
+            'is_tested' => ['required'],
+            'notes' => [],
+        ]));
+
+
+        return to_route('reports.edit', ['report' => $report->id]);
     }
 
     /**
