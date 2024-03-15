@@ -81,17 +81,17 @@ class ReportController extends Controller
         $request->merge($userAuth->user_type_id === 2 ? ['user_id' => $userAuth->id] : []);
 
         $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($request['branch_id']);
-        
-        $totalReports = sprintf("%05d", $branch->client->branches->sum(fn($b) => $b->reports->count()) + 1);
+
+        $nextId = ServiceReport::max('id') + 1;
         $currentDate = now()->toDateString();
-        
-        $completeId = collect([
+
+        $completeId = implode('-', [
             $branch->city->country->code,
-            $totalReports,
+            $nextId,
             $currentDate,
             str_replace(' ', '-', strtoupper($branch->client->name)),
             str_replace(' ', '-', strtoupper(Machine::findOrFail($request['machines'][0]['machine_id'])->machine_model->model))
-        ])->implode('-');
+        ]);
         $request->merge(['complete_id' => $completeId]);
         $report = ServiceReport::create($request->validate([
             'user_id' => ['required'],

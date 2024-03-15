@@ -1108,6 +1108,7 @@
                 </div>
             </div>
             <div class="xl:w-96 w-full xl:mt-0 mt-6">
+                <!--
                 <div
                     class="panel mb-5"
                     v-if="user.type === 2 && props.latestReports.length > 0"
@@ -1126,7 +1127,7 @@
                     <div class="w-full text-center mt-8">
                         <Link href="/reports">Show all</Link>
                     </div>
-                </div>
+                </div>-->
                 <div class="panel sticky top-[75px] left-0">
                     <div
                         class="grid xl:grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4"
@@ -1164,7 +1165,7 @@
                             </svg>
                             Save Report
                         </button>
-
+                        <!--
                         <button type="button" class="btn btn-info w-full gap-2">
                             <svg
                                 width="24"
@@ -1189,7 +1190,7 @@
                                 ></path>
                             </svg>
                             Close Report
-                        </button>
+                        </button>-->
                         <!--
                         <router-link to="/apps/invoice/preview" class="btn btn-primary w-full gap-2">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0">
