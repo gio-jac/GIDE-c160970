@@ -1482,7 +1482,7 @@ function submit() {
     if (form.selectedContact)
         postForm.branch_manager_id = form.selectedContact.id;
 
-    console.log(postForm);
-    //router.post("/reports", postForm);
+    //console.log(props.report.id);
+    router.put(`/reports/${props.report.id}`, postForm);
 }
 </script>
