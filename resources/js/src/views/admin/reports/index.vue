@@ -57,13 +57,16 @@
                         nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                     >
                         <template #id="data">
-                            {{ data.value.id.toString().padStart(6, '0') }}
+                            {{ data.value.id }}
                         </template>
-                        <template #machines="data">
-                            {{ data.value.machines.length }}
+                        <template #complete_id="data">
+                            {{ data.value.complete_id }}
                         </template>
                         <template #status="data">
                             {{ data.value.status.status }}
+                        </template>
+                        <template #created_at="data">
+                            {{ formatDate(data.value.created_at) }}
                         </template>
                         <template #is_active="data">
                             <div class="flex items-center font-semibold">
@@ -224,8 +227,9 @@ const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([
     { field: "id", title: "ID" },
-    { field: "machines", title: "Machines #" },
+    { field: "complete_id", title: "File Name" },
     { field: "status", title: "Status" },
+    { field: "created_at", title: "Creation Date" },
     {
         field: "actions",
         title: "Actions",
@@ -260,6 +264,11 @@ const tableOption = ref({
         down: "sort-icon-desc",
     },
 });
+
+const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString('es', options);
+}
 
 const deleteRow = (item: any = null) => {
     if (confirm("Are you sure want to delete selected row ?")) {
