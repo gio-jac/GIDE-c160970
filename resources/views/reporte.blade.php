@@ -41,7 +41,10 @@
         <tr>
             <td style="width:70%;text-align: left;">
                 <p style="font-weight: normal;font-size:15px;">SERVICE REPORT</p>
-                <p style="font-weight: normal;">REPORT ID:
+                <p style="font-weight: normal;margin:0;">REPORT ID:
+                    {{ $report->id }}
+                </p>
+                <p style="font-weight: normal;margin-top:0;">FILE NAME:
                     {{ $report->complete_id }}
                 </p>
             </td>
