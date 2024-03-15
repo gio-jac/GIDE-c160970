@@ -28,7 +28,7 @@ class ReportController extends Controller
         if($userAuth->user_type_id === 1){
             $reports = ServiceReport::with(['machines.machine_model','status'])->get();
         }else{
-            $reports = ServiceReport::where('user_id', $userAuth->id)->with(['machine.machine_model','status'])->get();
+            $reports = ServiceReport::where('user_id', $userAuth->id)->with(['machines.machine_model','status'])->get();
         }
         
         return Inertia::render('admin/reports/index', [
@@ -45,9 +45,9 @@ class ReportController extends Controller
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
         $catalogShifts = Shift::where('is_active', 1)->get();
-        $catalogModule = Module::where('is_active', 1)->get();
-        $catalogFailures = Failure::where('is_active', 1)->get();
-        $catalogTypes = FailureType::where('is_active', 1)->get();
+        $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
+        $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
+        $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
         $catalogMachines = Machine::where('is_active', 1)->with([
             'machine_model.model_segment',
             'client',

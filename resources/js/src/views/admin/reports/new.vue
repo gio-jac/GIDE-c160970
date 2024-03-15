@@ -1449,8 +1449,8 @@ const removeItem = (item: any = null) => {
 };
 
 const addNewPart = () => {
-    console.log(form.selectedPart);
-    postForm.service_parts.push(form.selectedPart);
+    if(form.selectedPart)
+        postForm.service_parts.push(form.selectedPart);
 };
 
 const preloadingTime: any = ref({

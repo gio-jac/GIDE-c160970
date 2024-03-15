@@ -25,6 +25,13 @@ use App\Http\Controllers\ExpensesController;
 */
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        $user = Auth::user();
+        return $user->user_type_id == 1
+            ? redirect()->route('users.index')
+            : redirect()->route('reports.index');
+    }
+
     return Inertia::render('auth/login');
 })->name('index');
 
@@ -32,7 +39,7 @@ Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
 
 Route::get('/dashboard', function () {
-    return Inertia::render('apps/invoice/list');
+    //return Inertia::render('apps/invoice/list');
 });
 
 Route::middleware('auth')->group(function () {

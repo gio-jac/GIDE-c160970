@@ -20,7 +20,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials + ['is_active' => true])) {
             $request->session()->regenerate();
  
-            return to_route('users.index');
+            return to_route('index');
         }
 
         return back()->withErrors([
