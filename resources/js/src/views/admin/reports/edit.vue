@@ -1113,15 +1113,14 @@
                     v-if="user.type === 2 && props.latestReports.length > 0"
                 >
                     <div class="text-lg">Latest Reports</div>
-                    <div class="flex flex-wrap">
+                    <div class="flex flex-wrap justify-evenly text-center">
                         <Link
                             v-for="(report, index) in props.latestReports"
-                            class="my-1 hover:text-sky-400"
+                            class="btn btn-outline-primary my-2"
                             :href="`/reports/${report.id}/edit`"
                             :key="index"
                         >
-                            {{ report.id }} - {{ report.machine.serial }} -
-                            {{ report.machine.data_client.client.name }}
+                            {{ report.id.toString().padStart(6, '0') }}
                         </Link>
                     </div>
                     <div class="w-full text-center mt-8">

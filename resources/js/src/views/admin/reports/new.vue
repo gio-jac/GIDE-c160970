@@ -1109,7 +1109,7 @@
                     </div>
                 </div>
             </div>
-            <div class="xl:w-96 w-full xl:mt-0 mt-6">
+            <div class="xl:w-96 w-full xl:mt-0 mt-6"><!--
                 <div class="panel mb-5" v-if="user.type === 2">
                     <div class="text-lg">Active reports</div>
                     <div class="flex flex-wrap justify-evenly text-center">
@@ -1177,7 +1177,7 @@
                     <div class="w-full text-center mt-8">
                         <a href="#">Show all</a>
                     </div>
-                </div>
+                </div>-->
                 <div class="panel sticky top-[75px] left-0">
                     <div
                         class="grid xl:grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4"

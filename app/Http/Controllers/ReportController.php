@@ -143,7 +143,7 @@ class ReportController extends Controller
         $report->parts()->createMany($dataParts);
             
         
-        return to_route('reports.index');
+        return to_route('reports.edit', ['report' => $report->id]);
     }
 
     /**
@@ -168,7 +168,7 @@ class ReportController extends Controller
             'parts.part',
             'shift',
         ])->findOrFail($id);
-        $latestReports = ServiceReport::where('user_id', Auth::user()->id)->with(['machine','machine.data_client','machine.data_client.client'])->latest()->take(5)->get();
+        $latestReports = ServiceReport::where('user_id', Auth::user()->id)->latest()->take(5)->get();
 
         //$catalogParts = Part::where('is_active', 1)->get();
         $catalogParts = [];
