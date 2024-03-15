@@ -659,7 +659,7 @@
                                             </span>
                                         </div>
                                     </Link>
-                                </li>
+                                </li><!--
                                 <li class="nav-item">
                                     <Link
                                         href="/reports"
@@ -731,7 +731,7 @@
                                             </span>
                                         </div>
                                     </Link>
-                                </li>
+                                </li>-->
                             </ul>
                         </li>
                     </ul>
