@@ -56,8 +56,8 @@
                         previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                         nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                     >
-                        <template #complete_id="data">
-                            {{ data.value.complete_id }}
+                        <template #id="data">
+                            {{ data.value.id.toString().padStart(6, '0') }}
                         </template>
                         <template #machines="data">
                             {{ data.value.machines.length }}
@@ -223,7 +223,7 @@ console.log(props.reports);
 const datatable: any = ref(null);
 const search = ref("");
 const cols = ref([
-    { field: "complete_id", title: "ID" },
+    { field: "id", title: "ID" },
     { field: "machines", title: "Machines #" },
     { field: "status", title: "Status" },
     {

@@ -662,7 +662,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <Link
-                                        href="/apps/chat"
+                                        href="/reports"
                                         class="group"
                                         @click="toggleMobileMenu"
                                     >
@@ -698,7 +698,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <Link
-                                        href="/apps/chat"
+                                        href="/reports"
                                         class="group"
                                         @click="toggleMobileMenu"
                                     >
