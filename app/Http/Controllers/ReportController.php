@@ -236,6 +236,14 @@ class ReportController extends Controller
             'notes' => [],
         ]));
 
+        $partsArray = $request->all()['service_parts'];
+
+        foreach($partsArray as $part) {
+            $report->parts()->updateOrCreate(
+                ['part_id' => $part['id']],
+                ['quantity' => empty($part['quantity']) ? 0 : $part['quantity']]
+            );
+        }
 
         return to_route('reports.edit', ['report' => $report->id]);
     }
