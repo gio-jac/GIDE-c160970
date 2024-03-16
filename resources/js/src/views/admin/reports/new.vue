@@ -8,8 +8,8 @@
                         <div class="flex items-center">
                             <label
                                 for="formMachine"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >Machine Serial</label
+                                class="w-[104px] text-right mb-0 mr-[10px]"
+                                >Machine Serial <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -28,6 +28,11 @@
                                 deselect-label=""
                             ></multiselect>
                         </div>
+                        <template v-if="errors.machines">
+                            <p class="text-danger mt-1 text-center">
+                                {{ errors.machines }}
+                            </p>
+                        </template>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4" v-if="user.type === 1">
@@ -35,8 +40,8 @@
                         <div class="flex items-center">
                             <label
                                 for="formUser"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >User</label
+                                class="w-[104px] text-right mb-0 mr-[10px]"
+                                >User <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -55,6 +60,11 @@
                                 deselect-label=""
                             ></multiselect>
                         </div>
+                        <template v-if="errors.user_id">
+                            <p class="text-danger mt-1 text-center">
+                                {{ errors.user_id }}
+                            </p>
+                        </template>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
@@ -62,8 +72,8 @@
                         <div class="flex items-center">
                             <label
                                 for="formShift"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >Shift</label
+                                class="w-[104px] text-right mb-0 mr-[10px]"
+                                >Shift <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -79,6 +89,11 @@
                                 deselect-label=""
                             ></multiselect>
                         </div>
+                        <template v-if="errors.shift_id">
+                            <p class="text-danger mt-1 text-center">
+                                {{ errors.shift_id }}
+                            </p>
+                        </template>
                     </div>
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
@@ -491,7 +506,7 @@
                         <div
                             class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6"
                         >
-                            <div class="text-lg">Branches</div>
+                            <div class="text-lg">Branches <span class="text-red-500">*</span></div>
                             <select
                                 id="formBranches"
                                 name="formBranches"
@@ -511,7 +526,13 @@
                                     {{ branch.address }}
                                 </option>
                             </select>
-                            <div class="text-lg">Contacts</div>
+
+                            <template v-if="errors.branch_id">
+                                <p class="text-danger mt-1 text-center">
+                                    {{ errors.branch_id }}
+                                </p>
+                            </template>
+                            <div class="text-lg">Contacts <span class="text-red-500">*</span></div>
                             <select
                                 id="formContacts"
                                 name="formContacts"
@@ -531,6 +552,11 @@
                                     {{ contact.name }}
                                 </option>
                             </select>
+                            <template v-if="errors.branch_manager_id">
+                                <p class="text-danger mt-1 text-center">
+                                    {{ errors.branch_manager_id }}
+                                </p>
+                            </template>
                             <div class="mt-4 flex items-center">
                                 <label
                                     for="formClient"
@@ -1109,7 +1135,8 @@
                     </div>
                 </div>
             </div>
-            <div class="xl:w-96 w-full xl:mt-0 mt-6"><!--
+            <div class="xl:w-96 w-full xl:mt-0 mt-6">
+                <!--
                 <div class="panel mb-5" v-if="user.type === 2">
                     <div class="text-lg">Active reports</div>
                     <div class="flex flex-wrap justify-evenly text-center">
@@ -1312,6 +1339,7 @@ defineOptions({
 });
 
 const props = defineProps({
+    errors: Object,
     catalogCodes: {
         type: Array,
         required: true,
@@ -1449,8 +1477,7 @@ const removeItem = (item: any = null) => {
 };
 
 const addNewPart = () => {
-    if(form.selectedPart)
-        postForm.service_parts.push(form.selectedPart);
+    if (form.selectedPart) postForm.service_parts.push(form.selectedPart);
 };
 
 const preloadingTime: any = ref({
@@ -1460,38 +1487,34 @@ const preloadingTime: any = ref({
     position: store.rtlClass === "rtl" ? "auto right" : "auto left",
 });
 
-watch(
-    () => form.selectedMachine,
-    (newVal) => {
-        if (newVal) {
-            console.log(newVal);
-            const newTotalMachine =
-                newVal.production_line?.machines.length || 1;
-            postForm.machines = Array.from(
-                { length: newTotalMachine },
-                (_, index) => ({
-                    machine_id:
-                        newTotalMachine === 1
-                            ? form.selectedMachine?.id
-                            : newVal.production_line?.machines[index].id,
-                    module_id: null,
-                    failure_id: null,
-                    failure_type_id: null,
-                    transport_time_1: null,
-                    transport_time_2: null,
-                    transport_1: null,
-                    transport_2: null,
-                    dt: null,
-                })
-            );
+const updateMachines = (selectedMachine) => {
+    if (!selectedMachine) return;
 
-            console.log(postForm.machines);
-            console.log(
-                `There are ${newTotalMachine} machines in production line`
-            );
-        }
-    }
-);
+    const totalMachines = selectedMachine.production_line?.machines.length || 1;
+
+    postForm.machines = Array.from({ length: totalMachines }, (_, index) => {
+        const machineId =
+            totalMachines === 1
+                ? selectedMachine.id
+                : selectedMachine.production_line.machines[index].id;
+
+        return {
+            machine_id: machineId,
+            module_id: null,
+            failure_id: null,
+            failure_type_id: null,
+            transport_time_1: null,
+            transport_time_2: null,
+            transport_1: null,
+            transport_2: null,
+            dt: null,
+        };
+    });
+
+    console.log(`There are ${totalMachines} machines in production line`);
+};
+
+watch(() => form.selectedMachine, updateMachines, { immediate: true });
 
 const postForm = reactive({
     user_id: null,
@@ -1532,13 +1555,13 @@ function selectPartChange(searchQuery, id) {
         fetch("/parts/autocomplete", {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': page.props.csrf
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": page.props.csrf,
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({ query: searchQuery }),
         })
-            .then((response) => response.json() )
+            .then((response) => response.json())
             .then((data) => {
                 catalogParts.value = data;
             })
