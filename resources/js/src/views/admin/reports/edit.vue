@@ -918,8 +918,9 @@
                                 >
 
                                 <multiselect
+                                    @search-change="selectPartChange"
                                     id="formReportParts"
-                                    :options="props.catalogParts"
+                                    :options="catalogParts"
                                     v-model="form.selectedPart"
                                     class="custom-multiselect flex-1"
                                     :searchable="true"
@@ -928,6 +929,7 @@
                                         ({ num_part, descripcion }) =>
                                             `${num_part} - ${descripcion}`
                                     "
+                                    :preserveSearch="true"
                                     selected-label=""
                                     select-label=""
                                     deselect-label=""
@@ -1256,7 +1258,7 @@ import Multiselect from "@suadelabs/vue3-multiselect";
 import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 import "flatpickr/dist/flatpickr.css";
 const store = useAppStore();
-
+const catalogParts = ref([]);
 const page = usePage();
 const user = computed(() => page.props.auth);
 
@@ -1471,6 +1473,35 @@ const postForm = reactive({
     machines: [] as Array<any>,
     service_parts: [],
 });
+
+let timeoutId = ref(null);
+function selectPartChange(searchQuery, id) {
+    catalogParts.value = [];
+    if (searchQuery.length <= 0) {
+        if (timeoutId.value) clearTimeout(timeoutId.value);
+        return;
+    }
+
+    if (timeoutId.value) clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(() => {
+        fetch("/parts/autocomplete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": page.props.csrf,
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({ query: searchQuery }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                catalogParts.value = data;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }, 1500);
+};
 
 function submit() {
     if (form.selectedUser) postForm.user_id = form.selectedUser.id;

@@ -1569,7 +1569,7 @@ function selectPartChange(searchQuery, id) {
                 console.error("Error:", error);
             });
     }, 1500);
-}
+};
 
 function submit() {
     if (form.selectedUser) postForm.user_id = form.selectedUser.id;
