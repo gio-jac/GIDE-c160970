@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('shift_id');
             $table->string('pieces')->nullable();
             $table->string('sogd')->nullable();
-            $table->decimal('time_on', 8, 2)->nullable();
+            $table->decimal('time_on', 8, 2)->default(0)->nullable();
             $table->string('travel_time')->nullable();
             $table->unsignedBigInteger('report_type_id')->nullable();
             $table->string('reported_error')->nullable();
