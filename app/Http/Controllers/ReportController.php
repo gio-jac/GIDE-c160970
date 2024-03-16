@@ -236,6 +236,24 @@ class ReportController extends Controller
             'notes' => [],
         ]));
 
+        $machines = $request->input('machines', []);
+
+        foreach ($machines as $machine) {
+            $pivotData = [
+                'module_id' => $machine['module_id'],
+                'failure_id' => $machine['failure_id'],
+                'failure_type_id' => $machine['failure_type_id'],
+                'transport_time_1' => $machine['transport_time_1'],
+                'transport_time_2' => $machine['transport_time_2'],
+                'transport_1' => $machine['transport_1'] ?? 0,
+                'transport_2' => $machine['transport_2'] ?? 0,
+                'dt' => $machine['dt'],
+            ];
+
+            $report->machines()->sync([$machine['machine_id'] => $pivotData], false);
+            $report->machines()->updateExistingPivot($machine['machine_id'], $pivotData);
+        }
+
         $partsArray = $request->all()['service_parts'];
 
         foreach($partsArray as $part) {
