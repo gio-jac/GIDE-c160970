@@ -79,9 +79,32 @@ class ReportController extends Controller
     {
         $userAuth = Auth::user();
         $request->merge($userAuth->user_type_id === 2 ? ['user_id' => $userAuth->id] : []);
-
+        $validatedData = $request->validate([
+            'user_id' => ['required'],
+            'shift_id' => ['required'],
+            'machines' => ['required', 'array', 'min:1'],
+            'pieces' => [],
+            'sogd' => [],
+            'time_on' => [],
+            'travel_time' => [],
+            'report_type_id' => [],
+            'branch_id' => ['required'],
+            'branch_manager_id' => ['required'],
+            'reported_error' => [],
+            'code_id' => [],
+            'actions_taken' => [],
+            'reported' => [],
+            'arrival' => [],
+            'finished' => [],
+            'departure' => [],
+            'status_id' => [],
+            'signature_client_name_1' => [],
+            'signature_client_name_2' => [],
+            'is_tested' => [],
+            'notes' => [],
+        ]);
         $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($request['branch_id']);
-
+        
         $nextId = ServiceReport::max('id') + 1;
         $currentDate = now()->toDateString();
 
@@ -92,32 +115,8 @@ class ReportController extends Controller
             str_replace(' ', '-', strtoupper($branch->client->name)),
             str_replace(' ', '-', strtoupper(Machine::findOrFail($request['machines'][0]['machine_id'])->machine_model->model))
         ]);
-        $request->merge(['complete_id' => $completeId]);
-        $report = ServiceReport::create($request->validate([
-            'user_id' => ['required'],
-            'complete_id' => ['required'],
-            'shift_id' => ['required'],
-            'pieces' => ['required'],
-            'sogd' => ['required'],
-            'time_on' => ['required'],
-            'travel_time' => ['required'],
-            'report_type_id' => ['required'],
-            'branch_id' => ['required'],
-            'branch_manager_id' => ['required'],
-            'reported_error' => ['required'],
-            'code_id' => ['required'],
-            'actions_taken' => [],
-            'reported' => ['required'],
-            'arrival' => [],
-            'finished' => [],
-            'departure' => [],
-            'status_id' => ['required'],
-            'signature_client_name_1' => [],
-            'signature_client_name_2' => [],
-            'is_tested' => ['required'],
-            'notes' => [],
-        ]));
-
+        $validatedData['complete_id'] = $completeId;
+        $report = ServiceReport::create($validatedData);
         //machines: [] as Array<any>,
         foreach($request->all()['machines'] as $machine) {
             $report->machines()->attach($machine["machine_id"],[
@@ -216,24 +215,24 @@ class ReportController extends Controller
         $report->update($request->validate([
             'user_id' => ['required'],
             'shift_id' => ['required'],
-            'pieces' => ['required'],
-            'sogd' => ['required'],
-            'time_on' => ['required'],
-            'travel_time' => ['required'],
-            'report_type_id' => ['required'],
+            'pieces' => [],
+            'sogd' => [],
+            'time_on' => [],
+            'travel_time' => [],
+            'report_type_id' => [],
             'branch_id' => ['required'],
             'branch_manager_id' => ['required'],
-            'reported_error' => ['required'],
-            'code_id' => ['required'],
+            'reported_error' => [],
+            'code_id' => [],
             'actions_taken' => [],
-            'reported' => ['required'],
+            'reported' => [],
             'arrival' => [],
             'finished' => [],
             'departure' => [],
-            'status_id' => ['required'],
+            'status_id' => [],
             'signature_client_name_1' => [],
             'signature_client_name_2' => [],
-            'is_tested' => ['required'],
+            'is_tested' => [],
             'notes' => [],
         ]));
 
@@ -266,9 +265,9 @@ class ReportController extends Controller
         ])->findOrFail($id);
         
         foreach($report->machines as &$machine){
-            $machine->pivot->module = Module::findOrFail($machine->pivot->module_id);
-            $machine->pivot->failure = Failure::findOrFail($machine->pivot->failure_id);
-            $machine->pivot->failure_type = FailureType::findOrFail($machine->pivot->failure_type_id);
+            $machine->pivot->module = Module::find($machine->pivot->module_id);
+            $machine->pivot->failure = Failure::find($machine->pivot->failure_id);
+            $machine->pivot->failure_type = FailureType::find($machine->pivot->failure_type_id);
         }
         $catalogCodes = Code::where('is_active', 1)->get();
         //return response()->json($report);

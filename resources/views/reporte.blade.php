@@ -118,15 +118,15 @@
             </td>
             <td>
                 MODULE:<br>
-                {{ $report->machines[0]->pivot->module->name }}
+                {{ $report->machines[0]->pivot->module->name ?? "N/A" }}
             </td>
             <td>
                 FAILURE:<br>
-                {{ $report->machines[0]->pivot->failure->name }}
+                {{ $report->machines[0]->pivot->failure->name ?? "N/A" }}
             </td>
             <td>
                 FAULT SYMPTOM:<br>
-                {{ $report->machines[0]->pivot->failure_type->name }}
+                {{ $report->machines[0]->pivot->failure_type->name ?? "N/A" }}
             </td>
         </tr>
     </table>
@@ -191,6 +191,7 @@
             @php
                 if (!function_exists('formatDateTime')) {
                     function formatDateTime($dateTime) {
+                        if(empty($dateTime)) return ["N/A","N/A"];
                         $dateTimeParts = explode(" ", $dateTime);
                         $dateParts = explode("-", $dateTimeParts[0]);
                         $dateTimeParts[0] = $dateParts[2].'-'.$dateParts[1].'-'.$dateParts[0];

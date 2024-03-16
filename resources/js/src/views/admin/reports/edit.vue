@@ -8,8 +8,8 @@
                         <div class="flex items-center">
                             <label
                                 for="formMachine"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >Machine Serial</label
+                                class="w-[104px] text-right mb-0 mr-[10px]"
+                                >Machine Serial <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -35,8 +35,8 @@
                         <div class="flex items-center">
                             <label
                                 for="formUser"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >User</label
+                                class="w-[104px] text-right mb-0 mr-[10px]"
+                                >User <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -62,8 +62,8 @@
                         <div class="flex items-center">
                             <label
                                 for="formShift"
-                                class="w-[100px] text-right mb-0 mr-[10px]"
-                                >Shift</label
+                                class="w-[104px] text-right mb-0 mr-[10px]"
+                                >Shift <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -491,7 +491,7 @@
                         <div
                             class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6"
                         >
-                            <div class="text-lg">Branches</div>
+                            <div class="text-lg">Branches <span class="text-red-500">*</span></div>
                             <select
                                 id="formBranches"
                                 name="formBranches"
@@ -511,7 +511,7 @@
                                     {{ branch.address }}
                                 </option>
                             </select>
-                            <div class="text-lg">Contacts</div>
+                            <div class="text-lg">Contacts <span class="text-red-500">*</span></div>
                             <select
                                 id="formContacts"
                                 name="formContacts"
