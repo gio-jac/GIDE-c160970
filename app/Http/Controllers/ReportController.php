@@ -174,9 +174,9 @@ class ReportController extends Controller
         $catalogCodes = Code::where('is_active', 1)->get();
         $catalogUsers = User::where('is_active', 1)->get();
         $catalogShifts = Shift::where('is_active', 1)->get();
-        $catalogModule = Module::where('is_active', 1)->get();
-        $catalogFailures = Failure::where('is_active', 1)->get();
-        $catalogTypes = FailureType::where('is_active', 1)->get();
+        $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
+        $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
+        $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
         $catalogMachines = Machine::where('is_active', 1)->with([
             'machine_model.model_segment',
             'client',
