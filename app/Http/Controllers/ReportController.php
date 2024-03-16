@@ -26,9 +26,9 @@ class ReportController extends Controller
     {
         $userAuth = Auth::user();
         if($userAuth->user_type_id === 1){
-            $reports = ServiceReport::with(['machines.machine_model','status'])->get();
+            $reports = ServiceReport::with(['machines.machine_model','status', 'user'])->get();
         }else{
-            $reports = ServiceReport::where('user_id', $userAuth->id)->with(['machines.machine_model','status'])->get();
+            $reports = ServiceReport::where('user_id', $userAuth->id)->with(['machines.machine_model','status', 'user'])->get();
         }
         
         return Inertia::render('admin/reports/index', [

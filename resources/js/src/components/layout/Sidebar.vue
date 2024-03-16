@@ -522,14 +522,15 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="/reports/failures"
+                                                                href="#"
+                                                                class="text-gray-300 cursor-no-drop"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/reports/failures'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Failures</Link
+                                                                >Failures (N/A)</Link
                                                             >
                                                         </li>
                                                         <li
@@ -552,45 +553,43 @@
                                                 </vue-collapsible>
                                             </li>
                                             <li>
-                                                <a
+                                                <Link
                                                     href="#"
+                                                    class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Machines</a
+                                                    >Machines (N/A)</Link
                                                 >
                                             </li>
                                             <li>
-                                                <a
+                                                <Link
                                                     href="#"
+                                                    class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Models</a
+                                                    >Models (N/A)</Link
                                                 >
                                             </li>
                                             <li>
-                                                <a
+                                                <Link
                                                     href="#"
+                                                    class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Customers</a
+                                                    >Customers (N/A)</Link
                                                 >
                                             </li>
                                             <li>
-                                                <a
+                                                <Link
                                                     href="#"
+                                                    class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Regions</a
+                                                    >Regions (N/A)</Link
                                                 >
                                             </li>
                                             <li>
-                                                <a
+                                                <Link
                                                     href="#"
+                                                    class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Parts</a
-                                                >
-                                            </li>
-                                            <li>
-                                                <a
-                                                    href="#"
-                                                    @click="toggleMobileMenu"
-                                                    >Assignments</a
+                                                    >Assignments (N/A)</Link
                                                 >
                                             </li>
                                         </ul>
