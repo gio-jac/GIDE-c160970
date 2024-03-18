@@ -45,7 +45,7 @@
                         ></span>
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary !mt-6">Add</button>
+                <button type="submit" class="btn btn-primary !mt-6">Save</button>
             </form>
         </div>
     </div>
