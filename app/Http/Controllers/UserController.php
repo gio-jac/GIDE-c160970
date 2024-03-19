@@ -92,17 +92,28 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::findOrFail($id);
-        $user->update($request->validate([
-            'emp' => ['required', 'max:10','unique:users,emp,'.$id],
-            'email' => ['required','email', 'max:255','unique:users,email,'.$id],
+
+        $validatedData = $request->validate([
+            'emp' => ['required', 'max:10', 'unique:users,emp,' . $id],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $id],
             'nombre' => ['required', 'max:255'],
             'apellido_paterno' => ['required', 'max:255'],
             'apellido_materno' => ['required', 'max:255'],
             'telefono' => ['max:255'],
-            'user_type_id' => ['required','exists:user_types,id'],
-            'user_title_id' => ['required','exists:user_titles,id'],
+            'user_type_id' => ['required', 'exists:user_types,id'],
+            'user_title_id' => ['required', 'exists:user_titles,id'],
             'is_active' => ['required'],
-        ]));
+        ]);
+
+        if ($request->filled('password')) {
+            $validatedData['password'] = $request->validate([
+                'password' => ['required', 'max:255'],
+            ])['password'];
+            
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        }
+
+        $user->update($validatedData);
 
         return to_route('users.index');
     }

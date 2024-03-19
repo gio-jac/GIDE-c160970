@@ -103,6 +103,23 @@
                         </p>
                     </template>
                 </div>
+                <div :class="{ 'has-error': errors.password }">
+                    <label for="formPassword">Password</label>
+                    <input
+                        id="formPassword"
+                        type="password"
+                        placeholder="Enter Password"
+                        class="form-input"
+                        v-model="form.password"
+                    />
+                    <template v-if="errors.password">
+                        <p class="text-danger mt-1">
+                            {{ errors.password }}
+                        </p>
+                    </template>
+                    <p class="text-danger mt-1">Entering a new password will replace the current one.</p>
+                </div>
+                
                 <div :class="{ 'has-error': errors.user_type_id }">
                     <label for="formUserType">User Type</label>
                     <div>
@@ -192,6 +209,7 @@ const props = defineProps({
 const form = reactive({
     emp: props.user.emp,
     email: props.user.email,
+    password: null,
     nombre: props.user.nombre,
     apellido_paterno: props.user.apellido_paterno,
     apellido_materno: props.user.apellido_materno,

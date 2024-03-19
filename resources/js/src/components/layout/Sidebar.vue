@@ -246,13 +246,13 @@
                                 </li>
                                 <li class="nav-item">
                                     <Link
-                                        href="/parts"
+                                        href="#"
                                         :class="{
                                             active: $page.url.startsWith(
                                                 '/parts'
                                             ),
                                         }"
-                                        class="group"
+                                        class="group text-gray-300 cursor-no-drop"
                                         @click="toggleMobileMenu"
                                     >
                                         <div class="flex items-center">
@@ -278,9 +278,9 @@
                                             </svg>
 
                                             <span
-                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark text-gray-300 cursor-no-drop"
                                             >
-                                                Parts
+                                                Parts (N/A)
                                             </span>
                                         </div>
                                     </Link>
@@ -420,14 +420,15 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="/users/titles"
+                                                                href="#"
+                                                                class="text-gray-300 cursor-no-drop"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/users/titles'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Titles</Link
+                                                                >Titles (N/A)</Link
                                                             >
                                                         </li>
                                                         <li
@@ -436,14 +437,15 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="/users/types"
+                                                                href="#"
+                                                                class="text-gray-300 cursor-no-drop"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/users/types'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Types</Link
+                                                                >Types (N/A)</Link
                                                             >
                                                         </li>
                                                     </ul>
@@ -506,14 +508,15 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="/reports/codes"
+                                                                href="#"
+                                                                class="text-gray-300 cursor-no-drop"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/reports/codes'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Codes</Link
+                                                                >Codes (N/A)</Link
                                                             >
                                                         </li>
                                                         <li
@@ -539,14 +542,15 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="/reports/statuses"
+                                                                href="#"
+                                                                class="text-gray-300 cursor-no-drop"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/reports/statuses'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Status</Link
+                                                                >Status (N/A)</Link
                                                             >
                                                         </li>
                                                     </ul>
