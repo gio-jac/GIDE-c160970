@@ -13,6 +13,7 @@
                             >
 
                             <multiselect
+                            disabled
                                 id="formMachine"
                                 :options="props.catalogMachines"
                                 v-model="form.selectedMachine"
