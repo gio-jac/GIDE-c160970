@@ -1215,6 +1215,7 @@
                         <a
                             :href="`/reports/${props.report.id}/file`"
                             class="btn btn-secondary w-full gap-2"
+                            @click="showDownloadMessage"
                         >
                             <svg
                                 width="24"
@@ -1258,6 +1259,7 @@ import flatPickr from "vue-flatpickr-component";
 import Multiselect from "@suadelabs/vue3-multiselect";
 import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 import "flatpickr/dist/flatpickr.css";
+import Swal from 'sweetalert2';
 const store = useAppStore();
 const catalogParts = ref([]);
 const page = usePage();
@@ -1514,7 +1516,61 @@ function submit() {
     if (form.selectedContact)
         postForm.branch_manager_id = form.selectedContact.id;
 
-    //console.log(props.report.id);
-    router.put(`/reports/${props.report.id}`, postForm);
+    Swal.fire({
+        title: 'Processing...',
+        text: 'Please wait while the data is being updated.',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: 'sweet-alerts',
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    router.put(`/reports/${props.report.id}`, postForm, {
+        onSuccess: () => {
+            console.log("Exitoso");
+            Swal.close();
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                html: "The update has been completed successfully.",
+                customClass: 'sweet-alerts',
+            });
+        },
+        onError: (error) => {
+            console.log(error);
+            let errorMessages = '';
+
+            for (const key in error) {
+                const fieldName = key.replace('_id', '');
+                errorMessages += `<p>${error[key]}</p>`;
+            }
+            Swal.close();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: errorMessages,
+                customClass: 'sweet-alerts',
+            });
+        },
+        onFinish: () => {
+            
+        }
+    });
+}
+
+function showDownloadMessage() {
+    Swal.fire({
+        title: 'Generating PDF...',
+        text: 'Please wait while the PDF is being generated.',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: 'sweet-alerts',
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
 }
 </script>

@@ -1329,6 +1329,7 @@ import flatPickr from "vue-flatpickr-component";
 import Multiselect from "@suadelabs/vue3-multiselect";
 import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 import "flatpickr/dist/flatpickr.css";
+import Swal from 'sweetalert2';
 const store = useAppStore();
 
 const page = usePage();
@@ -1582,6 +1583,41 @@ function submit() {
         postForm.branch_manager_id = form.selectedContact.id;
 
     console.log(postForm);
-    router.post("/reports", postForm);
+
+    Swal.fire({
+        title: 'Processing...',
+        text: 'Please wait while the data is being added.',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: 'sweet-alerts',
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    router.post("/reports", postForm, {
+        onSuccess: () => {
+            console.log("Exitoso");
+            Swal.close();
+        },
+        onError: (error) => {
+            console.log(error);
+            let errorMessages = '';
+
+            for (const key in error) {
+                const fieldName = key.replace('_id', '');
+                errorMessages += `<p>${error[key]}</p>`;
+            }
+            Swal.close();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: errorMessages,
+                customClass: 'sweet-alerts',
+            });
+        },
+        onFinish: () => {
+            
+        }
+    });
 }
 </script>
