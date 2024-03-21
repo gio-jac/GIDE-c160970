@@ -98,9 +98,9 @@
         @foreach ($report->machines as $machines)
         <tr>
             <td>{{ $machines->serial }}</td>
-            <td>{{ $machines->pivot->module->name }}</td>
-            <td>{{ $machines->pivot->failure->name }}</td>
-            <td>{{ $machines->pivot->failure_type->name }}</td>
+            <td>{{ empty($machines->pivot->module->name) ? "N/A" : $machines->pivot->module->name }}</td>
+            <td>{{ empty($machines->pivot->failure->name) ? "N/A" : $machines->pivot->failure->name}}</td>
+            <td>{{ empty($machines->pivot->failure_type->name) ? "N/A" : $machines->pivot->failure_type->name}}</td>
         </tr>
         @endforeach
     </table>
@@ -115,6 +115,7 @@
         @php
             if (!function_exists('formatDateTime2')) {
                 function formatDateTime2($dateTime) {
+                    if(empty($dateTime)) return ["N/A","N/A"];
                     $dateTimeParts = explode(" ", $dateTime);
                     $dateParts = explode("-", $dateTimeParts[0]);
                     $months = array(1 => 'Ene', 2 => 'Feb', 3 => 'Mar', 4 => 'Abr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Ago', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dic');
