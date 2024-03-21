@@ -81,7 +81,7 @@
             </td>
             <td>
                 TRANSPORT:<br>
-                {{ $report->transport }}
+                {{ $report->machines[0]->pivot->transport_1 }}
             </td>
         </tr>
     </table>
