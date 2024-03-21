@@ -31,7 +31,7 @@ class UserController extends Controller
     public function create()
     {
         $catalogUserTypes = UserTypes::where('is_active', 1)->get();
-        $catalogUserTitles = UserTitles::where('is_active', 1)->get();
+        $catalogUserTitles = UserTitles::where('is_active', 1)->orderBy('titulo', 'asc')->get();
         return Inertia::render('admin/users/new',[
             'catalogUserTypes' => $catalogUserTypes,
             'catalogUserTitles' => $catalogUserTitles
