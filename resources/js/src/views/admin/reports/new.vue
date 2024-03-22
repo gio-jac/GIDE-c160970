@@ -872,20 +872,6 @@
                         <div class="lg:w-1/2 w-full">
                             <div class="mt-4 flex items-center">
                                 <label
-                                    for="formReportTimeFinished"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Finished</label
-                                >
-                                <flat-pickr
-                                    id="formReportTimeFinished"
-                                    name="formReportTimeFinished"
-                                    v-model="postForm.finished"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
                                     for="formReportTimeDeparture"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
                                     >Departure</label
@@ -894,6 +880,20 @@
                                     id="formReportTimeDeparture"
                                     name="formReportTimeDeparture"
                                     v-model="postForm.departure"
+                                    class="form-input flex-1"
+                                    :config="dateTime"
+                                ></flat-pickr>
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label
+                                    for="formReportTimeFinished"
+                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
+                                    >Finished</label
+                                >
+                                <flat-pickr
+                                    id="formReportTimeFinished"
+                                    name="formReportTimeFinished"
+                                    v-model="postForm.finished"
                                     class="form-input flex-1"
                                     :config="dateTime"
                                 ></flat-pickr>

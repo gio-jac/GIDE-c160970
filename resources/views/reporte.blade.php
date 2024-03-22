@@ -236,7 +236,7 @@
                 RETURN
             </td>
             <td class="defaultBorder">
-                {{ $report->dt }}
+                {{ $report->machines[0]->pivot->dt }}
             </td>
         </tr>
     </table>
