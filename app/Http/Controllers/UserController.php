@@ -78,7 +78,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $catalogUserTypes = UserTypes::where('is_active', 1)->get();
-        $catalogUserTitles = UserTitles::where('is_active', 1)->get();
+        $catalogUserTitles = UserTitles::where('is_active', 1)->orderBy('titulo', 'asc')->get();
         return Inertia::render('admin/users/edit',[
             'catalogUserTypes' => $catalogUserTypes,
             'catalogUserTitles' => $catalogUserTitles,
