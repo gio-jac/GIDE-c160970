@@ -493,25 +493,21 @@
                             class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6"
                         >
                             <div class="text-lg">Branches <span class="text-red-500">*</span></div>
-                            <select
+                            <multiselect
                                 id="formBranches"
-                                name="formBranches"
-                                class="form-select text-white-dark"
+                                :options="form.selectedMachine ? form.selectedMachine.client.branches : []"
                                 v-model="form.selectedBranch"
-                                required
-                            >
-                                <option :value="null">
-                                    Open this select menu
-                                </option>
-                                <option
-                                    v-for="branch in form.selectedMachine
-                                        ?.client.branches"
-                                    :key="branch.id"
-                                    :value="branch"
-                                >
-                                    {{ branch.address }}
-                                </option>
-                            </select>
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                :custom-label="
+                                    ({ address }) =>
+                                        `${address}`
+                                "
+                                placeholder="Select an option"
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
                             <div class="text-lg">Contacts <span class="text-red-500">*</span></div>
                             <select
                                 id="formContacts"
