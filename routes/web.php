@@ -55,6 +55,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('/reports', ReportController::class);
     Route::post('/parts/autocomplete', [PartController::class, 'autocomplete'])->name('parts.autocomplete');
     Route::resource('/expenses', ExpensesController::class);
+
+    Route::get('/heartbeat', function () {
+        // This will reset the session timeout
+        
+        
+        return;
+    });
 });
 
 
