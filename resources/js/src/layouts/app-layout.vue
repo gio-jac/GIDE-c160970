@@ -148,9 +148,20 @@ const onInactive = () => {
 
 const sendHeartbeat = () => {
     if (userIsActive.value) {
-        router.get("/heartbeat", undefined, {
-            onError: () => console.log("ERROR at reaching server"),
-        });
+        fetch("/heartbeat", {
+            method: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error al alcanzar el servidor");
+                }
+            })
+            .catch((error) => {
+                console.log("ERROR al alcanzar el servidor:", error);
+            });
     }
 };
 
