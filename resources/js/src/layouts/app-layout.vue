@@ -157,8 +157,7 @@ const sendHeartbeat = () => {
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Error al alcanzar el servidor");
-                } else
-                    console.log("HEARTBEAT");
+                }
             })
             .catch((error) => {
                 console.log("ERROR al alcanzar el servidor:", error);
