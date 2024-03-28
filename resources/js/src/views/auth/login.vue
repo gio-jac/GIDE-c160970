@@ -224,7 +224,7 @@ import { computed, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import appSetting from "@/app-setting";
 import { useAppStore } from "@/stores/index";
-import { router } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import { useMeta } from "@/composables/use-meta";
 import AuthLayout from "@/layouts/auth-layout.vue";
 import { Head } from '@inertiajs/vue3';
@@ -243,12 +243,12 @@ const currentFlag = computed(() => {
     return `/assets/images/flags/${i18n.locale.toUpperCase()}.svg`;
 });
 
-const form = reactive({
+const form = useForm({
     email: null,
     password: null,
 });
 
 function submit() {
-    router.post("/login", form);
+    form.post("/login");
 }
 </script>

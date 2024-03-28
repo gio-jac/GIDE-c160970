@@ -41,6 +41,7 @@
                             >
 
                             <multiselect
+                                :disabled="props.report.closed === 1"
                                 id="formUser"
                                 :options="catalogUsers"
                                 v-model="form.selectedUser"
@@ -68,6 +69,7 @@
                             >
 
                             <multiselect
+                                :disabled="props.report.closed === 1"
                                 id="formShift"
                                 :options="props.catalogShifts"
                                 v-model="form.selectedShift"
@@ -114,6 +116,7 @@
                                                 >Error</label
                                             >
                                             <select
+                                                :disabled="props.report.closed === 1"
                                                 :id="'formModule' + index"
                                                 :name="'formModule' + index"
                                                 class="form-select text-white-dark"
@@ -140,6 +143,7 @@
                                                 >Cause</label
                                             >
                                             <select
+                                                :disabled="props.report.closed === 1"
                                                 :id="'formFailures' + index"
                                                 :name="'formFailures' + index"
                                                 class="form-select text-white-dark"
@@ -166,6 +170,7 @@
                                                 >Solution</label
                                             >
                                             <select
+                                                :disabled="props.report.closed === 1"
                                                 :id="'formTypes' + index"
                                                 :name="'formTypes' + index"
                                                 class="form-select text-white-dark"
@@ -208,6 +213,7 @@
                                                             >Shift 1</label
                                                         >
                                                         <flat-pickr
+                                                            :disabled="props.report.closed === 1"
                                                             :id="
                                                                 'formShift1' +
                                                                 index
@@ -238,6 +244,7 @@
                                                             >Transport</label
                                                         >
                                                         <input
+                                                            :disabled="props.report.closed === 1"
                                                             :id="
                                                                 'formShiftTotal1' +
                                                                 index
@@ -269,6 +276,7 @@
                                                             >Shift 2</label
                                                         >
                                                         <flat-pickr
+                                                            :disabled="props.report.closed === 1"
                                                             :id="
                                                                 'formShift2' +
                                                                 index
@@ -299,6 +307,7 @@
                                                             >Transport</label
                                                         >
                                                         <input
+                                                            :disabled="props.report.closed === 1"
                                                             :id="
                                                                 'formShiftTotal2' +
                                                                 index
@@ -341,6 +350,7 @@
                                                 >DT (Min.)</label
                                             >
                                             <input
+                                                :disabled="props.report.closed === 1"
                                                 :id="'formReportDT' + index"
                                                 type="number"
                                                 v-model="
@@ -375,6 +385,7 @@
                                                 >Error</label
                                             >
                                             <select
+                                                :disabled="props.report.closed === 1"
                                                 id="formModule1"
                                                 name="formModule1"
                                                 class="form-select text-white-dark"
@@ -401,6 +412,7 @@
                                                 >Cause</label
                                             >
                                             <select
+                                                :disabled="props.report.closed === 1"
                                                 id="formFailures1"
                                                 name="formFailures1"
                                                 class="form-select text-white-dark"
@@ -427,6 +439,7 @@
                                                 >Solution</label
                                             >
                                             <select
+                                                :disabled="props.report.closed === 1"
                                                 id="formTypes1"
                                                 name="formTypes1"
                                                 class="form-select text-white-dark"
@@ -453,6 +466,7 @@
                                                 >Transport</label
                                             >
                                             <input
+                                                :disabled="props.report.closed === 1"
                                                 id="formShiftTotal11"
                                                 type="number"
                                                 v-model="
@@ -469,6 +483,7 @@
                                                 >DT (Min.)</label
                                             >
                                             <input
+                                                :disabled="props.report.closed === 1"
                                                 id="formReportDT1"
                                                 type="number"
                                                 v-model="
@@ -494,6 +509,7 @@
                         >
                             <div class="text-lg">Branches <span class="text-red-500">*</span></div>
                             <multiselect
+                                :disabled="props.report.closed === 1"
                                 id="formBranches"
                                 :options="form.selectedMachine ? form.selectedMachine.client.branches : []"
                                 v-model="form.selectedBranch"
@@ -510,6 +526,7 @@
                             ></multiselect>
                             <div class="text-lg">Contacts <span class="text-red-500">*</span></div>
                             <select
+                                :disabled="props.report.closed === 1"
                                 id="formContacts"
                                 name="formContacts"
                                 class="form-select text-white-dark"
@@ -663,6 +680,7 @@
                                     >Pieces</label
                                 >
                                 <input
+                                    :disabled="props.report.closed === 1"
                                     id="formReportPieces"
                                     type="text"
                                     v-model="postForm.pieces"
@@ -678,6 +696,7 @@
                                     >SO GD</label
                                 >
                                 <input
+                                    :disabled="props.report.closed === 1"
                                     id="formReportSOGD"
                                     type="text"
                                     v-model="postForm.sogd"
@@ -695,6 +714,7 @@
                                     >Machine ON</label
                                 >
                                 <input
+                                    :disabled="props.report.closed === 1"
                                     id="formReportOnTime"
                                     step="0.01"
                                     pattern="\d+(\.\d{1,2})?"
@@ -712,6 +732,7 @@
                                     >Travel time</label
                                 >
                                 <input
+                                    :disabled="props.report.closed === 1"
                                     id="formReportTravelTime"
                                     type="text"
                                     v-model="postForm.travel_time"
@@ -728,6 +749,7 @@
                                 >
 
                                 <select
+                                    :disabled="props.report.closed === 1"
                                     id="formReportType"
                                     name="formReportType"
                                     v-model="postForm.report_type_id"
@@ -747,6 +769,7 @@
                                     >Reported Error</label
                                 >
                                 <textarea
+                                    :disabled="props.report.closed === 1"
                                     id="formReportedError"
                                     name="formReportedError"
                                     rows="3"
@@ -768,6 +791,7 @@
                             class="inline-flex"
                         >
                             <input
+                                :disabled="props.report.closed === 1"
                                 type="radio"
                                 name="formReportCode"
                                 class="form-radio"
@@ -792,6 +816,7 @@
                                 >Actions Taken</label
                             >
                             <textarea
+                                :disabled="props.report.closed === 1"
                                 id="formReportActions"
                                 name="formReportActions"
                                 v-model="postForm.actions_taken"
@@ -818,6 +843,7 @@
                                     >Reported</label
                                 >
                                 <flat-pickr
+                                    :disabled="props.report.closed === 1"
                                     id="formReportReportedTime"
                                     name="formReportReportedTime"
                                     v-model="postForm.reported"
@@ -832,6 +858,7 @@
                                     >Arrival</label
                                 >
                                 <flat-pickr
+                                    :disabled="props.report.closed === 1"
                                     id="formReportTimeArrival"
                                     name="formReportTimeArrival"
                                     v-model="postForm.arrival"
@@ -848,6 +875,7 @@
                                     >Departure</label
                                 >
                                 <flat-pickr
+                                    :disabled="props.report.closed === 1"
                                     id="formReportTimeDeparture"
                                     name="formReportTimeDeparture"
                                     v-model="postForm.departure"
@@ -862,6 +890,7 @@
                                     >Finished</label
                                 >
                                 <flat-pickr
+                                    :disabled="props.report.closed === 1"
                                     id="formReportTimeFinished"
                                     name="formReportTimeFinished"
                                     v-model="postForm.finished"
@@ -877,6 +906,7 @@
                                 class="inline-flex"
                             >
                                 <input
+                                    :disabled="props.report.closed === 1"
                                     type="radio"
                                     name="formReportStatus"
                                     class="form-radio"
@@ -892,6 +922,7 @@
                             >
                                 <label class="inline-flex">
                                     <input
+                                        :disabled="props.report.closed === 1"
                                         type="checkbox"
                                         v-model="postForm.is_tested"
                                         class="form-checkbox rounded-full"
@@ -915,6 +946,7 @@
                                 >
 
                                 <multiselect
+                                    :disabled="props.report.closed === 1"
                                     @search-change="selectPartChange"
                                     id="formReportParts"
                                     :options="catalogParts"
@@ -932,6 +964,7 @@
                                     deselect-label=""
                                 ></multiselect>
                                 <button
+                                    :disabled="props.report.closed === 1"
                                     class="btn btn-secondary gap-2"
                                     @click="addNewPart"
                                 >
@@ -1000,6 +1033,7 @@
                                         </td>
                                         <td>
                                             <input
+                                                :disabled="props.report.closed === 1"
                                                 type="number"
                                                 class="form-input w-32"
                                                 placeholder="Quantity"
@@ -1010,6 +1044,7 @@
                                         </td>
                                         <td>
                                             <button
+                                                :disabled="props.report.closed === 1"
                                                 type="button"
                                                 @click="removeItem(item)"
                                             >
@@ -1050,6 +1085,7 @@
                     <div>
                         <label for="notes">Remarks</label>
                         <textarea
+                            :disabled="props.report.closed === 1"
                             id="notes"
                             name="notes"
                             class="form-textarea min-h-[130px]"
@@ -1071,6 +1107,7 @@
                                     >Customer Signature Name</label
                                 >
                                 <input
+                                    :disabled="props.report.closed === 1"
                                     id="formCustomerSignatureName1"
                                     type="text"
                                     v-model="postForm.signature_client_name_1"
@@ -1094,6 +1131,7 @@
                                     >Customer Signature Name</label
                                 >
                                 <input
+                                    :disabled="props.report.closed === 1"
                                     id="formCustomerSignatureName2"
                                     type="text"
                                     v-model="postForm.signature_client_name_2"
@@ -1135,6 +1173,7 @@
                             type="button"
                             class="btn btn-success w-full gap-2"
                             @click="submit"
+                            v-if="props.report.closed === 0"
                         >
                             <svg
                                 width="24"
@@ -1164,8 +1203,8 @@
                             </svg>
                             Save Report
                         </button>
-                        <!--
-                        <button type="button" class="btn btn-info w-full gap-2">
+                        
+                        <button type="button" @click="closeReport" v-if="props.report.closed === 0" class="btn btn-info w-full gap-2">
                             <svg
                                 width="24"
                                 height="24"
@@ -1189,7 +1228,7 @@
                                 ></path>
                             </svg>
                             Close Report
-                        </button>-->
+                        </button>
                         <!--
                         <router-link to="/apps/invoice/preview" class="btn btn-primary w-full gap-2">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0">
@@ -1211,6 +1250,7 @@
                         <a
                             :href="`/reports/${props.report.id}/file`"
                             class="btn btn-secondary w-full gap-2"
+                            v-if="props.report.closed === 1"
                             @click="showDownloadMessage"
                         >
                             <svg
@@ -1568,5 +1608,9 @@ function showDownloadMessage() {
             Swal.showLoading();
         }
     });
+}
+
+function closeReport() {
+    router.get(`/reports/${props.report.id}/close`);
 }
 </script>

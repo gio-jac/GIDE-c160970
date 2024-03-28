@@ -211,6 +211,10 @@ class ReportController extends Controller
         $userAuth = Auth::user();
         $request->merge($userAuth->user_type_id === 2 ? ['user_id' => $userAuth->id] : []);
         $report = ServiceReport::findOrFail($id);
+        
+        if($report->closed) {
+            return;
+        }
 
         $report->update($request->validate([
             'user_id' => ['required'],
@@ -275,6 +279,24 @@ class ReportController extends Controller
     }
 
     /**
+     * Close report.
+     */
+    public function closeReport(string $id) {
+        $report = ServiceReport::when(Auth::user()->user_type_id === 2, function ($query) {
+            $query->where('user_id', Auth::id());
+        })->findOrFail($id);
+
+        if($report->closed) {
+            return;
+        }
+
+        $report->closed = true;
+        $report->save();
+
+        return to_route('reports.edit', ['report' => $report->id]);
+    }
+
+    /**
      * PDF Creation.
      */
     public function pdfReport(string $id) {
@@ -289,6 +311,10 @@ class ReportController extends Controller
             'branch.client',
             'branch.branchManagers',
         ])->findOrFail($id);
+
+        if(!$report->closed) {
+            return;
+        }
         
         foreach($report->machines as &$machine){
             $machine->pivot->module = Module::find($machine->pivot->module_id);
