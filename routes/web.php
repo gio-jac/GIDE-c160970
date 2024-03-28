@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/parts/excel', [PartController::class, 'storeExcel'])->name('parts.storeExcel');
     Route::resource('/reports/statuses', StatusController::class);
     Route::resource('/reports/codes', CodeController::class);
+    Route::get('/reports/{report}/close',[ReportController::class, 'closeReport'])->name('reports.close');
     Route::get('/reports/{report}/file', [ReportController::class, 'pdfReport'])->name('reports.file');
     Route::resource('/reports', ReportController::class);
     Route::post('/parts/autocomplete', [PartController::class, 'autocomplete'])->name('parts.autocomplete');
