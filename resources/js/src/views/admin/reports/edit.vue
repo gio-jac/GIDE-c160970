@@ -9,11 +9,12 @@
                             <label
                                 for="formMachine"
                                 class="w-[104px] text-right mb-0 mr-[10px]"
-                                >Machine Serial <span class="text-red-500">*</span></label
+                                >Machine Serial
+                                <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
-                            disabled
+                                disabled
                                 id="formMachine"
                                 :options="props.catalogMachines"
                                 v-model="form.selectedMachine"
@@ -65,7 +66,8 @@
                             <label
                                 for="formShift"
                                 class="w-[104px] text-right mb-0 mr-[10px]"
-                                >Shift <span class="text-red-500">*</span></label
+                                >Shift
+                                <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -116,7 +118,9 @@
                                                 >Error</label
                                             >
                                             <select
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 :id="'formModule' + index"
                                                 :name="'formModule' + index"
                                                 class="form-select text-white-dark"
@@ -143,7 +147,9 @@
                                                 >Cause</label
                                             >
                                             <select
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 :id="'formFailures' + index"
                                                 :name="'formFailures' + index"
                                                 class="form-select text-white-dark"
@@ -170,7 +176,9 @@
                                                 >Solution</label
                                             >
                                             <select
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 :id="'formTypes' + index"
                                                 :name="'formTypes' + index"
                                                 class="form-select text-white-dark"
@@ -213,7 +221,11 @@
                                                             >Shift 1</label
                                                         >
                                                         <flat-pickr
-                                                            :disabled="props.report.closed === 1"
+                                                            :disabled="
+                                                                props.report
+                                                                    .closed ===
+                                                                1
+                                                            "
                                                             :id="
                                                                 'formShift1' +
                                                                 index
@@ -244,7 +256,11 @@
                                                             >Transport</label
                                                         >
                                                         <input
-                                                            :disabled="props.report.closed === 1"
+                                                            :disabled="
+                                                                props.report
+                                                                    .closed ===
+                                                                1
+                                                            "
                                                             :id="
                                                                 'formShiftTotal1' +
                                                                 index
@@ -276,7 +292,11 @@
                                                             >Shift 2</label
                                                         >
                                                         <flat-pickr
-                                                            :disabled="props.report.closed === 1"
+                                                            :disabled="
+                                                                props.report
+                                                                    .closed ===
+                                                                1
+                                                            "
                                                             :id="
                                                                 'formShift2' +
                                                                 index
@@ -307,7 +327,11 @@
                                                             >Transport</label
                                                         >
                                                         <input
-                                                            :disabled="props.report.closed === 1"
+                                                            :disabled="
+                                                                props.report
+                                                                    .closed ===
+                                                                1
+                                                            "
                                                             :id="
                                                                 'formShiftTotal2' +
                                                                 index
@@ -350,7 +374,9 @@
                                                 >DT (Min.)</label
                                             >
                                             <input
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 :id="'formReportDT' + index"
                                                 type="number"
                                                 v-model="
@@ -385,7 +411,9 @@
                                                 >Error</label
                                             >
                                             <select
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 id="formModule1"
                                                 name="formModule1"
                                                 class="form-select text-white-dark"
@@ -412,7 +440,9 @@
                                                 >Cause</label
                                             >
                                             <select
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 id="formFailures1"
                                                 name="formFailures1"
                                                 class="form-select text-white-dark"
@@ -439,7 +469,9 @@
                                                 >Solution</label
                                             >
                                             <select
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 id="formTypes1"
                                                 name="formTypes1"
                                                 class="form-select text-white-dark"
@@ -466,7 +498,9 @@
                                                 >Transport</label
                                             >
                                             <input
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 id="formShiftTotal11"
                                                 type="number"
                                                 v-model="
@@ -483,7 +517,9 @@
                                                 >DT (Min.)</label
                                             >
                                             <input
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 id="formReportDT1"
                                                 type="number"
                                                 v-model="
@@ -507,24 +543,29 @@
                         <div
                             class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6"
                         >
-                            <div class="text-lg">Branches <span class="text-red-500">*</span></div>
+                            <div class="text-lg">
+                                Branches <span class="text-red-500">*</span>
+                            </div>
                             <multiselect
                                 :disabled="props.report.closed === 1"
                                 id="formBranches"
-                                :options="form.selectedMachine ? form.selectedMachine.client.branches : []"
+                                :options="
+                                    form.selectedMachine
+                                        ? form.selectedMachine.client.branches
+                                        : []
+                                "
                                 v-model="form.selectedBranch"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :custom-label="
-                                    ({ address }) =>
-                                        `${address}`
-                                "
+                                :custom-label="({ address }) => `${address}`"
                                 placeholder="Select an option"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
-                            <div class="text-lg">Contacts <span class="text-red-500">*</span></div>
+                            <div class="text-lg">
+                                Contacts <span class="text-red-500">*</span>
+                            </div>
                             <select
                                 :disabled="props.report.closed === 1"
                                 id="formContacts"
@@ -1033,7 +1074,9 @@
                                         </td>
                                         <td>
                                             <input
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 type="number"
                                                 class="form-input w-32"
                                                 placeholder="Quantity"
@@ -1044,7 +1087,9 @@
                                         </td>
                                         <td>
                                             <button
-                                                :disabled="props.report.closed === 1"
+                                                :disabled="
+                                                    props.report.closed === 1
+                                                "
                                                 type="button"
                                                 @click="removeItem(item)"
                                             >
@@ -1203,8 +1248,13 @@
                             </svg>
                             Save Report
                         </button>
-                        
-                        <button type="button" @click="closeReport" v-if="props.report.closed === 0" class="btn btn-info w-full gap-2">
+
+                        <button
+                            type="button"
+                            @click="closeReport"
+                            v-if="props.report.closed === 0"
+                            class="btn btn-info w-full gap-2"
+                        >
                             <svg
                                 width="24"
                                 height="24"
@@ -1278,6 +1328,36 @@
                             </svg>
                             Download PDF
                         </a>
+                        <button
+                            type="button"
+                            @click="reOpenReport"
+                            v-if="props.report.closed === 1 && user.type === 1"
+                            class="btn btn-info w-full gap-2"
+                        >
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-6 h-6"
+                            >
+                                <path
+                                    opacity="0.5"
+                                    d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                ></path>
+                                <path
+                                    d="M8.5 12.5L10.5 14.5L15.5 9.5"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                            </svg>
+                            Reopen Report
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1295,7 +1375,7 @@ import flatPickr from "vue-flatpickr-component";
 import Multiselect from "@suadelabs/vue3-multiselect";
 import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 import "flatpickr/dist/flatpickr.css";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 const store = useAppStore();
 const catalogParts = ref([]);
 const page = usePage();
@@ -1383,22 +1463,27 @@ onMounted(() => {
     //set default data
     console.log(props.report);
 
-    postForm.machines = Array.from({ length: props.report.machines.length }, (_, index) => ({
-        machine_id: props.report.machines[index].pivot.machine_id,
-        module_id: props.report.machines[index].pivot.module_id,
-        failure_id: props.report.machines[index].pivot.failure_id,
-        failure_type_id: props.report.machines[index].pivot.failure_type_id,
-        transport_time_1: props.report.machines[index].pivot.transport_time_1,
-        transport_time_2: props.report.machines[index].pivot.transport_time_2,
-        transport_1: props.report.machines[index].pivot.transport_1,
-        transport_2: props.report.machines[index].pivot.transport_2,
-        dt: props.report.machines[index].pivot.dt,
-    }));
-    
+    postForm.machines = Array.from(
+        { length: props.report.machines.length },
+        (_, index) => ({
+            machine_id: props.report.machines[index].pivot.machine_id,
+            module_id: props.report.machines[index].pivot.module_id,
+            failure_id: props.report.machines[index].pivot.failure_id,
+            failure_type_id: props.report.machines[index].pivot.failure_type_id,
+            transport_time_1:
+                props.report.machines[index].pivot.transport_time_1,
+            transport_time_2:
+                props.report.machines[index].pivot.transport_time_2,
+            transport_1: props.report.machines[index].pivot.transport_1,
+            transport_2: props.report.machines[index].pivot.transport_2,
+            dt: props.report.machines[index].pivot.dt,
+        })
+    );
+
     form.selectedMachine = props.catalogMachines.filter(
         (data) => data.id === props.report.machines[0].id
     )[0];
-    
+
     if (props.report.user_id)
         form.selectedUser = props.catalogUsers.filter(
             (data) => data.id === props.report.user_id
@@ -1540,7 +1625,7 @@ function selectPartChange(searchQuery, id) {
                 console.error("Error:", error);
             });
     }, 1500);
-};
+}
 
 function submit() {
     if (form.selectedUser) postForm.user_id = form.selectedUser.id;
@@ -1553,64 +1638,66 @@ function submit() {
         postForm.branch_manager_id = form.selectedContact.id;
 
     Swal.fire({
-        title: 'Processing...',
-        text: 'Please wait while the data is being updated.',
+        title: "Processing...",
+        text: "Please wait while the data is being updated.",
         allowOutsideClick: false,
         showConfirmButton: false,
-        customClass: 'sweet-alerts',
+        customClass: "sweet-alerts",
         didOpen: () => {
             Swal.showLoading();
-        }
+        },
     });
     router.put(`/reports/${props.report.id}`, postForm, {
         onSuccess: () => {
             console.log("Exitoso");
             Swal.close();
             Swal.fire({
-                icon: 'success',
-                title: 'Success!',
+                icon: "success",
+                title: "Success!",
                 html: "The update has been completed successfully.",
-                customClass: 'sweet-alerts',
+                customClass: "sweet-alerts",
             });
         },
         onError: (error) => {
             console.log(error);
-            let errorMessages = '';
+            let errorMessages = "";
 
             for (const key in error) {
-                const fieldName = key.replace('_id', '');
+                const fieldName = key.replace("_id", "");
                 errorMessages += `<p>${error[key]}</p>`;
             }
             Swal.close();
             Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
+                icon: "error",
+                title: "Oops...",
                 html: errorMessages,
-                customClass: 'sweet-alerts',
+                customClass: "sweet-alerts",
             });
         },
-        onFinish: () => {
-            
-        }
+        onFinish: () => {},
     });
 }
 
 function showDownloadMessage() {
     Swal.fire({
-        title: 'Generating PDF...',
-        text: 'Please wait while the PDF is being generated.',
+        title: "Generating PDF...",
+        text: "Please wait while the PDF is being generated.",
         allowOutsideClick: false,
         showConfirmButton: false,
-        customClass: 'sweet-alerts',
+        customClass: "sweet-alerts",
         timer: 3000,
         timerProgressBar: true,
         didOpen: () => {
             Swal.showLoading();
-        }
+        },
     });
 }
 
 function closeReport() {
     router.get(`/reports/${props.report.id}/close`);
+}
+
+function reOpenReport() {
+    router.get(`/reports/${props.report.id}/reopen`);
 }
 </script>
