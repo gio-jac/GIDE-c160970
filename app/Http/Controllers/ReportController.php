@@ -297,6 +297,26 @@ class ReportController extends Controller
     }
 
     /**
+     * Reopen report.
+     */
+    public function reOpenReport(string $id) {
+        $report = ServiceReport::findOrFail($id);
+
+        if(Auth::user()->user_type_id !== 1){
+            return;
+        }
+
+        if(!$report->closed) {
+            return;
+        }
+
+        $report->closed = false;
+        $report->save();
+
+        return to_route('reports.edit', ['report' => $report->id]);
+    }
+
+    /**
      * PDF Creation.
      */
     public function pdfReport(string $id) {
