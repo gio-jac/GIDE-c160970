@@ -563,6 +563,12 @@
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
+
+                            <template v-if="errors.branch_id">
+                                <p class="text-danger mt-1 text-center">
+                                    {{ errors.branch_id }}
+                                </p>
+                            </template>
                             <div class="text-lg">
                                 Contacts <span class="text-red-500">*</span>
                             </div>
@@ -586,6 +592,11 @@
                                     {{ contact.name }}
                                 </option>
                             </select>
+                            <template v-if="errors.branch_manager_id">
+                                <p class="text-danger mt-1 text-center">
+                                    {{ errors.branch_manager_id }}
+                                </p>
+                            </template>
                             <div class="mt-4 flex items-center">
                                 <label
                                     for="formClient"
@@ -1386,6 +1397,7 @@ defineOptions({
 });
 
 const props = defineProps({
+    errors: Object,
     catalogParts: {
         type: Array,
         required: true,
@@ -1694,10 +1706,102 @@ function showDownloadMessage() {
 }
 
 function closeReport() {
-    router.get(`/reports/${props.report.id}/close`);
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to close this report. Once closed, no further changes can be made.",
+        icon: "warning",
+        showCancelButton: true,
+        customClass: "sweet-alerts",
+        confirmButtonText: "Yes, close it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Processing...",
+                text: "Please wait while the data is being updated.",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                customClass: "sweet-alerts",
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+            router.get(`/reports/${props.report.id}/close`, undefined, {
+                onSuccess: () => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        html: "The report has been closed successfully.",
+                        customClass: "sweet-alerts",
+                    });
+                },
+                onError: (error) => {
+                    console.log(error);
+                    let errorMessages = "";
+
+                    for (const key in error) {
+                        const fieldName = key.replace("_id", "");
+                        errorMessages += `<p>${error[key]}</p>`;
+                    }
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        html: errorMessages,
+                        customClass: "sweet-alerts",
+                    });
+                },
+                onFinish: () => {},
+            });
+        }
+    });
 }
 
 function reOpenReport() {
-    router.get(`/reports/${props.report.id}/reopen`);
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to reopen this report. Please note that only the report creator and administrators can make further changes once reopened.",
+        icon: "warning",
+        showCancelButton: true,
+        customClass: "sweet-alerts",
+        confirmButtonText: "Yes, reopen it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Processing...",
+                text: "Please wait while the data is being updated.",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                customClass: "sweet-alerts",
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+            router.get(`/reports/${props.report.id}/reopen`, undefined, {
+                onSuccess: () => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        html: "The report has been reopened successfully.",
+                        customClass: "sweet-alerts",
+                    });
+                },
+                onError: (error) => {
+                    console.log(error);
+                    let errorMessages = "";
+
+                    for (const key in error) {
+                        const fieldName = key.replace("_id", "");
+                        errorMessages += `<p>${error[key]}</p>`;
+                    }
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        html: errorMessages,
+                        customClass: "sweet-alerts",
+                    });
+                },
+                onFinish: () => {},
+            });
+        }
+    });
 }
 </script>

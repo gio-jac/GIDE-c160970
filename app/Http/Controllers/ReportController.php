@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
@@ -289,6 +290,14 @@ class ReportController extends Controller
         if($report->closed) {
             return;
         }
+
+        /*
+        Validator::make($report->toArray(), [
+            'user_id' => ['required'],
+            'shift_id' => ['required'],
+            'branch_id' => ['required'],
+            'branch_manager_id' => ['required'],
+        ])->validate();*/
 
         $report->closed = true;
         $report->save();
