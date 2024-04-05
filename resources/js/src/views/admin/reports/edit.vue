@@ -241,6 +241,7 @@
                                                                     index
                                                                 ].transport_1
                                                             "
+                                                            @input="transportValidation(index)"
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
@@ -276,6 +277,7 @@
                                                                     index
                                                                 ].transport_2
                                                             "
+                                                            @input="transportValidation(index)"
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
@@ -310,6 +312,7 @@
                                                                     index
                                                                 ].transport_3
                                                             "
+                                                            @input="transportValidation(index)"
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
@@ -330,10 +333,14 @@
                                                         postForm.machines[index]
                                                             .transport_1
                                                     "
+                                                    @input="transportValidation(index)"
                                                     name="formShiftTotal11"
                                                     class="form-input text-white-dark"
                                                     type="number"
-                                                    placeholder="Enter Transport"
+                                                    min="0.0"
+                                                    max="9999.9"
+                                                    step="0.1"
+                                                    placeholder="0.0"
                                                 />
                                             </template>
                                         </div>
@@ -465,9 +472,13 @@
                                                             postForm.machines[0]
                                                                 .transport_1
                                                         "
+                                                        @input="transportValidation(0)"
                                                         name="formShiftTotal11"
                                                         class="form-input text-white-dark"
-                                                        placeholder="Enter Transport"
+                                                        min="0.0"
+                                                        max="9999.9"
+                                                        step="0.1"
+                                                        placeholder="0.0"
                                                     />
                                                 </div>
                                                 <div class="py-2">
@@ -1574,6 +1585,17 @@ const postForm = reactive({
     machines: [] as Array<any>,
     service_parts: [],
 });
+
+function transportValidation(index) {
+  const machine = postForm.machines[index];
+  const transportFields = ['transport_1', 'transport_2', 'transport_3'];
+
+  transportFields.forEach(field => {
+    if (machine[field] !== null) {
+      machine[field] = Math.max(0, Math.min(Number(machine[field]), 9999.9));
+    }
+  });
+}
 
 let timeoutId = ref(null);
 function selectPartChange(searchQuery, id) {
