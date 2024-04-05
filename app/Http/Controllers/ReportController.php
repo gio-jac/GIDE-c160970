@@ -55,7 +55,9 @@ class ReportController extends Controller
             'client.branches',
             'client.branches.branchManagers',
             'production_line',
-            'production_line.machines',
+            'production_line.machines' => function($query){
+                $query->orderBy('position', 'asc');
+            },
             'production_line.machines.machine_model',
             'production_line.machines.machine_model.model_segment',
         ])->get();
@@ -128,6 +130,7 @@ class ReportController extends Controller
                 "transport_time_2" => $machine["transport_time_2"],
                 "transport_1" => $machine["transport_1"] ?? 0,
                 "transport_2" => $machine["transport_2"] ?? 0,
+                "transport_3" => $machine["transport_3"] ?? 0,
                 "dt" => $machine["dt"],
             ]);
         }
@@ -163,7 +166,9 @@ class ReportController extends Controller
             'status',
             'machines',
             'machines.production_line',
-            'machines.production_line.machines',
+            'machines.production_line.machines' => function($query){
+                $query->orderBy('position', 'asc');
+            },
             'parts',
             'parts.part',
             'shift',
@@ -184,7 +189,9 @@ class ReportController extends Controller
             'client.branches',
             'client.branches.branchManagers',
             'production_line',
-            'production_line.machines',
+            'production_line.machines' => function($query){
+                $query->orderBy('position', 'asc');
+            },
             'production_line.machines.machine_model',
             'production_line.machines.machine_model.model_segment',
         ])->get();
@@ -252,6 +259,7 @@ class ReportController extends Controller
                 'transport_time_2' => $machine['transport_time_2'],
                 'transport_1' => $machine['transport_1'] ?? 0,
                 'transport_2' => $machine['transport_2'] ?? 0,
+                'transport_3' => $machine['transport_3'] ?? 0,
                 'dt' => $machine['dt'],
             ];
 
@@ -331,7 +339,9 @@ class ReportController extends Controller
     public function pdfReport(string $id) {
         $report = ServiceReport::with([
             'status',
-            'machines',
+            'machines' => function($query){
+                $query->orderBy('position', 'asc');
+            },
             'machines.machine_model',
             'parts','parts.part',
             'shift',

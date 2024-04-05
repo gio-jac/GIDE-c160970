@@ -9,7 +9,8 @@
                             <label
                                 for="formMachine"
                                 class="w-[104px] text-right mb-0 mr-[10px]"
-                                >Machine Serial <span class="text-red-500">*</span></label
+                                >Machine Serial
+                                <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -73,7 +74,8 @@
                             <label
                                 for="formShift"
                                 class="w-[104px] text-right mb-0 mr-[10px]"
-                                >Shift <span class="text-red-500">*</span></label
+                                >Shift
+                                <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -123,7 +125,10 @@
                                 </div>
                                 <div class="w-full">
                                     <div class="flex justify-evenly flex-wrap">
-                                        <div class="py-2">
+                                        <div
+                                            class="p-2 flex-auto sm:flex-1"
+                                            v-if="machine.only_dt !== 1"
+                                        >
                                             <label :for="'formModule' + index"
                                                 >Error</label
                                             >
@@ -149,7 +154,10 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <div class="py-2">
+                                        <div
+                                            class="p-2 flex-auto sm:flex-1"
+                                            v-if="machine.only_dt !== 1"
+                                        >
                                             <label :for="'formFailures' + index"
                                                 >Cause</label
                                             >
@@ -175,7 +183,10 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <div class="py-2">
+                                        <div
+                                            class="p-2 flex-auto sm:flex-1"
+                                            v-if="machine.only_dt !== 1"
+                                        >
                                             <label :for="'formTypes' + index"
                                                 >Solution</label
                                             >
@@ -201,7 +212,10 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <div class="py-2 flex-[100%]">
+                                        <div
+                                            class="flex-[100%]"
+                                            v-if="machine.only_dt !== 1"
+                                        >
                                             <template
                                                 v-if="
                                                     machine.machine_model
@@ -213,51 +227,24 @@
                                                 <div
                                                     class="w-full flex justify-evenly flex-wrap"
                                                 >
-                                                    <div>
+                                                    <div
+                                                        class="p-2 flex-auto sm:flex-1"
+                                                    >
                                                         <label
                                                             :for="
-                                                                'formShift1' +
+                                                                'formTransport1' +
                                                                 index
                                                             "
-                                                            >Shift 1</label
-                                                        >
-                                                        <flat-pickr
-                                                            :id="
-                                                                'formShift1' +
-                                                                index
-                                                            "
-                                                            :name="
-                                                                'formShift1' +
-                                                                index
-                                                            "
-                                                            class="form-input"
-                                                            v-model="
-                                                                postForm
-                                                                    .machines[
-                                                                    index
-                                                                ]
-                                                                    .transport_time_1
-                                                            "
-                                                            :config="
-                                                                preloadingTime
-                                                            "
-                                                        ></flat-pickr>
-                                                    </div>
-                                                    <div>
-                                                        <label
-                                                            :for="
-                                                                'formShiftTotal1' +
-                                                                index
-                                                            "
-                                                            >Transport</label
+                                                            >Initial
+                                                            Transport</label
                                                         >
                                                         <input
                                                             :id="
-                                                                'formShiftTotal1' +
+                                                                'formTransport1' +
                                                                 index
                                                             "
                                                             :name="
-                                                                'formShiftTotal1' +
+                                                                'formTransport1' +
                                                                 index
                                                             "
                                                             v-model="
@@ -268,57 +255,31 @@
                                                             "
                                                             type="number"
                                                             class="form-input"
+                                                            min="0.0"
+                                                            max="9999.9"
+                                                            step="0.1"
+                                                            placeholder="0.0"
                                                         />
                                                     </div>
-                                                </div>
-                                                <div
-                                                    class="w-full flex justify-evenly flex-wrap"
-                                                >
-                                                    <div>
+
+                                                    <div
+                                                        class="p-2 flex-auto sm:flex-1"
+                                                    >
                                                         <label
                                                             :for="
-                                                                'formShift2' +
+                                                                'formTransport2' +
                                                                 index
                                                             "
-                                                            >Shift 2</label
-                                                        >
-                                                        <flat-pickr
-                                                            :id="
-                                                                'formShift2' +
-                                                                index
-                                                            "
-                                                            :name="
-                                                                'formShift2' +
-                                                                index
-                                                            "
-                                                            class="form-input"
-                                                            v-model="
-                                                                postForm
-                                                                    .machines[
-                                                                    index
-                                                                ]
-                                                                    .transport_time_2
-                                                            "
-                                                            :config="
-                                                                preloadingTime
-                                                            "
-                                                        ></flat-pickr>
-                                                    </div>
-                                                    <div>
-                                                        <label
-                                                            :for="
-                                                                'formShiftTotal2' +
-                                                                index
-                                                            "
-                                                            >Transport</label
+                                                            >Final
+                                                            Transport</label
                                                         >
                                                         <input
                                                             :id="
-                                                                'formShiftTotal2' +
+                                                                'formTransport2' +
                                                                 index
                                                             "
                                                             :name="
-                                                                'formShiftTotal2' +
+                                                                'formTransport2' +
                                                                 index
                                                             "
                                                             v-model="
@@ -329,6 +290,44 @@
                                                             "
                                                             type="number"
                                                             class="form-input"
+                                                            min="0.0"
+                                                            max="9999.9"
+                                                            step="0.1"
+                                                            placeholder="0.0"
+                                                        />
+                                                    </div>
+                                                    <div
+                                                        class="p-2 flex-auto sm:flex-1"
+                                                    >
+                                                        <label
+                                                            :for="
+                                                                'formTransport3' +
+                                                                index
+                                                            "
+                                                            >Estimated
+                                                            Transport</label
+                                                        >
+                                                        <input
+                                                            :id="
+                                                                'formTransport3' +
+                                                                index
+                                                            "
+                                                            :name="
+                                                                'formTransport3' +
+                                                                index
+                                                            "
+                                                            v-model="
+                                                                postForm
+                                                                    .machines[
+                                                                    index
+                                                                ].transport_3
+                                                            "
+                                                            type="number"
+                                                            class="form-input"
+                                                            min="0.0"
+                                                            max="9999.9"
+                                                            step="0.1"
+                                                            placeholder="0.0"
                                                         />
                                                     </div>
                                                 </div>
@@ -384,7 +383,7 @@
                                 </div>
                                 <div class="w-full">
                                     <div class="flex justify-evenly flex-wrap">
-                                        <div class="py-2">
+                                        <div class="p-2 flex-auto sm:flex-1">
                                             <label for="formModule1"
                                                 >Error</label
                                             >
@@ -410,7 +409,7 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <div class="py-2">
+                                        <div class="p-2 flex-auto sm:flex-1">
                                             <label for="formFailures1"
                                                 >Cause</label
                                             >
@@ -436,7 +435,7 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <div class="py-2">
+                                        <div class="p-2 flex-auto sm:flex-1">
                                             <label for="formTypes"
                                                 >Solution</label
                                             >
@@ -462,36 +461,44 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <div class="py-2">
-                                            <label for="formShiftTotal11"
-                                                >Transport</label
+                                        <div class="flex-[100%]">
+                                            <div
+                                                class="w-full flex justify-evenly flex-wrap"
                                             >
-                                            <input
-                                                id="formShiftTotal11"
-                                                type="number"
-                                                v-model="
-                                                    postForm.machines[0]
-                                                        .transport_1
-                                                "
-                                                name="formShiftTotal11"
-                                                class="form-input text-white-dark"
-                                                placeholder="Enter Transport"
-                                            />
-                                        </div>
-                                        <div class="py-2">
-                                            <label for="formReportDT1"
-                                                >DT (Min.)</label
-                                            >
-                                            <input
-                                                id="formReportDT1"
-                                                type="number"
-                                                v-model="
-                                                    postForm.machines[0].dt
-                                                "
-                                                name="formReportDT1"
-                                                class="form-input text-white-dark"
-                                                placeholder="Enter DT"
-                                            />
+                                                <div class="py-2">
+                                                    <label
+                                                        for="formShiftTotal11"
+                                                        >Transport</label
+                                                    >
+                                                    <input
+                                                        id="formShiftTotal11"
+                                                        type="number"
+                                                        v-model="
+                                                            postForm.machines[0]
+                                                                .transport_1
+                                                        "
+                                                        name="formShiftTotal11"
+                                                        class="form-input text-white-dark"
+                                                        placeholder="Enter Transport"
+                                                    />
+                                                </div>
+                                                <div class="py-2">
+                                                    <label for="formReportDT1"
+                                                        >DT (Min.)</label
+                                                    >
+                                                    <input
+                                                        id="formReportDT1"
+                                                        type="number"
+                                                        v-model="
+                                                            postForm.machines[0]
+                                                                .dt
+                                                        "
+                                                        name="formReportDT1"
+                                                        class="form-input text-white-dark"
+                                                        placeholder="Enter DT"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -506,18 +513,21 @@
                         <div
                             class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6"
                         >
-                            <div class="text-lg">Branches <span class="text-red-500">*</span></div>
-                            
+                            <div class="text-lg">
+                                Branches <span class="text-red-500">*</span>
+                            </div>
+
                             <multiselect
                                 id="formBranches"
-                                :options="form.selectedMachine ? form.selectedMachine.client.branches : []"
+                                :options="
+                                    form.selectedMachine
+                                        ? form.selectedMachine.client.branches
+                                        : []
+                                "
                                 v-model="form.selectedBranch"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :custom-label="
-                                    ({ address}) =>
-                                        `${address}`
-                                "
+                                :custom-label="({ address }) => `${address}`"
                                 placeholder="Select an option"
                                 selected-label=""
                                 select-label=""
@@ -529,7 +539,9 @@
                                     {{ errors.branch_id }}
                                 </p>
                             </template>
-                            <div class="text-lg">Contacts <span class="text-red-500">*</span></div>
+                            <div class="text-lg">
+                                Contacts <span class="text-red-500">*</span>
+                            </div>
                             <select
                                 id="formContacts"
                                 name="formContacts"
@@ -837,7 +849,10 @@
                         <div
                             class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6"
                         >
-                            <div class="mt-4 flex items-center">
+                            <div
+                                class="mt-4 flex items-center"
+                                v-if="!form.selectedMachine?.production_line_id"
+                            >
                                 <label
                                     for="formReportReportedTime"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
@@ -867,7 +882,10 @@
                             </div>
                         </div>
                         <div class="lg:w-1/2 w-full">
-                            <div class="mt-4 flex items-center">
+                            <div
+                                class="mt-4 flex items-center"
+                                v-if="!form.selectedMachine?.production_line_id"
+                            >
                                 <label
                                     for="formReportTimeDeparture"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
@@ -1326,7 +1344,7 @@ import flatPickr from "vue-flatpickr-component";
 import Multiselect from "@suadelabs/vue3-multiselect";
 import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 import "flatpickr/dist/flatpickr.css";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 const store = useAppStore();
 
 const page = usePage();
@@ -1505,6 +1523,7 @@ const updateMachines = (selectedMachine) => {
             transport_time_2: null,
             transport_1: null,
             transport_2: null,
+            transport_3: null,
             dt: null,
         };
     });
@@ -1567,7 +1586,7 @@ function selectPartChange(searchQuery, id) {
                 console.error("Error:", error);
             });
     }, 1500);
-};
+}
 
 function submit() {
     if (form.selectedUser) postForm.user_id = form.selectedUser.id;
@@ -1582,14 +1601,14 @@ function submit() {
     console.log(postForm);
 
     Swal.fire({
-        title: 'Processing...',
-        text: 'Please wait while the data is being added.',
+        title: "Processing...",
+        text: "Please wait while the data is being added.",
         allowOutsideClick: false,
         showConfirmButton: false,
-        customClass: 'sweet-alerts',
+        customClass: "sweet-alerts",
         didOpen: () => {
             Swal.showLoading();
-        }
+        },
     });
     router.post("/reports", postForm, {
         onSuccess: () => {
@@ -1598,23 +1617,21 @@ function submit() {
         },
         onError: (error) => {
             console.log(error);
-            let errorMessages = '';
+            let errorMessages = "";
 
             for (const key in error) {
-                const fieldName = key.replace('_id', '');
+                const fieldName = key.replace("_id", "");
                 errorMessages += `<p>${error[key]}</p>`;
             }
             Swal.close();
             Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
+                icon: "error",
+                title: "Oops...",
                 html: errorMessages,
-                customClass: 'sweet-alerts',
+                customClass: "sweet-alerts",
             });
         },
-        onFinish: () => {
-            
-        }
+        onFinish: () => {},
     });
 }
 </script>

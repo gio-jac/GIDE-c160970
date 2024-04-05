@@ -37,12 +37,12 @@ class MachineSeeder extends Seeder
         Machine::create(['serial' => 'M01000214', 'client_id' => 3, 'machine_model_id' => 31]);
         Machine::create(['serial' => 'M01000315', 'client_id' => 3, 'machine_model_id' => 31]);
         Machine::create(['serial' => 'M01000316', 'client_id' => 3, 'machine_model_id' => 31]);
-        Machine::create(['serial' => 'X01000009', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 3]);
-        Machine::create(['serial' => 'X01000011', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 3]);
-        Machine::create(['serial' => 'X01000027', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 2]);
-        Machine::create(['serial' => 'X01000039', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 2]);
-        Machine::create(['serial' => 'X01000061', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 1]);
-        Machine::create(['serial' => 'X01000062', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 1]);
+        Machine::create(['serial' => 'X01000009', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 3, 'position' => 5]);
+        Machine::create(['serial' => 'X01000011', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 3, 'position' => 2]);
+        Machine::create(['serial' => 'X01000027', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 2, 'position' => 2]);
+        Machine::create(['serial' => 'X01000039', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 2, 'position' => 5]);
+        Machine::create(['serial' => 'X01000061', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 1, 'position' => 2]);
+        Machine::create(['serial' => 'X01000062', 'client_id' => 3, 'machine_model_id' => 38, 'production_line_id' => 1, 'position' => 5]);
         Machine::create(['serial' => '10020CV001912', 'client_id' => 4, 'machine_model_id' => 10]);
         Machine::create(['serial' => '10020CV001930', 'client_id' => 4, 'machine_model_id' => 10]);
         Machine::create(['serial' => '10020CV001932', 'client_id' => 4, 'machine_model_id' => 10]);
@@ -674,5 +674,21 @@ class MachineSeeder extends Seeder
         Machine::create(['serial' => 'PN1503100077', 'client_id' => 10, 'machine_model_id' => 18]);
         Machine::create(['serial' => 'PN1503100078', 'client_id' => 10, 'machine_model_id' => 18]);
         Machine::create(['serial' => 'PN1503100079', 'client_id' => 10, 'machine_model_id' => 18]);
+        //
+        Machine::create(['serial' => '62200302', 'client_id' => 3, 'machine_model_id' => 43, 'production_line_id' => 3, 'position' => 1, 'only_dt' => true]);
+        Machine::create(['serial' => '1705009', 'client_id' => 3, 'machine_model_id' => 44, 'production_line_id' => 3, 'position' => 3, 'only_dt' => true]);
+        Machine::create(['serial' => '62200304', 'client_id' => 3, 'machine_model_id' => 43, 'production_line_id' => 3, 'position' => 4, 'only_dt' => true]);
+        Machine::create(['serial' => '1705010', 'client_id' => 3, 'machine_model_id' => 44, 'production_line_id' => 3, 'position' => 6, 'only_dt' => true]);
+        Machine::create(['serial' => '62200399', 'client_id' => 3, 'machine_model_id' => 45, 'production_line_id' => 3, 'position' => 7, 'only_dt' => true]);
+        Machine::create(['serial' => '62200505', 'client_id' => 3, 'machine_model_id' => 43, 'production_line_id' => 2, 'position' => 1, 'only_dt' => true]);
+        Machine::create(['serial' => '1805021', 'client_id' => 3, 'machine_model_id' => 44, 'production_line_id' => 2, 'position' => 3, 'only_dt' => true]);
+        Machine::create(['serial' => '62200506', 'client_id' => 3, 'machine_model_id' => 43, 'production_line_id' => 2, 'position' => 4, 'only_dt' => true]);
+        Machine::create(['serial' => '2055040', 'client_id' => 3, 'machine_model_id' => 44, 'production_line_id' => 2, 'position' => 6, 'only_dt' => true]);
+        Machine::create(['serial' => '62200599', 'client_id' => 3, 'machine_model_id' => 45, 'production_line_id' => 2, 'position' => 7, 'only_dt' => true]);
+        Machine::create(['serial' => '62200510', 'client_id' => 3, 'machine_model_id' => 43, 'production_line_id' => 1, 'position' => 1, 'only_dt' => true]);
+        Machine::create(['serial' => '2105051', 'client_id' => 3, 'machine_model_id' => 44, 'production_line_id' => 1, 'position' => 3, 'only_dt' => true]);
+        Machine::create(['serial' => '62200511', 'client_id' => 3, 'machine_model_id' => 43, 'production_line_id' => 1, 'position' => 4, 'only_dt' => true]);
+        Machine::create(['serial' => '2105052', 'client_id' => 3, 'machine_model_id' => 44, 'production_line_id' => 1, 'position' => 6, 'only_dt' => true]);
+        Machine::create(['serial' => '62200598', 'client_id' => 3, 'machine_model_id' => 45, 'production_line_id' => 1, 'position' => 7, 'only_dt' => true]);
     }
 }

@@ -64,6 +64,10 @@
             <td>{{ $report->branch->address }}</td>
         </tr>
         <tr>
+            <td style="text-align:center;">Reportado por:</td>
+            <td>Ingeniero/a de Produccion</td>
+        </tr>
+        <tr>
             <td style="text-align:center;">Telefono:</td>
             <td>{{ $report->branch->branchManagers[0]->phone }}</td>
         </tr>
@@ -78,6 +82,10 @@
             <td>
                 {{ implode(', ', $report->machines->pluck('machine_model.model')->toArray()) }}
             </td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">FE de G+D:</td>
+            <td>{{ $report->user->nombre }} {{ $report->user->apellido_paterno }} {{ $report->user->apellido_materno }}</td>
         </tr>
     </table>
 
@@ -96,12 +104,14 @@
     <p style="margin-bottom:0px;">Descripcion del problema:</p>
     <table class="tblStyle">
         @foreach ($report->machines as $machines)
-        <tr>
-            <td>{{ $machines->serial }}</td>
-            <td>{{ empty($machines->pivot->module->name) ? "N/A" : $machines->pivot->module->name }}</td>
-            <td>{{ empty($machines->pivot->failure->name) ? "N/A" : $machines->pivot->failure->name}}</td>
-            <td>{{ empty($machines->pivot->failure_type->name) ? "N/A" : $machines->pivot->failure_type->name}}</td>
-        </tr>
+            @if($machines->only_dt !== 1)
+            <tr>
+                <td>{{ $machines->serial }}</td>
+                <td>{{ empty($machines->pivot->module->name) ? "N/A" : $machines->pivot->module->name }}</td>
+                <td>{{ empty($machines->pivot->failure->name) ? "N/A" : $machines->pivot->failure->name}}</td>
+                <td>{{ empty($machines->pivot->failure_type->name) ? "N/A" : $machines->pivot->failure_type->name}}</td>
+            </tr>
+            @endif
         @endforeach
     </table>
     <p style="margin-bottom:0px;">Solución/Comentarios:</p>
@@ -149,21 +159,19 @@
     <table class="tblStyle" style="float: right;width: 58%;text-align:center;">
         <tr>
             <td></td>
-            <td>Transporte</td>
-            <td>Cantidad</td>
-            <td>Total</td>
+            <td>Transporte Inicial</td>
+            <td>Transporte Final</td>
+            <td>T.E.</td>
         </tr>
         @foreach ($report->machines as $machine)
-        <tr @if($loop->index % 2 == 1) class="countTime" @endif>
-            <td rowspan="2">{{ $machine->serial }}</td>
-            <td>{{ $machine->pivot->transport_time_1 }}</td>
-            <td>{{ $machine->pivot->transport_1 }}</td>
-            <td rowspan="2">{{ $machine->pivot->transport_1 + $machine->pivot->transport_2 }}</td>
-        </tr>
-        <tr @if($loop->index % 2 == 1) class="countTime" @endif>
-            <td>{{ $machine->pivot->transport_time_2 }}</td>
-            <td>{{ $machine->pivot->transport_2 }}</td>
-        </tr>
+            @if($machine->only_dt !== 1)
+            <tr @if($loop->index % 2 == 1) class="countTime" @endif>
+                <td>{{ $machine->serial }}</td>
+                <td>{{ $machine->pivot->transport_1 }}</td>
+                <td>{{ $machine->pivot->transport_2 }}</td>
+                <td>{{ $machine->pivot->transport_3 }}</td>
+            </tr>
+            @endif
         @endforeach
     </table>
     
@@ -203,14 +211,20 @@
         @endforeach
     </table>
     <div style="clear: both;"></div>
+
     <p style="margin-bottom:0px;">Tiempos muertos:</p>
-    @foreach ($report->machines as $machine)
-        <table class="tblStyle" style="float: left;width: 200px;margin-right:10px;margin-bottom:10px;text-align:center;">
-            <tr>
-                <td style="width:100px;">{{ $machine->serial }}</td>
-                <td>{{ $machine->pivot->dt }}</td>
-            </tr>
-        </table>
+    @foreach ($report->machines->chunk(3) as $machineChunk)
+    <table class="tblStyle" style="float:left;width: 32%; margin-right: 10px; text-align: center;">
+        @if ($loop->last)
+        <tr><td style="border:0;">&nbsp;</td><td style="border:0;">&nbsp;</td></tr>
+        @endif
+        @foreach ($machineChunk as $machine)
+        <tr>
+            <td style="width: 100px;">{{ $machine->serial }}</td>
+            <td>{{ $machine->pivot->dt }}</td>
+        </tr>
+        @endforeach
+    </table>
     @endforeach
     <div style="clear: both;"></div>
         
@@ -222,7 +236,7 @@
         @endphp
         <div class="defaultBorder" style="float: left;width: {{ $widthcss }};height:100px;margin:0px 10px;text-align:center;">
             PERFOMED BY:
-            <div style="width:100%;text-align:center;margin-top:70px;">{{ $report->user->nombre }} {{ $report->user->apellido_paterno }} {{ $report->user->apellido_materno }}</div>
+            <div style="width:100%;text-align:center;margin-top:70px;">Ingeniero de Proceso</div>
         </div>
 
         <div class="defaultBorder" style="float: left;width: {{ $widthcss }};height:100px;margin:0px 10px;text-align:center;">

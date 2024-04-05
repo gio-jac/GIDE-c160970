@@ -133,6 +133,14 @@ class BranchManagerSeeder extends Seeder
         BranchManager::create(['name' => 'CLEOTILDE PEREZ', 'email' => 'cleotilde.perez@tlock.mx', 'phone' => '22 2616 0397', 'branch_id' => 118]);
         BranchManager::create(['name' => 'JERÓNIMO FRANCISCO CRUZ ALFARO', 'email' => 'jeronimo.cruz@tlock.mx', 'phone' => '55 1018 0107', 'branch_id' => 119]);
         BranchManager::create(['name' => 'OFELIA LÓPEZ GARCÍA', 'email' => 'ofelia.lopez@tlock.mx', 'phone' => '55 7947 1098', 'branch_id' => 120]);
-        BranchManager::create(['name' => 'TEST: OFELIA LÓPEZ GARCÍA', 'email' => 'ofelia.lopez@tlock.mx', 'phone' => '55 7947 1098', 'branch_id' => 121]);
+
+        BranchManager::create(['name' => 'Caullieres Hernández Mauricio Pável', 'email' => 'mcaullieres@banxico.org.mx', 'phone' => '5552688440', 'branch_id' => 121]);
+        BranchManager::create(['name' => 'Vélez Hernández José Eduardo', 'email' => 'jvelezh@banxico.org.mx', 'phone' => '5552688525', 'branch_id' => 122]);
+        BranchManager::create(['name' => 'Carreño Ramos José Guillermo', 'email' => 'jcarreno@banxico.org.mx', 'phone' => '333284 8228', 'branch_id' => 123]);
+        BranchManager::create(['name' => 'González Zepeda José Eduardo', 'email' => 'josegonzalez@banxico.org.mx', 'phone' => '33 3284 8239', 'branch_id' => 124]);
+        BranchManager::create(['name' => 'Correa Pavia Omar Rafael', 'email' => 'ocorrea@banxico.org.mx', 'phone' => '818-196-5162', 'branch_id' => 125]);
+        BranchManager::create(['name' => 'Cervantes Sandoval Karina', 'email' => 'kcervantes@banxico.org.mx', 'phone' => '662-289-8272', 'branch_id' => 126]);
+        BranchManager::create(['name' => 'López Leal Raúl Humberto', 'email' => 'raul.lopez@banxico.org.mx', 'phone' => '2299232900', 'branch_id' => 127]);
+        BranchManager::create(['name' => 'Flores Roman Carlos Alberto', 'email' => 'caflores@banxico.org.mx', 'phone' => '999-942-7328', 'branch_id' => 128]);
     }
 }

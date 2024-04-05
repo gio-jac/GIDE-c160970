@@ -75,6 +75,6 @@ class ServiceReport extends Model
 
     public function machines(): BelongsToMany
     {
-        return $this->belongsToMany(Machine::class, 'service_report_machine')->withTimestamps()->withPivot('module_id','failure_id','failure_type_id','transport_time_1','transport_time_2','transport_1','transport_2','dt');
+        return $this->belongsToMany(Machine::class, 'service_report_machine')->withTimestamps()->withPivot('module_id','failure_id','failure_type_id','transport_time_1','transport_time_2','transport_1','transport_2','transport_3','dt');
     }
 }
