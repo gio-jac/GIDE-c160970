@@ -82,70 +82,75 @@ class ReportController extends Controller
     {
         $userAuth = Auth::user();
         $request->merge($userAuth->user_type_id === 2 ? ['user_id' => $userAuth->id] : []);
-        $validatedData = $request->validate([
-            'user_id' => ['required'],
-            'shift_id' => ['required'],
-            'machines' => ['required', 'array', 'min:1'],
-            'pieces' => [],
-            'sogd' => [],
-            'time_on' => [],
-            'travel_time' => [],
-            'report_type_id' => [],
-            'branch_id' => ['required'],
-            'branch_manager_id' => ['required'],
-            'reported_error' => [],
-            'code_id' => [],
-            'actions_taken' => [],
-            'reported' => [],
-            'arrival' => [],
-            'finished' => [],
-            'departure' => [],
-            'status_id' => [],
-            'signature_client_name_1' => [],
-            'signature_client_name_2' => [],
-            'is_tested' => [],
-            'notes' => [],
-        ]);
-        $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($request['branch_id']);
-        
-        $nextId = ServiceReport::max('id') + 1;
-        $currentDate = now()->toDateString();
-
-        $completeId = implode('-', [
-            $branch->city->country->code,
-            $nextId,
-            $currentDate,
-            str_replace(' ', '-', strtoupper($branch->client->name)),
-            str_replace(' ', '-', strtoupper(Machine::findOrFail($request['machines'][0]['machine_id'])->machine_model->model))
-        ]);
-        $validatedData['complete_id'] = $completeId;
-        $report = ServiceReport::create($validatedData);
-        //machines: [] as Array<any>,
-        foreach($request->all()['machines'] as $machine) {
-            $report->machines()->attach($machine["machine_id"],[
-                "module_id" => $machine["module_id"],
-                "failure_id" => $machine["failure_id"],
-                "failure_type_id" => $machine["failure_type_id"],
-                "transport_time_1" => $machine["transport_time_1"],
-                "transport_time_2" => $machine["transport_time_2"],
-                "transport_1" => $machine["transport_1"] ?? 0,
-                "transport_2" => $machine["transport_2"] ?? 0,
-                "transport_3" => $machine["transport_3"] ?? 0,
-                "dt" => $machine["dt"],
+        try{
+            DB::beginTransaction();
+            $validatedData = $request->validate([
+                'user_id' => ['required'],
+                'shift_id' => ['required'],
+                'machines' => ['required', 'array', 'min:1'],
+                'pieces' => [],
+                'sogd' => [],
+                'time_on' => [],
+                'travel_time' => [],
+                'report_type_id' => [],
+                'branch_id' => ['required'],
+                'branch_manager_id' => ['required'],
+                'reported_error' => [],
+                'code_id' => [],
+                'actions_taken' => [],
+                'reported' => [],
+                'arrival' => [],
+                'finished' => [],
+                'departure' => [],
+                'status_id' => [],
+                'signature_client_name_1' => [],
+                'signature_client_name_2' => [],
+                'is_tested' => [],
+                'notes' => [],
             ]);
-        }
-        //$report->machines()->createMany($dataMachines);
-
-        //service_parts: [],
-        $partsArray = $request->all()['service_parts'];
-
-        $dataParts = [];
-        foreach($partsArray as $part) {
-            $dataParts[] = ["part_id" => $part["id"], "quantity" => empty($part["quantity"]) ? 0 : $part["quantity"]];
-        }
-        $report->parts()->createMany($dataParts);
+            $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($request['branch_id']);
             
-        
+            $nextId = ServiceReport::max('id') + 1;
+            $currentDate = now()->toDateString();
+
+            $completeId = implode('-', [
+                $branch->city->country->code,
+                $nextId,
+                $currentDate,
+                str_replace(' ', '-', strtoupper($branch->client->name)),
+                str_replace(' ', '-', strtoupper(Machine::findOrFail($request['machines'][0]['machine_id'])->machine_model->model))
+            ]);
+            $validatedData['complete_id'] = $completeId;
+            $report = ServiceReport::create($validatedData);
+            //machines: [] as Array<any>,
+            foreach($request->all()['machines'] as $machine) {
+                $report->machines()->attach($machine["machine_id"],[
+                    "module_id" => $machine["module_id"],
+                    "failure_id" => $machine["failure_id"],
+                    "failure_type_id" => $machine["failure_type_id"],
+                    "transport_time_1" => $machine["transport_time_1"],
+                    "transport_time_2" => $machine["transport_time_2"],
+                    "transport_1" => $machine["transport_1"] ?? 0,
+                    "transport_2" => $machine["transport_2"] ?? 0,
+                    "transport_3" => $machine["transport_3"] ?? 0,
+                    "dt" => $machine["dt"],
+                ]);
+            }
+            //$report->machines()->createMany($dataMachines);
+
+            //service_parts: [],
+            $partsArray = $request->all()['service_parts'];
+
+            $dataParts = [];
+            foreach($partsArray as $part) {
+                $dataParts[] = ["part_id" => $part["id"], "quantity" => empty($part["quantity"]) ? 0 : $part["quantity"]];
+            }
+            $report->parts()->createMany($dataParts);
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return;
+        }
         return to_route('reports.edit', ['report' => $report->id]);
     }
 
@@ -224,58 +229,64 @@ class ReportController extends Controller
             return;
         }
 
-        $report->update($request->validate([
-            'user_id' => ['required'],
-            'shift_id' => ['required'],
-            'pieces' => [],
-            'sogd' => [],
-            'time_on' => [],
-            'travel_time' => [],
-            'report_type_id' => [],
-            'branch_id' => ['required'],
-            'branch_manager_id' => ['required'],
-            'reported_error' => [],
-            'code_id' => [],
-            'actions_taken' => [],
-            'reported' => [],
-            'arrival' => [],
-            'finished' => [],
-            'departure' => [],
-            'status_id' => [],
-            'signature_client_name_1' => [],
-            'signature_client_name_2' => [],
-            'is_tested' => [],
-            'notes' => [],
-        ]));
+        try {
+            DB::beginTransaction();
+            $report->update($request->validate([
+                'user_id' => ['required'],
+                'shift_id' => ['required'],
+                'pieces' => [],
+                'sogd' => [],
+                'time_on' => [],
+                'travel_time' => [],
+                'report_type_id' => [],
+                'branch_id' => ['required'],
+                'branch_manager_id' => ['required'],
+                'reported_error' => [],
+                'code_id' => [],
+                'actions_taken' => [],
+                'reported' => [],
+                'arrival' => [],
+                'finished' => [],
+                'departure' => [],
+                'status_id' => [],
+                'signature_client_name_1' => [],
+                'signature_client_name_2' => [],
+                'is_tested' => [],
+                'notes' => [],
+            ]));
 
-        $machines = $request->input('machines', []);
+            $machines = $request->input('machines', []);
 
-        foreach ($machines as $machine) {
-            $pivotData = [
-                'module_id' => $machine['module_id'],
-                'failure_id' => $machine['failure_id'],
-                'failure_type_id' => $machine['failure_type_id'],
-                'transport_time_1' => $machine['transport_time_1'],
-                'transport_time_2' => $machine['transport_time_2'],
-                'transport_1' => $machine['transport_1'] ?? 0,
-                'transport_2' => $machine['transport_2'] ?? 0,
-                'transport_3' => $machine['transport_3'] ?? 0,
-                'dt' => $machine['dt'],
-            ];
+            foreach ($machines as $machine) {
+                $pivotData = [
+                    'module_id' => $machine['module_id'],
+                    'failure_id' => $machine['failure_id'],
+                    'failure_type_id' => $machine['failure_type_id'],
+                    'transport_time_1' => $machine['transport_time_1'],
+                    'transport_time_2' => $machine['transport_time_2'],
+                    'transport_1' => $machine['transport_1'] ?? 0,
+                    'transport_2' => $machine['transport_2'] ?? 0,
+                    'transport_3' => $machine['transport_3'] ?? 0,
+                    'dt' => $machine['dt'],
+                ];
 
-            $report->machines()->sync([$machine['machine_id'] => $pivotData], false);
-            $report->machines()->updateExistingPivot($machine['machine_id'], $pivotData);
+                $report->machines()->sync([$machine['machine_id'] => $pivotData], false);
+                $report->machines()->updateExistingPivot($machine['machine_id'], $pivotData);
+            }
+
+            $partsArray = $request->all()['service_parts'];
+
+            foreach($partsArray as $part) {
+                $report->parts()->updateOrCreate(
+                    ['part_id' => $part['id']],
+                    ['quantity' => empty($part['quantity']) ? 0 : $part['quantity']]
+                );
+            }
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return;
         }
-
-        $partsArray = $request->all()['service_parts'];
-
-        foreach($partsArray as $part) {
-            $report->parts()->updateOrCreate(
-                ['part_id' => $part['id']],
-                ['quantity' => empty($part['quantity']) ? 0 : $part['quantity']]
-            );
-        }
-
         return to_route('reports.edit', ['report' => $report->id]);
     }
 
