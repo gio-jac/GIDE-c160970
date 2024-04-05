@@ -55,6 +55,8 @@ class MachineModelsSeeder extends Seeder
         MachineModels::create(['model' => "BPS 3000",'model_segment_id' => 3]);
         MachineModels::create(['model' => "OBIS 3",'model_segment_id' => 3]);
         MachineModels::create(['model' => "NOTAMASTER",'model_segment_id' => 3]);
-
+        MachineModels::create(['model' => "CUTLINK",'model_segment_id' => 3]);//43
+        MachineModels::create(['model' => "NOTAPACK",'model_segment_id' => 3]);//44
+        MachineModels::create(['model' => "EMPAQUE",'model_segment_id' => 3]);//45
     }
 }

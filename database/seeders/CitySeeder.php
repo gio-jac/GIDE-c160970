@@ -97,5 +97,13 @@ class CitySeeder extends Seeder
         City::create(['name' => 'Zamora', 'country_id' => 2]);
         City::create(['name' => 'Zapopan', 'country_id' => 2]);
         City::create(['name' => 'Zihuatanejo', 'country_id' => 2]);
+        City::create(['name' => 'Legaria Fabrica', 'country_id' => 2]);//85
+        City::create(['name' => 'Legaria Caja', 'country_id' => 2]);
+        City::create(['name' => 'El Salto Fabrica', 'country_id' => 2]);
+        City::create(['name' => 'El Salto Caja', 'country_id' => 2]);
+        City::create(['name' => 'Monterrey Caja', 'country_id' => 2]);
+        City::create(['name' => 'Hermosillo Caja', 'country_id' => 2]);
+        City::create(['name' => 'Veracruz Caja', 'country_id' => 2]);
+        City::create(['name' => 'Merida Caja', 'country_id' => 2]);
     }
 }
