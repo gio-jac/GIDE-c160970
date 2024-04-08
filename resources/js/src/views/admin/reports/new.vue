@@ -102,7 +102,7 @@
                 <div class="mt-8 px-4">
                     <div class="text-lg">Machines</div>
                     <template v-if="form.selectedMachine">
-                        <div
+                        <div class="flex flex-wrap justify-evenly"
                             v-if="
                                 form.selectedMachine.production_line &&
                                 form.selectedMachine.production_line.machines
@@ -113,7 +113,8 @@
                                 v-for="(machine, index) in form.selectedMachine
                                     .production_line.machines"
                                 :key="machine"
-                                class="bg-gray-100 rounded-md p-4 mb-4"
+                                :class="{'bg-[#ececf9]': machine.only_dt !== 1, 'bg-gray-100': machine.only_dt === 1}"
+                                class="rounded-md p-4 mb-4"
                             >
                                 <div class="text-center font-semibold">
                                     Serial: {{ machine.serial }} -
