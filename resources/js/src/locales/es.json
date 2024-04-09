@@ -124,5 +124,10 @@
     "coming_soon_boxed": "Próximamente en caja",
     "coming_soon_cover": "Próximamente Portada",
     "contact_us_boxed": "Comuníquese con nosotros",
-    "contact_us_cover": "Contáctenos Portada"
+    "contact_us_cover": "Contáctenos Portada",
+    "login.welcome.message": "Ingresa tu correo electrónico y contraseña para iniciar sesión",
+    "login.welcome.emailPlaceholder": "Ingrese su email",
+    "login.welcome.password": "Contraseña",
+    "login.welcome.passwordPlaceholder": "Ingrese su contraseña",
+    "login.welcome.signin": "Iniciar sesion"
 }
