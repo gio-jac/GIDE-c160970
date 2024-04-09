@@ -112,7 +112,7 @@
                                 <p
                                     class="text-base font-bold leading-normal text-white-dark"
                                 >
-                                    Enter your email and password to login
+                                    {{ $t("login.welcome.message") }}
                                 </p>
                             </div>
                             <form
@@ -125,7 +125,7 @@
                                         <input
                                             id="Email"
                                             type="email"
-                                            placeholder="Enter Email"
+                                            :placeholder="$t('login.welcome.emailPlaceholder')"
                                             class="form-input ps-10 placeholder:text-white-dark"
                                             v-model="form.email"
                                         />
@@ -157,12 +157,12 @@
                                     </template>
                                 </div>
                                 <div>
-                                    <label for="Password">Password</label>
+                                    <label for="Password">{{ $t("login.welcome.password") }}</label>
                                     <div class="relative text-white-dark">
                                         <input
                                             id="Password"
                                             type="password"
-                                            placeholder="Enter Password"
+                                            :placeholder="$t('login.welcome.passwordPlaceholder')"
                                             class="form-input ps-10 placeholder:text-white-dark"
                                             v-model="form.password"
                                         />
@@ -209,7 +209,7 @@
                                     type="submit"
                                     class="btn bg-[#040066] hover:bg-[#00d4ff] text-white !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
                                 >
-                                    Sign in
+                                    {{ $t("login.welcome.signin") }}
                                 </button>
                             </form>
                         </div>
