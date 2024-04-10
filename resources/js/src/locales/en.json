@@ -129,5 +129,9 @@
     "login.welcome.emailPlaceholder": "Enter your email",
     "login.welcome.password": "Password",
     "login.welcome.passwordPlaceholder": "Enter your password",
-    "login.welcome.signin": "Sign in"
+    "login.welcome.signin": "Sign in",
+    "login.welcome.error.auth": "The provided credentials do not match our records.",
+    "login.welcome.error.email.required": "Please enter your email address.",
+    "login.welcome.error.email.email": "Please enter a valid email address.",
+    "login.welcome.error.password.required": "Please enter your password."
 }

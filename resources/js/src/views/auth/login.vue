@@ -152,7 +152,7 @@
                                     </div>
                                     <template v-if="errors.email">
                                         <p class="text-danger mt-1">
-                                            {{ errors.email }}
+                                            {{ $t(errors.email) }}
                                         </p>
                                     </template>
                                 </div>
@@ -201,7 +201,7 @@
                                     </div>
                                     <template v-if="errors.password">
                                         <p class="text-danger mt-1">
-                                            {{ errors.password }}
+                                            {{ $t(errors.password) }}
                                         </p>
                                     </template>
                                 </div>

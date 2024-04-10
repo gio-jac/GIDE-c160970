@@ -129,5 +129,9 @@
     "login.welcome.emailPlaceholder": "Ingrese su email",
     "login.welcome.password": "Contraseña",
     "login.welcome.passwordPlaceholder": "Ingrese su contraseña",
-    "login.welcome.signin": "Iniciar sesion"
+    "login.welcome.signin": "Iniciar sesion",
+    "login.welcome.error.auth": "Las credenciales proporcionadas no coinciden con nuestros registros.",
+    "login.welcome.error.email.required": "Por favor, introduzca su direccion de email.",
+    "login.welcome.error.email.email": "Por favor, ingrese una dirección de email válido.",
+    "login.welcome.error.password.required": "Por favor, introduzca su contraseña."
 }
