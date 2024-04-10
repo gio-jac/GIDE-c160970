@@ -528,7 +528,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :custom-label="({ address }) => `${address}`"
-                                placeholder="Select an option"
+                                placeholder="Type (street, city, etc.)"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
