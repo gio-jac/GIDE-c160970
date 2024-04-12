@@ -44,7 +44,7 @@
                     </template>
                 </div>
                 <div>
-                    <label for="formActive">Is assignable?</label>
+                    <label for="formActive">Is visible?</label>
                     <label class="w-12 h-6 relative">
                         <input
                             type="checkbox"
@@ -61,7 +61,7 @@
                 <button type="submit" class="btn btn-primary !mt-6">Add</button>
             </form>
         </div>
-
+        <!--
         <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b] mt-5">
             <form class="space-y-5" @submit.prevent="submitExcel">
                 <div class="custom-file-container" data-upload-id="myFirstImage">
@@ -75,7 +75,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary !mt-6">Add</button>
             </form>
-        </div>
+        </div>-->
     </div>
 </template>
 
@@ -86,14 +86,16 @@ import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
 import FileUploadWithPreview from 'file-upload-with-preview';
+import Swal from "sweetalert2";
 
 onMounted(() => {
+    /*
     new FileUploadWithPreview('myFirstImage', {
         images: {
             baseImage: '',
             backgroundImage: '',
         },
-    });
+    });*/
 });
 
 defineOptions({
@@ -115,7 +117,39 @@ const formExcel = reactive({
 });
 
 function submit() {
-    router.post("/parts", form);
+    Swal.fire({
+        title: "Processing...",
+        text: "Please wait while the data is being added.",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: "sweet-alerts",
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+    router.post("/parts", form, {
+        onSuccess: () => {
+            console.log("Exitoso");
+            Swal.close();
+        },
+        onError: (error) => {
+            console.log(error);
+            let errorMessages = "";
+
+            for (const key in error) {
+                const fieldName = key.replace("_id", "");
+                errorMessages += `<p>${error[key]}</p>`;
+            }
+            Swal.close();
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                html: errorMessages,
+                customClass: "sweet-alerts",
+            });
+        },
+        onFinish: () => {},
+    });
 }
 
 function onFileChange(e) {

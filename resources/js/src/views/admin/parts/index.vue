@@ -106,6 +106,7 @@
                                         ></path>
                                     </svg>
                                 </Link>
+                                <!--
                                 <button
                                     type="button"
                                     class="hover:text-danger"
@@ -152,7 +153,7 @@
                                             stroke-width="1.5"
                                         ></path>
                                     </svg>
-                                </button>
+                                </button>-->
                             </div>
                         </template>
                     </vue3-datatable>
@@ -167,6 +168,7 @@ import Vue3Datatable from "@bhplugin/vue3-datatable";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
+import Swal from "sweetalert2";
 
 defineOptions({
     layout: [SiteLayout, AppLayout],
@@ -183,7 +185,7 @@ const search = ref("");
 const cols = ref([
     { field: "num_part", title: "Part ID" },
     { field: "descripcion", title: "Description" },
-    { field: "is_active", title: "Is assignable?" },
+    { field: "is_active", title: "Is visible?" },
     {
         field: "actions",
         title: "Actions",
@@ -220,10 +222,52 @@ const tableOption = ref({
 });
 
 const deleteRow = (item: any = null) => {
-    if (confirm("Are you sure want to delete selected row ?")) {
-        if (item) {
-            router.delete(`/users/${item}`);
+    Swal.fire({
+        title: "Are you sure?",
+        text: "The part will be hidden and unavailable for selection, but not deleted.",
+        icon: "warning",
+        showCancelButton: true,
+        customClass: "sweet-alerts",
+        confirmButtonText: "Yes, deactivate it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Processing...",
+                text: "Please wait while the data is being updated.",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                customClass: "sweet-alerts",
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+            router.delete(`/parts/${item}`, {
+                onSuccess: () => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        html: "The part has been deactivated successfully.",
+                        customClass: "sweet-alerts",
+                    });
+                },
+                onError: (error) => {
+                    console.log(error);
+                    let errorMessages = "";
+
+                    for (const key in error) {
+                        const fieldName = key.replace("_id", "");
+                        errorMessages += `<p>${error[key]}</p>`;
+                    }
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        html: errorMessages,
+                        customClass: "sweet-alerts",
+                    });
+                },
+                onFinish: () => {},
+            });
         }
-    }
+    });
 };
 </script>
