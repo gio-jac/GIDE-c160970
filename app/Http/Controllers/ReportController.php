@@ -82,32 +82,33 @@ class ReportController extends Controller
     {
         $userAuth = Auth::user();
         $request->merge($userAuth->user_type_id === 2 ? ['user_id' => $userAuth->id] : []);
+        $validatedData = $request->validate([
+            'user_id' => ['required'],
+            'shift_id' => ['required'],
+            'machines' => ['required', 'array', 'min:1'],
+            'pieces' => [],
+            'sogd' => [],
+            'time_on' => [],
+            'travel_time' => [],
+            'report_type_id' => [],
+            'branch_id' => ['required'],
+            'branch_manager_id' => ['required'],
+            'reported_error' => [],
+            'code_id' => [],
+            'actions_taken' => [],
+            'reported' => [],
+            'arrival' => [],
+            'finished' => [],
+            'departure' => [],
+            'status_id' => [],
+            'signature_client_name_1' => [],
+            'signature_client_name_2' => [],
+            'is_tested' => [],
+            'notes' => [],
+        ]);
         try{
             DB::beginTransaction();
-            $validatedData = $request->validate([
-                'user_id' => ['required'],
-                'shift_id' => ['required'],
-                'machines' => ['required', 'array', 'min:1'],
-                'pieces' => [],
-                'sogd' => [],
-                'time_on' => [],
-                'travel_time' => [],
-                'report_type_id' => [],
-                'branch_id' => ['required'],
-                'branch_manager_id' => ['required'],
-                'reported_error' => [],
-                'code_id' => [],
-                'actions_taken' => [],
-                'reported' => [],
-                'arrival' => [],
-                'finished' => [],
-                'departure' => [],
-                'status_id' => [],
-                'signature_client_name_1' => [],
-                'signature_client_name_2' => [],
-                'is_tested' => [],
-                'notes' => [],
-            ]);
+            
             $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($request['branch_id']);
             
             $nextId = ServiceReport::max('id') + 1;
