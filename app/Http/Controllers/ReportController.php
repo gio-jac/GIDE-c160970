@@ -230,31 +230,33 @@ class ReportController extends Controller
             return;
         }
 
+        $validatedData = $request->validate([
+            'user_id' => ['required'],
+            'shift_id' => ['required'],
+            'pieces' => [],
+            'sogd' => [],
+            'time_on' => [],
+            'travel_time' => [],
+            'report_type_id' => [],
+            'branch_id' => ['required'],
+            'branch_manager_id' => ['required'],
+            'reported_error' => [],
+            'code_id' => [],
+            'actions_taken' => [],
+            'reported' => [],
+            'arrival' => [],
+            'finished' => [],
+            'departure' => [],
+            'status_id' => [],
+            'signature_client_name_1' => [],
+            'signature_client_name_2' => [],
+            'is_tested' => [],
+            'notes' => [],
+        ]);
+
         try {
             DB::beginTransaction();
-            $report->update($request->validate([
-                'user_id' => ['required'],
-                'shift_id' => ['required'],
-                'pieces' => [],
-                'sogd' => [],
-                'time_on' => [],
-                'travel_time' => [],
-                'report_type_id' => [],
-                'branch_id' => ['required'],
-                'branch_manager_id' => ['required'],
-                'reported_error' => [],
-                'code_id' => [],
-                'actions_taken' => [],
-                'reported' => [],
-                'arrival' => [],
-                'finished' => [],
-                'departure' => [],
-                'status_id' => [],
-                'signature_client_name_1' => [],
-                'signature_client_name_2' => [],
-                'is_tested' => [],
-                'notes' => [],
-            ]));
+            $report->update($validatedData);
 
             $machines = $request->input('machines', []);
 
