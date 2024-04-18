@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 class ServiceReport extends Model
 {
     use HasFactory;
@@ -75,6 +75,18 @@ class ServiceReport extends Model
 
     public function machines(): BelongsToMany
     {
-        return $this->belongsToMany(Machine::class, 'service_report_machine')->withTimestamps()->withPivot('module_id','failure_id','failure_type_id','transport_time_1','transport_time_2','transport_1','transport_2','transport_3','dt');
+        return $this->belongsToMany(Machine::class, ServiceReportMachine::class)->withTimestamps()->withPivot('id','transport_time_1','transport_time_2','transport_1','transport_2','transport_3','dt');
+    }
+
+    public function machineDetails(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            ServiceReportMachineDetail::class,
+            ServiceReportMachine::class,
+            'service_report_id', // Foreign key on ServiceReportMachine table
+            'service_report_machine_id', // Foreign key on ServiceReportMachineDetail table
+            'id', // Local key on ServiceReport table
+            'id' // Local key on ServiceReportMachine table
+        );
     }
 }

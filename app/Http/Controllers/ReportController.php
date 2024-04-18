@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Status;
 use App\Models\Machine;
 use App\Models\ServiceReport;
+use App\Models\ServiceReportMachine;
+use App\Models\ServiceReportMachineDetail;
 use App\Models\Shift;
 use App\Models\Module;
 use App\Models\Failure;
@@ -123,12 +125,11 @@ class ReportController extends Controller
             ]);
             $validatedData['complete_id'] = $completeId;
             $report = ServiceReport::create($validatedData);
-            //machines: [] as Array<any>,
+            
             foreach($request->all()['machines'] as $machine) {
-                $report->machines()->attach($machine["machine_id"],[
-                    "module_id" => $machine["module_id"],
-                    "failure_id" => $machine["failure_id"],
-                    "failure_type_id" => $machine["failure_type_id"],
+                $serviceReportMachine = ServiceReportMachine::create([
+                    "service_report_id" => $report->id,
+                    "machine_id" => $machine['machine_id'],
                     "transport_time_1" => $machine["transport_time_1"],
                     "transport_time_2" => $machine["transport_time_2"],
                     "transport_1" => $machine["transport_1"] ?? 0,
@@ -136,10 +137,20 @@ class ReportController extends Controller
                     "transport_3" => $machine["transport_3"] ?? 0,
                     "dt" => $machine["dt"],
                 ]);
+                
+                $details = [];
+                foreach($machine['machine_details'] as $detail) {
+                    if(!empty($detail["module_id"]) || !empty($detail["failure_id"]) || !empty($detail["failure_type_id"])){
+                        $details[] = [
+                            'service_report_machine_id' => $serviceReportMachine->id,
+                            'module_id' => $detail["module_id"],
+                            'failure_id' => $detail["failure_id"],
+                            'failure_type_id' => $detail["failure_type_id"],
+                        ];
+                    }
+                }
+                $serviceReportMachine->details()->createMany($details);
             }
-            //$report->machines()->createMany($dataMachines);
-
-            //service_parts: [],
             $partsArray = $request->all()['service_parts'];
 
             $dataParts = [];
@@ -175,6 +186,7 @@ class ReportController extends Controller
             'machines.production_line.machines' => function($query){
                 $query->orderBy('position', 'asc');
             },
+            'machineDetails',
             'parts',
             'parts.part',
             'shift',
@@ -259,12 +271,9 @@ class ReportController extends Controller
             $report->update($validatedData);
 
             $machines = $request->input('machines', []);
-
+            $machineDetails = [];
             foreach ($machines as $machine) {
                 $pivotData = [
-                    'module_id' => $machine['module_id'],
-                    'failure_id' => $machine['failure_id'],
-                    'failure_type_id' => $machine['failure_type_id'],
                     'transport_time_1' => $machine['transport_time_1'],
                     'transport_time_2' => $machine['transport_time_2'],
                     'transport_1' => $machine['transport_1'] ?? 0,
@@ -275,7 +284,25 @@ class ReportController extends Controller
 
                 $report->machines()->sync([$machine['machine_id'] => $pivotData], false);
                 $report->machines()->updateExistingPivot($machine['machine_id'], $pivotData);
+
+                $service_report_machine_id = collect($machine['machine_details'])
+                    ->whereNotNull('service_report_machine_id')
+                    ->value('service_report_machine_id');
+
+                foreach($machine['machine_details'] as $detail) {
+                    if(!empty($detail['module_id']) || !empty($detail['failure_id']) || !empty($detail['failure_type_id'])){
+                        $machineDetails[] = [
+                            'id' => $detail['id'] ?? null,
+                            'service_report_machine_id' => $detail['service_report_machine_id'] ?? $service_report_machine_id,
+                            'module_id' => $detail['module_id'],
+                            'failure_id' => $detail['failure_id'],
+                            'failure_type_id' => $detail['failure_type_id'],
+                        ];
+                    }
+                }
             }
+            
+            $report->machineDetails()->upsert($machineDetails, ['id'], ['module_id', 'failure_id', 'failure_type_id']);
 
             $partsArray = $request->all()['service_parts'];
 

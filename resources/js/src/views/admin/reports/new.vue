@@ -131,7 +131,10 @@
                                 <div class="w-full">
                                     <div class="flex justify-evenly flex-wrap">
                                         <div
-                                            v-for="(detail, indexDetail) in postForm.machines[index].machine_details"
+                                            v-for="(
+                                                detail, indexDetail
+                                            ) in postForm.machines[index]
+                                                .machine_details"
                                             :key="detail"
                                             class="flex-[100%] flex justify-evenly flex-wrap"
                                         >
@@ -140,17 +143,26 @@
                                                 v-if="machine.only_dt !== 1"
                                             >
                                                 <label
-                                                    :for="'formModule'+index + indexDetail"
+                                                    :for="
+                                                        'formModule' +
+                                                        index +
+                                                        indexDetail
+                                                    "
                                                     >Error</label
                                                 >
                                                 <select
-                                                    :id="'formModule' +index + indexDetail"
-                                                    :name="'formModule' +index + indexDetail"
-                                                    class="form-select text-white-dark"
-                                                    v-model="
-                                                        detail
-                                                            .module_id
+                                                    :id="
+                                                        'formModule' +
+                                                        index +
+                                                        indexDetail
                                                     "
+                                                    :name="
+                                                        'formModule' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    class="form-select text-white-dark"
+                                                    v-model="detail.module_id"
                                                     required
                                                 >
                                                     <option :value="null">
@@ -171,20 +183,25 @@
                                             >
                                                 <label
                                                     :for="
-                                                        'formFailures' +index + indexDetail
+                                                        'formFailures' +
+                                                        index +
+                                                        indexDetail
                                                     "
                                                     >Cause</label
                                                 >
                                                 <select
-                                                    :id="'formFailures' +index + indexDetail"
+                                                    :id="
+                                                        'formFailures' +
+                                                        index +
+                                                        indexDetail
+                                                    "
                                                     :name="
-                                                        'formFailures' +index + indexDetail
+                                                        'formFailures' +
+                                                        index +
+                                                        indexDetail
                                                     "
                                                     class="form-select text-white-dark"
-                                                    v-model="
-                                                        detail
-                                                            .failure_id
-                                                    "
+                                                    v-model="detail.failure_id"
                                                     required
                                                 >
                                                     <option :value="null">
@@ -204,16 +221,27 @@
                                                 v-if="machine.only_dt !== 1"
                                             >
                                                 <label
-                                                    :for="'formTypes' +index + indexDetail"
+                                                    :for="
+                                                        'formTypes' +
+                                                        index +
+                                                        indexDetail
+                                                    "
                                                     >Solution</label
                                                 >
                                                 <select
-                                                    :id="'formTypes' +index + indexDetail"
-                                                    :name="'formTypes' +index + indexDetail"
+                                                    :id="
+                                                        'formTypes' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formTypes' +
+                                                        index +
+                                                        indexDetail
+                                                    "
                                                     class="form-select text-white-dark"
                                                     v-model="
-                                                        detail
-                                                            .failure_type_id
+                                                        detail.failure_type_id
                                                     "
                                                     required
                                                 >
@@ -234,7 +262,12 @@
                                         <button
                                             v-if="machine.only_dt !== 1"
                                             class="btn btn-secondary gap-2"
-                                            @click="addMachineDetail(postForm.machines[index].machine_details)"
+                                            @click="
+                                                addMachineDetail(
+                                                    postForm.machines[index]
+                                                        .machine_details
+                                                )
+                                            "
                                         >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -457,23 +490,35 @@
                                 </div>
                                 <div class="w-full">
                                     <div class="flex justify-evenly flex-wrap">
-                                        <div 
-                                            v-for="(detail, indexDetail) in postForm.machines[0].machine_details"
+                                        <div
+                                            v-for="(
+                                                detail, indexDetail
+                                            ) in postForm.machines[0]
+                                                .machine_details"
                                             :key="detail"
                                             class="flex-[100%] flex justify-evenly flex-wrap"
                                         >
-                                            <div class="p-2 flex-auto sm:flex-1">
-                                                <label :for="'formModule1'+indexDetail"
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
+                                            >
+                                                <label
+                                                    :for="
+                                                        'formModule1' +
+                                                        indexDetail
+                                                    "
                                                     >Error</label
                                                 >
                                                 <select
-                                                    :id="'formModule1'+indexDetail"
-                                                    :name="'formModule1'+indexDetail"
-                                                    class="form-select text-white-dark"
-                                                    v-model="
-                                                        detail
-                                                            .module_id
+                                                    :id="
+                                                        'formModule1' +
+                                                        indexDetail
                                                     "
+                                                    :name="
+                                                        'formModule1' +
+                                                        indexDetail
+                                                    "
+                                                    class="form-select text-white-dark"
+                                                    v-model="detail.module_id"
                                                     required
                                                 >
                                                     <option :value="null">
@@ -488,18 +533,27 @@
                                                     </option>
                                                 </select>
                                             </div>
-                                            <div class="p-2 flex-auto sm:flex-1">
-                                                <label :for="'formFailures1'+indexDetail"
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
+                                            >
+                                                <label
+                                                    :for="
+                                                        'formFailures1' +
+                                                        indexDetail
+                                                    "
                                                     >Cause</label
                                                 >
                                                 <select
-                                                    :id="'formFailures1'+indexDetail"
-                                                    :name="'formFailures1'+indexDetail"
-                                                    class="form-select text-white-dark"
-                                                    v-model="
-                                                        detail
-                                                            .failure_id
+                                                    :id="
+                                                        'formFailures1' +
+                                                        indexDetail
                                                     "
+                                                    :name="
+                                                        'formFailures1' +
+                                                        indexDetail
+                                                    "
+                                                    class="form-select text-white-dark"
+                                                    v-model="detail.failure_id"
                                                     required
                                                 >
                                                     <option :value="null">
@@ -514,17 +568,28 @@
                                                     </option>
                                                 </select>
                                             </div>
-                                            <div class="p-2 flex-auto sm:flex-1">
-                                                <label :for="'formTypes1'+indexDetail"
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
+                                            >
+                                                <label
+                                                    :for="
+                                                        'formTypes1' +
+                                                        indexDetail
+                                                    "
                                                     >Solution</label
                                                 >
                                                 <select
-                                                    :id="'formTypes1'+indexDetail"
-                                                    :name="'formTypes1'+indexDetail"
+                                                    :id="
+                                                        'formTypes1' +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formTypes1' +
+                                                        indexDetail
+                                                    "
                                                     class="form-select text-white-dark"
                                                     v-model="
-                                                        detail
-                                                            .failure_type_id
+                                                        detail.failure_type_id
                                                     "
                                                     required
                                                 >
@@ -543,7 +608,12 @@
                                         </div>
                                         <button
                                             class="btn btn-secondary gap-2"
-                                            @click="addMachineDetail(postForm.machines[0].machine_details)"
+                                            @click="
+                                                addMachineDetail(
+                                                    postForm.machines[0]
+                                                        .machine_details
+                                                )
+                                            "
                                         >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -1726,10 +1796,10 @@ function selectPartChange(searchQuery, id) {
 
 function addMachineDetail(machine) {
     machine.push({
-                    module_id: null,
-                    failure_id: null,
-                    failure_type_id: null,
-                });
+        module_id: null,
+        failure_id: null,
+        failure_type_id: null,
+    });
     console.log(machine);
 }
 
@@ -1744,7 +1814,7 @@ function submit() {
         postForm.branch_manager_id = form.selectedContact.id;
 
     console.log(postForm);
-    
+
     Swal.fire({
         title: "Processing...",
         text: "Please wait while the data is being added.",
