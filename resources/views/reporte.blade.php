@@ -110,23 +110,34 @@
             </td>
         </tr>
     </table>
+    @php
+        $module = [];
+        $failure = [];
+        $failureType = [];
+        foreach($report->machineDetails as $detail){
+            $module[] = $detail['module']['name'];
+            $failure[] = $detail['failure']['name'];
+            $failureType[] = $detail['failureType']['name'];
+        }
+    @endphp
     <table class="tblStyle">
         <tr>
             <td>
                 SO GD:<br>
                 {{ $report->sogd }}
             </td>
+            
             <td>
                 MODULE:<br>
-                {{ $report->machines[0]->pivot->module->name ?? "N/A" }}
+                {!! nl2br(implode("\n", $module)) !!}
             </td>
             <td>
                 FAILURE:<br>
-                {{ $report->machines[0]->pivot->failure->name ?? "N/A" }}
+                {!! nl2br(implode("\n", $failure)) !!}
             </td>
             <td>
                 FAULT SYMPTOM:<br>
-                {{ $report->machines[0]->pivot->failure_type->name ?? "N/A" }}
+                {!! nl2br(implode("\n", $failureType)) !!}
             </td>
         </tr>
     </table>
@@ -157,9 +168,9 @@
     <table style="text-align:center;margin:7px 0;">
         <tr>
             <td class="defaultBorder" colspan="2">REPORTED</td>
+            <td class="defaultBorder" colspan="2">DEPARTURE TIME</td>
             <td class="defaultBorder" colspan="2">ARRIVAL TIME</td>
             <td class="defaultBorder" colspan="2">FINISH TIME</td>
-            <td class="defaultBorder" colspan="2">DEPARTURE TIME</td>
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
                     class="defaultBorder{{ $report->status_id === 1 ? ' highlighted' : '' }}"></div>
@@ -213,6 +224,12 @@
                 {{ $reported[1] }}
             </td>
             <td class="defaultBorder">
+                {{ $departure[0] }}
+            </td>
+            <td class="defaultBorder">
+                {{ $departure[1] }}
+            </td>
+            <td class="defaultBorder">
                 {{ $arrival[0] }}
             </td>
             <td class="defaultBorder">
@@ -223,12 +240,6 @@
             </td>
             <td class="defaultBorder">
                 {{ $finished[1] }}
-            </td>
-            <td class="defaultBorder">
-                {{ $departure[0] }}
-            </td>
-            <td class="defaultBorder">
-                {{ $departure[1] }}
             </td>
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;margin-left:-13px;"

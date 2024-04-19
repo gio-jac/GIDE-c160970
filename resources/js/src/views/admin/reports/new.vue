@@ -102,7 +102,8 @@
                 <div class="mt-8 px-4">
                     <div class="text-lg">Machines</div>
                     <template v-if="form.selectedMachine">
-                        <div class="flex flex-wrap justify-evenly"
+                        <div
+                            class="flex flex-wrap justify-evenly"
                             v-if="
                                 form.selectedMachine.production_line &&
                                 form.selectedMachine.production_line.machines
@@ -113,7 +114,10 @@
                                 v-for="(machine, index) in form.selectedMachine
                                     .production_line.machines"
                                 :key="machine"
-                                :class="{'bg-[#ececf9]': machine.only_dt !== 1, 'bg-gray-100': machine.only_dt === 1}"
+                                :class="{
+                                    'bg-[#ececf9]': machine.only_dt !== 1,
+                                    'bg-gray-100': machine.only_dt === 1,
+                                }"
                                 class="rounded-md p-4 mb-4"
                             >
                                 <div class="text-center font-semibold">
@@ -127,92 +131,171 @@
                                 <div class="w-full">
                                     <div class="flex justify-evenly flex-wrap">
                                         <div
-                                            class="p-2 flex-auto sm:flex-1"
-                                            v-if="machine.only_dt !== 1"
+                                            v-for="(
+                                                detail, indexDetail
+                                            ) in postForm.machines[index]
+                                                .machine_details"
+                                            :key="detail"
+                                            class="flex-[100%] flex justify-evenly flex-wrap"
                                         >
-                                            <label :for="'formModule' + index"
-                                                >Error</label
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
+                                                v-if="machine.only_dt !== 1"
                                             >
-                                            <select
-                                                :id="'formModule' + index"
-                                                :name="'formModule' + index"
-                                                class="form-select text-white-dark"
-                                                v-model="
-                                                    postForm.machines[index]
-                                                        .module_id
-                                                "
-                                                required
-                                            >
-                                                <option :value="null">
-                                                    Open this select menu
-                                                </option>
-                                                <option
-                                                    v-for="tmodule in props.catalogModule"
-                                                    :key="tmodule"
-                                                    :value="tmodule.id"
+                                                <label
+                                                    :for="
+                                                        'formModule' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    >Error</label
                                                 >
-                                                    {{ tmodule.name }}
-                                                </option>
-                                            </select>
+                                                <select
+                                                    :id="
+                                                        'formModule' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formModule' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    class="form-select text-white-dark"
+                                                    v-model="detail.module_id"
+                                                    required
+                                                >
+                                                    <option :value="null">
+                                                        Open this select menu
+                                                    </option>
+                                                    <option
+                                                        v-for="tmodule in props.catalogModule"
+                                                        :key="tmodule"
+                                                        :value="tmodule.id"
+                                                    >
+                                                        {{ tmodule.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
+                                                v-if="machine.only_dt !== 1"
+                                            >
+                                                <label
+                                                    :for="
+                                                        'formFailures' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    >Cause</label
+                                                >
+                                                <select
+                                                    :id="
+                                                        'formFailures' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formFailures' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    class="form-select text-white-dark"
+                                                    v-model="detail.failure_id"
+                                                    required
+                                                >
+                                                    <option :value="null">
+                                                        Open this select menu
+                                                    </option>
+                                                    <option
+                                                        v-for="failure in props.catalogFailures"
+                                                        :key="failure"
+                                                        :value="failure.id"
+                                                    >
+                                                        {{ failure.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
+                                                v-if="machine.only_dt !== 1"
+                                            >
+                                                <label
+                                                    :for="
+                                                        'formTypes' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    >Solution</label
+                                                >
+                                                <select
+                                                    :id="
+                                                        'formTypes' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formTypes' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    class="form-select text-white-dark"
+                                                    v-model="
+                                                        detail.failure_type_id
+                                                    "
+                                                    required
+                                                >
+                                                    <option :value="null">
+                                                        Open this select menu
+                                                    </option>
+                                                    <option
+                                                        v-for="failuretype in props.catalogTypes"
+                                                        :key="failuretype"
+                                                        :value="failuretype.id"
+                                                    >
+                                                        {{ failuretype.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div
-                                            class="p-2 flex-auto sm:flex-1"
+
+                                        <button
                                             v-if="machine.only_dt !== 1"
-                                        >
-                                            <label :for="'formFailures' + index"
-                                                >Cause</label
-                                            >
-                                            <select
-                                                :id="'formFailures' + index"
-                                                :name="'formFailures' + index"
-                                                class="form-select text-white-dark"
-                                                v-model="
+                                            class="btn btn-secondary gap-2"
+                                            @click="
+                                                addMachineDetail(
                                                     postForm.machines[index]
-                                                        .failure_id
-                                                "
-                                                required
-                                            >
-                                                <option :value="null">
-                                                    Open this select menu
-                                                </option>
-                                                <option
-                                                    v-for="failure in props.catalogFailures"
-                                                    :key="failure"
-                                                    :value="failure.id"
-                                                >
-                                                    {{ failure.name }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div
-                                            class="p-2 flex-auto sm:flex-1"
-                                            v-if="machine.only_dt !== 1"
+                                                        .machine_details
+                                                )
+                                            "
                                         >
-                                            <label :for="'formTypes' + index"
-                                                >Solution</label
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24px"
+                                                height="24px"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                class="w-5 h-5"
                                             >
-                                            <select
-                                                :id="'formTypes' + index"
-                                                :name="'formTypes' + index"
-                                                class="form-select text-white-dark"
-                                                v-model="
-                                                    postForm.machines[index]
-                                                        .failure_type_id
-                                                "
-                                                required
-                                            >
-                                                <option :value="null">
-                                                    Open this select menu
-                                                </option>
-                                                <option
-                                                    v-for="failuretype in props.catalogTypes"
-                                                    :key="failuretype"
-                                                    :value="failuretype.id"
-                                                >
-                                                    {{ failuretype.name }}
-                                                </option>
-                                            </select>
-                                        </div>
+                                                <line
+                                                    x1="12"
+                                                    y1="5"
+                                                    x2="12"
+                                                    y2="19"
+                                                ></line>
+                                                <line
+                                                    x1="5"
+                                                    y1="12"
+                                                    x2="19"
+                                                    y2="12"
+                                                ></line>
+                                            </svg>
+                                        </button>
+
                                         <div
                                             class="flex-[100%]"
                                             v-if="machine.only_dt !== 1"
@@ -254,7 +337,11 @@
                                                                     index
                                                                 ].transport_1
                                                             "
-                                                            @input="transportValidation(index)"
+                                                            @input="
+                                                                transportValidation(
+                                                                    index
+                                                                )
+                                                            "
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
@@ -290,7 +377,11 @@
                                                                     index
                                                                 ].transport_2
                                                             "
-                                                            @input="transportValidation(index)"
+                                                            @input="
+                                                                transportValidation(
+                                                                    index
+                                                                )
+                                                            "
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
@@ -325,7 +416,11 @@
                                                                     index
                                                                 ].transport_3
                                                             "
-                                                            @input="transportValidation(index)"
+                                                            @input="
+                                                                transportValidation(
+                                                                    index
+                                                                )
+                                                            "
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
@@ -346,7 +441,11 @@
                                                         postForm.machines[index]
                                                             .transport_1
                                                     "
-                                                    @input="transportValidation(index)"
+                                                    @input="
+                                                        transportValidation(
+                                                            index
+                                                        )
+                                                    "
                                                     name="formShiftTotal11"
                                                     class="form-input text-white-dark"
                                                     type="number"
@@ -391,84 +490,157 @@
                                 </div>
                                 <div class="w-full">
                                     <div class="flex justify-evenly flex-wrap">
-                                        <div class="p-2 flex-auto sm:flex-1">
-                                            <label for="formModule1"
-                                                >Error</label
+                                        <div
+                                            v-for="(
+                                                detail, indexDetail
+                                            ) in postForm.machines[0]
+                                                .machine_details"
+                                            :key="detail"
+                                            class="flex-[100%] flex justify-evenly flex-wrap"
+                                        >
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
                                             >
-                                            <select
-                                                id="formModule1"
-                                                name="formModule1"
-                                                class="form-select text-white-dark"
-                                                v-model="
-                                                    postForm.machines[0]
-                                                        .module_id
-                                                "
-                                                required
-                                            >
-                                                <option :value="null">
-                                                    Open this select menu
-                                                </option>
-                                                <option
-                                                    v-for="tmodule in props.catalogModule"
-                                                    :key="tmodule"
-                                                    :value="tmodule.id"
+                                                <label
+                                                    :for="
+                                                        'formModule1' +
+                                                        indexDetail
+                                                    "
+                                                    >Error</label
                                                 >
-                                                    {{ tmodule.name }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="p-2 flex-auto sm:flex-1">
-                                            <label for="formFailures1"
-                                                >Cause</label
-                                            >
-                                            <select
-                                                id="formFailures1"
-                                                name="formFailures1"
-                                                class="form-select text-white-dark"
-                                                v-model="
-                                                    postForm.machines[0]
-                                                        .failure_id
-                                                "
-                                                required
-                                            >
-                                                <option :value="null">
-                                                    Open this select menu
-                                                </option>
-                                                <option
-                                                    v-for="failure in props.catalogFailures"
-                                                    :key="failure"
-                                                    :value="failure.id"
+                                                <select
+                                                    :id="
+                                                        'formModule1' +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formModule1' +
+                                                        indexDetail
+                                                    "
+                                                    class="form-select text-white-dark"
+                                                    v-model="detail.module_id"
+                                                    required
                                                 >
-                                                    {{ failure.name }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="p-2 flex-auto sm:flex-1">
-                                            <label for="formTypes"
-                                                >Solution</label
+                                                    <option :value="null">
+                                                        Open this select menu
+                                                    </option>
+                                                    <option
+                                                        v-for="tmodule in props.catalogModule"
+                                                        :key="tmodule"
+                                                        :value="tmodule.id"
+                                                    >
+                                                        {{ tmodule.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
                                             >
-                                            <select
-                                                id="formTypes1"
-                                                name="formTypes1"
-                                                class="form-select text-white-dark"
-                                                v-model="
-                                                    postForm.machines[0]
-                                                        .failure_type_id
-                                                "
-                                                required
-                                            >
-                                                <option :value="null">
-                                                    Open this select menu
-                                                </option>
-                                                <option
-                                                    v-for="failuretype in props.catalogTypes"
-                                                    :key="failuretype"
-                                                    :value="failuretype.id"
+                                                <label
+                                                    :for="
+                                                        'formFailures1' +
+                                                        indexDetail
+                                                    "
+                                                    >Cause</label
                                                 >
-                                                    {{ failuretype.name }}
-                                                </option>
-                                            </select>
+                                                <select
+                                                    :id="
+                                                        'formFailures1' +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formFailures1' +
+                                                        indexDetail
+                                                    "
+                                                    class="form-select text-white-dark"
+                                                    v-model="detail.failure_id"
+                                                    required
+                                                >
+                                                    <option :value="null">
+                                                        Open this select menu
+                                                    </option>
+                                                    <option
+                                                        v-for="failure in props.catalogFailures"
+                                                        :key="failure"
+                                                        :value="failure.id"
+                                                    >
+                                                        {{ failure.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
+                                            >
+                                                <label
+                                                    :for="
+                                                        'formTypes1' +
+                                                        indexDetail
+                                                    "
+                                                    >Solution</label
+                                                >
+                                                <select
+                                                    :id="
+                                                        'formTypes1' +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formTypes1' +
+                                                        indexDetail
+                                                    "
+                                                    class="form-select text-white-dark"
+                                                    v-model="
+                                                        detail.failure_type_id
+                                                    "
+                                                    required
+                                                >
+                                                    <option :value="null">
+                                                        Open this select menu
+                                                    </option>
+                                                    <option
+                                                        v-for="failuretype in props.catalogTypes"
+                                                        :key="failuretype"
+                                                        :value="failuretype.id"
+                                                    >
+                                                        {{ failuretype.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
                                         </div>
+                                        <button
+                                            class="btn btn-secondary gap-2"
+                                            @click="
+                                                addMachineDetail(
+                                                    postForm.machines[0]
+                                                        .machine_details
+                                                )
+                                            "
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24px"
+                                                height="24px"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                class="w-5 h-5"
+                                            >
+                                                <line
+                                                    x1="12"
+                                                    y1="5"
+                                                    x2="12"
+                                                    y2="19"
+                                                ></line>
+                                                <line
+                                                    x1="5"
+                                                    y1="12"
+                                                    x2="19"
+                                                    y2="12"
+                                                ></line>
+                                            </svg>
+                                        </button>
                                         <div class="flex-[100%]">
                                             <div
                                                 class="w-full flex justify-evenly flex-wrap"
@@ -485,7 +657,11 @@
                                                             postForm.machines[0]
                                                                 .transport_1
                                                         "
-                                                        @input="transportValidation(0)"
+                                                        @input="
+                                                            transportValidation(
+                                                                0
+                                                            )
+                                                        "
                                                         name="formShiftTotal11"
                                                         class="form-input text-white-dark"
                                                         min="0.0"
@@ -855,78 +1031,56 @@
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
-                    <div
-                        class="flex justify-between lg:flex-row flex-col flex-wrap"
-                    >
-                        <div
-                            class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6"
-                        >
-                            <div
-                                class="mt-4 flex items-center"
-                                v-if="!form.selectedMachine?.production_line_id"
-                            >
-                                <label
-                                    for="formReportReportedTime"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Reported</label
-                                >
-                                <flat-pickr
-                                    id="formReportReportedTime"
-                                    name="formReportReportedTime"
-                                    v-model="postForm.reported"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportTimeArrival"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Arrival</label
-                                >
-                                <flat-pickr
-                                    id="formReportTimeArrival"
-                                    name="formReportTimeArrival"
-                                    v-model="postForm.arrival"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
+                    <div class="flex flex-wrap justify-evenly">
+                        <div class="px-2 max-w-[180px]"  v-if="!form.selectedMachine?.production_line_id">
+                            <label for="formReportReportedTime">
+                                Reported
+                            </label>
+                            <flat-pickr
+                                id="formReportReportedTime"
+                                name="formReportReportedTime"
+                                v-model="postForm.reported"
+                                class="form-input flex-1"
+                                :config="dateTime"
+                            ></flat-pickr>
                         </div>
-                        <div class="lg:w-1/2 w-full">
-                            <div
-                                class="mt-4 flex items-center"
-                                v-if="!form.selectedMachine?.production_line_id"
-                            >
-                                <label
-                                    for="formReportTimeDeparture"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Departure</label
-                                >
-                                <flat-pickr
-                                    id="formReportTimeDeparture"
-                                    name="formReportTimeDeparture"
-                                    v-model="postForm.departure"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportTimeFinished"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Finished</label
-                                >
-                                <flat-pickr
-                                    id="formReportTimeFinished"
-                                    name="formReportTimeFinished"
-                                    v-model="postForm.finished"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
+                        <div class="px-2 max-w-[180px]"  v-if="!form.selectedMachine?.production_line_id">
+                            <label for="formReportTimeDeparture">
+                                Departure
+                            </label>
+                            <flat-pickr
+                                id="formReportTimeDeparture"
+                                name="formReportTimeDeparture"
+                                v-model="postForm.departure"
+                                class="form-input flex-1"
+                                :config="dateTime"
+                            ></flat-pickr>
                         </div>
-                        <div class="w-full flex flex-wrap justify-evenly">
+                        <div class="px-2 max-w-[180px]">
+                            <label for="formReportTimeArrival">
+                                Arrival
+                            </label>
+                            <flat-pickr
+                                id="formReportTimeArrival"
+                                name="formReportTimeArrival"
+                                v-model="postForm.arrival"
+                                class="form-input flex-1"
+                                :config="dateTime"
+                            ></flat-pickr>
+                        </div>
+                        <div class="px-2 max-w-[180px]">
+                            <label for="formReportTimeFinished">
+                                Finished
+                            </label>
+                            <flat-pickr
+                                id="formReportTimeFinished"
+                                name="formReportTimeFinished"
+                                v-model="postForm.finished"
+                                class="form-input flex-1"
+                                :config="dateTime"
+                            ></flat-pickr>
+                        </div>
+                        <div class="w-full flex flex-wrap justify-evenly py-4">
                             <label
                                 v-for="(status, index) in catalogStatus"
                                 :key="index"
@@ -942,20 +1096,16 @@
                                 <span>{{ status.status }}</span>
                             </label>
                         </div>
-                        <div class="w-1/3 m-auto">
-                            <div
-                                class="mt-4 flex items-center flex flex-wrap justify-evenly"
-                            >
-                                <label class="inline-flex">
-                                    <input
-                                        type="checkbox"
-                                        v-model="postForm.is_tested"
-                                        class="form-checkbox rounded-full"
-                                        checked
-                                    />
-                                    <span>Test OK</span>
-                                </label>
-                            </div>
+                        <div class="w-full flex flex-wrap justify-evenly">
+                            <label class="inline-flex">
+                                <input
+                                    type="checkbox"
+                                    v-model="postForm.is_tested"
+                                    class="form-checkbox rounded-full"
+                                    checked
+                                />
+                                <span>Test OK</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -1528,9 +1678,13 @@ const updateMachines = (selectedMachine) => {
 
         return {
             machine_id: machineId,
-            module_id: null,
-            failure_id: null,
-            failure_type_id: null,
+            machine_details: [
+                {
+                    module_id: null,
+                    failure_id: null,
+                    failure_type_id: null,
+                },
+            ],
             transport_time_1: null,
             transport_time_2: null,
             transport_1: null,
@@ -1572,14 +1726,17 @@ const postForm = reactive({
 });
 
 function transportValidation(index) {
-  const machine = postForm.machines[index];
-  const transportFields = ['transport_1', 'transport_2', 'transport_3'];
+    const machine = postForm.machines[index];
+    const transportFields = ["transport_1", "transport_2", "transport_3"];
 
-  transportFields.forEach(field => {
-    if (machine[field] !== null) {
-      machine[field] = Math.max(0, Math.min(Number(machine[field]), 9999.9));
-    }
-  });
+    transportFields.forEach((field) => {
+        if (machine[field] !== null) {
+            machine[field] = Math.max(
+                0,
+                Math.min(Number(machine[field]), 99999.9)
+            );
+        }
+    });
 }
 
 let timeoutId = ref(null);
@@ -1609,6 +1766,15 @@ function selectPartChange(searchQuery, id) {
                 console.error("Error:", error);
             });
     }, 1500);
+}
+
+function addMachineDetail(machine) {
+    machine.push({
+        module_id: null,
+        failure_id: null,
+        failure_type_id: null,
+    });
+    console.log(machine);
 }
 
 function submit() {

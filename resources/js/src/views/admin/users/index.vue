@@ -120,6 +120,7 @@
                                         ></path>
                                     </svg>
                                 </Link>
+                                <!--
                                 <button
                                     type="button"
                                     class="hover:text-danger"
@@ -166,7 +167,7 @@
                                             stroke-width="1.5"
                                         ></path>
                                     </svg>
-                                </button>
+                                </button>-->
                             </div>
                         </template>
                     </vue3-datatable>

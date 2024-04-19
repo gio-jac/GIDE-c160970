@@ -28,6 +28,6 @@ class Machine extends Model
 
     public function serviceReports(): BelongsToMany
     {
-        return $this->belongsToMany(ServiceReport::class, 'service_report_machine');
+        return $this->belongsToMany(ServiceReport::class, ServiceReportMachine::class)->withTimestamps()->withPivot('transport_time_1','transport_time_2','transport_1','transport_2','transport_3','dt');
     }
 }
