@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ServiceReportMachineDetail extends Model
 {
@@ -20,5 +21,17 @@ class ServiceReportMachineDetail extends Model
     public function serviceReportMachine()
     {
         return $this->belongsTo(ServiceReportMachine::class);
+    }
+
+    public function module(): HasOne{
+        return $this->hasOne(Module::class, 'id', 'module_id');
+    }
+
+    public function failure(): HasOne{
+        return $this->hasOne(Failure::class, 'id', 'failure_id');
+    }
+
+    public function failureType(): HasOne{
+        return $this->hasOne(FailureType::class, 'id', 'failure_type_id');
     }
 }

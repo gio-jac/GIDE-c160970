@@ -384,6 +384,10 @@ class ReportController extends Controller
                 $query->orderBy('position', 'asc');
             },
             'machines.machine_model',
+            'machineDetails',
+            'machineDetails.module',
+            'machineDetails.failure',
+            'machineDetails.failureType',
             'parts','parts.part',
             'shift',
             'user',
@@ -396,11 +400,6 @@ class ReportController extends Controller
             return;
         }
         
-        foreach($report->machines as &$machine){
-            $machine->pivot->module = Module::find($machine->pivot->module_id);
-            $machine->pivot->failure = Failure::find($machine->pivot->failure_id);
-            $machine->pivot->failure_type = FailureType::find($machine->pivot->failure_type_id);
-        }
         $catalogCodes = Code::where('is_active', 1)->get();
         //return response()->json($report);
         $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';

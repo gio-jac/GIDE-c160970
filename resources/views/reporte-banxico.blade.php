@@ -43,10 +43,10 @@
 <body>
     <table>
         <tr>
-            <td style="width:50%; text-align:center;">
-                <img style="max-width:50%;" src="{{public_path('assets/images/icon/GD_Logo_BWM_pos_600.png')}}">
+            <td style="width:20%; text-align:left;">
+                <img style="max-width:200px;" src="{{public_path('assets/images/icon/GD_Logo_BWM_pos_600.png')}}">
             </td>
-            <td style="width:50%;text-align: center;">
+            <td style="width:80%;text-align: left;">
                 <p style="font-weight: normal;">REPORT ID:
                     {{ $report->complete_id }}
                 </p>
@@ -105,11 +105,25 @@
     <table class="tblStyle">
         @foreach ($report->machines as $machines)
             @if($machines->only_dt !== 1)
+            @php
+                $machineDetails = $report->machineDetails->filter(function ($item) use ($machines) {
+                    return $item['service_report_machine_id'] === $machines->pivot->id;
+                });
+                $module = [];
+                $failure = [];
+                $failureType = [];
+                foreach($machineDetails as $detail){
+                    $module[] = $detail['module']['name'];
+                    $failure[] = $detail['failure']['name'];
+                    $failureType[] = $detail['failureType']['name'];
+                }
+                var_dump($module);
+            @endphp
             <tr>
                 <td>{{ $machines->serial }}</td>
-                <td>{{ empty($machines->pivot->module->name) ? "N/A" : $machines->pivot->module->name }}</td>
-                <td>{{ empty($machines->pivot->failure->name) ? "N/A" : $machines->pivot->failure->name}}</td>
-                <td>{{ empty($machines->pivot->failure_type->name) ? "N/A" : $machines->pivot->failure_type->name}}</td>
+                <td>{!! nl2br(implode("\n", $module)) !!}</td>
+                <td>{!! nl2br(implode("\n", $failure)) !!}</td>
+                <td>{!! nl2br(implode("\n", $failureType)) !!}</td>
             </tr>
             @endif
         @endforeach
@@ -161,7 +175,7 @@
             <td></td>
             <td>Transporte Inicial</td>
             <td>Transporte Final</td>
-            <td>T.E.</td>
+            <td>Tiempo Extra</td>
         </tr>
         @foreach ($report->machines as $machine)
             @if($machine->only_dt !== 1)
@@ -235,7 +249,7 @@
             $widthcss = $widthPercentage . "%";
         @endphp
         <div class="defaultBorder" style="float: left;width: {{ $widthcss }};height:100px;margin:0px 10px;text-align:center;">
-            PERFOMED BY:
+            REPORTADO POR:
             <div style="width:100%;text-align:center;margin-top:70px;">Ingeniero de Proceso</div>
         </div>
 

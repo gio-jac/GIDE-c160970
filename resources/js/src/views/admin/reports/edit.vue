@@ -139,6 +139,7 @@
                                                     >Error</label
                                                 >
                                                 <select
+                                                    :disabled="props.report.closed === 1"
                                                     :id="
                                                         'formModule' +
                                                         index +
@@ -178,6 +179,7 @@
                                                     >Cause</label
                                                 >
                                                 <select
+                                                    :disabled="props.report.closed === 1"
                                                     :id="
                                                         'formFailures' +
                                                         index +
@@ -217,6 +219,7 @@
                                                     >Solution</label
                                                 >
                                                 <select
+                                                    :disabled="props.report.closed === 1"
                                                     :id="
                                                         'formTypes' +
                                                         index +
@@ -248,7 +251,7 @@
                                         </div>
 
                                         <button
-                                            v-if="machine.only_dt !== 1"
+                                            v-if="machine.only_dt !== 1 && props.report.closed !== 1"
                                             class="btn btn-secondary gap-2"
                                             @click="
                                                 addMachineDetail(
@@ -311,6 +314,7 @@
                                                             Transport</label
                                                         >
                                                         <input
+                                                            :disabled="props.report.closed === 1"
                                                             :id="
                                                                 'formTransport1' +
                                                                 index
@@ -351,6 +355,7 @@
                                                             Transport</label
                                                         >
                                                         <input
+                                                            :disabled="props.report.closed === 1"
                                                             :id="
                                                                 'formTransport2' +
                                                                 index
@@ -390,6 +395,7 @@
                                                             Transport</label
                                                         >
                                                         <input
+                                                            :disabled="props.report.closed === 1"
                                                             :id="
                                                                 'formTransport3' +
                                                                 index
@@ -449,6 +455,7 @@
                                                 >DT (Min.)</label
                                             >
                                             <input
+                                                :disabled="props.report.closed === 1"
                                                 :id="'formReportDT' + index"
                                                 type="number"
                                                 v-model="
@@ -497,6 +504,7 @@
                                                     >Error</label
                                                 >
                                                 <select
+                                                    :disabled="props.report.closed === 1"
                                                     :id="
                                                         'formModule1' +
                                                         indexDetail
@@ -532,6 +540,7 @@
                                                     >Cause</label
                                                 >
                                                 <select
+                                                    :disabled="props.report.closed === 1"
                                                     :id="
                                                         'formFailures1' +
                                                         indexDetail
@@ -567,6 +576,7 @@
                                                     >Solution</label
                                                 >
                                                 <select
+                                                    :disabled="props.report.closed === 1"
                                                     :id="
                                                         'formTypes1' +
                                                         indexDetail
@@ -595,6 +605,7 @@
                                             </div>
                                         </div>
                                         <button
+                                            v-if="props.report.closed !== 1"
                                             class="btn btn-secondary gap-2"
                                             @click="
                                                 addMachineDetail(
@@ -639,6 +650,7 @@
                                                         >Transport</label
                                                     >
                                                     <input
+                                                        :disabled="props.report.closed === 1"
                                                         id="formShiftTotal11"
                                                         type="number"
                                                         v-model="
@@ -663,6 +675,7 @@
                                                         >DT (Min.)</label
                                                     >
                                                     <input
+                                                        :disabled="props.report.closed === 1"
                                                         id="formReportDT1"
                                                         type="number"
                                                         v-model="
@@ -1028,113 +1041,87 @@
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
-                    <div
-                        class="flex justify-between lg:flex-row flex-col flex-wrap"
-                    >
-                        <div
-                            class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6"
-                        >
-                            <div
-                                class="mt-4 flex items-center"
-                                v-if="!form.selectedMachine?.production_line_id"
-                            >
-                                <label
-                                    for="formReportReportedTime"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Reported</label
-                                >
-                                <flat-pickr
-                                    :disabled="props.report.closed === 1"
-                                    id="formReportReportedTime"
-                                    name="formReportReportedTime"
-                                    v-model="postForm.reported"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportTimeArrival"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Arrival</label
-                                >
-                                <flat-pickr
-                                    :disabled="props.report.closed === 1"
-                                    id="formReportTimeArrival"
-                                    name="formReportTimeArrival"
-                                    v-model="postForm.arrival"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
+                    <div class="flex flex-wrap justify-evenly">
+                        <div class="px-2 max-w-[180px]"  v-if="!form.selectedMachine?.production_line_id">
+                            <label for="formReportReportedTime">
+                                Reported
+                            </label>
+                            <flat-pickr
+                                id="formReportReportedTime"
+                                name="formReportReportedTime"
+                                v-model="postForm.reported"
+                                class="form-input flex-1"
+                                :config="dateTime"
+                                :disabled="props.report.closed === 1"
+                            ></flat-pickr>
                         </div>
-                        <div class="lg:w-1/2 w-full">
-                            <div
-                                class="mt-4 flex items-center"
-                                v-if="!form.selectedMachine?.production_line_id"
-                            >
-                                <label
-                                    for="formReportTimeDeparture"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Departure</label
-                                >
-                                <flat-pickr
-                                    :disabled="props.report.closed === 1"
-                                    id="formReportTimeDeparture"
-                                    name="formReportTimeDeparture"
-                                    v-model="postForm.departure"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportTimeFinished"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Finished</label
-                                >
-                                <flat-pickr
-                                    :disabled="props.report.closed === 1"
-                                    id="formReportTimeFinished"
-                                    name="formReportTimeFinished"
-                                    v-model="postForm.finished"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
-                            </div>
+                        <div class="px-2 max-w-[180px]"  v-if="!form.selectedMachine?.production_line_id">
+                            <label for="formReportTimeDeparture">
+                                Departure
+                            </label>
+                            <flat-pickr
+                                id="formReportTimeDeparture"
+                                name="formReportTimeDeparture"
+                                v-model="postForm.departure"
+                                class="form-input flex-1"
+                                :config="dateTime"
+                                :disabled="props.report.closed === 1"
+                            ></flat-pickr>
                         </div>
-                        <div class="w-full flex flex-wrap justify-evenly">
+                        <div class="px-2 max-w-[180px]">
+                            <label for="formReportTimeArrival">
+                                Arrival
+                            </label>
+                            <flat-pickr
+                                id="formReportTimeArrival"
+                                name="formReportTimeArrival"
+                                v-model="postForm.arrival"
+                                class="form-input flex-1"
+                                :config="dateTime"
+                                :disabled="props.report.closed === 1"
+                            ></flat-pickr>
+                        </div>
+                        <div class="px-2 max-w-[180px]">
+                            <label for="formReportTimeFinished">
+                                Finished
+                            </label>
+                            <flat-pickr
+                                id="formReportTimeFinished"
+                                name="formReportTimeFinished"
+                                v-model="postForm.finished"
+                                class="form-input flex-1"
+                                :config="dateTime"
+                                :disabled="props.report.closed === 1"
+                            ></flat-pickr>
+                        </div>
+                        <div class="w-full flex flex-wrap justify-evenly py-4">
                             <label
                                 v-for="(status, index) in catalogStatus"
                                 :key="index"
                                 class="inline-flex"
                             >
                                 <input
-                                    :disabled="props.report.closed === 1"
                                     type="radio"
                                     name="formReportStatus"
                                     class="form-radio"
                                     :value="status.id"
                                     v-model="postForm.status_id"
+                                    :disabled="props.report.closed === 1"
                                 />
                                 <span>{{ status.status }}</span>
                             </label>
                         </div>
-                        <div class="w-1/3 m-auto">
-                            <div
-                                class="mt-4 flex items-center flex flex-wrap justify-evenly"
-                            >
-                                <label class="inline-flex">
-                                    <input
-                                        :disabled="props.report.closed === 1"
-                                        type="checkbox"
-                                        v-model="postForm.is_tested"
-                                        class="form-checkbox rounded-full"
-                                        checked
-                                    />
-                                    <span>Test OK</span>
-                                </label>
-                            </div>
+                        <div class="w-full flex flex-wrap justify-evenly">
+                            <label class="inline-flex">
+                                <input
+                                    type="checkbox"
+                                    v-model="postForm.is_tested"
+                                    class="form-checkbox rounded-full"
+                                    checked
+                                    :disabled="props.report.closed === 1"
+                                />
+                                <span>Test OK</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -1776,7 +1763,7 @@ function transportValidation(index) {
         if (machine[field] !== null) {
             machine[field] = Math.max(
                 0,
-                Math.min(Number(machine[field]), 9999.9)
+                Math.min(Number(machine[field]), 99999.9)
             );
         }
     });
