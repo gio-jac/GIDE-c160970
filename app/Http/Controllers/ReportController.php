@@ -103,8 +103,6 @@ class ReportController extends Controller
             'finished' => [],
             'departure' => [],
             'status_id' => [],
-            'signature_client_name_1' => [],
-            'signature_client_name_2' => [],
             'is_tested' => [],
             'notes' => [],
         ]);
@@ -136,6 +134,7 @@ class ReportController extends Controller
                     "transport_2" => $machine["transport_2"] ?? 0,
                     "transport_3" => $machine["transport_3"] ?? 0,
                     "dt" => $machine["dt"],
+                    "signature_client_name" => $machine["signature_client_name"] ?? null,
                 ]);
                 
                 $details = [];
@@ -260,8 +259,6 @@ class ReportController extends Controller
             'finished' => [],
             'departure' => [],
             'status_id' => [],
-            'signature_client_name_1' => [],
-            'signature_client_name_2' => [],
             'is_tested' => [],
             'notes' => [],
         ]);
@@ -280,6 +277,7 @@ class ReportController extends Controller
                     'transport_2' => $machine['transport_2'] ?? 0,
                     'transport_3' => $machine['transport_3'] ?? 0,
                     'dt' => $machine['dt'],
+                    'signature_client_name' => $machine['signature_client_name'] ?? null,
                 ];
 
                 $report->machines()->sync([$machine['machine_id'] => $pivotData], false);

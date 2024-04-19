@@ -299,7 +299,7 @@
 
         <div class="defaultBorder" style="float: right;width: 48%;height:100px;">
             CUSTOMER SIGNATURE:
-            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name_1) ? $report->branch->branchManagers[0]->name : $report->signature_client_name_1 }}</div>
+            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->machines[0]->pivot->signature_client_name) ? $report->branch->branchManagers[0]->name : $report->machines[0]->pivot->signature_client_name }}</div>
         </div>
         <div style="clear: both;"></div>
     </div>

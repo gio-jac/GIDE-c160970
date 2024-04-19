@@ -37,8 +37,6 @@ class ServiceReport extends Model
         'status_id',
         'is_tested',
         'notes',
-        'signature_client_name_1',
-        'signature_client_name_2',
         'is_active',
         'branch_id',
     ];
@@ -75,7 +73,7 @@ class ServiceReport extends Model
 
     public function machines(): BelongsToMany
     {
-        return $this->belongsToMany(Machine::class, ServiceReportMachine::class)->withTimestamps()->withPivot('id','transport_time_1','transport_time_2','transport_1','transport_2','transport_3','dt');
+        return $this->belongsToMany(Machine::class, ServiceReportMachine::class)->withTimestamps()->withPivot('id','transport_time_1','transport_time_2','transport_1','transport_2','transport_3','dt','signature_client_name');
     }
 
     public function machineDetails(): HasManyThrough
