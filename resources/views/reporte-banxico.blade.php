@@ -242,27 +242,34 @@
     <div style="clear: both;"></div>
         
     <div style="position: absolute; bottom: 0;width:100%;">
-        @php 
-            $signatureNumber = !empty($report->signature_client_name_2) ? 3 : 2;
-            $widthPercentage = 92 / $signatureNumber;
-            $widthcss = $widthPercentage . "%";
+        @php
+        $signatureNames = $report->machines
+            ->filter(fn($machine) => !empty($machine->pivot->signature_client_name))
+            ->map(fn($machine) => [
+                'serial' => $machine->serial,
+                'signature_client_name' => $machine->pivot->signature_client_name
+            ])
+            ->values()
+            ->all();
+
+        $signatureNames = $signatureNames ?: [[
+            'serial' => $report->machines[0]->serial,
+            'signature_client_name' => $report->branch->branchManagers[0]->name
+        ]];
+
+        $widthcss = 92 / (count($signatureNames) + 1) . '%';
         @endphp
         <div class="defaultBorder" style="float: left;width: {{ $widthcss }};height:100px;margin:0px 10px;text-align:center;">
             REPORTADO POR:
             <div style="width:100%;text-align:center;margin-top:70px;">Ingeniero de Proceso</div>
         </div>
 
+        @foreach($signatureNames as $signatureName)
         <div class="defaultBorder" style="float: left;width: {{ $widthcss }};height:100px;margin:0px 10px;text-align:center;">
-            OPERADOR {{ $report->machines[0]->serial }}:
-            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name_1) ? $report->branch->branchManagers[0]->name : $report->signature_client_name_1 }}</div>
+            OPERADOR {{ $signatureName['serial'] }}:
+            <div style="width:100%;text-align:center;margin-top:70px;">{{ $signatureName['signature_client_name'] }}</div>
         </div>
-        
-        @if($signatureNumber === 3)
-        <div class="defaultBorder" style="float: left;width: {{ $widthcss }};height:100px;margin:0px 10px;text-align:center;">
-            OPERADOR {{ $report->machines[1]->serial }}:
-            <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->signature_client_name_2) ? $report->branch->branchManagers[0]->name : $report->signature_client_name_2 }}</div>
-        </div>
-        @endif
+        @endforeach
         <div style="clear: both;"></div>
     </div>
 </body>

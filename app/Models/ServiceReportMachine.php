@@ -20,6 +20,7 @@ class ServiceReportMachine extends Model
         'transport_2',
         'transport_3',
         'dt',
+        'signature_client_name',
     ];
     
     public function serviceReport()

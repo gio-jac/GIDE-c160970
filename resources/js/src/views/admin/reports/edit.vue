@@ -1292,50 +1292,34 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div
-                        class="flex justify-between lg:flex-row flex-col flex-wrap"
+                        v-if="form.selectedMachine"
+                        class="flex flex-wrap justify-evenly w-full"
                     >
-                        <div class="w-full">
-                            <div class="flex items-center">
-                                <label
-                                    for="formCustomerSignatureName1"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/4 mb-0"
-                                    >Customer Signature Name</label
-                                >
-                                <input
-                                    :disabled="props.report.closed === 1"
-                                    id="formCustomerSignatureName1"
-                                    type="text"
-                                    v-model="postForm.signature_client_name_1"
-                                    name="formCustomerSignatureName1"
-                                    class="form-input flex-1"
-                                    placeholder="Enter Customer Name"
-                                />
-                            </div>
-                        </div>
-                        <div
-                            class="w-full py-2"
-                            v-if="
-                                form.selectedMachine?.machine_model
-                                    .model_segment.is_multi_transport === 1
-                            "
+                        <template
+                            v-for="(machine,index) in getMachines()"
+                            :key="machine"
                         >
-                            <div class="flex items-center">
+                            <div
+                                v-if="machine.only_dt !== 1"
+                                class="text-center min-w-[270px]"
+                            >
                                 <label
-                                    for="formCustomerSignatureName2"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/4 mb-0"
-                                    >Customer Signature Name</label
+                                    :for="`formSignatureName-${machine.serial}`"
+                                    class="mb-0"
                                 >
+                                    {{ machine.serial }}
+                                </label>
                                 <input
-                                    :disabled="props.report.closed === 1"
-                                    id="formCustomerSignatureName2"
+                                    :id="`formSignatureName-${machine.serial}`"
                                     type="text"
-                                    v-model="postForm.signature_client_name_2"
-                                    name="formCustomerSignatureName2"
+                                    :disabled="props.report.closed === 1"
+                                    :name="`formSignatureName-${machine.serial}`"
+                                    v-model="postForm.machines[index].signature_client_name"
                                     class="form-input flex-1"
-                                    placeholder="Enter Customer Name"
+                                    placeholder="Enter Signature Name"
                                 />
                             </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -1634,6 +1618,7 @@ onMounted(() => {
             transport_2: props.report.machines[index].pivot.transport_2,
             transport_3: props.report.machines[index].pivot.transport_3,
             dt: props.report.machines[index].pivot.dt,
+            signature_client_name: props.report.machines[index].pivot.signature_client_name,
         })
     );
 
@@ -1679,8 +1664,6 @@ onMounted(() => {
     postForm.finished = props.report.finished;
     postForm.departure = props.report.departure;
     postForm.status_id = props.report.status_id;
-    postForm.signature_client_name_1 = props.report.signature_client_name_1;
-    postForm.signature_client_name_2 = props.report.signature_client_name_2;
     postForm.is_tested = props.report.is_tested === 1 ? true : false;
     postForm.dt = props.report.dt;
     postForm.notes = props.report.notes;
@@ -1747,13 +1730,15 @@ const postForm = reactive({
     finished: null,
     departure: null,
     status_id: null,
-    signature_client_name_1: null,
-    signature_client_name_2: null,
     is_tested: null,
     notes: "",
     machines: [] as Array<any>,
     service_parts: [],
 });
+
+function getMachines() {
+    return form.selectedMachine?.production_line?.machines || [form.selectedMachine];
+}
 
 function transportValidation(index) {
     const machine = postForm.machines[index];
