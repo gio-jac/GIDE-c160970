@@ -113,11 +113,10 @@
                 $failure = [];
                 $failureType = [];
                 foreach($machineDetails as $detail){
-                    $module[] = $detail['module']['name'];
-                    $failure[] = $detail['failure']['name'];
-                    $failureType[] = $detail['failureType']['name'];
+                    $module[] = !empty($detail['module']['name']) ? $detail['module']['name'] : 'N/A';
+                    $failure[] = !empty($detail['failure']['name']) ? $detail['failure']['name'] : 'N/A';
+                    $failureType[] = !empty($detail['failureType']['name']) ? $detail['failureType']['name'] : 'N/A';
                 }
-                var_dump($module);
             @endphp
             <tr>
                 <td>{{ $machines->serial }}</td>
