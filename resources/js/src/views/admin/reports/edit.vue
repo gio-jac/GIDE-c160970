@@ -1799,12 +1799,13 @@ function selectPartChange(searchQuery, id) {
 }
 
 function addMachineDetail(machine) {
-    machine.push({
-        module_id: null,
-        failure_id: null,
-        failure_type_id: null,
-    });
-    console.log(machine);
+    if (machine.length < 5) {
+        machine.push({
+            module_id: null,
+            failure_id: null,
+            failure_type_id: null,
+        });
+    }
 }
 
 function submit() {
