@@ -22,5 +22,6 @@
     "sidebar.models": "Modelos",
     "sidebar.customers": "Clientes",
     "sidebar.regions": "Regiones",
-    "sidebar.assignments": "Asignaciones"
+    "sidebar.assignments": "Asignaciones",
+    "header.signout": "Cerrar sesión"
 }
