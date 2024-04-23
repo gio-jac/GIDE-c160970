@@ -592,7 +592,7 @@
                                                 />
                                             </svg>
 
-                                            Sign Out
+                                            {{ $t('header.signout') }}
                                         </Link>
                                     </li>
                                 </ul>
