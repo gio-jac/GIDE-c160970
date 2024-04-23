@@ -81,7 +81,7 @@
                                         class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
                                         ><!--{{
                                         $t('chat')
-                                    }}-->Homepage</span
+                                    }}-->{{ $t('sidebar.home')}} </span
                                     >
                                 </div>
                             </Link>
@@ -179,7 +179,7 @@
                                             <span
                                                 class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
                                             >
-                                                Users
+                                                {{ $t('sidebar.users')}}
                                             </span>
                                         </div>
                                     </Link>
@@ -201,7 +201,7 @@
                                             <span
                                                 class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
                                             >
-                                                Report
+                                                {{ $t('sidebar.reports')}}
                                             </span>
                                         </div>
                                     </Link>
@@ -223,7 +223,7 @@
                                             <span
                                                 class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
                                             >
-                                                Parts
+                                                {{ $t('sidebar.parts')}}
                                             </span>
                                         </div>
                                     </Link>
@@ -247,7 +247,7 @@
 
                                             <span
                                                 class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
-                                                >Catalogs</span
+                                                >{{ $t('sidebar.catalogs')}}</span
                                             >
                                         </div>
                                         <div
@@ -290,7 +290,7 @@
                                                                   'users')
                                                     "
                                                 >
-                                                    Users
+                                                    {{ $t('sidebar.users')}}
                                                     <div
                                                         class="ltr:ml-auto rtl:mr-auto rtl:rotate-180"
                                                         :class="{
@@ -344,7 +344,7 @@
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Titles (N/A)</Link
+                                                                >{{ $t('sidebar.positions')}} (N/A)</Link
                                                             >
                                                         </li>
                                                         <li
@@ -361,7 +361,7 @@
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Types (N/A)</Link
+                                                                >{{ $t('sidebar.profiles')}} (N/A)</Link
                                                             >
                                                         </li>
                                                     </ul>
@@ -378,7 +378,7 @@
                                                                   'reports')
                                                     "
                                                 >
-                                                    Reports
+                                                    {{ $t('sidebar.reports')}}
                                                     <div
                                                         class="ltr:ml-auto rtl:mr-auto rtl:rotate-180"
                                                         :class="{
@@ -432,7 +432,7 @@
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Codes (N/A)</Link
+                                                                >{{ $t('sidebar.codes')}} (N/A)</Link
                                                             >
                                                         </li>
                                                         <li
@@ -449,7 +449,7 @@
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Failures (N/A)</Link
+                                                                >{{ $t('sidebar.failures')}} (N/A)</Link
                                                             >
                                                         </li>
                                                         <li
@@ -466,7 +466,7 @@
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Status (N/A)</Link
+                                                                >{{ $t('sidebar.status')}} (N/A)</Link
                                                             >
                                                         </li>
                                                     </ul>
@@ -477,7 +477,7 @@
                                                     href="#"
                                                     class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Machines (N/A)</Link
+                                                    >{{ $t('sidebar.machines')}} (N/A)</Link
                                                 >
                                             </li>
                                             <li>
@@ -485,7 +485,7 @@
                                                     href="#"
                                                     class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Models (N/A)</Link
+                                                    >{{ $t('sidebar.models')}} (N/A)</Link
                                                 >
                                             </li>
                                             <li>
@@ -493,7 +493,7 @@
                                                     href="#"
                                                     class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Customers (N/A)</Link
+                                                    >{{ $t('sidebar.customers')}} (N/A)</Link
                                                 >
                                             </li>
                                             <li>
@@ -501,7 +501,7 @@
                                                     href="#"
                                                     class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Regions (N/A)</Link
+                                                    >{{ $t('sidebar.regions')}} (N/A)</Link
                                                 >
                                             </li>
                                             <li>
@@ -509,7 +509,7 @@
                                                     href="#"
                                                     class="text-gray-300 cursor-no-drop"
                                                     @click="toggleMobileMenu"
-                                                    >Assignments (N/A)</Link
+                                                    >{{ $t('sidebar.assignments')}} (N/A)</Link
                                                 >
                                             </li>
                                         </ul>
