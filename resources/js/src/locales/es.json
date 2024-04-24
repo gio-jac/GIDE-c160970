@@ -55,6 +55,7 @@
     "user.create.profile.default": "Seleccionar una opción",
     "user.create.positions": "Cargos",
     "user.create.positions.default": "Seleccionar una opción",
+    "user.create.activeUser": "Usuario habilitado",
     "user.create.add": "Crear",
     "user.create.update": "Actualizar",
     "user.create.passwordWarning": "Ingresar una nueva contraseña reemplazará la actual."
