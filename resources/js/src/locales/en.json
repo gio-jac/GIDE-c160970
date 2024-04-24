@@ -23,5 +23,17 @@
     "sidebar.customers": "Customers",
     "sidebar.regions": "Regions",
     "sidebar.assignments": "Assignments",
-    "header.signout": "Sign Out"
+    "header.signout": "Sign Out",
+    "user.index.newUser": "New User",
+    "user.index.col.name": "Name",
+    "user.index.col.firstSurname": "First Surname",
+    "user.index.col.phone": "Phone",
+    "user.index.col.email": "Email",
+    "user.index.col.country": "Country",
+    "user.index.col.active": "Active",
+    "user.index.col.actions": "Actions",
+    "user.index.searchPlaceholder": "Search...",
+    "user.index.all": "All",
+    "user.create.employeeid": "Employee ID"
+    
 }

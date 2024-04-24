@@ -29,7 +29,7 @@
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                 </svg>
-                                Add New
+                                {{ $t("user.index.newUser") }}
                             </Link>
                         </div>
                         <div class="ltr:ml-auto rtl:mr-auto flex">
@@ -37,7 +37,7 @@
                                 class="form-select text-white-dark"
                                 @change="handleSelectChange"
                             >
-                                <option value="">All</option>
+                                <option value="">{{ $t("user.index.all") }}</option>
                                 <option
                                     v-for="country in props.catalogCountry"
                                     :key="country.id"
@@ -50,7 +50,7 @@
                                 v-model="search"
                                 type="text"
                                 class="form-input"
-                                placeholder="Search..."
+                                :placeholder="$t('user.index.searchPlaceholder')"
                             />
                         </div>
                     </div>
@@ -177,15 +177,17 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, computed } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
+import { useI18n } from 'vue-i18n';
 
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
+const { t } = useI18n();
 const props = defineProps({
     users: {
         type: Array,
@@ -199,17 +201,17 @@ const props = defineProps({
 const currentData: any = ref(null);
 const datatable: any = ref(null);
 const search = ref("");
-const cols = ref([
+const cols = computed(() => [
     { field: "emp", title: "EMP ID", filter: false },
-    { field: "nombre", title: "Name", filter: false },
-    { field: "apellido_paterno", title: "Paternal surname", filter: false },
-    { field: "telefono", title: "Phone", filter: false },
-    { field: "email", title: "Email", filter: false },
-    { field: "country.name", title: "Country", filter: false },
-    { field: "is_active", title: "Active", filter: false },
+    { field: "nombre", title: t("user.index.col.name"), filter: false },
+    { field: "apellido_paterno", title: t("user.index.col.firstSurname"), filter: false },
+    { field: "telefono", title: t("user.index.col.phone"), filter: false },
+    { field: "email", title: t("user.index.col.email"), filter: false },
+    { field: "country.name", title: t("user.index.col.country"), filter: false },
+    { field: "is_active", title: t("user.index.col.active"), filter: false },
     {
         field: "actions",
-        title: "Actions",
+        title: t("user.index.col.actions"),
         sort: false,
         filter: false,
         headerClass: "justify-center",

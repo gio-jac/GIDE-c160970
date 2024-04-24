@@ -23,5 +23,16 @@
     "sidebar.customers": "Clientes",
     "sidebar.regions": "Regiones",
     "sidebar.assignments": "Asignaciones",
-    "header.signout": "Cerrar sesión"
+    "header.signout": "Cerrar sesión",
+    "user.index.newUser": "Crear usuario",
+    "user.index.col.name": "Nombre",
+    "user.index.col.firstSurname": "Apellido Paterno",
+    "user.index.col.phone": "Teléfono",
+    "user.index.col.email": "Email",
+    "user.index.col.country": "País",
+    "user.index.col.active": "Activo",
+    "user.index.col.actions": "Acciones",
+    "user.index.searchPlaceholder": "Buscar...",
+    "user.index.all": "Todos",
+    "user.create.employeeid": "ID de empleado"
 }
