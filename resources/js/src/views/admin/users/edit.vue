@@ -6,23 +6,23 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/users">Users</Link></li>
+                    <li><Link href="/users">{{ $t("user.create.breadcrumb.users") }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
                             class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70"
-                            >Edit</a
+                            >{{ $t("user.create.breadcrumb.edit") }}</a
                         >
                     </li>
                 </ol>
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.emp }">
-                    <label for="formEmp">Employee ID</label>
+                    <label for="formEmp">{{ $t("user.create.emp") }}</label>
                     <input
                         id="formEmp"
                         type="text"
-                        placeholder="Enter Type Name"
+                        :placeholder="$t('user.create.empPlaceholder')"
                         class="form-input"
                         v-model="form.emp"
                     />
@@ -31,11 +31,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.nombre }">
-                    <label for="formNombre">Name</label>
+                    <label for="formNombre">{{ $t("user.create.name") }}</label>
                     <input
                         id="formNombre"
                         type="text"
-                        placeholder="Enter Name"
+                        :placeholder="$t('user.create.namePlaceholder')"
                         class="form-input"
                         v-model="form.nombre"
                     />
@@ -44,11 +44,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.apellido_paterno }">
-                    <label for="formPaternalSurname">Paternal surname</label>
+                    <label for="formPaternalSurname">{{ $t("user.create.firstSurname") }}</label>
                     <input
                         id="formPaternalSurname"
                         type="text"
-                        placeholder="Enter Paternal Surname"
+                        :placeholder="$t('user.create.firstSurnamePlaceholder')"
                         class="form-input"
                         v-model="form.apellido_paterno"
                     />
@@ -59,11 +59,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.apellido_materno }">
-                    <label for="formMaternalSurname">Maternal surname</label>
+                    <label for="formMaternalSurname">{{ $t("user.create.secondSurname") }}</label>
                     <input
                         id="formMaternalSurname"
                         type="text"
-                        placeholder="Enter Maternal Surname"
+                        :placeholder="$t('user.create.secondSurnamePlaceholder')"
                         class="form-input"
                         v-model="form.apellido_materno"
                     />
@@ -74,11 +74,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.telefono }">
-                    <label for="formTelefono">Phone</label>
+                    <label for="formTelefono">{{ $t("user.create.phone") }}</label>
                     <input
                         id="formTelefono"
                         type="tel"
-                        placeholder="Enter Phone"
+                        :placeholder="$t('user.create.phonePlaceholder')"
                         class="form-input"
                         v-model="form.telefono"
                     />
@@ -89,11 +89,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.email }">
-                    <label for="formEmail">Email</label>
+                    <label for="formEmail">{{ $t("user.create.email") }}</label>
                     <input
                         id="formEmail"
                         type="email"
-                        placeholder="Enter Email"
+                        :placeholder="$t('user.create.emailPlaceholder')"
                         class="form-input"
                         v-model="form.email"
                     />
@@ -104,11 +104,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.password }">
-                    <label for="formPassword">Password</label>
+                    <label for="formPassword">{{ $t("user.create.password") }}</label>
                     <input
                         id="formPassword"
                         type="password"
-                        placeholder="Enter Password"
+                        :placeholder="$t('user.create.passwordPlaceholder')"
                         class="form-input"
                         v-model="form.password"
                     />
@@ -117,11 +117,10 @@
                             {{ errors.password }}
                         </p>
                     </template>
-                    <p class="text-danger mt-1">Entering a new password will replace the current one.</p>
+                    <p class="text-danger mt-1">{{ $t("user.create.passwordWarning") }}</p>
                 </div>
-                
                 <div :class="{ 'has-error': errors.user_type_id }">
-                    <label for="formUserType">User Type</label>
+                    <label for="formUserType">{{ $t("user.create.profile") }}</label>
                     <div>
                         <select
                             id="formUserType"
@@ -129,7 +128,7 @@
                             v-model="form.user_type_id"
                             required
                         >
-                            <option :value="null">Open this select menu</option>
+                            <option :value="null">{{ $t("user.create.profile.default") }}</option>
                             <option v-for="userType in props.catalogUserTypes" :key="userType.id" :value="userType.id">{{ userType.tipo }}</option>
                         </select>
                     </div>
@@ -140,7 +139,7 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.user_title_id }">
-                    <label for="formUserTitle">Title</label>
+                    <label for="formUserTitle">{{ $t("user.create.positions") }}</label>
                     <div>
                         <select
                             id="formUserTitle"
@@ -148,7 +147,7 @@
                             v-model="form.user_title_id"
                             required
                         >
-                            <option :value="null">Open this select menu</option>
+                            <option :value="null">{{ $t("user.create.positions.default") }}</option>
                             <option v-for="userTitle in props.catalogUserTitles" :key="userTitle.id" :value="userTitle.id">{{ userTitle.titulo }}</option>
                         </select>
                     </div>
@@ -158,22 +157,7 @@
                         </p>
                     </template>
                 </div>
-                <div>
-                    <label for="formActive">Active user</label>
-                    <label class="w-12 h-6 relative">
-                        <input
-                            type="checkbox"
-                            class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer"
-                            id="formActive"
-                            v-model="form.is_active"
-                        />
-                        <span
-                            for="formActive"
-                            class="bg-[#ebedf2] dark:bg-dark block h-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"
-                        ></span>
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary !mt-6">Save</button>
+                <button type="submit" class="btn btn-primary !mt-6">{{ $t("user.create.update") }}</button>
             </form>
         </div>
     </div>

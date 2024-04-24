@@ -36,6 +36,7 @@
     "user.index.all": "Todos",
     "user.create.breadcrumb.users": "Usuários",
     "user.create.breadcrumb.new": "Novo",
+    "user.create.breadcrumb.edit": "Editar",
     "user.create.emp": "ID de funcionário",
     "user.create.empPlaceholder": "Digite seu ID de funcionário",
     "user.create.name": "Nome",
@@ -54,5 +55,7 @@
     "user.create.profile.default": "Selecionar uma opção",
     "user.create.positions": "Cargos",
     "user.create.positions.default": "Selecionar uma opção",
-    "user.create.add": "Criar"
+    "user.create.add": "Criar",
+    "user.create.update": "Atualizar",
+    "user.create.passwordWarning": "Digitar uma nova senha substituirá a atual."
 }
