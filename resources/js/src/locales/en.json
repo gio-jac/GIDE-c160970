@@ -58,5 +58,10 @@
     "user.create.activeUser": "Active User",
     "user.create.add": "Add",
     "user.create.update": "Update",
-    "user.create.passwordWarning": "Entering a new password will replace the current one."
+    "user.create.passwordWarning": "Entering a new password will replace the current one.",
+    "report.index.newReport": "New Report",
+    "report.index.col.fileName": "File Name",
+    "report.index.col.status": "Status",
+    "report.index.col.assigned": "Assigned to",
+    "report.index.col.creationDate": "Creation date"
 }

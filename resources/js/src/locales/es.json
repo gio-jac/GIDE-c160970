@@ -58,5 +58,10 @@
     "user.create.activeUser": "Usuario habilitado",
     "user.create.add": "Crear",
     "user.create.update": "Actualizar",
-    "user.create.passwordWarning": "Ingresar una nueva contraseña reemplazará la actual."
+    "user.create.passwordWarning": "Ingresar una nueva contraseña reemplazará la actual.",
+    "report.index.newReport": "Crear reporte",
+    "report.index.col.fileName": "Nombre de archivo",
+    "report.index.col.status": "Estado",
+    "report.index.col.assigned": "Asignado a",
+    "report.index.col.creationDate": "Fecha de creación"
 }

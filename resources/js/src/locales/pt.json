@@ -58,5 +58,10 @@
     "user.create.activeUser": "Usuário habilitado",
     "user.create.add": "Criar",
     "user.create.update": "Atualizar",
-    "user.create.passwordWarning": "Digitar uma nova senha substituirá a atual."
+    "user.create.passwordWarning": "Digitar uma nova senha substituirá a atual.",
+    "report.index.newReport": "Criar relatório",
+    "report.index.col.fileName": "Nome do arquivo",
+    "report.index.col.status": "Estado",
+    "report.index.col.assigned": "Atribuído a",
+    "report.index.col.creationDate": "Data de criação"
 }
