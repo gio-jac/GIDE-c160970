@@ -66,7 +66,7 @@
                             {{ data.value.complete_id }}
                         </template>
                         <template #status="data">
-                            {{ data.value.status && data.value.status.status ? data.value.status.status : "N/A" }}
+                            {{ $t("catalogs.status."+data.value.status_id,data.value.status && data.value.status.status ? data.value.status.status : "N/A") }}
                         </template>
                         <template #created_at="data">
                             {{ formatDate(data.value.created_at) }}
