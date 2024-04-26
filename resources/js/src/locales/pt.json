@@ -138,5 +138,16 @@
     "part.new.partSerial": "Serial da Peça",
     "part.new.partSerialPlaceholder": "Digite Serial da Peça",
     "part.new.descriptionPlaceholder": "Digite Descrição",
-    "part.new.activePart": "Peça habilitada"
+    "part.new.activePart": "Peça habilitada",
+
+
+
+
+
+
+    "catalogs.shift.1":"Manhã",
+    "catalogs.shift.2":"Tarde",
+    "catalogs.shift.3":"Noite",
+    "catalogs.typeReport.1": "Contrato",
+    "catalogs.typeReport.2": "Cliente"
 }
