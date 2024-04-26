@@ -40,11 +40,11 @@
     <table>
         <tr>
             <td style="width:70%;text-align: left;">
-                <p style="font-weight: normal;font-size:15px;">SERVICE REPORT</p>
-                <p style="font-weight: normal;margin:0;">REPORT ID:
+                <p style="font-weight: normal;font-size:15px;">REPORTE DE SERVICIO</p>
+                <p style="font-weight: normal;margin:0;">REPORTE ID:
                     {{ $report->id }}
                 </p>
-                <p style="font-weight: normal;margin-top:0;">FILE NAME:
+                <p style="font-weight: normal;margin-top:0;">NOMBRE DE ARCHIVO:
                     {{ $report->complete_id }}
                 </p>
             </td>
@@ -56,23 +56,23 @@
     <table class="tblStyle">
         <tr>
             <td style="width:40%;">
-                CUSTOMER NAME:<br>
+                NOMBRE DEL CLIENTE:<br>
                 {{ $report->branch->client->name }}
             </td>
             <td style="width:60%;">
-                ADDRESS:<br>
+                DIRECCIÓN:<br>
                 {{ $report->branch->address }}
             </td>
         </tr>
     </table>
     <table class="tblStyle">
         <tr>
-            <td style="width:50%;">
-                CONTACT:<br>
+            <td style="width:35%;">
+                CONTACTO:<br>
                 {{ $report->branch->branchManagers[0]->name }}
             </td>
             <td>
-                MACHINE MODEL:<br>
+                MODELO DE MÁQUINA:<br>
                 {{ $report->machines[0]->machine_model->model }}
             </td>
             <td>
@@ -80,7 +80,7 @@
                 {{ $report->machines[0]->serial }}
             </td>
             <td>
-                TRANSPORT:<br>
+                TRANSPORTE:<br>
                 {{ $report->machines[0]->pivot->transport_1 }}
             </td>
         </tr>
@@ -88,15 +88,15 @@
     <table class="tblStyle">
         <tr>
             <td>
-                PIECES:<br>
+                PIEZAS:<br>
                 {{ $report->pieces }}
             </td>
             <td>
-                MACHINE ON:<br>
+                MÁQUINA ON:<br>
                 {{ $report->time_on }}
             </td>
             <td>
-                TRAVEL TIME:<br>
+                TIEMPO DE VIAJE:<br>
                 {{ $report->travel_time }}
             </td>
             @php
@@ -128,21 +128,21 @@
             </td>
             
             <td>
-                MODULE:<br>
+                ERROR:<br>
                 {!! nl2br(implode("\n", $module)) !!}
             </td>
             <td>
-                FAILURE:<br>
+                CAUSA:<br>
                 {!! nl2br(implode("\n", $failure)) !!}
             </td>
             <td>
-                FAULT SYMPTOM:<br>
+                SOLUCION:<br>
                 {!! nl2br(implode("\n", $failureType)) !!}
             </td>
         </tr>
     </table>
     <div class="tblStyle reportedError">
-        REPORTED ERROR:<br>
+        ERROR REPORTADO:<br>
         {{ $report->reported_error }}
     </div>
 
@@ -161,16 +161,16 @@
         </tr>
     </table>
     <div class="tblStyle reportedError">
-        ACTIONS TAKEN:<br>
+        ACCIONES TOMADAS:<br>
         {{ $report->actions_taken }}
     </div>
 
     <table style="text-align:center;margin:7px 0;">
         <tr>
-            <td class="defaultBorder" colspan="2">REPORTED</td>
-            <td class="defaultBorder" colspan="2">DEPARTURE TIME</td>
-            <td class="defaultBorder" colspan="2">ARRIVAL TIME</td>
-            <td class="defaultBorder" colspan="2">FINISH TIME</td>
+            <td class="defaultBorder" colspan="2">REPORTADO</td>
+            <td class="defaultBorder" colspan="2">HORA DE SALIDA</td>
+            <td class="defaultBorder" colspan="2">HORA DE LLEGADA</td>
+            <td class="defaultBorder" colspan="2">HORA DE FINALIZADO</td>
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
                     class="defaultBorder{{ $report->status_id === 1 ? ' highlighted' : '' }}"></div>
@@ -183,14 +183,14 @@
             </td>
         </tr>
         <tr>
-            <td class="defaultBorder">DATE</td>
-            <td class="defaultBorder">HOUR</td>
-            <td class="defaultBorder">DATE</td>
-            <td class="defaultBorder">HOUR</td>
-            <td class="defaultBorder">DATE</td>
-            <td class="defaultBorder">HOUR</td>
-            <td class="defaultBorder">DATE</td>
-            <td class="defaultBorder">HOUR</td>
+            <td class="defaultBorder">FECHA</td>
+            <td class="defaultBorder">HORA</td>
+            <td class="defaultBorder">FECHA</td>
+            <td class="defaultBorder">HORA</td>
+            <td class="defaultBorder">FECHA</td>
+            <td class="defaultBorder">HORA</td>
+            <td class="defaultBorder">FECHA</td>
+            <td class="defaultBorder">HORA</td>
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;margin-left:-3px;"
                     class="defaultBorder{{ $report->status_id === 2 ? ' highlighted' : '' }}"></div>
@@ -254,9 +254,9 @@
 
     <table class="tblStyle" style="float: left;width: 48%;">
         <tr>
-            <th>PART REPLACED</th>
-            <th>DESCRIPTION</th>
-            <th>QTY</th>
+            <th>PIEZA REEMPLAZADA</th>
+            <th>DESCRIPCIÓN</th>
+            <th>CANT</th>
         </tr>
         @foreach($report->parts as $part)
             @if($loop->index % 2 != 1)
@@ -271,9 +271,9 @@
 
     <table class="tblStyle" style="float: right;width: 48%;">
         <tr>
-            <th>PART REPLACED</th>
-            <th>DESCRIPTION</th>
-            <th>QTY</th>
+            <th>PIEZA REEMPLAZADA</th>
+            <th>DESCRIPCIÓN</th>
+            <th>CANT</th>
         </tr>
         @foreach($report->parts as $part)
             @if($loop->index % 2 == 1)
@@ -287,18 +287,18 @@
     </table>
     <div style="clear: both;"></div>
     <div class="tblStyle reportedError" style="margin:7px 0;">
-        REMARKS:<br>
+        OBSERVACIONES:<br>
         {{ $report->notes }}
     </div>
     
     <div style="position: absolute; bottom: 0;width:100%;">
         <div class="defaultBorder" style="float: left;width: 48%;height:100px;">
-            PERFOMED BY:
+            REALIZADO POR:
             <div style="width:100%;text-align:center;margin-top:70px;">{{ $report->user->nombre }} {{ $report->user->apellido_paterno }} {{ $report->user->apellido_materno }}</div>
         </div>
 
         <div class="defaultBorder" style="float: right;width: 48%;height:100px;">
-            CUSTOMER SIGNATURE:
+            FIRMA DEL CLIENTE:
             <div style="width:100%;text-align:center;margin-top:70px;">{{ empty($report->machines[0]->pivot->signature_client_name) ? $report->branch->branchManagers[0]->name : $report->machines[0]->pivot->signature_client_name }}</div>
         </div>
         <div style="clear: both;"></div>

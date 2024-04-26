@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/reports/codes', CodeController::class);
     Route::get('/reports/{report}/close',[ReportController::class, 'closeReport'])->name('reports.close');
     Route::get('/reports/{report}/reopen',[ReportController::class, 'reOpenReport'])->name('reports.reopen');
-    Route::get('/reports/{report}/file', [ReportController::class, 'pdfReport'])->name('reports.file');
+    Route::get('/reports/{report}/{locale}/file', [ReportController::class, 'pdfReport'])->name('reports.file');
     Route::resource('/reports', ReportController::class);
     Route::post('/parts/autocomplete', [PartController::class, 'autocomplete'])->name('parts.autocomplete');
     Route::resource('/expenses', ExpensesController::class);
