@@ -29,7 +29,7 @@
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                 </svg>
-                                Add New
+                                {{ $t("part.index.newPart") }}
                             </Link>
                         </div>
                         <div class="ltr:ml-auto rtl:mr-auto">
@@ -37,7 +37,7 @@
                                 v-model="search"
                                 type="text"
                                 class="form-input"
-                                placeholder="Search..."
+                                :placeholder="$t('user.index.searchPlaceholder')"
                             />
                         </div>
                     </div>
@@ -163,13 +163,15 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref,computed } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
@@ -182,13 +184,13 @@ const props = defineProps({
 
 const datatable: any = ref(null);
 const search = ref("");
-const cols = ref([
-    { field: "num_part", title: "Part ID" },
-    { field: "descripcion", title: "Description" },
-    { field: "is_active", title: "Is visible?" },
+const cols = computed(() => [
+    { field: "num_part", title: t("user.index.col.parteId") },
+    { field: "descripcion", title: t("report.form.description") },
+    { field: "is_active", title: t("user.index.col.active") },
     {
         field: "actions",
-        title: "Actions",
+        title: t("user.index.col.actions"),
         sort: false,
         headerClass: "justify-center",
     },

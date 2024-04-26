@@ -25,6 +25,7 @@
     "sidebar.assignments": "Assignments",
     "header.signout": "Sign Out",
     "user.index.newUser": "New User",
+    "user.index.col.parteId": "Part ID",
     "user.index.col.name": "Name",
     "user.index.col.firstSurname": "First Surname",
     "user.index.col.phone": "Phone",
@@ -130,5 +131,6 @@
     "report.form.downloadPdf": "Download PDF",
     "report.form.reopenReport": "Reopen report",
     "report.alert.generatingPdfTitle": "Generating PDF...",
-    "report.alert.generatingPdfText": "Please wait while the PDF is being generated."
+    "report.alert.generatingPdfText": "Please wait while the PDF is being generated.",
+    "part.index.newPart": "New User"
 }
