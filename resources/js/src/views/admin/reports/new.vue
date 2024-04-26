@@ -1091,7 +1091,7 @@
                                     :value="status.id"
                                     v-model="postForm.status_id"
                                 />
-                                <span>{{ status.status }}</span>
+                                <span>{{ $t("catalogs.status."+status.id,status.status) }}</span>
                             </label>
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly">
