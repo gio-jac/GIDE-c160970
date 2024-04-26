@@ -25,6 +25,7 @@
     "sidebar.assignments": "Atribuições",
     "header.signout": "Encerrar sessão",
     "user.index.newUser": "Criar usuário",
+    "user.index.col.parteId": "Peça ID",
     "user.index.col.name": "Nome",
     "user.index.col.firstSurname": "Primeiro Sobrenome",
     "user.index.col.phone": "Telefone",
@@ -130,5 +131,6 @@
     "report.form.downloadPdf": "Baixar PDF",
     "report.form.reopenReport": "Reabrir relatório",
     "report.alert.generatingPdfTitle": "Gerando PDF...",
-    "report.alert.generatingPdfText": "Por favor, aguarde enquanto o PDF está sendo gerado."
+    "report.alert.generatingPdfText": "Por favor, aguarde enquanto o PDF está sendo gerado.",
+    "part.index.newPart": "Criar peça"
 }
