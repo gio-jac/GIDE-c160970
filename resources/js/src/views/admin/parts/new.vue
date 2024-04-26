@@ -6,23 +6,23 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/parts">Parts</Link></li>
+                    <li><Link href="/parts">{{ $t("part.new.breadcrumb.parts") }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
                             class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70"
-                            >New</a
+                            >{{ $t("part.new.breadcrumb.new") }}</a
                         >
                     </li>
                 </ol>
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.num_part }">
-                    <label for="formPartId">Part ID</label>
+                    <label for="formPartId">{{ $t("part.new.partSerial") }}</label>
                     <input
                         id="formPartId"
                         type="text"
-                        placeholder="Enter Part ID"
+                        :placeholder="$t('part.new.partSerialPlaceholder')"
                         class="form-input"
                         v-model="form.num_part"
                     />
@@ -31,11 +31,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.descripcion }">
-                    <label for="formDescription">Description</label>
+                    <label for="formDescription">{{ $t("report.form.description") }}</label>
                     <input
                         id="formDescription"
                         type="text"
-                        placeholder="Enter description"
+                        :placeholder="$t('part.new.descriptionPlaceholder')"
                         class="form-input"
                         v-model="form.descripcion"
                     />
@@ -44,7 +44,7 @@
                     </template>
                 </div>
                 <div>
-                    <label for="formActive">Is visible?</label>
+                    <label for="formActive">{{ $t("part.new.activePart") }}</label>
                     <label class="w-12 h-6 relative">
                         <input
                             type="checkbox"
@@ -58,7 +58,7 @@
                         ></span>
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary !mt-6">Add</button>
+                <button type="submit" class="btn btn-primary !mt-6">{{ $t("user.create.add") }}</button>
             </form>
         </div>
         <!--

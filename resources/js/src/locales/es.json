@@ -132,5 +132,11 @@
     "report.form.reopenReport": "Reabrir reporte",
     "report.alert.generatingPdfTitle": "Generando PDF...",
     "report.alert.generatingPdfText": "Por favor, espere mientras se genera el PDF.",
-    "part.index.newPart": "Crear parte"
+    "part.index.newPart": "Crear parte",
+    "part.new.breadcrumb.parts":"Partes",
+    "part.new.breadcrumb.new":"Nueva",
+    "part.new.partSerial": "Serial de la Pieza",
+    "part.new.partSerialPlaceholder": "Ingrese Serial de la Pieza",
+    "part.new.descriptionPlaceholder": "Ingrese Descripción",
+    "part.new.activePart": "Parte Habilitada"
 }
