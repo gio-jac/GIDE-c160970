@@ -281,5 +281,8 @@
     "catalogs.failureType.10": "SUSTITUCIÓN DE PIEZAS",
     "catalogs.failureType.11": "PREVENTIVO",
     "catalogs.failureType.12": "NO PRODUCTIVO",
-    "catalogs.failureType.13": "ENTRENAMIENTO"
+    "catalogs.failureType.13": "ENTRENAMIENTO",
+    "catalogs.status.1": "COMPLETO",
+    "catalogs.status.2": "INCOMPLT",
+    "catalogs.status.3": "REGRESAR"
 }

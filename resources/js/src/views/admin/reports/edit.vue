@@ -87,7 +87,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
                                 :placeholder="$t('report.form.default')"
-                                :custom-label="({ name }) => `${name}`"
+                                :custom-label="({ id, name }) => `${$t('catalogs.shift.'+id, name)}`"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
@@ -176,7 +176,7 @@
                                                         :key="tmodule"
                                                         :value="tmodule.id"
                                                     >
-                                                        {{ tmodule.name }}
+                                                        {{ $t("catalogs.error."+tmodule.id,tmodule.name) }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -216,7 +216,7 @@
                                                         :key="failure"
                                                         :value="failure.id"
                                                     >
-                                                        {{ failure.name }}
+                                                        {{ $t("catalogs.failures."+failure.id,failure.name) }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -258,7 +258,7 @@
                                                         :key="failuretype"
                                                         :value="failuretype.id"
                                                     >
-                                                        {{ failuretype.name }}
+                                                        {{ $t("catalogs.failureType."+failuretype.id,failuretype.name) }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -536,7 +536,7 @@
                                                         :key="tmodule"
                                                         :value="tmodule.id"
                                                     >
-                                                        {{ tmodule.name }}
+                                                        {{ $t("catalogs.error."+tmodule.id,tmodule.name) }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -572,7 +572,7 @@
                                                         :key="failure"
                                                         :value="failure.id"
                                                     >
-                                                        {{ failure.name }}
+                                                        {{ $t("catalogs.failures."+failure.id,failure.name) }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -610,7 +610,7 @@
                                                         :key="failuretype"
                                                         :value="failuretype.id"
                                                     >
-                                                        {{ failuretype.name }}
+                                                        {{ $t("catalogs.failureType."+failuretype.id,failuretype.name) }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -976,8 +976,8 @@
                                     class="form-select text-white-dark flex-1"
                                     required
                                 >
-                                    <option value="1" selected>Contract</option>
-                                    <option value="2">Client</option>
+                                    <option value="1" selected>{{ $t("catalogs.typeReport.1") }}</option>
+                                    <option value="2">{{ $t("catalogs.typeReport.2") }}</option>
                                 </select>
                             </div>
                         </div>
@@ -1023,7 +1023,7 @@
                                 <span
                                     v-if="postForm.code_id === code.id"
                                     class="text-xs"
-                                    >{{ code.description }}</span
+                                    >{{ $t("catalogs.codes."+code.id, code.description) }}</span
                                 >
                             </div>
                         </label>
@@ -1121,7 +1121,7 @@
                                     v-model="postForm.status_id"
                                     :disabled="props.report.closed === 1"
                                 />
-                                <span>{{ status.status }}</span>
+                                <span>{{ $t("catalogs.status."+status.id,status.status) }}</span>
                             </label>
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly">

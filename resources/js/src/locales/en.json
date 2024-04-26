@@ -281,5 +281,8 @@
     "catalogs.failureType.10": "REPLACE PARTS",
     "catalogs.failureType.11": "PREVENTIVE",
     "catalogs.failureType.12": "UNPRODUCTIVE",
-    "catalogs.failureType.13": "TRAINING"
+    "catalogs.failureType.13": "TRAINING",
+    "catalogs.status.1": "COMPLETE",
+    "catalogs.status.2": "INCOMPLT",
+    "catalogs.status.3": "RETURN"
 }
