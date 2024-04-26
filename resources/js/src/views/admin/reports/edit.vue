@@ -8,19 +8,18 @@
                         <div class="flex items-center">
                             <label
                                 for="formMachine"
-                                class="w-[104px] text-right mb-0 mr-[10px]"
-                                >Machine Serial
+                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                >{{ $t("report.form.machineSerial") }}
                                 <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
-                                disabled
                                 id="formMachine"
                                 :options="props.catalogMachines"
                                 v-model="form.selectedMachine"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                placeholder="Select an option"
+                                :placeholder="$t('report.form.default')"
                                 :custom-label="
                                     ({ serial, machine_model }) =>
                                         `${serial} - ${machine_model.model}`
@@ -30,6 +29,11 @@
                                 deselect-label=""
                             ></multiselect>
                         </div>
+                        <template v-if="errors.machines">
+                            <p class="text-danger mt-1 text-center">
+                                {{ errors.machines }}
+                            </p>
+                        </template>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4" v-if="user.type === 1">
@@ -37,8 +41,8 @@
                         <div class="flex items-center">
                             <label
                                 for="formUser"
-                                class="w-[104px] text-right mb-0 mr-[10px]"
-                                >User <span class="text-red-500">*</span></label
+                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                >{{ $t("report.form.user") }} <span class="text-red-500">*</span></label
                             >
 
                             <multiselect
@@ -48,7 +52,7 @@
                                 v-model="form.selectedUser"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                placeholder="Select an option"
+                                :placeholder="$t('report.form.default')"
                                 :custom-label="
                                     ({ emp, nombre, apellido_paterno }) =>
                                         `${emp} - ${nombre} ${apellido_paterno}`
@@ -58,6 +62,11 @@
                                 deselect-label=""
                             ></multiselect>
                         </div>
+                        <template v-if="errors.user_id">
+                            <p class="text-danger mt-1 text-center">
+                                {{ errors.user_id }}
+                            </p>
+                        </template>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
@@ -65,8 +74,8 @@
                         <div class="flex items-center">
                             <label
                                 for="formShift"
-                                class="w-[104px] text-right mb-0 mr-[10px]"
-                                >Shift
+                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                >{{ $t("report.form.shift") }}
                                 <span class="text-red-500">*</span></label
                             >
 
@@ -77,18 +86,23 @@
                                 v-model="form.selectedShift"
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
-                                placeholder="Select an option"
+                                :placeholder="$t('report.form.default')"
                                 :custom-label="({ name }) => `${name}`"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
                         </div>
+                        <template v-if="errors.shift_id">
+                            <p class="text-danger mt-1 text-center">
+                                {{ errors.shift_id }}
+                            </p>
+                        </template>
                     </div>
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
-                    <div class="text-lg">Machines</div>
+                    <div class="text-lg">{{ $t("report.form.machines") }}</div>
                     <template v-if="form.selectedMachine">
                         <div
                             class="flex flex-wrap justify-evenly"
@@ -136,7 +150,7 @@
                                                         index +
                                                         indexDetail
                                                     "
-                                                    >Error</label
+                                                    >{{ $t("report.form.error") }}</label
                                                 >
                                                 <select
                                                     :disabled="props.report.closed === 1"
@@ -155,7 +169,7 @@
                                                     required
                                                 >
                                                     <option :value="null">
-                                                        Open this select menu
+                                                        {{ $t("report.form.default") }}
                                                     </option>
                                                     <option
                                                         v-for="tmodule in props.catalogModule"
@@ -176,7 +190,7 @@
                                                         index +
                                                         indexDetail
                                                     "
-                                                    >Cause</label
+                                                    >{{ $t("report.form.cause") }}</label
                                                 >
                                                 <select
                                                     :disabled="props.report.closed === 1"
@@ -195,7 +209,7 @@
                                                     required
                                                 >
                                                     <option :value="null">
-                                                        Open this select menu
+                                                        {{ $t("report.form.default") }}
                                                     </option>
                                                     <option
                                                         v-for="failure in props.catalogFailures"
@@ -216,7 +230,7 @@
                                                         index +
                                                         indexDetail
                                                     "
-                                                    >Solution</label
+                                                    >{{ $t("report.form.solution") }}</label
                                                 >
                                                 <select
                                                     :disabled="props.report.closed === 1"
@@ -237,7 +251,7 @@
                                                     required
                                                 >
                                                     <option :value="null">
-                                                        Open this select menu
+                                                        {{ $t("report.form.default") }}
                                                     </option>
                                                     <option
                                                         v-for="failuretype in props.catalogTypes"
@@ -310,8 +324,7 @@
                                                                 'formTransport1' +
                                                                 index
                                                             "
-                                                            >Initial
-                                                            Transport</label
+                                                            >{{ $t("report.form.initialTransport") }}</label
                                                         >
                                                         <input
                                                             :disabled="props.report.closed === 1"
@@ -351,8 +364,7 @@
                                                                 'formTransport2' +
                                                                 index
                                                             "
-                                                            >Final
-                                                            Transport</label
+                                                            >{{ $t("report.form.finalTransport") }}</label
                                                         >
                                                         <input
                                                             :disabled="props.report.closed === 1"
@@ -391,8 +403,7 @@
                                                                 'formTransport3' +
                                                                 index
                                                             "
-                                                            >Estimated
-                                                            Transport</label
+                                                            >{{ $t("report.form.estimatedTransport") }}</label
                                                         >
                                                         <input
                                                             :disabled="props.report.closed === 1"
@@ -427,7 +438,7 @@
                                             </template>
                                             <template v-else>
                                                 <label for="formShiftTotal11"
-                                                    >Transport</label
+                                                    >{{ $t("report.form.transport") }}</label
                                                 >
                                                 <input
                                                     id="formShiftTotal11"
@@ -463,7 +474,7 @@
                                                 "
                                                 :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
-                                                placeholder="Enter DT"
+                                                :placeholder="$t('report.form.dtPlaceholder')"
                                             />
                                         </div>
                                     </div>
@@ -501,7 +512,7 @@
                                                         'formModule1' +
                                                         indexDetail
                                                     "
-                                                    >Error</label
+                                                    >{{ $t("report.form.error") }}</label
                                                 >
                                                 <select
                                                     :disabled="props.report.closed === 1"
@@ -518,7 +529,7 @@
                                                     required
                                                 >
                                                     <option :value="null">
-                                                        Open this select menu
+                                                        {{ $t("report.form.default") }}
                                                     </option>
                                                     <option
                                                         v-for="tmodule in props.catalogModule"
@@ -537,7 +548,7 @@
                                                         'formFailures1' +
                                                         indexDetail
                                                     "
-                                                    >Cause</label
+                                                    >{{ $t("report.form.cause") }}</label
                                                 >
                                                 <select
                                                     :disabled="props.report.closed === 1"
@@ -554,7 +565,7 @@
                                                     required
                                                 >
                                                     <option :value="null">
-                                                        Open this select menu
+                                                        {{ $t("report.form.default") }}
                                                     </option>
                                                     <option
                                                         v-for="failure in props.catalogFailures"
@@ -573,7 +584,7 @@
                                                         'formTypes1' +
                                                         indexDetail
                                                     "
-                                                    >Solution</label
+                                                    >{{ $t("report.form.solution") }}</label
                                                 >
                                                 <select
                                                     :disabled="props.report.closed === 1"
@@ -592,7 +603,7 @@
                                                     required
                                                 >
                                                     <option :value="null">
-                                                        Open this select menu
+                                                        {{ $t("report.form.default") }}
                                                     </option>
                                                     <option
                                                         v-for="failuretype in props.catalogTypes"
@@ -647,7 +658,7 @@
                                                 <div class="py-2">
                                                     <label
                                                         for="formShiftTotal11"
-                                                        >Transport</label
+                                                        >{{ $t("report.form.transport") }}</label
                                                     >
                                                     <input
                                                         :disabled="props.report.closed === 1"
@@ -684,7 +695,7 @@
                                                         "
                                                         name="formReportDT1"
                                                         class="form-input text-white-dark"
-                                                        placeholder="Enter DT"
+                                                        :placeholder="$t('report.form.dtPlaceholder')"
                                                     />
                                                 </div>
                                             </div>
@@ -703,8 +714,9 @@
                             class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6"
                         >
                             <div class="text-lg">
-                                Branches <span class="text-red-500">*</span>
+                                {{ $t("report.form.branches") }} <span class="text-red-500">*</span>
                             </div>
+
                             <multiselect
                                 :disabled="props.report.closed === 1"
                                 id="formBranches"
@@ -717,7 +729,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :custom-label="({ address }) => `${address}`"
-                                placeholder="Type (street, city, etc.)"
+                                :placeholder="$t('report.form.branchPlaceholder')"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
@@ -729,7 +741,7 @@
                                 </p>
                             </template>
                             <div class="text-lg">
-                                Contacts <span class="text-red-500">*</span>
+                                {{ $t("report.form.contacts") }} <span class="text-red-500">*</span>
                             </div>
                             <select
                                 :disabled="props.report.closed === 1"
@@ -740,7 +752,7 @@
                                 required
                             >
                                 <option :value="null">
-                                    Open this select menu
+                                    {{ $t("report.form.default") }}
                                 </option>
                                 <option
                                     v-for="contact in form.selectedBranch
@@ -760,7 +772,7 @@
                                 <label
                                     for="formClient"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Client</label
+                                    >{{ $t("report.form.client") }}</label
                                 >
                                 <input
                                     id="formClient"
@@ -775,7 +787,7 @@
                                 <label
                                     for="formCustomerName"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Name</label
+                                    >{{ $t("report.form.name") }}</label
                                 >
                                 <input
                                     id="formCustomerName"
@@ -790,7 +802,7 @@
                                 <label
                                     for="formCustomerEmail"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Email</label
+                                    >{{ $t("report.form.email") }}</label
                                 >
                                 <input
                                     id="formCustomerEmail"
@@ -805,7 +817,7 @@
                                 <label
                                     for="formCustomerPhone"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Phone</label
+                                    >{{ $t("report.form.phone") }}</label
                                 >
                                 <input
                                     id="formCustomerPhone"
@@ -818,12 +830,12 @@
                             </div>
                         </div>
                         <div class="lg:w-1/2 w-full">
-                            <div class="text-lg">Machine Data</div>
+                            <div class="text-lg">{{ $t("report.form.machineData") }}</div>
                             <div class="flex items-center mt-4">
                                 <label
                                     for="formMachineSerial"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Serial</label
+                                    >{{ $t("report.form.serial") }}</label
                                 >
                                 <input
                                     id="formMachineSerial"
@@ -832,14 +844,13 @@
                                     class="form-input flex-1"
                                     :value="form.selectedMachine?.serial"
                                     readonly
-                                    placeholder="Enter Serial"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
                                     for="formMachineType"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Type</label
+                                    >{{ $t("report.form.type") }}</label
                                 >
                                 <input
                                     id="formMachineType"
@@ -851,14 +862,13 @@
                                             .model
                                     "
                                     readonly
-                                    placeholder="Enter Type"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
                                     for="formMachineSegment"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Segment</label
+                                    >{{ $t("report.form.segment") }}</label
                                 >
                                 <input
                                     id="formMachineSegment"
@@ -870,7 +880,6 @@
                                             .model_segment.segment
                                     "
                                     readonly
-                                    placeholder="Enter Segment"
                                 />
                             </div>
                         </div>
@@ -888,7 +897,7 @@
                                 <label
                                     for="formReportPieces"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Pieces</label
+                                    >{{ $t("report.form.pieces") }}</label
                                 >
                                 <input
                                     :disabled="props.report.closed === 1"
@@ -897,14 +906,14 @@
                                     v-model="postForm.pieces"
                                     name="formReportPieces"
                                     class="form-input flex-1"
-                                    placeholder="Enter Pieces"
+                                    :placeholder="$t('report.form.piecesPlaceholder')"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
                                     for="formReportSOGD"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >SO GD</label
+                                    >{{ $t("report.form.SOGD") }}</label
                                 >
                                 <input
                                     :disabled="props.report.closed === 1"
@@ -913,7 +922,7 @@
                                     v-model="postForm.sogd"
                                     name="formReportSOGD"
                                     class="form-input flex-1"
-                                    placeholder="Enter SO GD"
+                                    :placeholder="$t('report.form.SOGDPlaceholder')"
                                 />
                             </div>
                         </div>
@@ -922,7 +931,7 @@
                                 <label
                                     for="formReportOnTime"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Machine ON</label
+                                    >{{ $t("report.form.machineOn") }}</label
                                 >
                                 <input
                                     :disabled="props.report.closed === 1"
@@ -933,14 +942,14 @@
                                     v-model="postForm.time_on"
                                     name="formReportOnTime"
                                     class="form-input flex-1"
-                                    placeholder="Machine time ON"
+                                    placeholder="0.00"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
                                     for="formReportTravelTime"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Travel time</label
+                                    >{{ $t("report.form.travelTime") }}</label
                                 >
                                 <input
                                     :disabled="props.report.closed === 1"
@@ -949,14 +958,14 @@
                                     v-model="postForm.travel_time"
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
-                                    placeholder="Enter Travel Time"
+                                    :placeholder="$t('report.form.travelTimePlaceholder')"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
                                     for="formReportType"
                                     class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >Type</label
+                                    >{{ $t("report.form.type") }}</label
                                 >
 
                                 <select
@@ -977,7 +986,7 @@
                                 <label
                                     for="formReportedError"
                                     class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                    >Reported Error</label
+                                    >{{ $t("report.form.reportedError") }}</label
                                 >
                                 <textarea
                                     :disabled="props.report.closed === 1"
@@ -986,7 +995,7 @@
                                     rows="3"
                                     v-model="postForm.reported_error"
                                     class="form-textarea flex-1"
-                                    placeholder="Enter Reported Error"
+                                    :placeholder="$t('report.form.reportedErrorPlaceholder')"
                                     required
                                 ></textarea>
                             </div>
@@ -1024,7 +1033,7 @@
                             <label
                                 for="formReportActions"
                                 class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                >Actions Taken</label
+                                >{{ $t("report.form.actionsTaken") }}</label
                             >
                             <textarea
                                 :disabled="props.report.closed === 1"
@@ -1033,7 +1042,7 @@
                                 v-model="postForm.actions_taken"
                                 rows="3"
                                 class="form-textarea flex-1"
-                                placeholder="Enter Actions Taken"
+                                :placeholder="$t('report.form.actionsTakenPlaceholder')"
                                 required
                             ></textarea>
                         </div>
@@ -1042,9 +1051,12 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="flex flex-wrap justify-evenly">
-                        <div class="px-2 max-w-[180px]"  v-if="!form.selectedMachine?.production_line_id">
+                        <div
+                            class="px-2 max-w-[180px]"
+                            v-if="!form.selectedMachine?.production_line_id"
+                        >
                             <label for="formReportReportedTime">
-                                Reported
+                                {{ $t("report.form.reported") }}
                             </label>
                             <flat-pickr
                                 id="formReportReportedTime"
@@ -1055,9 +1067,12 @@
                                 :disabled="props.report.closed === 1"
                             ></flat-pickr>
                         </div>
-                        <div class="px-2 max-w-[180px]"  v-if="!form.selectedMachine?.production_line_id">
+                        <div
+                            class="px-2 max-w-[180px]"
+                            v-if="!form.selectedMachine?.production_line_id"
+                        >
                             <label for="formReportTimeDeparture">
-                                Departure
+                                {{ $t("report.form.departure") }}
                             </label>
                             <flat-pickr
                                 id="formReportTimeDeparture"
@@ -1069,9 +1084,7 @@
                             ></flat-pickr>
                         </div>
                         <div class="px-2 max-w-[180px]">
-                            <label for="formReportTimeArrival">
-                                Arrival
-                            </label>
+                            <label for="formReportTimeArrival">{{ $t("report.form.arrival") }}</label>
                             <flat-pickr
                                 id="formReportTimeArrival"
                                 name="formReportTimeArrival"
@@ -1083,7 +1096,7 @@
                         </div>
                         <div class="px-2 max-w-[180px]">
                             <label for="formReportTimeFinished">
-                                Finished
+                                {{ $t("report.form.finished") }}
                             </label>
                             <flat-pickr
                                 id="formReportTimeFinished"
@@ -1133,7 +1146,7 @@
                                 <label
                                     for="formReportParts"
                                     class="w-[100px] text-right mb-0 mr-[10px]"
-                                    >Parts</label
+                                    >{{ $t("report.form.parts") }}</label
                                 >
 
                                 <multiselect
@@ -1144,7 +1157,7 @@
                                     v-model="form.selectedPart"
                                     class="custom-multiselect flex-1"
                                     :searchable="true"
-                                    placeholder="Select an option"
+                                    :placeholder="$t('report.form.partsPlaceholder')"
                                     :custom-label="
                                         ({ num_part, descripcion }) =>
                                             `${num_part} - ${descripcion}`
@@ -1192,9 +1205,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Part Replaced</th>
-                                    <th class="w-1/3">Description</th>
-                                    <th class="w-1/3">Quantity</th>
+                                    <th>{{ $t("report.form.partReplaced") }}</th>
+                                    <th class="w-1/3">{{ $t("report.form.description") }}</th>
+                                    <th class="w-1/3">{{ $t("report.form.quantity") }}</th>
                                     <th class="w-1"></th>
                                 </tr>
                             </thead>
@@ -1207,7 +1220,7 @@
                                             colspan="5"
                                             class="!text-center font-semibold"
                                         >
-                                            No Item Available
+                                            {{ $t("report.form.noItems") }}
                                         </td>
                                     </tr>
                                 </template>
@@ -1278,13 +1291,13 @@
                 </div>
                 <div class="mt-8 px-4">
                     <div>
-                        <label for="notes">Remarks</label>
+                        <label for="notes">{{ $t("report.form.remarks") }}</label>
                         <textarea
                             :disabled="props.report.closed === 1"
                             id="notes"
                             name="notes"
                             class="form-textarea min-h-[130px]"
-                            placeholder="Remarks...."
+                            :placeholder="$t('report.form.remarksPlaceholder')"
                             v-model="postForm.notes"
                         ></textarea>
                     </div>
@@ -1316,7 +1329,7 @@
                                     :name="`formSignatureName-${machine.serial}`"
                                     v-model="postForm.machines[index].signature_client_name"
                                     class="form-input flex-1"
-                                    placeholder="Enter Signature Name"
+                                    :placeholder="$t('report.form.signatureNamePlaceholder')"
                                 />
                             </div>
                         </template>
@@ -1380,7 +1393,7 @@
                                     stroke-linecap="round"
                                 />
                             </svg>
-                            Save Report
+                            {{ $t('report.form.saveReport') }}
                         </button>
 
                         <button
@@ -1411,7 +1424,7 @@
                                     stroke-linejoin="round"
                                 ></path>
                             </svg>
-                            Close Report
+                            {{ $t('report.form.closeReport') }}
                         </button>
                         <!--
                         <router-link to="/apps/invoice/preview" class="btn btn-primary w-full gap-2">
@@ -1460,7 +1473,7 @@
                                     stroke-linejoin="round"
                                 ></path>
                             </svg>
-                            Download PDF
+                            {{ $t('report.form.downloadPdf') }}
                         </a>
                         <button
                             type="button"
@@ -1490,7 +1503,7 @@
                                     stroke-linejoin="round"
                                 ></path>
                             </svg>
-                            Reopen Report
+                            {{ $t('report.form.reopenReport') }}
                         </button>
                     </div>
                 </div>
@@ -1510,6 +1523,9 @@ import Multiselect from "@suadelabs/vue3-multiselect";
 import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 import "flatpickr/dist/flatpickr.css";
 import Swal from "sweetalert2";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 const store = useAppStore();
 const catalogParts = ref([]);
 const page = usePage();
@@ -1804,8 +1820,8 @@ function submit() {
         postForm.branch_manager_id = form.selectedContact.id;
 
     Swal.fire({
-        title: "Processing...",
-        text: "Please wait while the data is being updated.",
+        title: t("report.alert.processing"),
+        text: t("report.alert.updateText"),
         allowOutsideClick: false,
         showConfirmButton: false,
         customClass: "sweet-alerts",
@@ -1819,8 +1835,8 @@ function submit() {
             Swal.close();
             Swal.fire({
                 icon: "success",
-                title: "Success!",
-                html: "The update has been completed successfully.",
+                title: t("report.alert.success"),
+                html: t("report.alert.successUpdate"),
                 customClass: "sweet-alerts",
             });
         },
@@ -1846,8 +1862,8 @@ function submit() {
 
 function showDownloadMessage() {
     Swal.fire({
-        title: "Generating PDF...",
-        text: "Please wait while the PDF is being generated.",
+        title: t("report.alert.generatingPdfTitle"),
+        text: t("report.alert.generatingPdfText"),
         allowOutsideClick: false,
         showConfirmButton: false,
         customClass: "sweet-alerts",
@@ -1861,17 +1877,18 @@ function showDownloadMessage() {
 
 function closeReport() {
     Swal.fire({
-        title: "Are you sure?",
-        text: "You are about to close this report. Once closed, no further changes can be made.",
+        title: t("report.form.titleConfirmation"),
+        text: t("report.form.textConfirmation"),
         icon: "warning",
         showCancelButton: true,
         customClass: "sweet-alerts",
-        confirmButtonText: "Yes, close it!",
+        confirmButtonText: t("report.form.confirmCloseButtonText"),
+        cancelButtonText: t("report.form.confirmCancelButtonText"),
     }).then((result) => {
         if (result.isConfirmed) {
             Swal.fire({
-                title: "Processing...",
-                text: "Please wait while the data is being updated.",
+                title: t("report.alert.processing"),
+                text: t("report.alert.updateText"),
                 allowOutsideClick: false,
                 showConfirmButton: false,
                 customClass: "sweet-alerts",
@@ -1883,8 +1900,8 @@ function closeReport() {
                 onSuccess: () => {
                     Swal.fire({
                         icon: "success",
-                        title: "Success!",
-                        html: "The report has been closed successfully.",
+                        title: t("report.alert.success"),
+                        html: t("report.alert.reportClosedText"),
                         customClass: "sweet-alerts",
                     });
                 },
@@ -1911,17 +1928,18 @@ function closeReport() {
 
 function reOpenReport() {
     Swal.fire({
-        title: "Are you sure?",
-        text: "You are about to reopen this report. Please note that only the report creator and administrators can make further changes once reopened.",
+        title: t("report.form.titleConfirmation"),
+        text: t("report.form.textReopenConfirmation"),
         icon: "warning",
         showCancelButton: true,
         customClass: "sweet-alerts",
-        confirmButtonText: "Yes, reopen it!",
+        confirmButtonText: t("report.form.confirmReopenButtonText"),
+        cancelButtonText: t("report.form.confirmCancelButtonText"),
     }).then((result) => {
         if (result.isConfirmed) {
             Swal.fire({
-                title: "Processing...",
-                text: "Please wait while the data is being updated.",
+                title: t("report.alert.processing"),
+                text: t("report.alert.updateText"),
                 allowOutsideClick: false,
                 showConfirmButton: false,
                 customClass: "sweet-alerts",
@@ -1933,8 +1951,8 @@ function reOpenReport() {
                 onSuccess: () => {
                     Swal.fire({
                         icon: "success",
-                        title: "Success!",
-                        html: "The report has been reopened successfully.",
+                        title: t("report.alert.success"),
+                        html: t("report.alert.successReopen"),
                         customClass: "sweet-alerts",
                     });
                 },

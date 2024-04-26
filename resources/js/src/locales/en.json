@@ -114,5 +114,21 @@
     "report.form.signatureNamePlaceholder": "Enter Signature name",
     "report.form.saveReport": "Save report",
     "report.alert.processing": "Processing...",
-    "report.alert.processingText": "Please wait while the data is being added."
+    "report.alert.processingText": "Please wait while the data is being added.",
+    "report.alert.updateText": "Please wait while the data is being updated.",
+    "report.alert.success": "Success!",
+    "report.alert.successUpdate": "The update has been completed successfully.",
+    "report.form.closeReport": "Close report",
+    "report.form.titleConfirmation": "Are you sure?",
+    "report.form.textConfirmation": "You are about to close this report. Once closed, no further changes can be made.",
+    "report.form.confirmCloseButtonText": "Yes, close it!",
+    "report.form.confirmCancelButtonText": "Cancel",
+    "report.alert.reportClosedText": "The report has been closed successfully.",
+    "report.form.textReopenConfirmation": "You are about to reopen this report. Please note that only the report creator and administrators can make further changes once reopened.",
+    "report.form.confirmReopenButtonText": "Yes, reopen it!",
+    "report.alert.successReopen": "The report has been reopened successfully.",
+    "report.form.downloadPdf": "Download PDF",
+    "report.form.reopenReport": "Reopen report",
+    "report.alert.generatingPdfTitle": "Generating PDF...",
+    "report.alert.generatingPdfText": "Please wait while the PDF is being generated."
 }

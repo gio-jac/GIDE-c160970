@@ -114,5 +114,21 @@
     "report.form.signatureNamePlaceholder": "Digite o nome do signatário",
     "report.form.saveReport": "Salvar relatório",
     "report.alert.processing": "Processando...",
-    "report.alert.processingText": "Aguarde enquanto os dados estão sendo adicionados."
+    "report.alert.processingText": "Aguarde enquanto os dados estão sendo adicionados.",
+    "report.alert.updateText": "Aguarde enquanto os dados estão sendo atualizados.",
+    "report.alert.success": "Sucesso!",
+    "report.alert.successUpdate": "A atualização foi concluída com sucesso.",
+    "report.form.closeReport": "Fechar relatório",
+    "report.form.titleConfirmation": "Tem certeza?",
+    "report.form.textConfirmation": "Você está prestes a fechar este relatório. Uma vez fechado, nenhuma alteração adicional poderá ser feita.",
+    "report.form.confirmCloseButtonText": "Sim, feche!",
+    "report.form.confirmCancelButtonText": "Cancelar",
+    "report.alert.reportClosedText": "O relatório foi fechado com sucesso.",
+    "report.form.textReopenConfirmation": "Você está prestes a reabrir este relatório. Por favor, observe que apenas o criador do relatório e os administradores podem fazer alterações adicionais após a reabertura.",
+    "report.form.confirmReopenButtonText": "Sim, reabra!",
+    "report.alert.successReopen": "O relatório foi reaberto com sucesso.",
+    "report.form.downloadPdf": "Baixar PDF",
+    "report.form.reopenReport": "Reabrir relatório",
+    "report.alert.generatingPdfTitle": "Gerando PDF...",
+    "report.alert.generatingPdfText": "Por favor, aguarde enquanto o PDF está sendo gerado."
 }
