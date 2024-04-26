@@ -375,7 +375,8 @@ class ReportController extends Controller
     /**
      * PDF Creation.
      */
-    public function pdfReport(string $id) {
+    public function pdfReport(string $id,string $lang = 'en') {
+        $lang = substr($lang, 0, 2);
         $report = ServiceReport::with([
             'status',
             'machines' => function($query){
@@ -401,8 +402,13 @@ class ReportController extends Controller
         $catalogCodes = Code::where('is_active', 1)->get();
         //return response()->json($report);
         $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';
-        $pdf = Pdf::loadView($view, ['catalogCodes' => $catalogCodes, 'report' => $report]);
 
-        return $pdf->download($report->complete_id.'.pdf');
+        if(!view()->exists("{$view}-{$lang}")) {
+            $lang = 'en';
+        }
+
+        $pdf = Pdf::loadView("{$view}-{$lang}", compact('catalogCodes', 'report'));
+
+        return $pdf->download("{$report->complete_id}.pdf");
     }
 }
