@@ -272,7 +272,7 @@
     "catalogs.failureType.1": "ADJUSTMENT",
     "catalogs.failureType.2": "UPDATE",
     "catalogs.failureType.3": "CHANGE OIL",
-    "catalogs.failureType.4": "UNISNTALLATION",
+    "catalogs.failureType.4": "UNINSTALLATION",
     "catalogs.failureType.5": "ADJUST CONNECTORS",
     "catalogs.failureType.6": "INSTALLATION",
     "catalogs.failureType.7": "CLEANING",
