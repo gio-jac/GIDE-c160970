@@ -376,39 +376,43 @@ class ReportController extends Controller
      * PDF Creation.
      */
     public function pdfReport(string $id,string $lang = 'en') {
-        $lang = substr($lang, 0, 2);
-        $report = ServiceReport::with([
-            'status',
-            'machines' => function($query){
-                $query->orderBy('position', 'asc');
-            },
-            'machines.machine_model',
-            'machineDetails',
-            'machineDetails.module',
-            'machineDetails.failure',
-            'machineDetails.failureType',
-            'parts','parts.part',
-            'shift',
-            'user',
-            'branch',
-            'branch.client',
-            'branch.branchManagers',
-        ])->findOrFail($id);
+        $defaultLocale = app()->getLocale();
+        try {
+            $lang = substr($lang, 0, 2);
+            $report = ServiceReport::with([
+                'status',
+                'machines' => function($query){
+                    $query->orderBy('position', 'asc');
+                },
+                'machines.machine_model',
+                'machineDetails',
+                'machineDetails.module',
+                'machineDetails.failure',
+                'machineDetails.failureType',
+                'parts','parts.part',
+                'shift',
+                'user',
+                'branch',
+                'branch.client',
+                'branch.branchManagers',
+            ])->findOrFail($id);
 
-        if(!$report->closed) {
-            return;
+            if (!$report->closed) {
+                abort(403, 'Report is not closed');
+                return;
+            }
+            
+            $catalogCodes = Code::where('is_active', 1)->get();
+            //return response()->json($report);
+            $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';
+
+            $lang = view()->exists("{$view}-{$lang}") ? $lang : 'en';
+            app()->setLocale($lang);
+            $pdf = Pdf::loadView("{$view}-{$lang}", compact('catalogCodes', 'report'));
+
+            return $pdf->download("{$report->complete_id}.pdf");
+        }finally {
+            app()->setLocale($defaultLocale);
         }
-        
-        $catalogCodes = Code::where('is_active', 1)->get();
-        //return response()->json($report);
-        $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';
-
-        if(!view()->exists("{$view}-{$lang}")) {
-            $lang = 'en';
-        }
-
-        $pdf = Pdf::loadView("{$view}-{$lang}", compact('catalogCodes', 'report'));
-
-        return $pdf->download("{$report->complete_id}.pdf");
     }
 }

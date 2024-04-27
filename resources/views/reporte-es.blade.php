@@ -103,10 +103,10 @@
                 $reportTypeId = $report->report_type_id;
             @endphp
             <td class="centered-cell{{ $reportTypeId === 1 ? ' highlighted' : '' }}">
-                CONTRACT
+                CONTRATO
             </td>
             <td class="centered-cell{{ $reportTypeId === 2 ? ' highlighted' : '' }}">
-                CLIENT
+                CLIENTE
             </td>
         </tr>
     </table>
@@ -115,9 +115,9 @@
         $failure = [];
         $failureType = [];
         foreach($report->machineDetails as $detail){
-            $module[] = !empty($detail['module']['name']) ? $detail['module']['name'] : 'N/A';
-            $failure[] = !empty($detail['failure']['name']) ? $detail['failure']['name'] : 'N/A';
-            $failureType[] = !empty($detail['failureType']['name']) ? $detail['failureType']['name'] : 'N/A';
+            $module[] = !empty($detail['module']['name']) ? __('error.'.$detail['module']['id'],[],null,$detail['module']['name']) : 'N/A';
+            $failure[] = !empty($detail['failure']['name']) ? __('failures.'.$detail['failure']['id'],[],null,$detail['failure']['name']) : 'N/A';
+            $failureType[] = !empty($detail['failureType']['name']) ? __('failureType.'.$detail['failureType']['id'],[],null,$detail['failureType']['name']) : 'N/A';
         }
     @endphp
     <table class="tblStyle">
@@ -174,7 +174,7 @@
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
                     class="defaultBorder{{ $report->status_id === 1 ? ' highlighted' : '' }}"></div>
-                COMPLETE
+                COMPLETO
             </td>
             <td>
                 <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
@@ -242,9 +242,9 @@
                 {{ $finished[1] }}
             </td>
             <td>
-                <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;margin-left:-13px;"
+                <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;margin-left:1px;"
                     class="defaultBorder{{ $report->status_id === 3 ? ' highlighted' : '' }}"></div>
-                RETURN
+                REGRESAR
             </td>
             <td class="defaultBorder">
                 {{ $report->machines[0]->pivot->dt }}
