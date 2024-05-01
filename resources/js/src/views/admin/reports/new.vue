@@ -1561,6 +1561,39 @@ const form = reactive({
     selectedStatus: null,
 });
 
+onMounted(() => {
+    //set default data
+    items.value.push({
+        id: 1,
+        title: "",
+        description: "",
+        rate: 0,
+        quantity: 0,
+        amount: 0,
+    });
+    
+    sortCatalogData();
+});
+
+watch(
+  () => store.locale,
+  () => {
+    sortCatalogData();
+  }
+);
+
+function sortCatalogData() {
+  props.catalogModule.sort((a, b) => sortCatalogArray(a, b, 'catalogs.error'));
+  props.catalogFailures.sort((a, b) => sortCatalogArray(a, b, 'catalogs.failures'));
+  props.catalogTypes.sort((a, b) => sortCatalogArray(a, b, 'catalogs.failureType'));
+}
+
+function sortCatalogArray(a, b, prefix) {
+  const translateA = t(`${prefix}.${a.id}`, a.name);
+  const translateB = t(`${prefix}.${b.id}`, b.name);
+  return translateA.localeCompare(translateB);
+}
+
 const items: any = ref([]);
 const selectedFile = ref(null);
 const params = ref({
@@ -1599,17 +1632,6 @@ const discount = ref<number>(0);
 const shippingCharge = ref<number>(0);
 const paymentMethod = ref("");
 
-onMounted(() => {
-    //set default data
-    items.value.push({
-        id: 1,
-        title: "",
-        description: "",
-        rate: 0,
-        quantity: 0,
-        amount: 0,
-    });
-});
 
 const addItem = () => {
     let maxId = 0;
