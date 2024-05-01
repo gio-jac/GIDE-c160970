@@ -1514,7 +1514,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, reactive, computed } from "vue";
+import { ref, onMounted, watch,reactive, computed } from "vue";
 import { Head, usePage, router, Link } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
 import AppLayout from "@/layouts/app-layout.vue";
@@ -1612,6 +1612,7 @@ const preloadingTime: any = ref({
 });
 
 onMounted(() => {
+    sortCatalogData();
     //set default data
     console.log(props.report);
     console.log(props.report.machines);
@@ -1694,6 +1695,25 @@ onMounted(() => {
         });
     }
 });
+
+watch(
+  () => store.locale,
+  () => {
+    sortCatalogData();
+  }
+);
+
+function sortCatalogData() {
+  props.catalogModule.sort((a, b) => sortCatalogArray(a, b, 'catalogs.error'));
+  props.catalogFailures.sort((a, b) => sortCatalogArray(a, b, 'catalogs.failures'));
+  props.catalogTypes.sort((a, b) => sortCatalogArray(a, b, 'catalogs.failureType'));
+}
+
+function sortCatalogArray(a, b, prefix) {
+  const translateA = t(`${prefix}.${a.id}`, a.name);
+  const translateB = t(`${prefix}.${b.id}`, b.name);
+  return translateA.localeCompare(translateB);
+}
 
 const addItem = () => {
     let maxId = 0;
