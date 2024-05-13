@@ -76,7 +76,7 @@
     "report.form.transport": "Transport",
     "report.form.initialTransport": "Initial Transport",
     "report.form.finalTransport": "Final Transport",
-    "report.form.estimatedTransport": "Estimated Transport",
+    "report.form.estimatedTransport": "Extra Time",
     "report.form.dtPlaceholder": "Enter DT",
     "report.form.branches": "Branches",
     "report.form.branchPlaceholder": "Type (Street, City, Etc.)",
