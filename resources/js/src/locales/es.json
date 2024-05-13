@@ -76,7 +76,7 @@
     "report.form.transport": "Transporte",
     "report.form.initialTransport": "Transporte inicial",
     "report.form.finalTransport": "Transporte final",
-    "report.form.estimatedTransport": "Transporte estimado",
+    "report.form.estimatedTransport": "Tiempo extra",
     "report.form.dtPlaceholder": "Ingrese DT",
     "report.form.branches": "Sucursales",
     "report.form.branchPlaceholder": "Ingrese (Calle, Ciudad, Etc.)",

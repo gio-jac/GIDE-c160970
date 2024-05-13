@@ -229,11 +229,11 @@
     @foreach ($report->machines->chunk(3) as $machineChunk)
     <table class="tblStyle" style="float:left;width: 32%; margin-right: 10px; text-align: center;">
         @if ($loop->last)
-        <tr><td style="border:0;">&nbsp;</td><td style="border:0;">&nbsp;</td></tr>
+        <tr><td style="border:0;">&nbsp;</td><td style="border:0;">&nbsp;<br>&nbsp;</td></tr>
         @endif
         @foreach ($machineChunk as $machine)
         <tr>
-            <td style="width: 100px;">{{ $machine->serial }}</td>
+            <td style="width: 100px;">{{ $machine->serial }}<br>{{ $machine->machine_model->model }}</td>
             <td>{{ $machine->pivot->dt }}</td>
         </tr>
         @endforeach
