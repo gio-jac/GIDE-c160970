@@ -121,6 +121,22 @@
                                         ></path>
                                     </svg>
                                 </Link>
+                                <a
+                                    href="javascript:void(0)"
+                                    v-if="data.value.closed === 1"
+                                    class="hover:text-info"
+                                    @click="showDownloadMessage(data.value.id)"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" id="file">
+                                        <path 
+                                            fill="currentColor" 
+                                            stroke="currentColor" 
+                                            stroke-width="0.5"
+                                            opacity="0.7"
+                                            d="M19.714 6.149 14.259.364c-.189-.199-.456-.363-.73-.363H1.979C.874.001 0 1.001 0 2.105v7c0 .552.437.896.99.896h.004c.553 0 1.006-.344 1.006-.896v-6c0-.552.427-1.104.98-1.104H12v4.104c0 1.105.874 1.896 1.98 1.896H18v1.104c0 .552.437.896.99.896h.004c.553 0 1.006-.344 1.006-.896V6.838c0-.257-.109-.503-.286-.689zM3.979 15.105a1 1 0 0 0-1-1h-1v2h1a1 1 0 0 0 1-1zm1.996-.266a3.002 3.002 0 0 1-2.996 3.162H2v1.104c0 .552-.453.896-1.006.896H.989c-.552 0-.989-.344-.989-.896v-6c0-.552.427-1.104.98-1.104h1.83c1.624 0 3.08 1.216 3.165 2.838zm5.025.266c0-.552-.469-1.104-1.02-1.104H9v4h.98c.551 0 1.02-.344 1.02-.896v-2zm2-.104v2c0 1.65-1.35 3-3 3H7.895A.895.895 0 0 1 7 19.105V12.98c0-.541.438-.979.98-.979H10c1.65 0 3 1.35 3 3zm7-1.974v.026c0 .552-.469.948-1.02.948H16v2h2.98A1.04 1.04 0 0 1 20 17.027v.026c0 .552-.469.948-1.02.948H16v1.104c0 .552-.453.896-1.006.896h-.005c-.552 0-.989-.344-.989-.896v-6c0-.552.427-1.104.98-1.104h4A1.04 1.04 0 0 1 20 13.027z">
+                                        </path>
+                                    </svg>
+                                </a>
                                 <!--
                                 <Link
                                     :href="`/expenses`"
@@ -217,7 +233,10 @@ import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { useI18n } from 'vue-i18n';
+import { useAppStore } from "@/stores/index";
+import Swal from "sweetalert2";
 
+const store = useAppStore();
 const { t } = useI18n();
 defineOptions({
     layout: [SiteLayout, AppLayout],
@@ -292,4 +311,21 @@ const deleteRow = (item: any = null) => {
         }
     }
 };
+
+function showDownloadMessage(id) {
+    const url = `/reports/${id}/${store.locale}/file`;
+    window.location.href = url;
+    Swal.fire({
+        title: t("report.alert.generatingPdfTitle"),
+        text: t("report.alert.generatingPdfText"),
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: "sweet-alerts",
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+}
 </script>
