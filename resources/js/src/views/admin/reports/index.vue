@@ -68,6 +68,9 @@
                         <template #status="data">
                             {{ $t("catalogs.status."+data.value.status_id,data.value.status && data.value.status.status ? data.value.status.status : "N/A") }}
                         </template>
+                        <template #machines="data">
+                            {{ data.value.machines.filter(item => item.only_dt === 0).map((item: any) => item.serial).join(', ') }}
+                        </template>
                         <template #created_at="data">
                             {{ formatDate(data.value.created_at) }}
                         </template>
@@ -256,6 +259,7 @@ const cols = computed(() =>[
     { field: "id", title: "ID" },
     { field: "complete_id", title: t("report.index.col.fileName") },
     { field: "status", title: t("report.index.col.status") },
+    { field: "machines", title: "Maquinas" },
     { field: "assigned_to", title: t("report.index.col.assigned") },
     { field: "created_at", title: t("report.index.col.creationDate") },
     {
