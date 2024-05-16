@@ -22,7 +22,7 @@
 
         .tblStyle.reportedError {
             border: 1px solid black;
-            height: 75.8px;
+            height: 50px;
         }
 
         .countTime{
@@ -127,6 +127,10 @@
             @endif
         @endforeach
     </table>
+    <p style="margin-bottom:0px;">Error Reportado:</p>
+    <div class="tblStyle reportedError">
+        {{ $report->reported_error }}
+    </div>
     <p style="margin-bottom:0px;">Solución/Comentarios:</p>
     <div class="tblStyle reportedError">
         {{ $report->actions_taken }}
@@ -240,6 +244,11 @@
     </table>
     @endforeach
     <div style="clear: both;"></div>
+    Observaciones:
+    <div class="tblStyle reportedError" style="margin:7px 0;">
+        {{ $report->notes }}
+    </div>
+    <div style="clear: both;"></div>  
         
     <div style="position: absolute; bottom: 0;width:100%;">
         @php
