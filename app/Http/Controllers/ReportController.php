@@ -405,11 +405,13 @@ class ReportController extends Controller
             }
             
             $catalogCodes = Code::where('is_active', 1)->get();
-            //return response()->json($report);
+            
             $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';
-
+            $lang = $view === 'reporte-banxico' ? 'es' : $lang;
             $lang = view()->exists("{$view}-{$lang}") ? $lang : 'en';
+            
             app()->setLocale($lang);
+            
             $pdf = Pdf::loadView("{$view}-{$lang}", compact('catalogCodes', 'report'));
 
             return $pdf->download("{$report->complete_id}.pdf");
