@@ -14,6 +14,7 @@ class ServiceReportMachineDetail extends Model
         'module_id',
         'failure_id',
         'failure_type_id',
+        'dt'
     ];
 
     public $timestamps = true;

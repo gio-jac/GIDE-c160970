@@ -139,12 +139,13 @@ class ReportController extends Controller
                 
                 $details = [];
                 foreach($machine['machine_details'] as $detail) {
-                    if(!empty($detail["module_id"]) || !empty($detail["failure_id"]) || !empty($detail["failure_type_id"])){
+                    if(!empty($detail["module_id"]) || !empty($detail["failure_id"]) || !empty($detail["failure_type_id"]) || !empty($detail["dt"])){
                         $details[] = [
                             'service_report_machine_id' => $serviceReportMachine->id,
                             'module_id' => $detail["module_id"],
                             'failure_id' => $detail["failure_id"],
                             'failure_type_id' => $detail["failure_type_id"],
+                            'dt' => $detail["dt"],
                         ];
                     }
                 }
@@ -288,19 +289,20 @@ class ReportController extends Controller
                     ->value('service_report_machine_id');
 
                 foreach($machine['machine_details'] as $detail) {
-                    if(!empty($detail['module_id']) || !empty($detail['failure_id']) || !empty($detail['failure_type_id'])){
+                    if(!empty($detail['module_id']) || !empty($detail['failure_id']) || !empty($detail['failure_type_id']) || !empty($detail["dt"])){
                         $machineDetails[] = [
                             'id' => $detail['id'] ?? null,
                             'service_report_machine_id' => $detail['service_report_machine_id'] ?? $service_report_machine_id,
                             'module_id' => $detail['module_id'],
                             'failure_id' => $detail['failure_id'],
                             'failure_type_id' => $detail['failure_type_id'],
+                            'dt' => $detail['dt'],
                         ];
                     }
                 }
             }
             
-            $report->machineDetails()->upsert($machineDetails, ['id'], ['module_id', 'failure_id', 'failure_type_id']);
+            $report->machineDetails()->upsert($machineDetails, ['id'], ['module_id', 'failure_id', 'failure_type_id', 'dt']);
 
             $partsArray = $request->all()['service_parts'];
 

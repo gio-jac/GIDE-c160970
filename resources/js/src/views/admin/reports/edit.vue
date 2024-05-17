@@ -263,6 +263,38 @@
                                                     </option>
                                                 </select>
                                             </div>
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
+                                                v-if="machine.only_dt !== 1"
+                                            >
+                                                <label :for="
+                                                        'formErrorDT' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    >DT (Min.)</label
+                                                >
+                                                <input
+                                                    :id="
+                                                        'formErrorDT' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formErrorDT' +
+                                                        index +
+                                                        indexDetail
+                                                    "
+                                                    type="number"
+                                                    v-model="
+                                                        detail.dt
+                                                    "
+                                                    
+                                                    class="form-input text-white-dark"
+                                                    :placeholder="$t('report.form.dtPlaceholder')"
+                                                    :disabled="props.report.closed === 1"
+                                                />
+                                            </div>
                                         </div>
 
                                         <button
@@ -614,6 +646,34 @@
                                                         {{ $t("catalogs.failureType."+failuretype.id,failuretype.name) }}
                                                     </option>
                                                 </select>
+                                            </div>
+                                            <div
+                                                class="p-2 flex-auto sm:flex-1"
+                                            >
+                                                <label :for="
+                                                        'formErrorDT1' +
+                                                        indexDetail
+                                                    "
+                                                    >DT (Min.)</label
+                                                >
+                                                <input
+                                                    :id="
+                                                        'formErrorDT1' +
+                                                        indexDetail
+                                                    "
+                                                    :name="
+                                                        'formErrorDT1' +
+                                                        indexDetail
+                                                    "
+                                                    type="number"
+                                                    v-model="
+                                                        detail.dt
+                                                    "
+                                                    
+                                                    class="form-input text-white-dark"
+                                                    :placeholder="$t('report.form.dtPlaceholder')"
+                                                    :disabled="props.report.closed === 1"
+                                                />
                                             </div>
                                         </div>
                                         <button
@@ -1839,6 +1899,8 @@ function submit() {
 
     if (form.selectedContact)
         postForm.branch_manager_id = form.selectedContact.id;
+
+    console.log(postForm);
 
     Swal.fire({
         title: t("report.alert.processing"),
