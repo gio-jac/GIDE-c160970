@@ -6,23 +6,23 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/parts">Parts</Link></li>
+                    <li><Link href="/parts">{{ $t("part.new.breadcrumb.parts") }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
                             class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70"
-                            >New</a
+                            >{{ $t("part.new.breadcrumb.new") }}</a
                         >
                     </li>
                 </ol>
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.num_part }">
-                    <label for="formPartId">Part ID</label>
+                    <label for="formPartId">{{ $t("part.new.partSerial") }}</label>
                     <input
                         id="formPartId"
                         type="text"
-                        placeholder="Enter Part ID"
+                        :placeholder="$t('part.new.partSerialPlaceholder')"
                         class="form-input"
                         v-model="form.num_part"
                     />
@@ -31,11 +31,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.descripcion }">
-                    <label for="formDescription">Description</label>
+                    <label for="formDescription">{{ $t("report.form.description") }}</label>
                     <input
                         id="formDescription"
                         type="text"
-                        placeholder="Enter description"
+                        :placeholder="$t('part.new.descriptionPlaceholder')"
                         class="form-input"
                         v-model="form.descripcion"
                     />
@@ -44,7 +44,7 @@
                     </template>
                 </div>
                 <div>
-                    <label for="formActive">Is assignable?</label>
+                    <label for="formActive">{{ $t("part.new.activePart") }}</label>
                     <label class="w-12 h-6 relative">
                         <input
                             type="checkbox"
@@ -58,10 +58,10 @@
                         ></span>
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary !mt-6">Add</button>
+                <button type="submit" class="btn btn-primary !mt-6">{{ $t("user.create.add") }}</button>
             </form>
         </div>
-
+        <!--
         <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b] mt-5">
             <form class="space-y-5" @submit.prevent="submitExcel">
                 <div class="custom-file-container" data-upload-id="myFirstImage">
@@ -75,7 +75,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary !mt-6">Add</button>
             </form>
-        </div>
+        </div>-->
     </div>
 </template>
 
@@ -86,14 +86,16 @@ import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
 import FileUploadWithPreview from 'file-upload-with-preview';
+import Swal from "sweetalert2";
 
 onMounted(() => {
+    /*
     new FileUploadWithPreview('myFirstImage', {
         images: {
             baseImage: '',
             backgroundImage: '',
         },
-    });
+    });*/
 });
 
 defineOptions({
@@ -115,7 +117,39 @@ const formExcel = reactive({
 });
 
 function submit() {
-    router.post("/parts", form);
+    Swal.fire({
+        title: "Processing...",
+        text: "Please wait while the data is being added.",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: "sweet-alerts",
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+    router.post("/parts", form, {
+        onSuccess: () => {
+            console.log("Exitoso");
+            Swal.close();
+        },
+        onError: (error) => {
+            console.log(error);
+            let errorMessages = "";
+
+            for (const key in error) {
+                const fieldName = key.replace("_id", "");
+                errorMessages += `<p>${error[key]}</p>`;
+            }
+            Swal.close();
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                html: errorMessages,
+                customClass: "sweet-alerts",
+            });
+        },
+        onFinish: () => {},
+    });
 }
 
 function onFileChange(e) {

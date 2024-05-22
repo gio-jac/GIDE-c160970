@@ -19,7 +19,7 @@ class UserJamaicaSeeder extends Seeder
         User::create([
             'emp' => "E03920",
             'email' => "garnetantonio.bailey@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Antonio",
             'apellido_paterno' => "Bailey",
             'apellido_materno' => "Garnet",
@@ -30,7 +30,7 @@ class UserJamaicaSeeder extends Seeder
         User::create([
             'emp' => "E03674",
             'email' => "albert.thompson@gi-de.com",
-            'password' => Hash::make("111"),
+            'password' => Hash::make("GyD2024$@"),
             'nombre' =>  "Albert",
             'apellido_paterno' => "Thompson",
             'apellido_materno' => null,

@@ -15,16 +15,20 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+        ], [
+            'email.required' => 'login.welcome.error.email.required',
+            'email.email' => 'login.welcome.error.email.email',
+            'password.required' => 'login.welcome.error.password.required',
         ]);
 
         if (Auth::attempt($credentials + ['is_active' => true])) {
             $request->session()->regenerate();
  
-            return to_route('users.index');
+            return to_route('index');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'login.welcome.error.auth',
         ])->onlyInput('email');
     }
 

@@ -4,7 +4,7 @@
             <div class="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-[#0e1726]">
                 <div class="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
                     <Link href="/" class="main-logo flex items-center shrink-0">
-                        <img class="w-40 ltr:-ml-1 rtl:-mr-1 inline" src="/assets/images/icon/Creating Confidence.svg" alt="" />
+                        <img class="w-40 ltr:-ml-1 rtl:-mr-1 inline" src="/assets/images/icon/GD_Logo_BWM_pos_600.png" alt="" />
                     </Link>
 
                     <a
@@ -592,7 +592,7 @@
                                                 />
                                             </svg>
 
-                                            Sign Out
+                                            {{ $t('header.signout') }}
                                         </Link>
                                     </li>
                                 </ul>

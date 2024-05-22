@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('service_report_id');
             $table->unsignedBigInteger('machine_id');
-            $table->unsignedBigInteger('module_id');
-            $table->unsignedBigInteger('failure_id');
-            $table->unsignedBigInteger('failure_type_id');
+            $table->unsignedBigInteger('module_id')->nullable();
+            $table->unsignedBigInteger('failure_id')->nullable();
+            $table->unsignedBigInteger('failure_type_id')->nullable();
             $table->time('transport_time_1', $precision = 0)->nullable();
             $table->time('transport_time_2', $precision = 0)->nullable();
             $table->integer('transport_1')->default(0);
             $table->integer('transport_2')->default(0);
-            $table->integer('dt')->default(0);
+            $table->integer('dt')->default(0)->nullable();
             $table->timestamps();
             $table->foreign('machine_id')->references('id')->on('machines');
             $table->foreign('service_report_id')->references('id')->on('service_reports');

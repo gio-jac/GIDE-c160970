@@ -29,7 +29,7 @@
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                 </svg>
-                                Add New
+                                {{ $t("part.index.newPart") }}
                             </Link>
                         </div>
                         <div class="ltr:ml-auto rtl:mr-auto">
@@ -37,7 +37,7 @@
                                 v-model="search"
                                 type="text"
                                 class="form-input"
-                                placeholder="Search..."
+                                :placeholder="$t('user.index.searchPlaceholder')"
                             />
                         </div>
                     </div>
@@ -106,6 +106,7 @@
                                         ></path>
                                     </svg>
                                 </Link>
+                                <!--
                                 <button
                                     type="button"
                                     class="hover:text-danger"
@@ -152,7 +153,7 @@
                                             stroke-width="1.5"
                                         ></path>
                                     </svg>
-                                </button>
+                                </button>-->
                             </div>
                         </template>
                     </vue3-datatable>
@@ -162,12 +163,15 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref,computed } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
+import Swal from "sweetalert2";
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
@@ -180,13 +184,13 @@ const props = defineProps({
 
 const datatable: any = ref(null);
 const search = ref("");
-const cols = ref([
-    { field: "num_part", title: "Part ID" },
-    { field: "descripcion", title: "Description" },
-    { field: "is_active", title: "Is assignable?" },
+const cols = computed(() => [
+    { field: "num_part", title: t("user.index.col.parteId") },
+    { field: "descripcion", title: t("report.form.description") },
+    { field: "is_active", title: t("user.index.col.active") },
     {
         field: "actions",
-        title: "Actions",
+        title: t("user.index.col.actions"),
         sort: false,
         headerClass: "justify-center",
     },
@@ -220,10 +224,52 @@ const tableOption = ref({
 });
 
 const deleteRow = (item: any = null) => {
-    if (confirm("Are you sure want to delete selected row ?")) {
-        if (item) {
-            router.delete(`/users/${item}`);
+    Swal.fire({
+        title: "Are you sure?",
+        text: "The part will be hidden and unavailable for selection, but not deleted.",
+        icon: "warning",
+        showCancelButton: true,
+        customClass: "sweet-alerts",
+        confirmButtonText: "Yes, deactivate it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Processing...",
+                text: "Please wait while the data is being updated.",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                customClass: "sweet-alerts",
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+            router.delete(`/parts/${item}`, {
+                onSuccess: () => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        html: "The part has been deactivated successfully.",
+                        customClass: "sweet-alerts",
+                    });
+                },
+                onError: (error) => {
+                    console.log(error);
+                    let errorMessages = "";
+
+                    for (const key in error) {
+                        const fieldName = key.replace("_id", "");
+                        errorMessages += `<p>${error[key]}</p>`;
+                    }
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        html: errorMessages,
+                        customClass: "sweet-alerts",
+                    });
+                },
+                onFinish: () => {},
+            });
         }
-    }
+    });
 };
 </script>

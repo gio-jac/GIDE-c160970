@@ -142,6 +142,13 @@ class BranchSeeder extends Seeder
         Branch::create(['address' => 'Calzada Manuel Clouthier 5274, Colonia Campestre, Las Bajadas, 91775 Veracruz, Ver.', 'city_id' => 78, 'client_id' => 7]);
         Branch::create(['address' => 'Niño Perdido 331, Delegación Santa María Totoltepec, 52120 San Pedro Totoltepec, Méx.', 'city_id' => 71, 'client_id' => 7]);
 
-        Branch::create(['address' => 'TEST: Niño Perdido 331, Delegación Santa María Totoltepec, 52120 San Pedro Totoltepec, Méx.', 'city_id' => 71, 'client_id' => 3]);
+        Branch::create(['address' => 'calzada Legaria 691, Col. Irrigación, C.P. 11500 México, D.F.', 'city_id' => 85, 'client_id' => 3]);
+        Branch::create(['address' => 'calzada Legaria 691, Col. Irrigación, C.P. 11500 México, D.F.', 'city_id' => 86, 'client_id' => 3]);
+        Branch::create(['address' => 'Parque Industrial Guadalajara Prolongación Gobernador Curiel # 5000 Las Pintas, El Salto Jalisco C.P 45690', 'city_id' => 87, 'client_id' => 3]);
+        Branch::create(['address' => 'Parque Industrial Guadalajara Prolongación Gobernador Curiel # 5000 Las Pintas, El Salto Jalisco C.P 45690', 'city_id' => 88, 'client_id' => 3]);
+        Branch::create(['address' => 'Carretera Miguel Alemán No. 770 Complejo Industrial Kalos, Apodaca Nuevo Leon. 66603 México', 'city_id' => 89, 'client_id' => 3]);
+        Branch::create(['address' => 'Paseo de los Álamos No. 226 Col Casa Grande Hermosillo Sonora', 'city_id' => 90, 'client_id' => 3]);
+        Branch::create(['address' => 'Boulevard Adolfo Ruiz Cortínez No. 1700 Fraccionamiento Costa de Oro. C,P 92499 Boca del Rio, Veracruz', 'city_id' => 91, 'client_id' => 3]);
+        Branch::create(['address' => 'Calle 56A No.475x37 Paseo Montejo, Mérida Yucatán. 97000 México', 'city_id' => 92, 'client_id' => 3]);
     }
 }

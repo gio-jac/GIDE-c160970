@@ -34,13 +34,13 @@ class PartController extends Controller
      */
     public function store(Request $request)
     {
-        Part::create($request->validate([
+        $part = Part::create($request->validate([
             'num_part' => ['required', 'max:255', 'unique:parts'],
             'descripcion' => ['required', 'max:255'],
             'is_active' => ['required'],
         ]));
 
-        return to_route('parts.index');
+        return to_route('parts.edit', ['part' => $part->id]);
     }
 
     /**
@@ -71,7 +71,10 @@ class PartController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $part = Part::findOrFail($id);
+        return Inertia::render('admin/parts/edit',[
+            'part' => $part
+        ]);
     }
 
     /**
@@ -79,7 +82,15 @@ class PartController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $part = Part::findOrFail($id);
+
+        $part->update($request->validate([
+            'num_part' => ['required', 'max:255', 'unique:parts,num_part,'.$id],
+            'descripcion' => ['required', 'max:255'],
+            'is_active' => ['required'],
+        ]));
+
+        return to_route('parts.edit', ['part' => $part->id]);
     }
 
     /**
@@ -87,7 +98,11 @@ class PartController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Part::findOrFail($id)->update([
+            'is_active' => false,
+        ]);
+        
+        return to_route('parts.index');
     }
 
     public function autocomplete(Request $request)

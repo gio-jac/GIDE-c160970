@@ -25,6 +25,13 @@ use App\Http\Controllers\ExpensesController;
 */
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        $user = Auth::user();
+        return $user->user_type_id == 1
+            ? redirect()->route('users.index')
+            : redirect()->route('reports.index');
+    }
+
     return Inertia::render('auth/login');
 })->name('index');
 
@@ -32,7 +39,7 @@ Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
 
 Route::get('/dashboard', function () {
-    return Inertia::render('apps/invoice/list');
+    //return Inertia::render('apps/invoice/list');
 });
 
 Route::middleware('auth')->group(function () {
@@ -44,10 +51,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/parts/excel', [PartController::class, 'storeExcel'])->name('parts.storeExcel');
     Route::resource('/reports/statuses', StatusController::class);
     Route::resource('/reports/codes', CodeController::class);
-    Route::get('/reports/{report}/file', [ReportController::class, 'pdfReport'])->name('reports.file');
+    Route::get('/reports/{report}/close',[ReportController::class, 'closeReport'])->name('reports.close');
+    Route::get('/reports/{report}/reopen',[ReportController::class, 'reOpenReport'])->name('reports.reopen');
+    Route::get('/reports/{report}/{locale}/file', [ReportController::class, 'pdfReport'])->name('reports.file');
     Route::resource('/reports', ReportController::class);
     Route::post('/parts/autocomplete', [PartController::class, 'autocomplete'])->name('parts.autocomplete');
     Route::resource('/expenses', ExpensesController::class);
+
+    Route::get('/heartbeat', function () {
+        // This will reset the session timeout
+        
+        
+        return;
+    });
 });
 
 

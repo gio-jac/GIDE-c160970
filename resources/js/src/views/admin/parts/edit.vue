@@ -1,37 +1,50 @@
 <template>
-    <Head title="Users Edit Type" />
+    <Head title="Edit Part" />
     <div>
         <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b]">
             <div class="mb-5">
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/users/types">User Types</Link></li>
+                    <li><Link href="/parts">{{ $t("part.new.breadcrumb.parts") }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
                             class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70"
-                            >Edit</a
+                            >{{ $t("user.create.breadcrumb.edit") }}</a
                         >
                     </li>
                 </ol>
             </div>
             <form class="space-y-5" @submit.prevent="submit">
-                <div :class="{ 'has-error': errors.tipo }">
-                    <label for="formType">Type</label>
+                <div :class="{ 'has-error': errors.num_part }">
+                    <label for="formPartId">{{ $t("part.new.partSerial") }}</label>
                     <input
-                        id="formType"
+                        id="formPartId"
                         type="text"
-                        placeholder="Enter Type Name"
+                        :placeholder="$t('part.new.partSerialPlaceholder')"
                         class="form-input"
-                        v-model="form.tipo"
+                        v-model="form.num_part"
                     />
-                    <template v-if="errors.tipo">
-                        <p class="text-danger mt-1">{{ errors.tipo }}</p>
+                    <template v-if="errors.num_part">
+                        <p class="text-danger mt-1">{{ errors.num_part }}</p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.descripcion }">
+                    <label for="formDescription">{{ $t("report.form.description") }}</label>
+                    <input
+                        id="formDescription"
+                        type="text"
+                        :placeholder="$t('part.new.descriptionPlaceholder')"
+                        class="form-input"
+                        v-model="form.descripcion"
+                    />
+                    <template v-if="errors.descripcion">
+                        <p class="text-danger mt-1">{{ errors.descripcion }}</p>
                     </template>
                 </div>
                 <div>
-                    <label for="formActive">Is assignable?</label>
+                    <label for="formActive">{{ $t("part.new.activePart") }}</label>
                     <label class="w-12 h-6 relative">
                         <input
                             type="checkbox"
@@ -45,7 +58,7 @@
                         ></span>
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary !mt-6">Add</button>
+                <button type="submit" class="btn btn-primary !mt-6">{{ $t("user.create.update") }}</button>
             </form>
         </div>
     </div>
@@ -56,24 +69,65 @@ import { reactive } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
+import Swal from "sweetalert2";
 
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
+
 const props = defineProps({
-    type: {
+    errors: Object,
+    part: {
         type: Object,
         required: true,
-    },
-    errors: Object
+    }
 });
 
 const form = reactive({
-    tipo: props.type.tipo,
-    is_active: props.type.is_active === 1 ? true : false,
+    num_part: props.part.num_part,
+    descripcion: props.part.descripcion,
+    is_active: props.part.is_active === 1 ? true : false,
 });
 
 function submit() {
-    router.put(`/users/types/${props.type.id}`, form);
+    Swal.fire({
+        title: "Processing...",
+        text: "Please wait while the data is being updated.",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: "sweet-alerts",
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+    router.put(`/parts/${props.part.id}`, form, {
+        onSuccess: () => {
+            console.log("Exitoso");
+            Swal.close();
+            Swal.fire({
+                icon: "success",
+                title: "Success!",
+                html: "The update has been completed successfully.",
+                customClass: "sweet-alerts",
+            });
+        },
+        onError: (error) => {
+            console.log(error);
+            let errorMessages = "";
+
+            for (const key in error) {
+                const fieldName = key.replace("_id", "");
+                errorMessages += `<p>${error[key]}</p>`;
+            }
+            Swal.close();
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                html: errorMessages,
+                customClass: "sweet-alerts",
+            });
+        },
+        onFinish: () => {},
+    });
 }
 </script>

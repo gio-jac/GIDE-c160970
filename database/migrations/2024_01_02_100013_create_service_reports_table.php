@@ -13,25 +13,26 @@ return new class extends Migration
     {
         Schema::create('service_reports', function (Blueprint $table) {
             $table->id();
+            $table->string('complete_id')->unique();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('shift_id');
-            $table->string('pieces');
-            $table->string('sogd');
-            $table->decimal('time_on', 8, 2)->default(0);
-            $table->string('travel_time');
-            $table->unsignedBigInteger('report_type_id');
-            $table->string('reported_error');
-            $table->unsignedBigInteger('code_id');
+            $table->string('pieces')->nullable();
+            $table->string('sogd')->nullable();
+            $table->decimal('time_on', 8, 2)->default(0)->nullable();
+            $table->string('travel_time')->nullable();
+            $table->unsignedBigInteger('report_type_id')->nullable();
+            $table->string('reported_error')->nullable();
+            $table->unsignedBigInteger('code_id')->nullable();
             $table->unsignedBigInteger('branch_id');
             $table->unsignedBigInteger('branch_manager_id');
-            $table->string('actions_taken');
+            $table->string('actions_taken')->nullable();
             $table->timestamp('reported')->nullable();
             $table->timestamp('arrival')->nullable();
             $table->timestamp('finished')->nullable();
             $table->timestamp('departure')->nullable();
-            $table->unsignedBigInteger('status_id');
-            $table->boolean('is_tested')->default(false);
-            $table->string('notes');
+            $table->unsignedBigInteger('status_id')->nullable();
+            $table->boolean('is_tested')->default(false)->nullable();;
+            $table->string('notes')->nullable();
             $table->string('signature_client_name_1')->nullable();
             $table->string('signature_client_name_2')->nullable();
             $table->boolean('is_active')->default(true);

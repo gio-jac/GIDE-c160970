@@ -26,4 +26,9 @@ class Branch extends Model
     {
         return $this->belongsTo(Client::class, 'client_id', 'id');
     }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(ServiceReport::class, 'branch_id', 'id');
+    }
 }

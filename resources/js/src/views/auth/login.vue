@@ -14,7 +14,7 @@
                         <div class="absolute top-6 start-6">
                             <img
                                 class="w-40 ltr:-ml-1 rtl:-mr-1 inline"
-                                src="/assets/images/icon/Creating Confidence.svg"
+                                src="/assets/images/icon/GD_Logo_BWM_pos_600.png"
                                 alt=""
                             />
                         </div>
@@ -112,7 +112,7 @@
                                 <p
                                     class="text-base font-bold leading-normal text-white-dark"
                                 >
-                                    Enter your email and password to login
+                                    {{ $t("login.welcome.message") }}
                                 </p>
                             </div>
                             <form
@@ -125,7 +125,7 @@
                                         <input
                                             id="Email"
                                             type="email"
-                                            placeholder="Enter Email"
+                                            :placeholder="$t('login.welcome.emailPlaceholder')"
                                             class="form-input ps-10 placeholder:text-white-dark"
                                             v-model="form.email"
                                         />
@@ -152,17 +152,17 @@
                                     </div>
                                     <template v-if="errors.email">
                                         <p class="text-danger mt-1">
-                                            {{ errors.email }}
+                                            {{ $t(errors.email) }}
                                         </p>
                                     </template>
                                 </div>
                                 <div>
-                                    <label for="Password">Password</label>
+                                    <label for="Password">{{ $t("login.welcome.password") }}</label>
                                     <div class="relative text-white-dark">
                                         <input
                                             id="Password"
                                             type="password"
-                                            placeholder="Enter Password"
+                                            :placeholder="$t('login.welcome.passwordPlaceholder')"
                                             class="form-input ps-10 placeholder:text-white-dark"
                                             v-model="form.password"
                                         />
@@ -201,7 +201,7 @@
                                     </div>
                                     <template v-if="errors.password">
                                         <p class="text-danger mt-1">
-                                            {{ errors.password }}
+                                            {{ $t(errors.password) }}
                                         </p>
                                     </template>
                                 </div>
@@ -209,7 +209,7 @@
                                     type="submit"
                                     class="btn bg-[#040066] hover:bg-[#00d4ff] text-white !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
                                 >
-                                    Sign in
+                                    {{ $t("login.welcome.signin") }}
                                 </button>
                             </form>
                         </div>
@@ -224,7 +224,7 @@ import { computed, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import appSetting from "@/app-setting";
 import { useAppStore } from "@/stores/index";
-import { router } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import { useMeta } from "@/composables/use-meta";
 import AuthLayout from "@/layouts/auth-layout.vue";
 import { Head } from '@inertiajs/vue3';
@@ -243,12 +243,12 @@ const currentFlag = computed(() => {
     return `/assets/images/flags/${i18n.locale.toUpperCase()}.svg`;
 });
 
-const form = reactive({
+const form = useForm({
     email: null,
     password: null,
 });
 
 function submit() {
-    router.post("/login", form);
+    form.post("/login");
 }
 </script>

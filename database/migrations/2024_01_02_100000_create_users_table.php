@@ -23,7 +23,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->unsignedBigInteger('user_type_id');
             $table->unsignedBigInteger('user_title_id');
-            $table->unsignedBigInteger('country_id');
+            $table->unsignedBigInteger('country_id')->default(2);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->foreign('user_type_id')->references('id')->on('user_types');
