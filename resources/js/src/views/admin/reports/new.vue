@@ -1835,7 +1835,7 @@ function selectPartChange(searchQuery, id) {
             .catch((error) => {
                 console.error("Error:", error);
             });
-    }, 1500);
+    }, 750);
 }
 
 function addMachineDetail(machine) {
