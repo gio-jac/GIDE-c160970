@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserTitles;
+use App\Models\machine_reports\UserTitles;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

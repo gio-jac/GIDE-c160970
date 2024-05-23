@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Part;
+use App\Models\machine_reports\Part;
 use App\Imports\PartsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;

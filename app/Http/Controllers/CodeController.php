@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Code;
+use App\Models\machine_reports\Code;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

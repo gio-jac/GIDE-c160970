@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductionLineRequest;
 use App\Http\Requests\UpdateProductionLineRequest;
-use App\Models\ProductionLine;
+use App\Models\machine_reports\ProductionLine;
 
 class ProductionLineController extends Controller
 {

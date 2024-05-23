@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Shift;
+use App\Models\machine_reports\Shift;
 
 class ShiftSeeder extends Seeder
 {

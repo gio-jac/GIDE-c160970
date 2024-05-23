@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Status;
+use App\Models\machine_reports\Status;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Branch;
+use App\Models\machine_reports\Branch;
 
 class BranchSeeder extends Seeder
 {

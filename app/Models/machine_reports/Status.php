@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\machine_reports;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Part extends Model
+class Status extends Model
 {
     use HasFactory;
 
@@ -15,8 +15,9 @@ class Part extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'num_part',
-        'descripcion',
+        'id',
+        'status',
+        'description',
         'is_active',
     ];
 

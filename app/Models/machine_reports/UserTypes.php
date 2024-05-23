@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\machine_reports;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class UserTypes extends Model
 {
     use HasFactory;
 
@@ -15,9 +15,8 @@ class Country extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'id',
-        'name',
         'is_active',
+        'tipo',
     ];
 
     /**

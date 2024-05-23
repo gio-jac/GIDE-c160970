@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserTypes;
+use App\Models\machine_reports\UserTypes;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\Branch;
-use App\Models\Code;
+use App\Models\machine_reports\Branch;
+use App\Models\machine_reports\Code;
 use App\Models\User;
-use App\Models\Status;
-use App\Models\Machine;
-use App\Models\ServiceReport;
-use App\Models\ServiceReportMachine;
-use App\Models\ServiceReportMachineDetail;
-use App\Models\Shift;
-use App\Models\Module;
-use App\Models\Failure;
-use App\Models\FailureType;
+use App\Models\machine_reports\Status;
+use App\Models\machine_reports\Machine;
+use App\Models\machine_reports\ServiceReport;
+use App\Models\machine_reports\ServiceReportMachine;
+use App\Models\machine_reports\ServiceReportMachineDetail;
+use App\Models\machine_reports\Shift;
+use App\Models\machine_reports\Module;
+use App\Models\machine_reports\Failure;
+use App\Models\machine_reports\FailureType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -284,9 +284,8 @@ class ReportController extends Controller
                 $report->machines()->sync([$machine['machine_id'] => $pivotData], false);
                 $report->machines()->updateExistingPivot($machine['machine_id'], $pivotData);
 
-                $service_report_machine_id = collect($machine['machine_details'])
-                    ->whereNotNull('service_report_machine_id')
-                    ->value('service_report_machine_id');
+                $updatedMachine = $report->machines()->where('machine_id', $machine['machine_id'])->first();
+                $service_report_machine_id = $updatedMachine->pivot->id;
 
                 foreach($machine['machine_details'] as $detail) {
                     if(!empty($detail['module_id']) || !empty($detail['failure_id']) || !empty($detail['failure_type_id']) || !empty($detail["dt"])){
@@ -303,7 +302,8 @@ class ReportController extends Controller
             }
             
             $report->machineDetails()->upsert($machineDetails, ['id'], ['module_id', 'failure_id', 'failure_type_id', 'dt']);
-
+            
+            
             $partsArray = $request->all()['service_parts'];
 
             foreach($partsArray as $part) {

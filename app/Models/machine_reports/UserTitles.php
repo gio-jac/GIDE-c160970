@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\machine_reports;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserTypes extends Model
+class UserTitles extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class UserTypes extends Model
      */
     protected $fillable = [
         'is_active',
-        'tipo',
+        'titulo',
     ];
 
     /**
