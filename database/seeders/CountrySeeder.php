@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Country;
+use App\Models\machine_reports\Country;
 
 class CountrySeeder extends Seeder
 {

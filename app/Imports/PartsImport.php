@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\Part;
+use App\Models\machine_reports\Part;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
