@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\machine_reports;
 
-use App\Models\machine_reports\Status;
+use App\Http\Controllers\Controller;
+use App\Models\machine_reports\Code;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class StatusController extends Controller
+class CodeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $status = Status::all();
-        return Inertia::render('admin/reports/statuses/index',[
-            'status' => $status
+        $codes = Code::all();
+        return Inertia::render('admin/reports/codes/index',[
+            'codes' => $codes
         ]);
     }
 
@@ -24,7 +25,7 @@ class StatusController extends Controller
      */
     public function create()
     {
-        return Inertia::render('admin/reports/statuses/new');
+        return Inertia::render('admin/reports/codes/new');
     }
 
     /**
@@ -32,13 +33,13 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
-        Status::create($request->validate([
-            'status' => ['required', 'max:255', 'unique:statuses'],
+        Code::create($request->validate([
+            'code' => ['required', 'max:255', 'unique:codes'],
             'description' => ['required', 'max:255'],
             'is_active' => ['required'],
         ]));
 
-        return to_route('statuses.index');
+        return to_route('codes.index');
     }
 
     /**
@@ -70,10 +71,10 @@ class StatusController extends Controller
      */
     public function destroy(string $id)
     {
-        Status::findOrFail($id)->update([
+        Code::findOrFail($id)->update([
             'is_active' => false,
         ]);
         
-        return to_route('statuses.index');
+        return to_route('codes.index');
     }
 }

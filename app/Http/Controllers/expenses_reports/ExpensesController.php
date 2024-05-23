@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\expenses_reports;
 
-use App\Http\Requests\StoreProductionLineRequest;
-use App\Http\Requests\UpdateProductionLineRequest;
-use App\Models\machine_reports\ProductionLine;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
-class ProductionLineController extends Controller
+class ExpensesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return Inertia::render('admin/expenses/edit', []);
     }
 
     /**
@@ -27,7 +27,7 @@ class ProductionLineController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductionLineRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class ProductionLineController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProductionLine $productionLine)
+    public function show(string $id)
     {
         //
     }
@@ -43,7 +43,7 @@ class ProductionLineController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProductionLine $productionLine)
+    public function edit(string $id)
     {
         //
     }
@@ -51,7 +51,7 @@ class ProductionLineController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductionLineRequest $request, ProductionLine $productionLine)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -59,7 +59,7 @@ class ProductionLineController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductionLine $productionLine)
+    public function destroy(string $id)
     {
         //
     }

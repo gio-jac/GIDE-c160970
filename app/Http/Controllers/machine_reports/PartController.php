@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\machine_reports;
 
+use App\Http\Controllers\Controller;
 use App\Models\machine_reports\Part;
 use App\Imports\PartsImport;
 use Maatwebsite\Excel\Facades\Excel;

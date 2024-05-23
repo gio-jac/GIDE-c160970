@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\machine_reports;
 
+use App\Http\Controllers\Controller;
 use App\Models\machine_reports\UserTitles;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

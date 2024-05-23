@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\machine_reports;
 
-use App\Models\machine_reports\Code;
+use App\Http\Controllers\Controller;
+use App\Models\machine_reports\UserTypes;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class CodeController extends Controller
+class UserTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $codes = Code::all();
-        return Inertia::render('admin/reports/codes/index',[
-            'codes' => $codes
+        $types = UserTypes::all();
+        return Inertia::render('admin/users/types/index',[
+            'types' => $types
         ]);
     }
 
@@ -24,7 +25,7 @@ class CodeController extends Controller
      */
     public function create()
     {
-        return Inertia::render('admin/reports/codes/new');
+        return Inertia::render('admin/users/types/new');
     }
 
     /**
@@ -32,13 +33,12 @@ class CodeController extends Controller
      */
     public function store(Request $request)
     {
-        Code::create($request->validate([
-            'code' => ['required', 'max:255', 'unique:codes'],
-            'description' => ['required', 'max:255'],
+        UserTypes::create($request->validate([
+            'tipo' => ['required', 'max:255', 'unique:user_types'],
             'is_active' => ['required'],
         ]));
 
-        return to_route('codes.index');
+        return to_route('types.index');
     }
 
     /**
@@ -54,7 +54,10 @@ class CodeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $type = UserTypes::findOrFail($id);
+        return Inertia::render('admin/users/types/edit',[
+            'type' => $type
+        ]);
     }
 
     /**
@@ -62,7 +65,13 @@ class CodeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $type = UserTypes::findOrFail($id);
+        $type->update($request->validate([
+            'tipo' => ['required', 'max:255', 'unique:user_types,tipo,'.$id],
+            'is_active' => ['required'],
+        ]));
+
+        return to_route('types.index');
     }
 
     /**
@@ -70,10 +79,10 @@ class CodeController extends Controller
      */
     public function destroy(string $id)
     {
-        Code::findOrFail($id)->update([
+        UserTypes::findOrFail($id)->update([
             'is_active' => false,
         ]);
         
-        return to_route('codes.index');
+        return to_route('types.index');
     }
 }
