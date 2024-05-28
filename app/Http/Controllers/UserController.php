@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\UserTitles;
-use App\Models\UserTypes;
-use App\Models\Country;
+use App\Models\machine_reports\UserTitles;
+use App\Models\machine_reports\UserTypes;
+use App\Models\machine_reports\Country;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
