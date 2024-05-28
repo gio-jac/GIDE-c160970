@@ -61,7 +61,7 @@
                 <button type="submit" class="btn btn-primary !mt-6">{{ $t("user.create.add") }}</button>
             </form>
         </div>
-        
+        <!--
         <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b] mt-5">
             <form class="space-y-5" @submit.prevent="submitExcel">
                 <div class="custom-file-container" data-upload-id="myFirstImage">
@@ -75,7 +75,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary !mt-6">Add</button>
             </form>
-        </div>
+        </div>-->
     </div>
 </template>
 
@@ -89,13 +89,13 @@ import FileUploadWithPreview from 'file-upload-with-preview';
 import Swal from "sweetalert2";
 
 onMounted(() => {
-    
+    /*
     new FileUploadWithPreview('myFirstImage', {
         images: {
             baseImage: '',
             backgroundImage: '',
         },
-    });
+    });*/
 });
 
 defineOptions({
