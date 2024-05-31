@@ -1734,6 +1734,10 @@ const preloadingTime: any = ref({
 const updateMachines = (selectedMachine) => {
     if (!selectedMachine) return;
 
+    if (selectedMachine.production_line?.id === null) {
+        selectedMachine.production_line = null;
+    }
+
     const totalMachines = selectedMachine.production_line?.machines.length || 1;
 
     postForm.machines = Array.from({ length: totalMachines }, (_, index) => {
