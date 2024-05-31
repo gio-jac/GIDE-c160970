@@ -1704,6 +1704,10 @@ onMounted(() => {
         (data) => data.id === props.report.machines[0].id
     )[0];
 
+    if (form.selectedMachine.production_line?.id === null) {
+        form.selectedMachine.production_line = null;
+    }
+
     if (props.report.user_id)
         form.selectedUser = props.catalogUsers.filter(
             (data) => data.id === props.report.user_id
