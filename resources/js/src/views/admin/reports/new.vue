@@ -1194,6 +1194,7 @@
                                     deselect-label=""
                                 ></multiselect>
                                 <button
+                                    :disabled="!form.selectedPart"
                                     class="btn btn-secondary gap-2"
                                     @click="addNewPart"
                                 >
@@ -1267,7 +1268,10 @@
                                                 placeholder="Quantity"
                                                 v-model="item.quantity"
                                                 value="1"
+                                                step="1"
+                                                max="255"
                                                 min="0"
+                                                @input="partQtyValidation($event,i)"
                                             />
                                         </td>
                                         <td>
@@ -1721,7 +1725,13 @@ const removeItem = (item: any = null) => {
 };
 
 const addNewPart = () => {
-    if (form.selectedPart) postForm.service_parts.push(form.selectedPart);
+    if (!form.selectedPart) return;
+    const existingPartIndex = postForm.service_parts.findIndex(part => part.id === form.selectedPart.id);
+    if (existingPartIndex !== -1) {
+        postForm.service_parts[existingPartIndex].quantity += 1;
+    } else {
+        postForm.service_parts.push({ ...form.selectedPart, quantity: 0 });
+    }
 };
 
 const preloadingTime: any = ref({
@@ -1811,6 +1821,14 @@ function transportValidation(index) {
             );
         }
     });
+}
+
+function partQtyValidation(event,index) {
+    event.target.value = event.target.value.replace(/^0+/, '') || '0';
+
+    const part = postForm.service_parts[index];
+
+    part.quantity = Math.max(0, Math.min(Number(part.quantity), 255));
 }
 
 let timeoutId = ref(null);
