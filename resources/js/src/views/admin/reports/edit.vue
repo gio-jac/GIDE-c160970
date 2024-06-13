@@ -289,7 +289,10 @@
                                                     v-model="
                                                         detail.dt
                                                     "
-                                                    
+                                                    @input="dtValidation($event,index,indexDetail)"
+                                                    min="0"
+                                                    max="999999"
+                                                    step="1"
                                                     class="form-input text-white-dark"
                                                     :placeholder="$t('report.form.dtPlaceholder')"
                                                     :disabled="props.report.closed === 1"
@@ -669,7 +672,10 @@
                                                     v-model="
                                                         detail.dt
                                                     "
-                                                    
+                                                    @input="dtValidation($event,0,indexDetail)"
+                                                    min="0"
+                                                    max="999999"
+                                                    step="1"
                                                     class="form-input text-white-dark"
                                                     :placeholder="$t('report.form.dtPlaceholder')"
                                                     :disabled="props.report.closed === 1"
@@ -998,12 +1004,15 @@
                                     :disabled="props.report.closed === 1"
                                     id="formReportOnTime"
                                     step="0.01"
-                                    pattern="\d+(\.\d{1,2})?"
                                     type="number"
                                     v-model="postForm.time_on"
                                     name="formReportOnTime"
                                     class="form-input flex-1"
                                     placeholder="0.00"
+                                    value="0.00"
+                                    min="0.00"
+                                    max="999999.99"
+                                    @input="machineOnValidation"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
@@ -1869,6 +1878,16 @@ function partQtyValidation(event,index) {
     const part = postForm.service_parts[index];
 
     part.quantity = Math.max(0, Math.min(Number(part.quantity), 255));
+}
+
+function machineOnValidation(event) {
+    postForm.time_on = parseFloat(postForm.time_on).toFixed(2);
+    postForm.time_on = Math.max(0.00, Math.min(Number(postForm.time_on), 999999.99));
+}
+
+function dtValidation(event, indexMachine, indexDetail) {
+    postForm.machines[indexMachine].machine_details[indexDetail].dt = parseInt(postForm.machines[indexMachine].machine_details[indexDetail].dt);
+    postForm.machines[indexMachine].machine_details[indexDetail].dt = Math.max(0, Math.min(Number(postForm.machines[indexMachine].machine_details[indexDetail].dt), 999999));
 }
 
 let timeoutId = ref(null);
