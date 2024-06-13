@@ -489,7 +489,7 @@
                                         </div>
                                         <div class="py-2">
                                             <label :for="'formReportDT' + index"
-                                                >DT (Min.)</label
+                                                >DT Final (Min.)</label
                                             >
                                             <input
                                                 :id="'formReportDT' + index"
@@ -733,7 +733,7 @@
                                                 </div>
                                                 <div class="py-2">
                                                     <label for="formReportDT1"
-                                                        >DT (Min.)</label
+                                                        >DT Final (Min.)</label
                                                     >
                                                     <input
                                                         id="formReportDT1"
