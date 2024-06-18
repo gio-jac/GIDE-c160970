@@ -303,8 +303,18 @@ class ReportController extends Controller
                 }
             }
             
-            $report->machineDetails()->upsert($machineDetails, ['id'], ['module_id', 'failure_id', 'failure_type_id', 'dt']);
+            $incomingIds = array_column(array_filter($machineDetails, function($detail) {
+                return isset($detail['id']);
+            }), 'id');
+
+            $existingDetails = $report->machineDetails()->pluck('service_report_machine_details.id')->toArray();
+            $idsToDelete = array_diff($existingDetails, $incomingIds);
             
+            if (!empty($idsToDelete)) {
+                $report->machineDetails()->whereIn('service_report_machine_details.id', $idsToDelete)->delete();
+            }
+            
+            $report->machineDetails()->upsert($machineDetails, ['id'], ['module_id', 'failure_id', 'failure_type_id', 'dt']);
             
             $partsArray = $request->all()['service_parts'];
 

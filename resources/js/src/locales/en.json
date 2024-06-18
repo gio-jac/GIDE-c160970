@@ -73,7 +73,7 @@
     "report.form.error": "Error",
     "report.form.cause": "Cause",
     "report.form.solution": "Solution",
-    "report.form.transport": "Transport",
+    "report.form.transport": "Transport (Hrs.)",
     "report.form.initialTransport": "Initial Transport",
     "report.form.finalTransport": "Final Transport",
     "report.form.estimatedTransport": "Extra Time",
