@@ -266,8 +266,8 @@ class ReportController extends Controller
             'notes' => [],
         ]);
 
-        //try {
-        //    DB::beginTransaction();
+        try {
+            DB::beginTransaction();
             $report->update($validatedData);
 
             $machines = $request->input('machines', []);
@@ -324,11 +324,11 @@ class ReportController extends Controller
                     ['quantity' => empty($part['quantity']) ? 0 : $part['quantity']]
                 );
             }
-        //    DB::commit();
-        //}catch(\Exception $e){
-        //    DB::rollBack();
-        //    return;
-        //}
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return;
+        }
         return to_route('reports.edit', ['report' => $report->id]);
     }
 
