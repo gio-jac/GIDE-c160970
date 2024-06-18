@@ -285,6 +285,42 @@
                                                     :placeholder="$t('report.form.dtPlaceholder')"
                                                 />
                                             </div>
+                                            <div
+                                                class="flex"
+                                                v-if="machine.only_dt !== 1"
+                                            >
+                                                <button
+                                                    type="button"
+                                                    @click="removeMachineDetail(index,indexDetail)"
+                                                    v-if="postForm.machines[index].machine_details.length > 1"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="24px"
+                                                        height="24px"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="1.5"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        class="w-5 h-5"
+                                                    >
+                                                        <line
+                                                            x1="18"
+                                                            y1="6"
+                                                            x2="6"
+                                                            y2="18"
+                                                        ></line>
+                                                        <line
+                                                            x1="6"
+                                                            y1="6"
+                                                            x2="18"
+                                                            y2="18"
+                                                        ></line>
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="w-full flex justify-center">
                                             <button
@@ -1478,6 +1514,10 @@ const removeItem = (item: any = null) => {
     postForm.service_parts = postForm.service_parts.filter(
         (d: any) => d.id != item.id
     );
+};
+
+function removeMachineDetail(index, indexDetail) {
+    postForm.machines[index].machine_details.splice(indexDetail, 1);
 };
 
 const addNewPart = () => {
