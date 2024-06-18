@@ -368,7 +368,7 @@
                                             </button>
                                         </div>
                                         <div
-                                            class=""
+                                            class="py-2"
                                             v-if="machine.only_dt !== 1"
                                         >
                                             <template
