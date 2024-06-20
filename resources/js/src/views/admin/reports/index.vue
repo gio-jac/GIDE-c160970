@@ -329,13 +329,15 @@ import { ref, computed, onMounted } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
-import { Head, Link, router } from "@inertiajs/vue3";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
 import { useAppStore } from "@/stores/index";
 import Swal from "sweetalert2";
 
 const store = useAppStore();
 const { t } = useI18n();
+const page = usePage();
+const user = computed(() => page.props.auth);
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
@@ -349,8 +351,6 @@ const props = defineProps({
         required: true,
     }
 });
-
-console.log(props.reports);
 
 const currentData: any = ref(null);
 onMounted(() => {
@@ -366,20 +366,27 @@ const handleSelectChange = (event) => {
 
 const datatable: any = ref(null);
 const search = ref("");
-const cols = computed(() => [
-    { field: "id", title: "ID" },
-    { field: "complete_id", title: t("report.index.col.fileName") },
-    { field: "status", title: t("report.index.col.status") },
-    { field: "machines", title: "Maquinas" },
-    { field: "user_full_name", title: t("report.index.col.assigned") },
-    { field: "created_at", title: t("report.index.col.creationDate") },
-    {
-        field: "actions",
-        title: t("user.index.col.actions"),
-        sort: false,
-        headerClass: "justify-center",
-    },
-]);
+const cols = computed(() => {
+    let baseCols = [
+        { field: "id", title: "ID" },
+        { field: "complete_id", title: t("report.index.col.fileName") },
+        { field: "status", title: t("report.index.col.status") },
+        { field: "machines", title: "Maquinas" },
+        { field: "created_at", title: t("report.index.col.creationDate") },
+        {
+            field: "actions",
+            title: t("user.index.col.actions"),
+            sort: false,
+            headerClass: "justify-center",
+        },
+    ]
+
+    if (page.props.auth.type === 1) {
+        baseCols.splice(4, 0, { field: "user_full_name", title: t("report.index.col.assigned") });
+    }
+    
+    return baseCols;
+});
 const searchText = ref("");
 const columns = ref(["titulo", "is_active", "actions"]);
 const tableOption = ref({
