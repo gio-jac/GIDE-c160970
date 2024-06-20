@@ -94,7 +94,7 @@
     "report.form.SOGD": "SO GD",
     "report.form.SOGDPlaceholder": "Digite SO GD",
     "report.form.machineOn": "Máquina ON",
-    "report.form.travelTime": "Tempo de viagem",
+    "report.form.travelTime": "Tempo de viagem (Min.)",
     "report.form.travelTimePlaceholder": "Digite Tempo de viagem",
     "report.form.reportedError": "Erro reportado",
     "report.form.reportedErrorPlaceholder": "Digite Erro reportado",

@@ -94,7 +94,7 @@
     "report.form.SOGD": "SO GD",
     "report.form.SOGDPlaceholder": "Enter SO GD",
     "report.form.machineOn": "Machine ON",
-    "report.form.travelTime": "Travel time",
+    "report.form.travelTime": "Travel time (Min.)",
     "report.form.travelTimePlaceholder": "Enter Travel time",
     "report.form.reportedError": "Reported error",
     "report.form.reportedErrorPlaceholder": "Enter Reported error",
