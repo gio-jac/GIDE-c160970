@@ -745,11 +745,16 @@
                                 <input
                                     :disabled="props.report.closed === 1"
                                     id="formReportPieces"
-                                    type="text"
+                                    type="number"
                                     v-model="postForm.pieces"
                                     name="formReportPieces"
+                                    step="1"
                                     class="form-input flex-1"
-                                    :placeholder="$t('report.form.piecesPlaceholder')"
+                                    placeholder="0"
+                                    value="0"
+                                    min="0"
+                                    max="999"
+                                    @input="partsValidation"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
@@ -800,11 +805,16 @@
                                 <input
                                     :disabled="props.report.closed === 1"
                                     id="formReportTravelTime"
-                                    type="text"
+                                    type="number"
                                     v-model="postForm.travel_time"
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
-                                    :placeholder="$t('report.form.travelTimePlaceholder')"
+                                    placeholder="0"
+                                    step="1"
+                                    value="0"
+                                    min="0"
+                                    max="10080"
+                                    @input="travelTimeValidation"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
@@ -1668,6 +1678,14 @@ function machineOnValidation(event) {
 function dtValidation(event, indexMachine, indexDetail) {
     postForm.machines[indexMachine].machine_details[indexDetail].dt = parseInt(postForm.machines[indexMachine].machine_details[indexDetail].dt);
     postForm.machines[indexMachine].machine_details[indexDetail].dt = Math.max(0, Math.min(Number(postForm.machines[indexMachine].machine_details[indexDetail].dt), 999999));
+}
+
+function partsValidation(event) {
+    postForm.pieces = Math.max(0, Math.min(Number(postForm.pieces), 999));
+}
+
+function travelTimeValidation(event) {
+    postForm.travel_time = Math.max(0, Math.min(Number(postForm.travel_time), 10080));
 }
 
 let timeoutId = ref(null);
