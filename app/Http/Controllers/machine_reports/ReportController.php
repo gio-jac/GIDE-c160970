@@ -40,7 +40,7 @@ class ReportController extends Controller
                     return $report;
                 });
         }else{
-            $reports = ServiceReport::where('user_id', $userAuth->id)->where('is_active', true)->with(['machines.machine_model','status', 'user'])->get();
+            $reports = ServiceReport::where('user_id', $userAuth->id)->where('is_active', true)->with(['machines.machine_model','status', 'user', 'branch.city'])->get();
         }
         $catalogCountry = Country::where('is_active', 1)->get();
         
