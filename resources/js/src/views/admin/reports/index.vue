@@ -32,7 +32,20 @@
                                 {{ $t("report.index.newReport") }}
                             </Link>
                         </div>
-                        <div class="ltr:ml-auto rtl:mr-auto">
+                        <div class="ltr:ml-auto rtl:mr-auto flex">
+                            <select
+                                class="form-select text-white-dark"
+                                @change="handleSelectChange"
+                            >
+                                <option value="">{{ $t("user.index.all") }}</option>
+                                <option
+                                    v-for="country in props.catalogCountry"
+                                    :key="country.id"
+                                    :value="country.id"
+                                >
+                                    {{ country.name }}
+                                </option>
+                            </select>
                             <input
                                 v-model="search"
                                 type="text"
@@ -46,9 +59,9 @@
 
                     <vue3-datatable
                         ref="datatable"
-                        :rows="props.reports"
+                        :rows="currentData"
                         :columns="cols"
-                        :totalRows="props.reports?.length"
+                        :totalRows="currentData?.length"
                         :hasCheckbox="false"
                         :sortable="true"
                         :search="search"
@@ -89,9 +102,9 @@
                         <template #created_at="data">
                             {{ formatDate(data.value.created_at) }}
                         </template>
-                        <template #assigned_to="data">
+                        <!--<template #assigned_to="data">
                             {{ fullName(data.value.user) }}
-                        </template>
+                        </template>-->
                         <template #is_active="data">
                             <div class="flex items-center font-semibold">
                                 <span
@@ -312,7 +325,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
@@ -331,9 +344,25 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    catalogCountry: {
+        type: Array,
+        required: true,
+    }
 });
 
 console.log(props.reports);
+
+const currentData: any = ref(null);
+onMounted(() => {
+    currentData.value = [...props.reports];
+});
+
+const handleSelectChange = (event) => {
+    const selectedValue = event.target.value === "" ? null : parseInt(event.target.value);
+    currentData.value = selectedValue
+        ? props.reports.filter((objeto) => objeto.branch.city.country_id === selectedValue)
+        : [...props.reports];
+};
 
 const datatable: any = ref(null);
 const search = ref("");
@@ -342,7 +371,7 @@ const cols = computed(() => [
     { field: "complete_id", title: t("report.index.col.fileName") },
     { field: "status", title: t("report.index.col.status") },
     { field: "machines", title: "Maquinas" },
-    { field: "assigned_to", title: t("report.index.col.assigned") },
+    { field: "user_full_name", title: t("report.index.col.assigned") },
     { field: "created_at", title: t("report.index.col.creationDate") },
     {
         field: "actions",

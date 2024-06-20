@@ -52,6 +52,11 @@ class User extends Authenticatable
         
     ];
 
+    public function getFullNameAttribute()
+    {
+        return "{$this->nombre} {$this->apellido_paterno} {$this->apellido_materno}";
+    }
+
     public function country(): HasOne
     {
         return $this->hasOne(Country::class, 'id', 'country_id');

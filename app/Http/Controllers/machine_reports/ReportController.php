@@ -16,6 +16,7 @@ use App\Models\machine_reports\Shift;
 use App\Models\machine_reports\Module;
 use App\Models\machine_reports\Failure;
 use App\Models\machine_reports\FailureType;
+use App\Models\machine_reports\Country;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -31,13 +32,21 @@ class ReportController extends Controller
     {
         $userAuth = Auth::user();
         if($userAuth->user_type_id === 1){
-            $reports = ServiceReport::where('is_active', true)->with(['machines.machine_model','status', 'user'])->get();
+            $reports = ServiceReport::where('is_active', true)
+                ->with(['machines.machine_model', 'status', 'user', 'branch.city'])
+                ->get()
+                ->map(function ($report) {
+                    $report->user_full_name = $report->user->full_name;
+                    return $report;
+                });
         }else{
             $reports = ServiceReport::where('user_id', $userAuth->id)->where('is_active', true)->with(['machines.machine_model','status', 'user'])->get();
         }
+        $catalogCountry = Country::where('is_active', 1)->get();
         
         return Inertia::render('admin/reports/index', [
-            'reports' => $reports
+            'reports' => $reports,
+            'catalogCountry' => $catalogCountry
         ]);
     }
 
