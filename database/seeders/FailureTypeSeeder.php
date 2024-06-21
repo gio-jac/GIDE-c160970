@@ -26,5 +26,8 @@ class FailureTypeSeeder extends Seeder
         FailureType::create(['name' => 'PREVENTIVE']);
         FailureType::create(['name' => 'UNPRODUCTIVE']);
         FailureType::create(['name' => 'TRAINING']);
+        FailureType::create(['name' => 'PREVENTIVE MAINTENANCE, 500 HRS']);
+        FailureType::create(['name' => 'PREVENTIVE MAINTENANCE, 1000 HRS']);
+        FailureType::create(['name' => 'PREVENTIVE MAINTENANCE, 2000 HRS']);
     }
 }
