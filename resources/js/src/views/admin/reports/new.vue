@@ -530,6 +530,7 @@
                                                 :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
                                                 :placeholder="$t('report.form.dtPlaceholder')"
+                                                @input="finalDtValidation($event,index)"
                                             />
                                         </div>
                                     </div>
@@ -1645,6 +1646,11 @@ function machineOnValidation(event) {
 function dtValidation(event, indexMachine, indexDetail) {
     postForm.machines[indexMachine].machine_details[indexDetail].dt = parseInt(postForm.machines[indexMachine].machine_details[indexDetail].dt);
     postForm.machines[indexMachine].machine_details[indexDetail].dt = Math.max(0, Math.min(Number(postForm.machines[indexMachine].machine_details[indexDetail].dt), 999999));
+}
+
+function finalDtValidation(event, indexMachine) {
+    postForm.machines[indexMachine].dt = parseInt(postForm.machines[indexMachine].dt);
+    postForm.machines[indexMachine].dt = Math.max(0, Math.min(Number(postForm.machines[indexMachine].dt), 999999));
 }
 
 function partsValidation(event) {
