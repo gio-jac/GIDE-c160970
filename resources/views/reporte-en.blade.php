@@ -158,7 +158,7 @@
                 $codeId = $report->code_id;
             @endphp
             @foreach ($catalogCodes as $code)
-                <td >
+                <td>
                     <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
                         class="defaultBorder{{ $code->id === $codeId ? ' highlighted' : '' }}"></div>
                     {{ $code->code }}
