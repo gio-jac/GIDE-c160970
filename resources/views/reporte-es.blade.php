@@ -163,7 +163,7 @@
                         class="defaultBorder{{ $code->id === $codeId ? ' highlighted' : '' }}"></div>
                     {{ $code->code }}
                     @if ($code->id === $codeId)
-                    <p style="margin: 0;padding:0;border:0;font-size:8px">{{ $code->description }}</p>
+                    <p style="margin: 0;padding:0;border:0;font-size:8px">{{ __('codes.'.$code->id,[],null, $code->code) }}</p>
                     @endif
                 </td>
             @endforeach

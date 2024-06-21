@@ -158,10 +158,13 @@
                 $codeId = $report->code_id;
             @endphp
             @foreach ($catalogCodes as $code)
-                <td>
+                <td >
                     <div style="display: inline-block;width:20px;height:10px;margin-bottom: -2px;"
                         class="defaultBorder{{ $code->id === $codeId ? ' highlighted' : '' }}"></div>
                     {{ $code->code }}
+                    @if ($code->id === $codeId)
+                    <p style="margin: 0;padding:0;border:0;font-size:8px">{{ __('codes.'.$code->id,[],null, $code->code) }}</p>
+                    @endif
                 </td>
             @endforeach
         </tr>
