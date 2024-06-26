@@ -14,6 +14,7 @@
                             >
 
                             <multiselect
+                                v-tippy:machineid
                                 id="formMachine"
                                 :options="props.catalogMachines"
                                 v-model="form.selectedMachine"
@@ -28,6 +29,7 @@
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
+                            <tippy target="machineid" trigger="focus">Usado para la búsqueda y selección de máquina, utiliza el siguiente formato:<br>"Serial - Modelo de máquina"</tippy>
                         </div>
                         <template v-if="errors.machines">
                             <p class="text-danger mt-1 text-center">
@@ -46,6 +48,7 @@
                             >
 
                             <multiselect
+                                v-tippy:user
                                 id="formUser"
                                 :options="catalogUsers"
                                 v-model="form.selectedUser"
@@ -60,6 +63,7 @@
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
+                            <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato:<br>"EMP - Nombre PrimerApellido"</tippy>
                         </div>
                         <template v-if="errors.user_id">
                             <p class="text-danger mt-1 text-center">
@@ -79,6 +83,7 @@
                             >
 
                             <multiselect
+                                v-tippy:shift
                                 id="formShift"
                                 :options="props.catalogShifts"
                                 v-model="form.selectedShift"
@@ -90,6 +95,7 @@
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
+                            <tippy target="shift" trigger="focus">Usado para la selección del turno de la realización del reporte</tippy>
                         </div>
                         <template v-if="errors.shift_id">
                             <p class="text-danger mt-1 text-center">
@@ -551,7 +557,9 @@
                             </div>
 
                             <multiselect
+                                v-tippy:branches
                                 id="formBranches"
+                                :disabled="form.selectedMachine ? false : true"
                                 :options="
                                     form.selectedMachine
                                         ? form.selectedMachine.client.branches
@@ -566,6 +574,7 @@
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
+                            <tippy target="branches" placement="left" trigger="focus">Selección de la dirección de la sucursal asociada al cliente de la máquina seleccionada</tippy>
 
                             <template v-if="errors.branch_id">
                                 <p class="text-danger mt-1 text-center">
@@ -576,6 +585,7 @@
                                 {{ $t("report.form.contacts") }} <span class="text-red-500">*</span>
                             </div>
                             <select
+                                v-tippy:contacts
                                 id="formContacts"
                                 name="formContacts"
                                 class="form-select text-white-dark"
@@ -594,6 +604,8 @@
                                     {{ contact.name }}
                                 </option>
                             </select>
+                            <tippy target="contacts" placement="left" trigger="focus">Selección del contacto asociado a la dirección de la sucursal seleccionada</tippy>
+
                             <template v-if="errors.branch_manager_id">
                                 <p class="text-danger mt-1 text-center">
                                     {{ errors.branch_manager_id }}
@@ -751,6 +763,7 @@
                                     >{{ $t("report.form.SOGD") }}</label
                                 >
                                 <input
+                                    v-tippy:sogd
                                     id="formReportSOGD"
                                     type="text"
                                     v-model="postForm.sogd"
@@ -758,6 +771,7 @@
                                     class="form-input flex-1"
                                     :placeholder="$t('report.form.SOGDPlaceholder')"
                                 />
+                                <tippy target="sogd" trigger="focus">El sol se asomaba tímidamente entre las nubes, bañando con su luz dorada los tejados de la pequeña ciudad costera.</tippy>
                             </div>
                         </div>
                         <div class="lg:w-1/2 w-full">
