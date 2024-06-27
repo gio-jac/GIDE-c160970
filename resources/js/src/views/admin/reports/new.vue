@@ -743,6 +743,7 @@
                                     >{{ $t("report.form.pieces") }}</label
                                 >
                                 <input
+                                    v-tippy:pieces
                                     id="formReportPieces"
                                     type="number"
                                     v-model="postForm.pieces"
@@ -755,6 +756,7 @@
                                     max="999999999999"
                                     @input="partsValidation"
                                 />
+                                <tippy target="pieces" trigger="focus">Utilizado como contador de billetes<br> Máximo: 999 999 999 999</tippy>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
@@ -771,7 +773,7 @@
                                     class="form-input flex-1"
                                     :placeholder="$t('report.form.SOGDPlaceholder')"
                                 />
-                                <tippy target="sogd" trigger="focus">El sol se asomaba tímidamente entre las nubes, bañando con su luz dorada los tejados de la pequeña ciudad costera.</tippy>
+                                <tippy target="sogd" trigger="focus">Utilizado para capturar la orden de servicio de GD</tippy>
                             </div>
                         </div>
                         <div class="lg:w-1/2 w-full">
@@ -782,6 +784,7 @@
                                     >{{ $t("report.form.machineOn") }}</label
                                 >
                                 <input
+                                    v-tippy:ontime
                                     id="formReportOnTime"
                                     step="0.01"
                                     type="number"
@@ -794,6 +797,7 @@
                                     max="9999999.99"
                                     @input="machineOnValidation"
                                 />
+                                <tippy target="ontime" trigger="focus">Utilizado para registrar el tiempo de funcionamiento de la máquina<br> Máximo: 9 999 999.99</tippy>
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
@@ -802,6 +806,7 @@
                                     >{{ $t("report.form.travelTime") }}</label
                                 >
                                 <input
+                                    v-tippy:traveltime
                                     id="formReportTravelTime"
                                     type="number"
                                     v-model="postForm.travel_time"
@@ -814,6 +819,7 @@
                                     max="10080"
                                     @input="travelTimeValidation"
                                 />
+                                <tippy target="traveltime" trigger="focus">Utilizado para registrar el tiempo de traslado<br> Máximo: 10 080 minutos</tippy>
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
