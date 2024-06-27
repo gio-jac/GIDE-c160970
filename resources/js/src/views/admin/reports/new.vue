@@ -752,7 +752,7 @@
                                     placeholder="0"
                                     value="0"
                                     min="0"
-                                    max="999"
+                                    max="999999999999"
                                     @input="partsValidation"
                                 />
                             </div>
@@ -791,7 +791,7 @@
                                     placeholder="0.00"
                                     value="0.00"
                                     min="0.00"
-                                    max="999999.99"
+                                    max="9999999.99"
                                     @input="machineOnValidation"
                                 />
                             </div>
@@ -1654,7 +1654,7 @@ function partQtyValidation(event,index) {
 
 function machineOnValidation(event) {
     postForm.time_on = parseFloat(postForm.time_on).toFixed(2);
-    postForm.time_on = Math.max(0.00, Math.min(Number(postForm.time_on), 999999.99));
+    postForm.time_on = Math.max(0.00, Math.min(Number(postForm.time_on), 9999999.99));
 }
 
 function dtValidation(event, indexMachine, indexDetail) {
@@ -1668,7 +1668,7 @@ function finalDtValidation(event, indexMachine) {
 }
 
 function partsValidation(event) {
-    postForm.pieces = Math.max(0, Math.min(Number(postForm.pieces), 999));
+    postForm.pieces = Math.max(0, Math.min(Number(postForm.pieces), 999999999999));
 }
 
 function travelTimeValidation(event) {
