@@ -14,6 +14,7 @@ class Machine extends Model
     protected $fillable = [
         'serial',
         'production_line_id',
+        'line_num',
         'client_id',
         'machine_model_id',
         'position',
