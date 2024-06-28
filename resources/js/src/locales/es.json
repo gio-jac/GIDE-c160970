@@ -63,6 +63,7 @@
     "report.index.newReport": "Crear reporte",
     "report.index.col.fileName": "Nombre de archivo",
     "report.index.col.status": "Estado",
+    "report.index.col.idmachines": "ID Máquinas",
     "report.index.col.assigned": "Asignado a",
     "report.index.col.creationDate": "Fecha de creación",
     "report.form.machineSerial": "Serial de máquina",
