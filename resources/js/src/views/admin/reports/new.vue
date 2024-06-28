@@ -124,6 +124,7 @@
                                     Serial: {{ machine.serial }} -
                                     {{ machine.machine_model.model }} -
                                     {{
+                                        machine.line_num ? machine.line_num :
                                         machine.machine_model.model_segment
                                             .segment
                                     }}
