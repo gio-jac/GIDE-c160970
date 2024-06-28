@@ -63,6 +63,7 @@
     "report.index.newReport": "New Report",
     "report.index.col.fileName": "File Name",
     "report.index.col.status": "Status",
+    "report.index.col.idmachines": "ID Machines",
     "report.index.col.assigned": "Assigned to",
     "report.index.col.creationDate": "Creation date",
     "report.form.machineSerial": "Machine Serial",

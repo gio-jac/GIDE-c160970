@@ -371,7 +371,7 @@ const cols = computed(() => {
         { field: "id", title: "ID" },
         { field: "complete_id", title: t("report.index.col.fileName") },
         { field: "status", title: t("report.index.col.status") },
-        { field: "machines", title: "Maquinas" },
+        { field: "machines", title: t("report.index.col.idmachines") },
         { field: "created_at", title: t("report.index.col.creationDate") },
         {
             field: "actions",
