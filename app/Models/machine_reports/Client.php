@@ -10,6 +10,11 @@ class Client extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'is_active',
+    ];
+
     public function branches(): HasMany
     {
         return $this->hasMany(Branch::class,'client_id', 'id');
