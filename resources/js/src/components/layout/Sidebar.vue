@@ -232,9 +232,7 @@
                                     <Link
                                         href="/machines"
                                         :class="{
-                                            active: $page.url.startsWith(
-                                                '/machines'
-                                            ),
+                                            active: $page.url === '/machines',
                                         }"
                                         class="group"
                                         @click="toggleMobileMenu"
@@ -494,13 +492,75 @@
                                                     </ul>
                                                 </vue-collapsible>
                                             </li>
-                                            <li>
-                                                <Link
-                                                    href="#"
-                                                    class="text-gray-300 cursor-no-drop"
-                                                    @click="toggleMobileMenu"
-                                                    >{{ $t('sidebar.machines')}} (N/A)</Link
+                                            <li class="menu nav-item">
+                                                <button
+                                                    type="button"
+                                                    class="w-full before:bg-gray-300 before:w-[5px] before:h-[5px] before:rounded ltr:before:mr-2 rtl:before:ml-2 dark:text-[#888ea8] hover:bg-gray-100 dark:hover:bg-gray-900"
+                                                    @click="
+                                                        subActive === 'machines'
+                                                            ? (subActive = null)
+                                                            : (subActive =
+                                                                  'machines')
+                                                    "
                                                 >
+                                                    {{ $t('sidebar.machines')}}
+                                                    <div
+                                                        class="ltr:ml-auto rtl:mr-auto rtl:rotate-180"
+                                                        :class="{
+                                                            '!rotate-90':
+                                                                subActive ===
+                                                                'machines',
+                                                        }"
+                                                    >
+                                                        <svg
+                                                            width="16"
+                                                            height="16"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path
+                                                                opacity="0.5"
+                                                                d="M6.25 19C6.25 19.3139 6.44543 19.5946 6.73979 19.7035C7.03415 19.8123 7.36519 19.7264 7.56944 19.4881L13.5694 12.4881C13.8102 12.2073 13.8102 11.7928 13.5694 11.5119L7.56944 4.51194C7.36519 4.27364 7.03415 4.18773 6.73979 4.29662C6.44543 4.40551 6.25 4.68618 6.25 5.00004L6.25 19Z"
+                                                                fill="currentColor"
+                                                            />
+                                                            <path
+                                                                fill-rule="evenodd"
+                                                                clip-rule="evenodd"
+                                                                d="M10.5119 19.5695C10.1974 19.2999 10.161 18.8264 10.4306 18.5119L16.0122 12L10.4306 5.48811C10.161 5.17361 10.1974 4.70014 10.5119 4.43057C10.8264 4.161 11.2999 4.19743 11.5695 4.51192L17.5695 11.5119C17.8102 11.7928 17.8102 12.2072 17.5695 12.4881L11.5695 19.4881C11.2999 19.8026 10.8264 19.839 10.5119 19.5695Z"
+                                                                fill="currentColor"
+                                                            />
+                                                        </svg>
+                                                    </div>
+                                                </button>
+
+                                                <vue-collapsible
+                                                    :isOpen="
+                                                        subActive === 'machines'
+                                                    "
+                                                >
+                                                    <ul
+                                                        :unmount="false"
+                                                        class="sub-menu text-gray-500"
+                                                    >
+                                                        <li
+                                                            @click="
+                                                                toggleMobileMenu
+                                                            "
+                                                        >
+                                                            <Link
+                                                                href="/machines/clients"
+                                                                :class="{
+                                                                    active: $page.url.startsWith(
+                                                                        '/machines/clients'
+                                                                    ),
+                                                                }"
+                                                                target="_blank"
+                                                                >Clients</Link
+                                                            >
+                                                        </li>
+                                                    </ul>
+                                                </vue-collapsible>
                                             </li>
                                             <li>
                                                 <Link

@@ -62,7 +62,13 @@ class ReportController extends Controller
         $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
         $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
         $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
-        $catalogMachines = Machine::where('is_active', 1)->with([
+        $catalogMachines = Machine::select(
+                'id',
+                'serial',
+                'production_line_id',
+                'machine_model_id',
+                'client_id'
+            )->where('is_active', 1)->with([
             'machine_model.model_segment',
             'client',
             'client.branches',
@@ -212,7 +218,13 @@ class ReportController extends Controller
         $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
         $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
         $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
-        $catalogMachines = Machine::where('is_active', 1)->with([
+        $catalogMachines = Machine::select(
+            'id',
+            'serial',
+            'production_line_id',
+            'machine_model_id',
+            'client_id'
+        )->where('is_active', 1)->with([
             'machine_model.model_segment',
             'client',
             'client.branches',
