@@ -69,16 +69,33 @@ class ReportController extends Controller
                 'machine_model_id',
                 'client_id'
             )->where('is_active', 1)->with([
-            'machine_model.model_segment',
-            'client',
-            'client.branches',
-            'client.branches.branchManagers',
-            'production_line',
+            'machine_model.model_segment' => function($query){
+                $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
+            },
+            'client' => function($query){
+                $query->select('id', 'name');
+            },
+            'client.branches' => function($query){
+                $query->select('id', 'city_id', 'client_id');
+            },
+            'client.branches.city' => function($query){
+                $query->select('id', 'name');
+            },
+            'client.branches.branchManagers' => function($query){
+                $query->select('id', 'name', 'email', 'phone', 'branch_id');
+            },
+            'production_line' => function($query){
+                $query->select('id', 'name');
+            },
             'production_line.machines' => function($query){
                 $query->orderBy('position', 'asc');
             },
-            'production_line.machines.machine_model',
-            'production_line.machines.machine_model.model_segment',
+            'production_line.machines.machine_model' => function($query){
+                $query->select('id', 'model', 'model_segment_id');
+            },
+            'production_line.machines.machine_model.model_segment' => function($query){
+                $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
+            },
         ])->get();
         $catalogStatus = Status::where('is_active', 1)->get();
         
@@ -225,9 +242,18 @@ class ReportController extends Controller
             'machine_model_id',
             'client_id'
         )->where('is_active', 1)->with([
-            'machine_model.model_segment',
-            'client',
-            'client.branches',
+            'machine_model.model_segment' => function($query){
+                $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
+            },
+            'client' => function($query){
+                $query->select('id', 'name');
+            },
+            'client.branches' => function($query){
+                $query->select('id', 'city_id', 'client_id');
+            },
+            'client.branches.city' => function($query){
+                $query->select('id', 'name');
+            },
             'client.branches.branchManagers',
             'production_line',
             'production_line.machines' => function($query){
