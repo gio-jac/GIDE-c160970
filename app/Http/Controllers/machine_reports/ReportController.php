@@ -69,9 +69,18 @@ class ReportController extends Controller
                 'machine_model_id',
                 'client_id'
             )->where('is_active', 1)->with([
-            'machine_model.model_segment',
-            'client',
-            'client.branches',
+            'machine_model.model_segment' => function($query){
+                $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
+            },
+            'client' => function($query){
+                $query->select('id', 'name');
+            },
+            'client.branches' => function($query){
+                $query->select('id', 'city_id', 'client_id');
+            },
+            'client.branches.city' => function($query){
+                $query->select('id', 'name');
+            },
             'client.branches.branchManagers',
             'production_line',
             'production_line.machines' => function($query){
@@ -225,9 +234,18 @@ class ReportController extends Controller
             'machine_model_id',
             'client_id'
         )->where('is_active', 1)->with([
-            'machine_model.model_segment',
-            'client',
-            'client.branches',
+            'machine_model.model_segment' => function($query){
+                $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
+            },
+            'client' => function($query){
+                $query->select('id', 'name');
+            },
+            'client.branches' => function($query){
+                $query->select('id', 'city_id', 'client_id');
+            },
+            'client.branches.city' => function($query){
+                $query->select('id', 'name');
+            },
             'client.branches.branchManagers',
             'production_line',
             'production_line.machines' => function($query){

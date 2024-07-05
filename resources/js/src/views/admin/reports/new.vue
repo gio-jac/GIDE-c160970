@@ -569,7 +569,7 @@
                                 v-model="form.selectedBranch"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :custom-label="({ address, alias }) => `${alias ? alias : address}`"
+                                :custom-label="({ city }) => `${city.name}`"
                                 :placeholder="$t('report.form.branchPlaceholder')"
                                 selected-label=""
                                 select-label=""
