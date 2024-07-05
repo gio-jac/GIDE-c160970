@@ -4,6 +4,7 @@ namespace App\Http\Controllers\machine_reports;
 
 use App\Http\Controllers\Controller;
 use App\Models\machine_reports\Client;
+use App\Models\machine_reports\Country;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -54,9 +55,11 @@ class ClientController extends Controller
      */
     public function edit(string $id)
     {
-        $client = Client::findOrFail($id);
+        $client = Client::with(['branches','branches.city','branches.city.country'])->findOrFail($id);
+        $catalogCountries = Country::with('cities')->get();
         return Inertia::render('admin/machines/clients/edit',[
-            'client' => $client
+            'client' => $client,
+            'catalogCountries' => $catalogCountries
         ]);
     }
 
