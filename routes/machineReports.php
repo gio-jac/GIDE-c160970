@@ -9,6 +9,7 @@ use App\Http\Controllers\machine_reports\CodeController;
 use App\Http\Controllers\machine_reports\StatusController;
 use App\Http\Controllers\machine_reports\MachineController;
 use App\Http\Controllers\machine_reports\ClientController;
+use App\Http\Controllers\machine_reports\BranchController;
 
 Route::middleware('auth')->group(function () {
     Route::resource('/users/types', UserTypeController::class);
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/{report}/{locale}/file', [ReportController::class, 'pdfReport'])->name('reports.file');
     Route::resource('/reports', ReportController::class);
     Route::post('/parts/autocomplete', [PartController::class, 'autocomplete'])->name('parts.autocomplete');
+    Route::resource('/machines/clients/branches', BranchController::class);
     Route::resource('/machines/clients', ClientController::class);
     Route::resource('/machines', MachineController::class);
 });

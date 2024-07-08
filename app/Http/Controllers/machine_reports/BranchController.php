@@ -4,21 +4,16 @@ namespace App\Http\Controllers\machine_reports;
 
 use App\Http\Controllers\Controller;
 use App\Models\machine_reports\Client;
-use App\Models\machine_reports\Country;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
-class ClientController extends Controller
+class BranchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $clients = Client::all();
-        return Inertia::render('admin/machines/clients/index',[
-            'clients' => $clients
-        ]);
+        //
     }
 
     /**
@@ -26,7 +21,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        return Inertia::render('admin/machines/clients/new');
+        //
     }
 
     /**
@@ -34,12 +29,7 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        Client::create($request->validate([
-            'name' => ['required', 'max:255', 'unique:clients'],
-            'is_active' => ['required'],
-        ]));
-
-        return to_route('clients.index');
+        //
     }
 
     /**
@@ -55,17 +45,7 @@ class ClientController extends Controller
      */
     public function edit(string $id)
     {
-        $client = Client::with(['branches','branches.city','branches.city.country'])->findOrFail($id);
-
-        foreach ($client->branches as $key => &$value) {
-            $value['edit_mode'] = false;
-        }
-
-        $catalogCountries = Country::with('cities')->get();
-        return Inertia::render('admin/machines/clients/edit',[
-            'client' => $client,
-            'catalogCountries' => $catalogCountries
-        ]);
+        //
     }
 
     /**
@@ -75,10 +55,18 @@ class ClientController extends Controller
     {
         $client = Client::findOrFail($id);
 
-        $client->update($request->validate([
-            'name' => ['required', 'max:255', 'unique:clients'],
-            'is_active' => ['required'],
-        ]));
+        $validatedData = $request->validate([
+            '*.id' => [],
+            '*.address' => ['required', 'max:255'],
+            '*.city_id' => ['required'],
+            '*.is_active' => ['required'],
+        ]);
+
+        foreach ($validatedData as $key => &$value) {
+            $value['client_id'] = $client->id;
+        }
+        
+        $client->branches()->upsert($validatedData, ['id'], ['address','city_id','client_id','is_active']);
 
         return to_route('clients.edit', ['client' => $client->id]);
     }

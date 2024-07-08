@@ -61,14 +61,16 @@
                     </thead>
                     <tbody>
                         <template v-for="(branch, index) in formBranches" :key="index">
-                            <template v-if="branch.id">
-                                <tr>
+                            <template v-if="branch.id && !branch.edit_mode">
+                                <tr :class="{ 'bg-red-200': branch.is_active == 0 }">
                                     <td>{{ branch.address }}</td>
                                     <td>{{ branch.city.country.name }}</td>
                                     <td>{{ branch.city.name }}</td>
-                                    <td>
+                                    <td class="flex">
                                         <button
                                             type="button"
+                                            @click="editBranch(index)"
+                                            class="mx-1"
                                         >
                                             <svg
                                                 width="24"
@@ -98,28 +100,36 @@
                                                 ></path>
                                             </svg>
                                         </button>
+                                        <button
+                                            type="button"
+                                            @click="branch.is_active = branch.is_active == 1 ? 0 : 1"
+                                        >
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M9.5 11L10 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M14.5 11L14 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="1.5"></path></svg>
+                                        </button>
                                     </td>
                                 </tr>
                             </template>
-                            <template v-else>
+                            <template v-if="!branch.id || branch.edit_mode">
                                 <tr>
-                                    <td><input type="text" class="form-input" /></td>
+                                    <td><input type="text" class="form-input" v-model="formBranches[index].address" /></td>
                                     <td>
-                                        <select class="form-select" v-model="formBranches[index].selectedCountry">
-                                            <option v-for="country in catalogCountries" :key="country.id" :value="country">
+                                        <select class="form-select" v-model="formBranches[index].country_id">
+                                            <option v-for="country in catalogCountries" :key="country.id" :value="country.id">
                                                 {{ country.name }}
                                             </option>
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-select" v-model="formBranches[index].city">
-                                            <option v-for="city in formBranches[index].selectedCountry?.cities" :key="city.id" :value="city.id">
+                                        <select class="form-select" v-model="formBranches[index].city_id">
+                                            <option v-for="city in getCities(formBranches[index].country_id)" :key="city.id" :value="city.id">
                                                 {{ city.name }}
                                             </option>
                                         </select>
                                     </td>
                                     <td>
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><path opacity="0.5" d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="currentColor" stroke-width="1.5"></path><path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                        <button type="button" v-if="branch.id" @click="branch.edit_mode = false">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><path opacity="0.5" d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="currentColor" stroke-width="1.5"></path><path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                        </button>
                                     </td>
                                 </tr>
                             </template>
@@ -159,7 +169,7 @@
                     </button>
                 </div>
             </div>
-            <button class="btn btn-primary !mt-6">{{ $t("user.create.update") }}</button>
+            <button type="button" @click="submitBranches()" class="btn btn-primary !mt-6">{{ $t("user.create.update") }}</button>
         </div>
     </div>
 </template>
@@ -187,7 +197,7 @@ const props = defineProps({
     }
 });
 
-console.log(props.catalogCountries);
+console.log(props.client);
 
 const form = reactive({
     name: props.client.name,
@@ -204,9 +214,23 @@ function addBranch() {
     formBranches.push({
         id: null,
         address: "",
-        selectedCountry: null,
-        city: null
+        country_id: null,
+        city_id: null,
+        is_active: 1
     });
+}
+
+function getCities(country_id) {
+    const country = props.catalogCountries.find(c => c.id === country_id);
+    return country ? country.cities : [];
+}
+
+function editBranch(index) {
+    const branch = formBranches[index];
+    console.log(branch);
+    branch.edit_mode = true;
+    branch.country_id = branch.city.country.id;
+    branch.city_id = branch.city.id;
 }
 
 function submit() {
@@ -221,6 +245,50 @@ function submit() {
         },
     });
     router.put(`/machines/clients/${props.client.id}`, form, {
+        onSuccess: () => {
+            console.log("Exitoso");
+            Swal.close();
+            Swal.fire({
+                icon: "success",
+                title: "Success!",
+                html: "The update has been completed successfully.",
+                customClass: "sweet-alerts",
+            });
+        },
+        onError: (error) => {
+            console.log(error);
+            let errorMessages = "";
+
+            for (const key in error) {
+                const fieldName = key.replace("_id", "");
+                errorMessages += `<p>${error[key]}</p>`;
+            }
+            Swal.close();
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                html: errorMessages,
+                customClass: "sweet-alerts",
+            });
+        },
+        onFinish: () => {},
+    });
+}
+
+function submitBranches() {    
+    Swal.fire({
+        title: "Processing...",
+        text: "Please wait while the data is being updated.",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: "sweet-alerts",
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+    router.put(`/machines/clients/branches/${props.client.id}`, formBranches, {
+        preserveState: false,
+        preserveScroll: true,
         onSuccess: () => {
             console.log("Exitoso");
             Swal.close();
