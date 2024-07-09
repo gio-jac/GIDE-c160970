@@ -1,76 +1,50 @@
 <template>
     <Head title="Edit Client" />
     <div>
-        <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b]">
+        <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b] mt-5">
             <div class="mb-5">
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
                     <li><Link href="/machines/clients">Client</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
+                        <Link
+                            :href="`/machines/clients/${branch.client_id}/edit`"
+                            class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70"
+                            >Branch</Link
+                        >
+                    </li>
+                    <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
                             class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70"
-                            >{{ $t("user.create.breadcrumb.edit") }}</a
+                            >Contacts</a
                         >
                     </li>
                 </ol>
             </div>
-            <form class="space-y-5" @submit.prevent="submit">
-                <div :class="{ 'has-error': errors.num_part }">
-                    <label for="formClient">Client</label>
-                    <input
-                        id="formClient"
-                        type="text"
-                        placeholder="Enter Client name"
-                        class="form-input"
-                        v-model="form.name"
-                    />
-                    <template v-if="errors.name">
-                        <p class="text-danger mt-1">errors.name</p>
-                    </template>
-                </div>
-                <div>
-                    <label for="formActive">Active Client</label>
-                    <label class="w-12 h-6 relative">
-                        <input
-                            type="checkbox"
-                            class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer"
-                            id="formActive"
-                            v-model="form.is_active"
-                        />
-                        <span
-                            for="formActive"
-                            class="bg-[#ebedf2] dark:bg-dark block h-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"
-                        ></span>
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary !mt-6">{{ $t("user.create.update") }}</button>
-            </form>
-        </div>
-        <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b] mt-5">
             <div class="table-responsive mt-4">
                 <table>
                     <thead>
                         <tr>
-                            <th class="w-1/2">Address</th>
-                            <th>Country</th>
-                            <th class="w-1/4">City</th>
-                            <th class="w-1"></th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-for="(branch, index) in formBranches" :key="index">
-                            <template v-if="branch.id && !branch.edit_mode">
-                                <tr :class="{ 'bg-red-200': branch.is_active == 0 }">
-                                    <td>{{ branch.address }}</td>
-                                    <td>{{ branch.city.country.name }}</td>
-                                    <td>{{ branch.city.name }}</td>
+                        <template v-for="(contact, index) in formContacts" :key="index">
+                            <template v-if="contact.id && !contact.edit_mode">
+                                <tr :class="{ 'bg-red-200': contact.is_active == 0 }">
+                                    <td>{{ contact.name }}</td>
+                                    <td>{{ contact.email }}</td>
+                                    <td>{{ contact.phone }}</td>
                                     <td class="flex">
                                         <button
                                             type="button"
-                                            @click="editBranch(index)"
                                             class="mx-1"
+                                            @click="contact.edit_mode = true"
                                         >
                                             <svg
                                                 width="24"
@@ -103,35 +77,20 @@
                                         <button
                                             type="button"
                                             class="mx-1"
-                                            @click="branch.is_active = branch.is_active == 1 ? 0 : 1"
+                                            @click="contact.is_active = contact.is_active == 1 ? 0 : 1"
                                         >
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M9.5 11L10 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M14.5 11L14 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="1.5"></path></svg>
                                         </button>
-                                        <Link :href="`/machines/clients/branches/contacts/${branch.id}/edit`">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5"></circle><path opacity="0.5" d="M18 9C19.6569 9 21 7.88071 21 6.5C21 5.11929 19.6569 4 18 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M6 9C4.34315 9 3 7.88071 3 6.5C3 5.11929 4.34315 4 6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><ellipse cx="12" cy="17" rx="6" ry="4" stroke="currentColor" stroke-width="1.5"></ellipse><path opacity="0.5" d="M20 19C21.7542 18.6153 23 17.6411 23 16.5C23 15.3589 21.7542 14.3847 20 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M4 19C2.24575 18.6153 1 17.6411 1 16.5C1 15.3589 2.24575 14.3847 4 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg>
-                                        </Link>
                                     </td>
                                 </tr>
                             </template>
-                            <template v-if="!branch.id || branch.edit_mode">
+                            <template v-else>
                                 <tr>
-                                    <td><input type="text" class="form-input" v-model="formBranches[index].address" /></td>
+                                    <td><input type="text" class="form-input" v-model="formContacts[index].name" /></td>
+                                    <td><input type="email" class="form-input" v-model="formContacts[index].email" /></td>
+                                    <td><input type="tel" class="form-input" v-model="formContacts[index].phone" /></td>
                                     <td>
-                                        <select class="form-select" v-model="formBranches[index].country_id">
-                                            <option v-for="country in catalogCountries" :key="country.id" :value="country.id">
-                                                {{ country.name }}
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-select" v-model="formBranches[index].city_id">
-                                            <option v-for="city in getCities(formBranches[index].country_id)" :key="city.id" :value="city.id">
-                                                {{ city.name }}
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <button type="button" v-if="branch.id" @click="branch.edit_mode = false">
+                                        <button type="button" v-if="contact.id" @click="contact.edit_mode = false">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><path opacity="0.5" d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="currentColor" stroke-width="1.5"></path><path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                                         </button>
                                     </td>
@@ -142,7 +101,7 @@
                 </table>
                 <div class="w-full flex justify-center">
                     <button
-                        @click="addBranch()"
+                        @click="addContact()"
                         class="btn btn-secondary gap-2"
                     >
                         <svg
@@ -173,7 +132,7 @@
                     </button>
                 </div>
             </div>
-            <button type="button" @click="submitBranches()" class="btn btn-primary !mt-6">{{ $t("user.create.update") }}</button>
+            <button type="button" @click="submitContacts()" class="btn btn-primary !mt-6">{{ $t("user.create.update") }}</button>
         </div>
     </div>
 </template>
@@ -190,54 +149,31 @@ defineOptions({
 });
 
 const props = defineProps({
-    errors: Object,
-    client: {
+    branch: {
         type: Object,
-        required: true,
-    },
-    catalogCountries: {
-        type: Array,
         required: true,
     }
 });
 
-console.log(props.client);
+console.log(props.branch);
 
-const form = reactive({
-    name: props.client.name,
-    is_active: props.client.is_active === 1 ? true : false,
-});
-
-const formBranches = reactive([]);
+const formContacts = reactive([]);
 
 onMounted(() => {
-    formBranches.push(...props.client.branches);
+    formContacts.push(...props.branch.branch_managers);
 });
 
-function addBranch() {
-    formBranches.push({
+function addContact() {
+    formContacts.push({
         id: null,
-        address: "",
-        country_id: null,
-        city_id: null,
+        name: "",
+        email: "",
+        phone: "",
         is_active: 1
     });
 }
 
-function getCities(country_id) {
-    const country = props.catalogCountries.find(c => c.id === country_id);
-    return country ? country.cities : [];
-}
-
-function editBranch(index) {
-    const branch = formBranches[index];
-    console.log(branch);
-    branch.edit_mode = true;
-    branch.country_id = branch.city.country.id;
-    branch.city_id = branch.city.id;
-}
-
-function submit() {
+function submitContacts() {
     Swal.fire({
         title: "Processing...",
         text: "Please wait while the data is being updated.",
@@ -248,50 +184,8 @@ function submit() {
             Swal.showLoading();
         },
     });
-    router.put(`/machines/clients/${props.client.id}`, form, {
-        onSuccess: () => {
-            console.log("Exitoso");
-            Swal.close();
-            Swal.fire({
-                icon: "success",
-                title: "Success!",
-                html: "The update has been completed successfully.",
-                customClass: "sweet-alerts",
-            });
-        },
-        onError: (error) => {
-            console.log(error);
-            let errorMessages = "";
-
-            for (const key in error) {
-                const fieldName = key.replace("_id", "");
-                errorMessages += `<p>${error[key]}</p>`;
-            }
-            Swal.close();
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                html: errorMessages,
-                customClass: "sweet-alerts",
-            });
-        },
-        onFinish: () => {},
-    });
-}
-
-function submitBranches() {    
-    Swal.fire({
-        title: "Processing...",
-        text: "Please wait while the data is being updated.",
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        customClass: "sweet-alerts",
-        didOpen: () => {
-            Swal.showLoading();
-        },
-    });
-    router.put(`/machines/clients/branches/${props.client.id}`, formBranches, {
-        preserveState: false,
+    router.put(`/machines/clients/branches/contacts/${props.branch.id}`, formContacts, {
+        preserveState: true,
         preserveScroll: true,
         onSuccess: () => {
             console.log("Exitoso");
@@ -301,6 +195,11 @@ function submitBranches() {
                 title: "Success!",
                 html: "The update has been completed successfully.",
                 customClass: "sweet-alerts",
+            });
+            router.visit(`/machines/clients/branches/contacts/${props.branch.id}/edit`, {
+                only: ['branch'],
+                preserveScroll: true,
+                preserveState: false,
             });
         },
         onError: (error) => {
