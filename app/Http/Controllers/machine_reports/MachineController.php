@@ -110,4 +110,28 @@ class MachineController extends Controller
     {
         //
     }
+
+    public function autocomplete(Request $request)
+    {
+        $search = $request->input('query');
+
+        $results = Machine::query()
+            ->where('is_active', true)
+            ->where('serial', 'LIKE', "%{$search}%")
+            ->with([
+                'machine_model.model_segment:id,segment,is_multi_transport,is_multi_signature',
+                'client:id,name',
+                'client.branches:id,city_id,client_id',
+                'client.branches.city:id,name',
+                'client.branches.branchManagers',
+                'production_line',
+                'production_line.machines' => function($query) {
+                    $query->orderBy('position', 'asc');
+                },
+                'production_line.machines.machine_model.model_segment',
+            ])
+            ->get();
+
+        return response()->json($results);
+    }
 }

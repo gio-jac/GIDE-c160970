@@ -62,7 +62,7 @@ class ReportController extends Controller
         $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
         $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
         $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
-        $catalogMachines = Machine::select(
+        /*$catalogMachines = Machine::select(
                 'id',
                 'serial',
                 'production_line_id',
@@ -96,14 +96,14 @@ class ReportController extends Controller
             'production_line.machines.machine_model.model_segment' => function($query){
                 $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
             },
-        ])->get();
+        ])->get();*/
         $catalogStatus = Status::where('is_active', 1)->get();
         
         return Inertia::render('admin/reports/new',[
             'catalogCodes' => $catalogCodes,
             'catalogUsers' => $catalogUsers,
             'catalogStatus' => $catalogStatus,
-            'catalogMachines' => $catalogMachines,
+            'catalogMachines' => [],
             'catalogShifts' => $catalogShifts,
             'catalogModule' => $catalogModule,
             'catalogFailures' => $catalogFailures,
@@ -241,7 +241,7 @@ class ReportController extends Controller
             'production_line_id',
             'machine_model_id',
             'client_id'
-        )->where('is_active', 1)->with([
+        )->where('id', $report->machines->first()->id)->with([
             'machine_model.model_segment' => function($query){
                 $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
             },
