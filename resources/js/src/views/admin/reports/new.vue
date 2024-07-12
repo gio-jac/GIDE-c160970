@@ -15,8 +15,9 @@
 
                             <multiselect
                                 v-tippy:machineid
+                                @search-change="selectMachineChange"
                                 id="formMachine"
-                                :options="props.catalogMachines"
+                                :options="catalogMachines"
                                 v-model="form.selectedMachine"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
@@ -665,7 +666,7 @@
                                 >
                                 <input
                                     id="formCustomerPhone"
-                                    type="tel"
+                                    type="text"
                                     name="formCustomerPhone"
                                     class="form-input flex-1"
                                     readonly
@@ -1384,6 +1385,7 @@ const store = useAppStore();
 const page = usePage();
 const user = computed(() => page.props.auth);
 const catalogParts = ref([]);
+const catalogMachines = ref([]);
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
@@ -1399,10 +1401,6 @@ const props = defineProps({
         required: true,
     },
     catalogStatus: {
-        type: Array,
-        required: true,
-    },
-    catalogMachines: {
         type: Array,
         required: true,
     },
@@ -1683,6 +1681,7 @@ function travelTimeValidation(event) {
 }
 
 let timeoutId = ref(null);
+let timeoutIdMachine = ref(null);
 function selectPartChange(searchQuery, id) {
     catalogParts.value = [];
     if (searchQuery.length <= 0) {
@@ -1704,6 +1703,34 @@ function selectPartChange(searchQuery, id) {
             .then((response) => response.json())
             .then((data) => {
                 catalogParts.value = data;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }, 750);
+}
+
+function selectMachineChange(searchQuery, id) {
+    catalogMachines.value = [];
+    if (searchQuery.length <= 0) {
+        if (timeoutIdMachine.value) clearTimeout(timeoutIdMachine.value);
+        return;
+    }
+
+    if (timeoutIdMachine.value) clearTimeout(timeoutIdMachine.value);
+    timeoutIdMachine.value = setTimeout(() => {
+        fetch("/machines/autocomplete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": page.props.csrf,
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({ query: searchQuery }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                catalogMachines.value = data;
             })
             .catch((error) => {
                 console.error("Error:", error);

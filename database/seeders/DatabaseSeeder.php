@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             MachineSeeder::class,
             BranchSeeder::class,
             BranchManagerSeeder::class,
+            ExcelRegistryMachinesSeeder::class,
         ]);
     }
 }
