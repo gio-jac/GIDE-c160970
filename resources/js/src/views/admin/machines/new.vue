@@ -6,7 +6,7 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/machines">Machines</Link></li>
+                    <li><Link href="/machines">{{ $t("machine.new.breadcrumb.machines") }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
@@ -18,12 +18,12 @@
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div>
-                    <label for="machineSerial">Serial <span class="text-red-500">*</span></label>
+                    <label for="machineSerial">{{ $t("machine.new.form.serial") }} <span class="text-red-500">*</span></label>
                     <input
                         id="machineSerial"
                         name="machineSerial"
                         type="text"
-                        placeholder="Enter Machine Serial"
+                        :placeholder="$t('machine.new.serialPlaceholder')"
                         class="form-input"
                         v-model="form.serial"
                     />
@@ -32,7 +32,7 @@
                     </template>
                 </div>
                 <div>
-                    <label for="machineModel">Machine Model <span class="text-red-500">*</span></label>
+                    <label for="machineModel">{{ $t("machine.new.form.machineModel") }} <span class="text-red-500">*</span></label>
                     <select
                         id="machineModel"
                         name="machineModel"
@@ -51,7 +51,7 @@
                     </template>
                 </div>
                 <div>
-                    <label for="machineClient">Client <span class="text-red-500">*</span></label>
+                    <label for="machineClient">{{ $t("machine.new.form.client") }} <span class="text-red-500">*</span></label>
                     <select
                         id="machineClient"
                         name="machineClient"
@@ -71,7 +71,7 @@
                 </div>
                 
                 <div>
-                    <label for="machineProductionLine">Production Line</label>
+                    <label for="machineProductionLine">{{ $t("machine.new.form.productionLine") }}</label>
                     <select
                         id="machineProductionLine"
                         name="machineProductionLine"
@@ -79,7 +79,7 @@
                         v-model="form.production_line_id"
                     >
                         <option :value="null">
-                            None
+                            {{ $t("machine.new.form.none") }}
                         </option>
                         <option v-for="productionLine in productionLines" :key="productionLine" :value="productionLine.id">
                             {{ productionLine.name }}

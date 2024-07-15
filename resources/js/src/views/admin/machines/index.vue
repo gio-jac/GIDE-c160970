@@ -29,7 +29,7 @@
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                 </svg>
-                                New Machine
+                                {{ $t('machine.index.newMachine')}}
                             </Link>
                         </div>
                         <div class="ltr:ml-auto rtl:mr-auto">
@@ -185,10 +185,10 @@ console.log(props.machines);
 const datatable: any = ref(null);
 const search = ref("");
 const cols = computed(() => [
-    { field: "serial", title: "Serial" },
-    { field: "machine_model.model", title: "Model" },
-    { field: "machine_model.model_segment.segment", title: "Segment" },
-    { field: "production_line.name", title: "Production Line" },
+    { field: "serial", title: t("machine.index.col.serial") },
+    { field: "machine_model.model", title: t("machine.index.col.model") },
+    { field: "machine_model.model_segment.segment", title: t("machine.index.col.segment") },
+    { field: "production_line.name", title: t("machine.index.col.productionLine") },
     { field: "is_active", title: t("user.index.col.active") },
     {
         field: "actions",

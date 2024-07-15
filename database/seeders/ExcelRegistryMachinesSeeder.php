@@ -34,7 +34,7 @@ class ExcelRegistryMachinesSeeder extends Seeder
             City::create(['name' => 'San Nicolas', 'country_id' => 2]);
             City::create(['name' => 'Vallejo', 'country_id' => 2]);
             
-            //Client::create(['name' => 'FEMSA']);
+            Client::create(['name' => 'FEMSA']);
             Client::create(['name' => 'REGIO TRASLADOS']);
             Client::create(['name' => 'SISSA']);
 
