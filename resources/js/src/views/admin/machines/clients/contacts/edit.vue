@@ -1,24 +1,24 @@
 <template>
-    <Head title="Edit Client" />
+    <Head title="Edit Contacts" />
     <div>
         <div class="panel border-[#e0e6ed] dark:border-[#1b2e4b] mt-5">
             <div class="mb-5">
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/machines/clients">Client</Link></li>
+                    <li><Link href="/machines/clients">{{ $t('report.form.client') }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <Link
                             :href="`/machines/clients/${branch.client_id}/edit`"
                             class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70"
-                            >Branch</Link
+                            >{{ $t('branch.edit.breadcrumb.branch') }}</Link
                         >
                     </li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
                             class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70"
-                            >Contacts</a
+                            >{{ $t('report.form.contacts') }}</a
                         >
                     </li>
                 </ol>
@@ -27,9 +27,9 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>{{ $t('report.form.name') }}</th>
                             <th>Email</th>
-                            <th>Phone</th>
+                            <th>{{ $t('report.form.phone') }}</th>
                             <th></th>
                         </tr>
                     </thead>
