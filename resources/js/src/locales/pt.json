@@ -23,6 +23,7 @@
     "sidebar.customers": "Clientes",
     "sidebar.regions": "Regiões",
     "sidebar.assignments": "Atribuições",
+    "sidebar.clients": "Clientes",
     "header.signout": "Encerrar sessão",
     "user.index.newUser": "Criar usuário",
     "user.index.col.parteId": "Peça ID",
@@ -140,7 +141,19 @@
     "part.new.partSerialPlaceholder": "Digite Serial da Peça",
     "part.new.descriptionPlaceholder": "Digite Descrição",
     "part.new.activePart": "Peça habilitada",
-
+    "machine.index.newMachine": "Criar Máquina",
+    "machine.index.col.serial": "Serial",
+    "machine.index.col.model": "Modelo",
+    "machine.index.col.segment": "Segmento",
+    "machine.index.col.productionLine": "Linha de produção",
+    "machine.new.breadcrumb.machines":"Máquinas",
+    "machine.new.form.serial": "Serial",
+    "machine.new.serialPlaceholder": "Digite Serial da Máquina",
+    "machine.new.form.machineModel": "Modelo da Máquina",
+    "machine.new.form.client": "Cliente",
+    "machine.new.form.productionLine": "Linha de produção",
+    "machine.new.form.none": "Nenhum",
+    "machine.edit.form.activeMachine": "Máquina Ativa",
 
 
 

@@ -243,7 +243,7 @@
                                             <span
                                                 class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
                                             >
-                                                Machines
+                                                {{ $t('sidebar.machines')}}
                                             </span>
                                         </div>
                                     </Link>
@@ -556,7 +556,7 @@
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Clients</Link
+                                                                >{{ $t('sidebar.clients')}}</Link
                                                             >
                                                         </li>
                                                     </ul>
