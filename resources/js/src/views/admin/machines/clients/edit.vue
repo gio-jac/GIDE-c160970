@@ -6,7 +6,7 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/machines/clients">Client</Link></li>
+                    <li><Link href="/machines/clients">{{ $t('sidebar.clients') }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
@@ -18,11 +18,11 @@
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.num_part }">
-                    <label for="formClient">Client</label>
+                    <label for="formClient">{{ $t('report.form.client') }}</label>
                     <input
                         id="formClient"
                         type="text"
-                        placeholder="Enter Client name"
+                        :placeholder="$t('client.new.clientNamePlaceholder')"
                         class="form-input"
                         v-model="form.name"
                     />
@@ -31,7 +31,7 @@
                     </template>
                 </div>
                 <div>
-                    <label for="formActive">Active Client</label>
+                    <label for="formActive">{{ $t("client.edit.activeClient") }}</label>
                     <label class="w-12 h-6 relative">
                         <input
                             type="checkbox"
@@ -53,9 +53,9 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="w-1/2">Address</th>
-                            <th>Country</th>
-                            <th class="w-1/4">City</th>
+                            <th class="w-1/2">{{ $t("client.edit.table.address") }}</th>
+                            <th>{{ $t("client.edit.table.country") }}</th>
+                            <th class="w-1/4">{{ $t("client.edit.table.city") }}</th>
                             <th class="w-1"></th>
                         </tr>
                     </thead>

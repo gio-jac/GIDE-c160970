@@ -154,6 +154,12 @@
     "machine.new.form.productionLine": "Production Line",
     "machine.new.form.none": "None",
     "machine.edit.form.activeMachine": "Active Machine",
+    "client.index.newClient": "New Client",
+    "client.new.clientNamePlaceholder": "Enter Client Name",
+    "client.edit.activeClient": "Active User",
+    "client.edit.table.address": "Address",
+    "client.edit.table.country": "Country",
+    "client.edit.table.city": "City",
 
 
 
