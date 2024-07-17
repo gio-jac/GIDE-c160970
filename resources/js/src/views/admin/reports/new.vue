@@ -14,8 +14,10 @@
                             >
 
                             <multiselect
+                                v-tippy:machineid
+                                @search-change="selectMachineChange"
                                 id="formMachine"
-                                :options="props.catalogMachines"
+                                :options="catalogMachines"
                                 v-model="form.selectedMachine"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
@@ -28,6 +30,7 @@
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
+                            <tippy target="machineid" trigger="focus">Usado para la búsqueda y selección de máquina, utiliza el siguiente formato:<br>"Serial - Modelo de máquina"</tippy>
                         </div>
                         <template v-if="errors.machines">
                             <p class="text-danger mt-1 text-center">
@@ -46,6 +49,7 @@
                             >
 
                             <multiselect
+                                v-tippy:user
                                 id="formUser"
                                 :options="catalogUsers"
                                 v-model="form.selectedUser"
@@ -60,6 +64,7 @@
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
+                            <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato:<br>"EMP - Nombre PrimerApellido"</tippy>
                         </div>
                         <template v-if="errors.user_id">
                             <p class="text-danger mt-1 text-center">
@@ -79,6 +84,7 @@
                             >
 
                             <multiselect
+                                v-tippy:shift
                                 id="formShift"
                                 :options="props.catalogShifts"
                                 v-model="form.selectedShift"
@@ -90,6 +96,7 @@
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
+                            <tippy target="shift" trigger="focus">Usado para la selección del turno de la realización del reporte</tippy>
                         </div>
                         <template v-if="errors.shift_id">
                             <p class="text-danger mt-1 text-center">
@@ -104,15 +111,9 @@
                     <template v-if="form.selectedMachine">
                         <div
                             class="flex flex-wrap justify-evenly"
-                            v-if="
-                                form.selectedMachine.production_line &&
-                                form.selectedMachine.production_line.machines
-                                    .length > 0
-                            "
                         >
                             <div
-                                v-for="(machine, index) in form.selectedMachine
-                                    .production_line.machines"
+                                v-for="(machine, index) in getMachines()"
                                 :key="machine"
                                 :class="{
                                     'bg-[#ececf9]': machine.only_dt !== 1,
@@ -124,6 +125,7 @@
                                     Serial: {{ machine.serial }} -
                                     {{ machine.machine_model.model }} -
                                     {{
+                                        machine.line_num ? machine.line_num :
                                         machine.machine_model.model_segment
                                             .segment
                                     }}
@@ -283,52 +285,91 @@
                                                     v-model="
                                                         detail.dt
                                                     "
-                                                    
+                                                    @input="dtValidation($event,index,indexDetail)"
+                                                    min="0"
+                                                    max="999999"
+                                                    step="1"
                                                     class="form-input text-white-dark"
                                                     :placeholder="$t('report.form.dtPlaceholder')"
                                                 />
                                             </div>
-                                        </div>
-
-                                        <button
-                                            v-if="machine.only_dt !== 1"
-                                            class="btn btn-secondary gap-2"
-                                            @click="
-                                                addMachineDetail(
-                                                    postForm.machines[index]
-                                                        .machine_details
-                                                )
-                                            "
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="24px"
-                                                height="24px"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="1.5"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                class="w-5 h-5"
+                                            <div
+                                                class="flex"
+                                                v-if="machine.only_dt !== 1"
                                             >
-                                                <line
-                                                    x1="12"
-                                                    y1="5"
-                                                    x2="12"
-                                                    y2="19"
-                                                ></line>
-                                                <line
-                                                    x1="5"
-                                                    y1="12"
-                                                    x2="19"
-                                                    y2="12"
-                                                ></line>
-                                            </svg>
-                                        </button>
-
+                                                <button
+                                                    type="button"
+                                                    @click="removeMachineDetail(index,indexDetail)"
+                                                    v-if="postForm.machines[index].machine_details.length > 1"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="24px"
+                                                        height="24px"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="1.5"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        class="w-5 h-5"
+                                                    >
+                                                        <line
+                                                            x1="18"
+                                                            y1="6"
+                                                            x2="6"
+                                                            y2="18"
+                                                        ></line>
+                                                        <line
+                                                            x1="6"
+                                                            y1="6"
+                                                            x2="18"
+                                                            y2="18"
+                                                        ></line>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="w-full flex justify-center">
+                                            <button
+                                                v-if="machine.only_dt !== 1"
+                                                class="btn btn-secondary gap-2"
+                                                @click="
+                                                    addMachineDetail(
+                                                        postForm.machines[index]
+                                                            .machine_details
+                                                    )
+                                                "
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="24px"
+                                                    height="24px"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="1.5"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="w-5 h-5"
+                                                >
+                                                    <line
+                                                        x1="12"
+                                                        y1="5"
+                                                        x2="12"
+                                                        y2="19"
+                                                    ></line>
+                                                    <line
+                                                        x1="5"
+                                                        y1="12"
+                                                        x2="19"
+                                                        y2="12"
+                                                    ></line>
+                                                </svg>
+                                            </button>
+                                        </div>
                                         <div
-                                            class="flex-[100%]"
+                                            class="py-2"
                                             v-if="machine.only_dt !== 1"
                                         >
                                             <template
@@ -486,7 +527,7 @@
                                         </div>
                                         <div class="py-2">
                                             <label :for="'formReportDT' + index"
-                                                >DT (Min.)</label
+                                                >DT Final (Min.)</label
                                             >
                                             <input
                                                 :id="'formReportDT' + index"
@@ -497,251 +538,8 @@
                                                 :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
                                                 :placeholder="$t('report.form.dtPlaceholder')"
+                                                @input="finalDtValidation($event,index)"
                                             />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <div class="bg-gray-100 rounded-md p-4">
-                                <div class="text-center font-semibold">
-                                    Serial: {{ form.selectedMachine.serial }} -
-                                    {{
-                                        form.selectedMachine.machine_model.model
-                                    }}
-                                    -
-                                    {{
-                                        form.selectedMachine.machine_model
-                                            .model_segment.segment
-                                    }}
-                                </div>
-                                <div class="w-full">
-                                    <div class="flex justify-evenly flex-wrap">
-                                        <div
-                                            v-for="(
-                                                detail, indexDetail
-                                            ) in postForm.machines[0]
-                                                .machine_details"
-                                            :key="detail"
-                                            class="flex-[100%] flex justify-evenly flex-wrap"
-                                        >
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formModule1' +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.error") }}</label
-                                                >
-                                                <select
-                                                    :id="
-                                                        'formModule1' +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formModule1' +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="detail.module_id"
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="tmodule in props.catalogModule"
-                                                        :key="tmodule"
-                                                        :value="tmodule.id"
-                                                    >
-                                                        {{ $t("catalogs.error."+tmodule.id,tmodule.name) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formFailures1' +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.cause") }}</label
-                                                >
-                                                <select
-                                                    :id="
-                                                        'formFailures1' +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formFailures1' +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="detail.failure_id"
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="failure in props.catalogFailures"
-                                                        :key="failure"
-                                                        :value="failure.id"
-                                                    >
-                                                        {{ $t("catalogs.failures."+failure.id,failure.name) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formTypes1' +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.solution") }}</label
-                                                >
-                                                <select
-                                                    :id="
-                                                        'formTypes1' +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formTypes1' +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="
-                                                        detail.failure_type_id
-                                                    "
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="failuretype in props.catalogTypes"
-                                                        :key="failuretype"
-                                                        :value="failuretype.id"
-                                                    >
-                                                        {{ $t("catalogs.failureType."+failuretype.id,failuretype.name) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                            >
-                                                <label :for="
-                                                        'formErrorDT1' +
-                                                        indexDetail
-                                                    "
-                                                    >DT (Min.)</label
-                                                >
-                                                <input
-                                                    :id="
-                                                        'formErrorDT1' +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formErrorDT1' +
-                                                        indexDetail
-                                                    "
-                                                    type="number"
-                                                    v-model="
-                                                        detail.dt
-                                                    "
-                                                    
-                                                    class="form-input text-white-dark"
-                                                    :placeholder="$t('report.form.dtPlaceholder')"
-                                                />
-                                            </div>
-                                        </div>
-                                        <button
-                                            class="btn btn-secondary gap-2"
-                                            @click="
-                                                addMachineDetail(
-                                                    postForm.machines[0]
-                                                        .machine_details
-                                                )
-                                            "
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="24px"
-                                                height="24px"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="1.5"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                class="w-5 h-5"
-                                            >
-                                                <line
-                                                    x1="12"
-                                                    y1="5"
-                                                    x2="12"
-                                                    y2="19"
-                                                ></line>
-                                                <line
-                                                    x1="5"
-                                                    y1="12"
-                                                    x2="19"
-                                                    y2="12"
-                                                ></line>
-                                            </svg>
-                                        </button>
-                                        <div class="flex-[100%]">
-                                            <div
-                                                class="w-full flex justify-evenly flex-wrap"
-                                            >
-                                                <div class="py-2">
-                                                    <label
-                                                        for="formShiftTotal11"
-                                                        >{{ $t("report.form.transport") }}</label
-                                                    >
-                                                    <input
-                                                        id="formShiftTotal11"
-                                                        type="number"
-                                                        v-model="
-                                                            postForm.machines[0]
-                                                                .transport_1
-                                                        "
-                                                        @input="
-                                                            transportValidation(
-                                                                0
-                                                            )
-                                                        "
-                                                        name="formShiftTotal11"
-                                                        class="form-input text-white-dark"
-                                                        min="0.0"
-                                                        max="9999.9"
-                                                        step="0.1"
-                                                        placeholder="0.0"
-                                                    />
-                                                </div>
-                                                <div class="py-2">
-                                                    <label for="formReportDT1"
-                                                        >DT (Min.)</label
-                                                    >
-                                                    <input
-                                                        id="formReportDT1"
-                                                        type="number"
-                                                        v-model="
-                                                            postForm.machines[0]
-                                                                .dt
-                                                        "
-                                                        name="formReportDT1"
-                                                        class="form-input text-white-dark"
-                                                        :placeholder="$t('report.form.dtPlaceholder')"
-                                                    />
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -761,7 +559,9 @@
                             </div>
 
                             <multiselect
+                                v-tippy:branches
                                 id="formBranches"
+                                :disabled="form.selectedMachine ? false : true"
                                 :options="
                                     form.selectedMachine
                                         ? form.selectedMachine.client.branches
@@ -770,12 +570,13 @@
                                 v-model="form.selectedBranch"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :custom-label="({ address }) => `${address}`"
+                                :custom-label="({ city }) => `${city.name}`"
                                 :placeholder="$t('report.form.branchPlaceholder')"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
                             ></multiselect>
+                            <tippy target="branches" placement="left" trigger="focus">Selección de la dirección de la sucursal asociada al cliente de la máquina seleccionada</tippy>
 
                             <template v-if="errors.branch_id">
                                 <p class="text-danger mt-1 text-center">
@@ -786,6 +587,7 @@
                                 {{ $t("report.form.contacts") }} <span class="text-red-500">*</span>
                             </div>
                             <select
+                                v-tippy:contacts
                                 id="formContacts"
                                 name="formContacts"
                                 class="form-select text-white-dark"
@@ -804,6 +606,8 @@
                                     {{ contact.name }}
                                 </option>
                             </select>
+                            <tippy target="contacts" placement="left" trigger="focus">Selección del contacto asociado a la dirección de la sucursal seleccionada</tippy>
+
                             <template v-if="errors.branch_manager_id">
                                 <p class="text-danger mt-1 text-center">
                                     {{ errors.branch_manager_id }}
@@ -862,7 +666,7 @@
                                 >
                                 <input
                                     id="formCustomerPhone"
-                                    type="tel"
+                                    type="text"
                                     name="formCustomerPhone"
                                     class="form-input flex-1"
                                     readonly
@@ -941,13 +745,20 @@
                                     >{{ $t("report.form.pieces") }}</label
                                 >
                                 <input
+                                    v-tippy:pieces
                                     id="formReportPieces"
-                                    type="text"
+                                    type="number"
                                     v-model="postForm.pieces"
                                     name="formReportPieces"
+                                    step="1"
                                     class="form-input flex-1"
-                                    :placeholder="$t('report.form.piecesPlaceholder')"
+                                    placeholder="0"
+                                    value="0"
+                                    min="0"
+                                    max="999999999999"
+                                    @input="partsValidation"
                                 />
+                                <tippy target="pieces" trigger="focus">Utilizado como contador de billetes<br> Máximo: 999 999 999 999</tippy>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label
@@ -956,6 +767,7 @@
                                     >{{ $t("report.form.SOGD") }}</label
                                 >
                                 <input
+                                    v-tippy:sogd
                                     id="formReportSOGD"
                                     type="text"
                                     v-model="postForm.sogd"
@@ -963,6 +775,7 @@
                                     class="form-input flex-1"
                                     :placeholder="$t('report.form.SOGDPlaceholder')"
                                 />
+                                <tippy target="sogd" trigger="focus">Utilizado para capturar la orden de servicio de GD</tippy>
                             </div>
                         </div>
                         <div class="lg:w-1/2 w-full">
@@ -973,15 +786,20 @@
                                     >{{ $t("report.form.machineOn") }}</label
                                 >
                                 <input
+                                    v-tippy:ontime
                                     id="formReportOnTime"
                                     step="0.01"
-                                    pattern="\d+(\.\d{1,2})?"
                                     type="number"
                                     v-model="postForm.time_on"
                                     name="formReportOnTime"
                                     class="form-input flex-1"
                                     placeholder="0.00"
+                                    value="0.00"
+                                    min="0.00"
+                                    max="9999999.99"
+                                    @input="machineOnValidation"
                                 />
+                                <tippy target="ontime" trigger="focus">Utilizado para registrar el tiempo de funcionamiento de la máquina<br> Máximo: 9 999 999.99</tippy>
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
@@ -990,13 +808,20 @@
                                     >{{ $t("report.form.travelTime") }}</label
                                 >
                                 <input
+                                    v-tippy:traveltime
                                     id="formReportTravelTime"
-                                    type="text"
+                                    type="number"
                                     v-model="postForm.travel_time"
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
-                                    :placeholder="$t('report.form.travelTimePlaceholder')"
+                                    placeholder="0"
+                                    step="1"
+                                    value="0"
+                                    min="0"
+                                    max="10080"
+                                    @input="travelTimeValidation"
                                 />
+                                <tippy target="traveltime" trigger="focus">Utilizado para registrar el tiempo de traslado<br> Máximo: 10 080 minutos</tippy>
                             </div>
                             <div class="flex items-center mt-4">
                                 <label
@@ -1194,6 +1019,7 @@
                                     deselect-label=""
                                 ></multiselect>
                                 <button
+                                    :disabled="!form.selectedPart"
                                     class="btn btn-secondary gap-2"
                                     @click="addNewPart"
                                 >
@@ -1267,7 +1093,10 @@
                                                 placeholder="Quantity"
                                                 v-model="item.quantity"
                                                 value="1"
+                                                step="1"
+                                                max="255"
                                                 min="0"
+                                                @input="partQtyValidation($event,i)"
                                             />
                                         </td>
                                         <td>
@@ -1556,6 +1385,7 @@ const store = useAppStore();
 const page = usePage();
 const user = computed(() => page.props.auth);
 const catalogParts = ref([]);
+const catalogMachines = ref([]);
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
@@ -1571,10 +1401,6 @@ const props = defineProps({
         required: true,
     },
     catalogStatus: {
-        type: Array,
-        required: true,
-    },
-    catalogMachines: {
         type: Array,
         required: true,
     },
@@ -1720,8 +1546,18 @@ const removeItem = (item: any = null) => {
     );
 };
 
+function removeMachineDetail(index, indexDetail) {
+    postForm.machines[index].machine_details.splice(indexDetail, 1);
+};
+
 const addNewPart = () => {
-    if (form.selectedPart) postForm.service_parts.push(form.selectedPart);
+    if (!form.selectedPart) return;
+    const existingPartIndex = postForm.service_parts.findIndex(part => part.id === form.selectedPart.id);
+    if (existingPartIndex !== -1) {
+        postForm.service_parts[existingPartIndex].quantity += 1;
+    } else {
+        postForm.service_parts.push({ ...form.selectedPart, quantity: 0 });
+    }
 };
 
 const preloadingTime: any = ref({
@@ -1733,6 +1569,10 @@ const preloadingTime: any = ref({
 
 const updateMachines = (selectedMachine) => {
     if (!selectedMachine) return;
+
+    if (selectedMachine.production_line?.id === null) {
+        selectedMachine.production_line = null;
+    }
 
     const totalMachines = selectedMachine.production_line?.machines.length || 1;
 
@@ -1809,7 +1649,39 @@ function transportValidation(index) {
     });
 }
 
+function partQtyValidation(event,index) {
+    event.target.value = event.target.value.replace(/^0+/, '') || '0';
+
+    const part = postForm.service_parts[index];
+
+    part.quantity = Math.max(0, Math.min(Number(part.quantity), 255));
+}
+
+function machineOnValidation(event) {
+    postForm.time_on = parseFloat(postForm.time_on).toFixed(2);
+    postForm.time_on = Math.max(0.00, Math.min(Number(postForm.time_on), 9999999.99));
+}
+
+function dtValidation(event, indexMachine, indexDetail) {
+    postForm.machines[indexMachine].machine_details[indexDetail].dt = parseInt(postForm.machines[indexMachine].machine_details[indexDetail].dt);
+    postForm.machines[indexMachine].machine_details[indexDetail].dt = Math.max(0, Math.min(Number(postForm.machines[indexMachine].machine_details[indexDetail].dt), 999999));
+}
+
+function finalDtValidation(event, indexMachine) {
+    postForm.machines[indexMachine].dt = parseInt(postForm.machines[indexMachine].dt);
+    postForm.machines[indexMachine].dt = Math.max(0, Math.min(Number(postForm.machines[indexMachine].dt), 999999));
+}
+
+function partsValidation(event) {
+    postForm.pieces = Math.max(0, Math.min(Number(postForm.pieces), 999999999999));
+}
+
+function travelTimeValidation(event) {
+    postForm.travel_time = Math.max(0, Math.min(Number(postForm.travel_time), 10080));
+}
+
 let timeoutId = ref(null);
+let timeoutIdMachine = ref(null);
 function selectPartChange(searchQuery, id) {
     catalogParts.value = [];
     if (searchQuery.length <= 0) {
@@ -1831,6 +1703,34 @@ function selectPartChange(searchQuery, id) {
             .then((response) => response.json())
             .then((data) => {
                 catalogParts.value = data;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }, 750);
+}
+
+function selectMachineChange(searchQuery, id) {
+    catalogMachines.value = [];
+    if (searchQuery.length <= 0) {
+        if (timeoutIdMachine.value) clearTimeout(timeoutIdMachine.value);
+        return;
+    }
+
+    if (timeoutIdMachine.value) clearTimeout(timeoutIdMachine.value);
+    timeoutIdMachine.value = setTimeout(() => {
+        fetch("/machines/autocomplete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": page.props.csrf,
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({ query: searchQuery }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                catalogMachines.value = data;
             })
             .catch((error) => {
                 console.error("Error:", error);

@@ -11,6 +11,17 @@ class Machine extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'serial',
+        'production_line_id',
+        'line_num',
+        'client_id',
+        'machine_model_id',
+        'position',
+        'only_dt',
+        'is_active',
+    ];
+
     public function machine_model(): HasOne
     {
         return $this->hasOne(MachineModels::class, 'id', 'machine_model_id');
@@ -23,7 +34,9 @@ class Machine extends Model
 
     public function production_line(): HasOne
     {
-        return $this->hasOne(ProductionLine::class, 'id', 'production_line_id');
+        return $this->hasOne(ProductionLine::class, 'id', 'production_line_id')->withDefault([
+            'name' => 'N/A'
+        ]);
     }
 
     public function serviceReports(): BelongsToMany

@@ -29,4 +29,9 @@ class Country extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function cities()
+    {
+        return $this->hasMany(City::class);
+    }
 }

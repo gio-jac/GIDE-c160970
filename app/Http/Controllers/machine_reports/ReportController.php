@@ -16,6 +16,7 @@ use App\Models\machine_reports\Shift;
 use App\Models\machine_reports\Module;
 use App\Models\machine_reports\Failure;
 use App\Models\machine_reports\FailureType;
+use App\Models\machine_reports\Country;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -31,13 +32,21 @@ class ReportController extends Controller
     {
         $userAuth = Auth::user();
         if($userAuth->user_type_id === 1){
-            $reports = ServiceReport::where('is_active', true)->with(['machines.machine_model','status', 'user'])->get();
+            $reports = ServiceReport::where('is_active', true)
+                ->with(['machines.machine_model', 'status', 'user', 'branch.city'])
+                ->get()
+                ->map(function ($report) {
+                    $report->user_full_name = $report->user->full_name;
+                    return $report;
+                });
         }else{
-            $reports = ServiceReport::where('user_id', $userAuth->id)->where('is_active', true)->with(['machines.machine_model','status', 'user'])->get();
+            $reports = ServiceReport::where('user_id', $userAuth->id)->where('is_active', true)->with(['machines.machine_model','status', 'user', 'branch.city'])->get();
         }
+        $catalogCountry = Country::where('is_active', 1)->get();
         
         return Inertia::render('admin/reports/index', [
-            'reports' => $reports
+            'reports' => $reports,
+            'catalogCountry' => $catalogCountry
         ]);
     }
 
@@ -53,25 +62,48 @@ class ReportController extends Controller
         $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
         $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
         $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
-        $catalogMachines = Machine::where('is_active', 1)->with([
-            'machine_model.model_segment',
-            'client',
-            'client.branches',
-            'client.branches.branchManagers',
-            'production_line',
+        /*$catalogMachines = Machine::select(
+                'id',
+                'serial',
+                'production_line_id',
+                'machine_model_id',
+                'client_id'
+            )->where('is_active', 1)->with([
+            'machine_model.model_segment' => function($query){
+                $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
+            },
+            'client' => function($query){
+                $query->select('id', 'name');
+            },
+            'client.branches' => function($query){
+                $query->select('id', 'city_id', 'client_id');
+            },
+            'client.branches.city' => function($query){
+                $query->select('id', 'name');
+            },
+            'client.branches.branchManagers' => function($query){
+                $query->select('id', 'name', 'email', 'phone', 'branch_id');
+            },
+            'production_line' => function($query){
+                $query->select('id', 'name');
+            },
             'production_line.machines' => function($query){
                 $query->orderBy('position', 'asc');
             },
-            'production_line.machines.machine_model',
-            'production_line.machines.machine_model.model_segment',
-        ])->get();
+            'production_line.machines.machine_model' => function($query){
+                $query->select('id', 'model', 'model_segment_id');
+            },
+            'production_line.machines.machine_model.model_segment' => function($query){
+                $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
+            },
+        ])->get();*/
         $catalogStatus = Status::where('is_active', 1)->get();
         
         return Inertia::render('admin/reports/new',[
             'catalogCodes' => $catalogCodes,
             'catalogUsers' => $catalogUsers,
             'catalogStatus' => $catalogStatus,
-            'catalogMachines' => $catalogMachines,
+            'catalogMachines' => [],
             'catalogShifts' => $catalogShifts,
             'catalogModule' => $catalogModule,
             'catalogFailures' => $catalogFailures,
@@ -203,10 +235,25 @@ class ReportController extends Controller
         $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
         $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
         $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
-        $catalogMachines = Machine::where('is_active', 1)->with([
-            'machine_model.model_segment',
-            'client',
-            'client.branches',
+        $catalogMachines = Machine::select(
+            'id',
+            'serial',
+            'production_line_id',
+            'machine_model_id',
+            'client_id'
+        )->where('id', $report->machines->first()->id)->with([
+            'machine_model.model_segment' => function($query){
+                $query->select('id', 'segment', 'is_multi_transport', 'is_multi_signature');
+            },
+            'client' => function($query){
+                $query->select('id', 'name');
+            },
+            'client.branches' => function($query){
+                $query->select('id', 'city_id', 'client_id');
+            },
+            'client.branches.city' => function($query){
+                $query->select('id', 'name');
+            },
             'client.branches.branchManagers',
             'production_line',
             'production_line.machines' => function($query){
@@ -303,8 +350,18 @@ class ReportController extends Controller
                 }
             }
             
-            $report->machineDetails()->upsert($machineDetails, ['id'], ['module_id', 'failure_id', 'failure_type_id', 'dt']);
+            $incomingIds = array_column(array_filter($machineDetails, function($detail) {
+                return isset($detail['id']);
+            }), 'id');
+
+            $existingDetails = $report->machineDetails()->pluck('service_report_machine_details.id')->toArray();
+            $idsToDelete = array_diff($existingDetails, $incomingIds);
             
+            if (!empty($idsToDelete)) {
+                $report->machineDetails()->whereIn('service_report_machine_details.id', $idsToDelete)->delete();
+            }
+            
+            $report->machineDetails()->upsert($machineDetails, ['id'], ['module_id', 'failure_id', 'failure_type_id', 'dt']);
             
             $partsArray = $request->all()['service_parts'];
 
