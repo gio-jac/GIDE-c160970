@@ -1000,7 +1000,7 @@
                 <div class="mt-8">
                     <div class="flex px-4">
                         <div class="w-full">
-                            <div class="flex items-center">
+                            <div v-if="props.report.closed !== 1" class="flex items-center">
                                 <label
                                     for="formReportParts"
                                     class="w-[100px] text-right mb-0 mr-[10px]"
@@ -1056,6 +1056,10 @@
                                         ></line>
                                     </svg>
                                 </button>
+                                <div class="w-[50px] flex justify-end pr-[15px]">
+                                    <div v-if="loaders.parts.waiting" class="waiting-loader"></div>
+                                    <div v-if="loaders.parts.searching" class="searching-loader mr-[-9px]"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1391,6 +1395,9 @@ const store = useAppStore();
 const catalogParts = ref([]);
 const page = usePage();
 const user = computed(() => page.props.auth);
+const loaders = ref({
+    parts: { waiting: true, searching: false},
+});
 
 defineOptions({
     layout: [SiteLayout, AppLayout],
@@ -1705,6 +1712,8 @@ function selectPartChange(searchQuery, id) {
 
     if (timeoutId.value) clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(() => {
+        loaders.value.parts.searching = true;
+        loaders.value.parts.waiting = false;
         fetch("/parts/autocomplete", {
             method: "POST",
             headers: {
@@ -1720,6 +1729,10 @@ function selectPartChange(searchQuery, id) {
             })
             .catch((error) => {
                 console.error("Error:", error);
+            })
+            .finally(() => {
+                loaders.value.parts.searching = false;
+                loaders.value.parts.waiting = true;
             });
     }, 750);
 }
