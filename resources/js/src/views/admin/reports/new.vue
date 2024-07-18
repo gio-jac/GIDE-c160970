@@ -31,6 +31,10 @@
                                 deselect-label=""
                             ></multiselect>
                             <tippy target="machineid" trigger="focus">Usado para la búsqueda y selección de máquina, utiliza el siguiente formato:<br>"Serial - Modelo de máquina"</tippy>
+                            <div class="w-[50px] flex justify-end pr-[15px]">
+                                <div v-if="loaders.machines.waiting" class="waiting-loader"></div>
+                                <div v-if="loaders.machines.searching" class="searching-loader mr-[-9px]"></div>
+                            </div>
                         </div>
                         <template v-if="errors.machines">
                             <p class="text-danger mt-1 text-center">
@@ -1049,6 +1053,10 @@
                                         ></line>
                                     </svg>
                                 </button>
+                                <div class="w-[50px] flex justify-end pr-[15px]">
+                                    <div v-if="loaders.parts.waiting" class="waiting-loader"></div>
+                                    <div v-if="loaders.parts.searching" class="searching-loader mr-[-9px]"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1386,6 +1394,10 @@ const page = usePage();
 const user = computed(() => page.props.auth);
 const catalogParts = ref([]);
 const catalogMachines = ref([]);
+const loaders = ref({
+    machines: { waiting: true, searching: false },
+    parts: { waiting: true, searching: false},
+});
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
@@ -1691,6 +1703,8 @@ function selectPartChange(searchQuery, id) {
 
     if (timeoutId.value) clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(() => {
+        loaders.value.parts.searching = true;
+        loaders.value.parts.waiting = false;
         fetch("/parts/autocomplete", {
             method: "POST",
             headers: {
@@ -1706,6 +1720,10 @@ function selectPartChange(searchQuery, id) {
             })
             .catch((error) => {
                 console.error("Error:", error);
+            })
+            .finally(() => {
+                loaders.value.parts.searching = false;
+                loaders.value.parts.waiting = true;
             });
     }, 750);
 }
@@ -1719,6 +1737,8 @@ function selectMachineChange(searchQuery, id) {
 
     if (timeoutIdMachine.value) clearTimeout(timeoutIdMachine.value);
     timeoutIdMachine.value = setTimeout(() => {
+        loaders.value.machines.searching = true;
+        loaders.value.machines.waiting = false;
         fetch("/machines/autocomplete", {
             method: "POST",
             headers: {
@@ -1734,6 +1754,10 @@ function selectMachineChange(searchQuery, id) {
             })
             .catch((error) => {
                 console.error("Error:", error);
+            })
+            .finally(() => {
+                loaders.value.machines.searching = false;
+                loaders.value.machines.waiting = true;
             });
     }, 750);
 }
