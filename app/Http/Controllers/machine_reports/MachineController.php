@@ -117,7 +117,12 @@ class MachineController extends Controller
 
         $results = Machine::query()
             ->where('is_active', true)
-            ->where('serial', 'LIKE', "%{$search}%")
+            ->where(function ($query) use ($search) {
+                $query->where('serial', 'LIKE', "%{$search}%")
+                    ->orWhereHas('machine_model', function ($query) use ($search) {
+                        $query->where('model', 'LIKE', "%{$search}%");
+                    });
+            })
             ->with([
                 'machine_model.model_segment:id,segment,is_multi_transport,is_multi_signature',
                 'client:id,name',
