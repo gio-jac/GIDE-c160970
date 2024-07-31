@@ -243,7 +243,13 @@
         @endif
         @foreach ($machineChunk as $machine)
         <tr>
-            <td style="width: 100px;">{{ $machine->serial }}<br>{{ $machine->machine_model->model }}</td>
+            <td style="width: 100px;">
+                {{ $machine->serial }}<br>
+                {{ $machine->machine_model->model }}
+                @if(!is_null($machine->line_num))
+                    - {{ $machine->line_num }}
+                @endif
+            </td>
             <td>{{ $machine->pivot->dt }}</td>
         </tr>
         @endforeach
