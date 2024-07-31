@@ -57,7 +57,7 @@
     <table class="tblStyle" style="float: left;width: 56%;">
         <tr>
             <td style="min-width:100px;text-align:center;">Cliente:</td>
-            <td>{{ $report->branch->client->name }}</td>
+            <td>{{ $report->branch->client->name === "BANXICO" ? "Banco de México" : $report->branch->client->name }}</td>
         </tr>
         <tr>
             <td style="text-align:center;">Direccion:</td>
