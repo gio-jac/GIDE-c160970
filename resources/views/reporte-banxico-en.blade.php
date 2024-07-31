@@ -51,6 +51,9 @@
                     {{ $report->complete_id }}
                 </p>
             </td>
+            <td style="font-weight: normal;font-size:15px;width:175px;">
+                REPORTE DE SERVICIO
+            </td>
         </tr>
     </table>
 
