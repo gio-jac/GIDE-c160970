@@ -109,6 +109,20 @@
                         </template>
                     </div>
                 </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formServiceDate"
+                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                >Service Date
+                                <span class="text-red-500">*</span></label
+                            >
+
+                            <flat-pickr id="formServiceDate" v-model="postForm.service_date" class="form-input flex-1" :config="basic"></flat-pickr>
+                        </div>
+                    </div>
+                </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="text-lg">{{ $t("report.form.machines") }}</div>
@@ -1442,6 +1456,11 @@ const dateTime: any = ref({
     position: store.rtlClass === "rtl" ? "auto right" : "auto left",
 });
 
+const basic: any = ref({
+    dateFormat: 'Y-m-d',
+    position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
+});
+
 const form = reactive({
     selectedMachine: null,
     selectedMachine2: null,
@@ -1619,10 +1638,20 @@ const updateMachines = (selectedMachine) => {
 
 watch(() => form.selectedMachine, updateMachines, { immediate: true });
 
+function getCurrentDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 const postForm = reactive({
     user_id: null,
     shift_id: null,
     pieces: null,
+    service_date: getCurrentDate(),
+    service_timezone: new Date().toString().match(/([A-Z]+[\+-][0-9]+)/)[1],
     sogd: null,
     time_on: null,
     travel_time: null,
