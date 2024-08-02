@@ -115,7 +115,7 @@
                             <label
                                 for="formServiceDate"
                                 class="w-[125px] text-right mb-0 mr-[10px]"
-                                >Service Date
+                                >{{ $t("report.form.serviceDate") }}
                                 <span class="text-red-500">*</span></label
                             >
 

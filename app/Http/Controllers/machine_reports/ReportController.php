@@ -319,6 +319,22 @@ class ReportController extends Controller
 
         try {
             DB::beginTransaction();
+            $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($request['branch_id']);
+            
+            $nextId = $id;
+            $currentDate = $validatedData['service_date'];
+
+            $completeId = implode('-', [
+                $branch->city->country->code,
+                $nextId,
+                $currentDate,
+                str_replace(' ', '-', strtoupper($branch->client->name)),
+                str_replace(' ', '-', strtoupper(Machine::findOrFail($request['machines'][0]['machine_id'])->machine_model->model))
+            ]);
+            $validatedData['complete_id'] = $completeId;
+
+
+
             $report->update($validatedData);
 
             $machines = $request->input('machines', []);
