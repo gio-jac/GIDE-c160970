@@ -101,6 +101,20 @@
                         </template>
                     </div>
                 </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formServiceDate"
+                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                >{{ $t("report.form.serviceDate") }}
+                                <span class="text-red-500">*</span></label
+                            >
+
+                            <flat-pickr id="formServiceDate" v-model="postForm.service_date" class="form-input flex-1" :config="basic"></flat-pickr>
+                        </div>
+                    </div>
+                </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="text-lg">{{ $t("report.form.machines") }}</div>
@@ -1454,6 +1468,11 @@ const dateTime: any = ref({
     position: store.rtlClass === "rtl" ? "auto right" : "auto left",
 });
 
+const basic: any = ref({
+    dateFormat: 'Y-m-d',
+    position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
+});
+
 const form = reactive({
     selectedMachine: null,
     selectedMachine2: null,
@@ -1482,7 +1501,7 @@ onMounted(() => {
     sortCatalogData();
     //set default data
     console.log(props.report);
-    console.log(props.report.machines);
+    //console.log(props.report.machines);
     postForm.machines = Array.from(
         { length: props.report.machines.length },
         (_, index) => ({
@@ -1528,6 +1547,8 @@ onMounted(() => {
     form.selectedContact = form.selectedBranch?.branch_managers.filter(
         (data) => data.id === props.report.branch_manager_id
     )[0];
+    postForm.service_date = props.report.service_date;
+    postForm.service_timezone = props.report.service_timezone;
     postForm.transport = props.report.transport;
     postForm.pieces = props.report.pieces;
     postForm.sogd = props.report.sogd;
@@ -1633,6 +1654,8 @@ const postForm = reactive({
     user_id: null,
     shift_id: null,
     pieces: null,
+    service_date: null,
+    service_timezone: null,
     sogd: null,
     time_on: null,
     travel_time: null,

@@ -123,6 +123,8 @@ class ReportController extends Controller
             'shift_id' => ['required'],
             'machines' => ['required', 'array', 'min:1'],
             'pieces' => [],
+            'service_date' => [],
+            'service_timezone' => [],
             'sogd' => [],
             'time_on' => [],
             'travel_time' => [],
@@ -146,7 +148,7 @@ class ReportController extends Controller
             $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($request['branch_id']);
             
             $nextId = ServiceReport::max('id') + 1;
-            $currentDate = now()->toDateString();
+            $currentDate = $validatedData['service_date'];
 
             $completeId = implode('-', [
                 $branch->city->country->code,
@@ -295,6 +297,8 @@ class ReportController extends Controller
             'user_id' => ['required'],
             'shift_id' => ['required'],
             'pieces' => [],
+            'service_date' => [],
+            'service_timezone' => [],
             'sogd' => [],
             'time_on' => [],
             'travel_time' => [],
@@ -315,6 +319,22 @@ class ReportController extends Controller
 
         try {
             DB::beginTransaction();
+            $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($request['branch_id']);
+            
+            $nextId = $id;
+            $currentDate = $validatedData['service_date'];
+
+            $completeId = implode('-', [
+                $branch->city->country->code,
+                $nextId,
+                $currentDate,
+                str_replace(' ', '-', strtoupper($branch->client->name)),
+                str_replace(' ', '-', strtoupper(Machine::findOrFail($request['machines'][0]['machine_id'])->machine_model->model))
+            ]);
+            $validatedData['complete_id'] = $completeId;
+
+
+
             $report->update($validatedData);
 
             $machines = $request->input('machines', []);

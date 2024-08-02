@@ -51,13 +51,16 @@
                     {{ $report->complete_id }}
                 </p>
             </td>
+            <td style="font-weight: normal;font-size:15px;width:175px;">
+                REPORTE DE SERVICIO
+            </td>
         </tr>
     </table>
 
     <table class="tblStyle" style="float: left;width: 56%;">
         <tr>
             <td style="min-width:100px;text-align:center;">Cliente:</td>
-            <td>{{ $report->branch->client->name }}</td>
+            <td>{{ $report->branch->client->name === "BANXICO" ? "Banco de México" : $report->branch->client->name }}</td>
         </tr>
         <tr>
             <td style="text-align:center;">Direccion:</td>
@@ -240,7 +243,13 @@
         @endif
         @foreach ($machineChunk as $machine)
         <tr>
-            <td style="width: 100px;">{{ $machine->serial }}<br>{{ $machine->machine_model->model }}</td>
+            <td style="width: 100px;">
+                {{ $machine->serial }}<br>
+                {{ $machine->machine_model->model }}
+                @if(!is_null($machine->line_num))
+                    - {{ $machine->line_num }}
+                @endif
+            </td>
             <td>{{ $machine->pivot->dt }}</td>
         </tr>
         @endforeach
