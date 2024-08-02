@@ -67,6 +67,7 @@
     "report.index.col.idmachines": "ID Máquinas",
     "report.index.col.assigned": "Atribuído a",
     "report.index.col.creationDate": "Data de criação",
+    "report.form.serviceDate": "Data do Serviço",
     "report.form.machineSerial": "Serial da máquina",
     "report.form.default": "Selecionar uma opção",
     "report.form.user": "Usuário",

@@ -67,6 +67,7 @@
     "report.index.col.idmachines": "ID Machines",
     "report.index.col.assigned": "Assigned to",
     "report.index.col.creationDate": "Creation date",
+    "report.form.serviceDate": "Service Date",
     "report.form.machineSerial": "Machine Serial",
     "report.form.default": "Select an option",
     "report.form.user": "User",
