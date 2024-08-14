@@ -111,6 +111,29 @@ class MachineController extends Controller
         //
     }
 
+    public function getByMachineModel(string $id) {
+        $machines = Machine::select('serial')->where('machine_model_id', $id)->orderBy('serial')->get();
+        return response()->json($machines);
+    }
+
+    public function getMachine(string $serial) {
+        $machine = Machine::where('serial', $serial)->with([
+            'machine_model.model_segment:id,segment,is_multi_transport,is_multi_signature',
+            'client:id,name',
+            'client.branches:id,city_id,client_id',
+            'client.branches.city:id,name',
+            'client.branches.branchManagers',
+            'production_line',
+            'production_line.machines' => function($query) {
+                $query->orderBy('position', 'asc');
+            },
+            'production_line.machines.machine_model.model_segment',
+        ])
+        ->firstOrFail();
+        
+        return response()->json($machine);
+    }
+
     public function autocomplete(Request $request)
     {
         $search = $request->input('query');

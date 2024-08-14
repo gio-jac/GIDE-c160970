@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/machines/autocomplete', [MachineController::class, 'autocomplete'])->name('machines.autocomplete');
     Route::resource('/machines/clients/branches/contacts', BranchManagerController::class);
     Route::resource('/machines/clients/branches', BranchController::class);
+    Route::get('/machines/model/{id}', [MachineController::class, 'getByMachineModel'])->name('machines.getByMachineModel');
+    Route::get('/machine/{serial}', [MachineController::class, 'getMachine'])->name('machines.getMachine');
     Route::resource('/machines/clients', ClientController::class);
     Route::resource('/machines', MachineController::class);
 });
