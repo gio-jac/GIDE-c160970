@@ -7,6 +7,35 @@
                     <div class="w-full">
                         <div class="flex items-center">
                             <label
+                                for="formMachineModel"
+                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                >Machine Model
+                                <span class="text-red-500">*</span></label
+                            >
+
+                            <multiselect
+                                id="formMachineModel"
+                                :options="catalogMachineModels"
+                                @select="machineModelChange"
+                                v-model="form.selectedMachineModel"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                :placeholder="$t('report.form.default')"
+                                :custom-label="
+                                    ({ model }) =>
+                                        `${model}`
+                                "
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
                                 for="formMachine"
                                 class="w-[125px] text-right mb-0 mr-[10px]"
                                 >{{ $t("report.form.machineSerial") }}
@@ -15,16 +44,16 @@
 
                             <multiselect
                                 v-tippy:machineid
-                                @search-change="selectMachineChange"
+                                @select="machineChange"
                                 id="formMachine"
                                 :options="catalogMachines"
-                                v-model="form.selectedMachine"
+                                v-model="form.selectedSearchMachine"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="
-                                    ({ serial, machine_model }) =>
-                                        `${serial} - ${machine_model.model}`
+                                    ({ serial }) =>
+                                        `${serial}`
                                 "
                                 selected-label=""
                                 select-label=""
@@ -1446,6 +1475,10 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    catalogMachineModels: {
+        type: Array,
+        required: true,
+    },
 });
 
 console.log(props.catalogModule);
@@ -1462,6 +1495,8 @@ const basic: any = ref({
 });
 
 const form = reactive({
+    selectedMachineModel: null,
+    selectedSearchMachine: null,
     selectedMachine: null,
     selectedMachine2: null,
     selectedBranch: null,
@@ -1719,6 +1754,54 @@ function partsValidation(event) {
 
 function travelTimeValidation(event) {
     postForm.travel_time = Math.max(0, Math.min(Number(postForm.travel_time), 10080));
+}
+
+function machineModelChange(selectedOption) {
+    loaders.value.parts.searching = true;
+    loaders.value.parts.waiting = false;
+
+    fetch(`/machines/model/${selectedOption.id}`, {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": page.props.csrf,
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            catalogMachines.value = data;
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        })
+        .finally(() => {
+            loaders.value.parts.searching = false;
+            loaders.value.parts.waiting = true;
+        });
+}
+
+function machineChange(selectedOption) {
+    loaders.value.parts.searching = true;
+    loaders.value.parts.waiting = false;
+
+    fetch(`/machine/${selectedOption.serial}`, {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": page.props.csrf,
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            form.selectedMachine = data;
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        })
+        .finally(() => {
+            loaders.value.parts.searching = false;
+            loaders.value.parts.waiting = true;
+        });
 }
 
 let timeoutId = ref(null);
