@@ -61,7 +61,9 @@ class ClientController extends Controller
             $value['edit_mode'] = false;
         }
 
-        $catalogCountries = Country::with('cities')->get();
+        $catalogCountries = Country::with(['cities' => function($query) {
+            $query->orderBy('name');
+        }])->get();
         return Inertia::render('admin/machines/clients/edit',[
             'client' => $client,
             'catalogCountries' => $catalogCountries
