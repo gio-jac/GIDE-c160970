@@ -43,7 +43,6 @@
                             >
 
                             <multiselect
-                                v-tippy:machineid
                                 @select="machineChange"
                                 id="formMachine"
                                 :options="catalogMachines"
