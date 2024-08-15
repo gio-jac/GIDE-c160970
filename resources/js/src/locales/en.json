@@ -69,6 +69,7 @@
     "report.index.col.creationDate": "Creation date",
     "report.form.serviceDate": "Service Date",
     "report.form.machineSerial": "Machine Serial",
+    "report.form.machineModel": "Machine Model",
     "report.form.default": "Select an option",
     "report.form.user": "User",
     "report.form.shift": "Shift",

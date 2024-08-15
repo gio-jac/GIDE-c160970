@@ -9,6 +9,7 @@ use App\Models\machine_reports\Code;
 use App\Models\User;
 use App\Models\machine_reports\Status;
 use App\Models\machine_reports\Machine;
+use App\Models\machine_reports\MachineModels;
 use App\Models\machine_reports\ServiceReport;
 use App\Models\machine_reports\ServiceReportMachine;
 use App\Models\machine_reports\ServiceReportMachineDetail;
@@ -62,6 +63,7 @@ class ReportController extends Controller
         $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
         $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
         $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
+        $catalogMachineModels = MachineModels::select('id','model')->where('is_active', 1)->orderBy('model')->get();
         /*$catalogMachines = Machine::select(
                 'id',
                 'serial',
@@ -108,6 +110,7 @@ class ReportController extends Controller
             'catalogModule' => $catalogModule,
             'catalogFailures' => $catalogFailures,
             'catalogTypes' => $catalogTypes,
+            'catalogMachineModels' => $catalogMachineModels
         ]);
     }
 

@@ -69,6 +69,7 @@
     "report.index.col.creationDate": "Fecha de creación",
     "report.form.serviceDate": "Fecha de Servicio",
     "report.form.machineSerial": "Serial de máquina",
+    "report.form.machineModel": "Modelo de máquina",
     "report.form.default": "Seleccionar una opción",
     "report.form.user": "Usuario",
     "report.form.shift": "Turno",
