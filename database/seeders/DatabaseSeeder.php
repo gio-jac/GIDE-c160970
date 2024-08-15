@@ -37,7 +37,8 @@ class DatabaseSeeder extends Seeder
             BranchSeeder::class,
             BranchManagerSeeder::class,
             ExcelRegistryMachinesSeeder::class,
-            JamaicaCitiesSeeder::class
+            JamaicaCitiesSeeder::class,
+            ColombiaCitiesSeeder::class,
         ]);
     }
 }
