@@ -8,8 +8,8 @@
                         <div class="flex items-center">
                             <label
                                 for="formMachineModel"
-                                class="w-[125px] text-right mb-0 mr-[10px]"
-                                >Machine Model
+                                class="w-[140px] text-right mb-0 mr-[10px]"
+                                >{{ $t("report.form.machineModel") }}
                                 <span class="text-red-500">*</span></label
                             >
 
@@ -37,7 +37,7 @@
                         <div class="flex items-center">
                             <label
                                 for="formMachine"
-                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
                                 >{{ $t("report.form.machineSerial") }}
                                 <span class="text-red-500">*</span></label
                             >
@@ -77,7 +77,7 @@
                         <div class="flex items-center">
                             <label
                                 for="formUser"
-                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
                                 >{{ $t("report.form.user") }} <span class="text-red-500">*</span></label
                             >
 
@@ -111,7 +111,7 @@
                         <div class="flex items-center">
                             <label
                                 for="formShift"
-                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
                                 >{{ $t("report.form.shift") }}
                                 <span class="text-red-500">*</span></label
                             >
@@ -143,7 +143,7 @@
                         <div class="flex items-center">
                             <label
                                 for="formServiceDate"
-                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
                                 >{{ $t("report.form.serviceDate") }}
                                 <span class="text-red-500">*</span></label
                             >
@@ -1757,8 +1757,8 @@ function travelTimeValidation(event) {
 }
 
 function machineModelChange(selectedOption) {
-    loaders.value.parts.searching = true;
-    loaders.value.parts.waiting = false;
+    loaders.value.machines.searching = true;
+    loaders.value.machines.waiting = false;
 
     fetch(`/machines/model/${selectedOption.id}`, {
         method: "get",
@@ -1775,14 +1775,14 @@ function machineModelChange(selectedOption) {
             console.error("Error:", error);
         })
         .finally(() => {
-            loaders.value.parts.searching = false;
-            loaders.value.parts.waiting = true;
+            loaders.value.machines.searching = false;
+            loaders.value.machines.waiting = true;
         });
 }
 
 function machineChange(selectedOption) {
-    loaders.value.parts.searching = true;
-    loaders.value.parts.waiting = false;
+    loaders.value.machines.searching = true;
+    loaders.value.machines.waiting = false;
 
     fetch(`/machine/${selectedOption.serial}`, {
         method: "get",
@@ -1799,8 +1799,8 @@ function machineChange(selectedOption) {
             console.error("Error:", error);
         })
         .finally(() => {
-            loaders.value.parts.searching = false;
-            loaders.value.parts.waiting = true;
+            loaders.value.machines.searching = false;
+            loaders.value.machines.waiting = true;
         });
 }
 
