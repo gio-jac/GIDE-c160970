@@ -13,6 +13,8 @@ class Failure extends Model
 
     protected $fillable = [
         'name',
+        'updated_translation',
+        'is_active',
     ];
     /*
     public function modules(): BelongsToMany{
