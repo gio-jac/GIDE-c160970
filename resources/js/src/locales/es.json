@@ -11,6 +11,7 @@
     "sidebar.home": "Inicio",
     "sidebar.users": "Usuarios",
     "sidebar.reports": "Reportes",
+    "sidebar.expenses": "Gastos",
     "sidebar.parts": "Piezas",
     "sidebar.catalogs": "Catálogos",
     "sidebar.positions": "Cargos",
@@ -23,7 +24,11 @@
     "sidebar.customers": "Clientes",
     "sidebar.regions": "Regiones",
     "sidebar.assignments": "Asignaciones",
+<<<<<<< Updated upstream
     "sidebar.clients": "Clientes",
+=======
+    "sidebar.expensesAdvanceRequest": "Solicitud de anticipo",
+>>>>>>> Stashed changes
     "header.signout": "Cerrar sesión",
     "user.index.newUser": "Crear usuario",
     "user.index.col.parteId": "Parte ID",
@@ -136,6 +141,9 @@
     "report.form.reopenReport": "Reabrir reporte",
     "report.alert.generatingPdfTitle": "Generando PDF...",
     "report.alert.generatingPdfText": "Por favor, espere mientras se genera el PDF.",
+    "report.alert.generatingExcelTitle": "Generando Excel...",
+    "report.alert.generatingExcelText": "Por favor, espere mientras se genera el Excel.",
+    
     "part.index.newPart": "Crear parte",
     "part.new.breadcrumb.parts":"Partes",
     "part.new.breadcrumb.new":"Nueva",
