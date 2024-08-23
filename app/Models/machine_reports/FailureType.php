@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class FailureType extends Model
 {
+    //Solution
     use HasFactory;
     /*
     public function failures(): BelongsToMany{
