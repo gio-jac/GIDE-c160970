@@ -11,7 +11,7 @@
                     >
                         <div class="flex items-center gap-2">
                             <Link
-                                href="/machines/create"
+                                href="/reports/solutions/create"
                                 class="btn btn-primary gap-2"
                             >
                                 <svg
@@ -64,7 +64,7 @@
                                 <span
                                     class="badge"
                                     :class="[
-                                        data.value.is_active === 1
+                                        data.value.updated_translation === 1
                                             ? 'bg-green-500'
                                             : 'bg-red-500',
                                     ]"

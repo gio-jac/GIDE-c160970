@@ -10,6 +10,10 @@ class Module extends Model
 {
     //error
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
     /*
     public function models(): BelongsToMany{
         return $this->belongsToMany(MachineModels::class, 'models_modules', 'module_id', 'machine_model_id')->withTimestamps();

@@ -26,7 +26,7 @@ class ModuleController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('admin/reports/errors/new');
     }
 
     /**
@@ -34,7 +34,11 @@ class ModuleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Module::create($request->validate([
+            'name' => ['required', 'max:255', 'unique:modules'],
+        ]));
+
+        return to_route('errors.index');
     }
 
     /**

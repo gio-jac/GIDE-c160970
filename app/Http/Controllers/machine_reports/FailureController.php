@@ -26,7 +26,7 @@ class FailureController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('admin/reports/causes/new');
     }
 
     /**
@@ -34,7 +34,11 @@ class FailureController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Failure::create($request->validate([
+            'name' => ['required', 'max:255', 'unique:failures'],
+        ]));
+
+        return to_route('causes.index');
     }
 
     /**
