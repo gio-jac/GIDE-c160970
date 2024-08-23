@@ -10,8 +10,8 @@ class City extends Model
 {
     use HasFactory;
 
-    public function country(): HasOne
+    public function country()
     {
-        return $this->hasOne(Country::class, 'id', 'country_id');
+        return $this->belongsTo(Country::class);
     }
 }

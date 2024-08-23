@@ -81,8 +81,8 @@
                             >
 
                             <multiselect
-                                :disabled="props.report.closed === 1"
                                 id="formShift"
+                                :disabled="props.report.closed === 1"
                                 :options="props.catalogShifts"
                                 v-model="form.selectedShift"
                                 class="custom-multiselect flex-1"
@@ -101,21 +101,29 @@
                         </template>
                     </div>
                 </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formServiceDate"
+                                class="w-[125px] text-right mb-0 mr-[10px]"
+                                >{{ $t("report.form.serviceDate") }}
+                                <span class="text-red-500">*</span></label
+                            >
+
+                            <flat-pickr id="formServiceDate" v-model="postForm.service_date" class="form-input flex-1" :config="basic"></flat-pickr>
+                        </div>
+                    </div>
+                </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="text-lg">{{ $t("report.form.machines") }}</div>
                     <template v-if="form.selectedMachine">
                         <div
                             class="flex flex-wrap justify-evenly"
-                            v-if="
-                                form.selectedMachine.production_line &&
-                                form.selectedMachine.production_line.machines
-                                    .length > 0
-                            "
                         >
                             <div
-                                v-for="(machine, index) in form.selectedMachine
-                                    .production_line.machines"
+                                v-for="(machine, index) in getMachines()"
                                 :key="machine"
                                 :class="{
                                     'bg-[#ececf9]': machine.only_dt !== 1,
@@ -127,6 +135,7 @@
                                     Serial: {{ machine.serial }} -
                                     {{ machine.machine_model.model }} -
                                     {{
+                                        machine.line_num ? machine.line_num :
                                         machine.machine_model.model_segment
                                             .segment
                                     }}
@@ -289,53 +298,92 @@
                                                     v-model="
                                                         detail.dt
                                                     "
-                                                    
+                                                    @input="dtValidation($event,index,indexDetail)"
+                                                    min="0"
+                                                    max="999999"
+                                                    step="1"
                                                     class="form-input text-white-dark"
                                                     :placeholder="$t('report.form.dtPlaceholder')"
                                                     :disabled="props.report.closed === 1"
                                                 />
                                             </div>
-                                        </div>
-
-                                        <button
-                                            v-if="machine.only_dt !== 1 && props.report.closed !== 1"
-                                            class="btn btn-secondary gap-2"
-                                            @click="
-                                                addMachineDetail(
-                                                    postForm.machines[index]
-                                                        .machine_details
-                                                )
-                                            "
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="24px"
-                                                height="24px"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="1.5"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                class="w-5 h-5"
+                                            <div
+                                                class="flex"
+                                                v-if="machine.only_dt !== 1"
                                             >
-                                                <line
-                                                    x1="12"
-                                                    y1="5"
-                                                    x2="12"
-                                                    y2="19"
-                                                ></line>
-                                                <line
-                                                    x1="5"
-                                                    y1="12"
-                                                    x2="19"
-                                                    y2="12"
-                                                ></line>
-                                            </svg>
-                                        </button>
-
+                                                <button
+                                                    type="button"
+                                                    @click="removeMachineDetail(index,indexDetail)"
+                                                    v-if="postForm.machines[index].machine_details.length > 1"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="24px"
+                                                        height="24px"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="1.5"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        class="w-5 h-5"
+                                                    >
+                                                        <line
+                                                            x1="18"
+                                                            y1="6"
+                                                            x2="6"
+                                                            y2="18"
+                                                        ></line>
+                                                        <line
+                                                            x1="6"
+                                                            y1="6"
+                                                            x2="18"
+                                                            y2="18"
+                                                        ></line>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="w-full flex justify-center">
+                                            <button
+                                                v-if="machine.only_dt !== 1 && props.report.closed !== 1"
+                                                class="btn btn-secondary gap-2"
+                                                @click="
+                                                    addMachineDetail(
+                                                        postForm.machines[index]
+                                                            .machine_details
+                                                    )
+                                                "
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="24px"
+                                                    height="24px"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="1.5"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="w-5 h-5"
+                                                >
+                                                    <line
+                                                        x1="12"
+                                                        y1="5"
+                                                        x2="12"
+                                                        y2="19"
+                                                    ></line>
+                                                    <line
+                                                        x1="5"
+                                                        y1="12"
+                                                        x2="19"
+                                                        y2="12"
+                                                    ></line>
+                                                </svg>
+                                            </button>
+                                        </div>
                                         <div
-                                            class="flex-[100%]"
+                                            class="py-2"
                                             v-if="machine.only_dt !== 1"
                                         >
                                             <template
@@ -496,7 +544,7 @@
                                         </div>
                                         <div class="py-2">
                                             <label :for="'formReportDT' + index"
-                                                >DT (Min.)</label
+                                                >DT Final (Min.)</label
                                             >
                                             <input
                                                 :disabled="props.report.closed === 1"
@@ -508,258 +556,8 @@
                                                 :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
                                                 :placeholder="$t('report.form.dtPlaceholder')"
+                                                @input="finalDtValidation($event,index)"
                                             />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <div class="bg-gray-100 rounded-md p-4">
-                                <div class="text-center font-semibold">
-                                    Serial: {{ form.selectedMachine.serial }} -
-                                    {{
-                                        form.selectedMachine.machine_model.model
-                                    }}
-                                    -
-                                    {{
-                                        form.selectedMachine.machine_model
-                                            .model_segment.segment
-                                    }}
-                                </div>
-                                <div class="w-full">
-                                    <div class="flex justify-evenly flex-wrap">
-                                        <div
-                                            v-for="(
-                                                detail, indexDetail
-                                            ) in postForm.machines[0]
-                                                .machine_details"
-                                            :key="detail"
-                                            class="flex-[100%] flex justify-evenly flex-wrap"
-                                        >
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formModule1' +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.error") }}</label
-                                                >
-                                                <select
-                                                    :disabled="props.report.closed === 1"
-                                                    :id="
-                                                        'formModule1' +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formModule1' +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="detail.module_id"
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="tmodule in props.catalogModule"
-                                                        :key="tmodule"
-                                                        :value="tmodule.id"
-                                                    >
-                                                        {{ $t("catalogs.error."+tmodule.id,tmodule.name) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formFailures1' +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.cause") }}</label
-                                                >
-                                                <select
-                                                    :disabled="props.report.closed === 1"
-                                                    :id="
-                                                        'formFailures1' +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formFailures1' +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="detail.failure_id"
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="failure in props.catalogFailures"
-                                                        :key="failure"
-                                                        :value="failure.id"
-                                                    >
-                                                        {{ $t("catalogs.failures."+failure.id,failure.name) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formTypes1' +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.solution") }}</label
-                                                >
-                                                <select
-                                                    :disabled="props.report.closed === 1"
-                                                    :id="
-                                                        'formTypes1' +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formTypes1' +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="
-                                                        detail.failure_type_id
-                                                    "
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="failuretype in props.catalogTypes"
-                                                        :key="failuretype"
-                                                        :value="failuretype.id"
-                                                    >
-                                                        {{ $t("catalogs.failureType."+failuretype.id,failuretype.name) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                            >
-                                                <label :for="
-                                                        'formErrorDT1' +
-                                                        indexDetail
-                                                    "
-                                                    >DT (Min.)</label
-                                                >
-                                                <input
-                                                    :id="
-                                                        'formErrorDT1' +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formErrorDT1' +
-                                                        indexDetail
-                                                    "
-                                                    type="number"
-                                                    v-model="
-                                                        detail.dt
-                                                    "
-                                                    
-                                                    class="form-input text-white-dark"
-                                                    :placeholder="$t('report.form.dtPlaceholder')"
-                                                    :disabled="props.report.closed === 1"
-                                                />
-                                            </div>
-                                        </div>
-                                        <button
-                                            v-if="props.report.closed !== 1"
-                                            class="btn btn-secondary gap-2"
-                                            @click="
-                                                addMachineDetail(
-                                                    postForm.machines[0]
-                                                        .machine_details
-                                                )
-                                            "
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="24px"
-                                                height="24px"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="1.5"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                class="w-5 h-5"
-                                            >
-                                                <line
-                                                    x1="12"
-                                                    y1="5"
-                                                    x2="12"
-                                                    y2="19"
-                                                ></line>
-                                                <line
-                                                    x1="5"
-                                                    y1="12"
-                                                    x2="19"
-                                                    y2="12"
-                                                ></line>
-                                            </svg>
-                                        </button>
-                                        <div class="flex-[100%]">
-                                            <div
-                                                class="w-full flex justify-evenly flex-wrap"
-                                            >
-                                                <div class="py-2">
-                                                    <label
-                                                        for="formShiftTotal11"
-                                                        >{{ $t("report.form.transport") }}</label
-                                                    >
-                                                    <input
-                                                        :disabled="props.report.closed === 1"
-                                                        id="formShiftTotal11"
-                                                        type="number"
-                                                        v-model="
-                                                            postForm.machines[0]
-                                                                .transport_1
-                                                        "
-                                                        @input="
-                                                            transportValidation(
-                                                                0
-                                                            )
-                                                        "
-                                                        name="formShiftTotal11"
-                                                        class="form-input text-white-dark"
-                                                        min="0.0"
-                                                        max="9999.9"
-                                                        step="0.1"
-                                                        placeholder="0.0"
-                                                    />
-                                                </div>
-                                                <div class="py-2">
-                                                    <label for="formReportDT1"
-                                                        >DT (Min.)</label
-                                                    >
-                                                    <input
-                                                        :disabled="props.report.closed === 1"
-                                                        id="formReportDT1"
-                                                        type="number"
-                                                        v-model="
-                                                            postForm.machines[0]
-                                                                .dt
-                                                        "
-                                                        name="formReportDT1"
-                                                        class="form-input text-white-dark"
-                                                        :placeholder="$t('report.form.dtPlaceholder')"
-                                                    />
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -789,7 +587,7 @@
                                 v-model="form.selectedBranch"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :custom-label="({ address }) => `${address}`"
+                                :custom-label="({ city }) => `${city.name}`"
                                 :placeholder="$t('report.form.branchPlaceholder')"
                                 selected-label=""
                                 select-label=""
@@ -963,11 +761,16 @@
                                 <input
                                     :disabled="props.report.closed === 1"
                                     id="formReportPieces"
-                                    type="text"
+                                    type="number"
                                     v-model="postForm.pieces"
                                     name="formReportPieces"
+                                    step="1"
                                     class="form-input flex-1"
-                                    :placeholder="$t('report.form.piecesPlaceholder')"
+                                    placeholder="0"
+                                    value="0"
+                                    min="0"
+                                    max="999999999999"
+                                    @input="partsValidation"
                                 />
                             </div>
                             <div class="mt-4 flex items-center">
@@ -998,12 +801,15 @@
                                     :disabled="props.report.closed === 1"
                                     id="formReportOnTime"
                                     step="0.01"
-                                    pattern="\d+(\.\d{1,2})?"
                                     type="number"
                                     v-model="postForm.time_on"
                                     name="formReportOnTime"
                                     class="form-input flex-1"
                                     placeholder="0.00"
+                                    value="0.00"
+                                    min="0.00"
+                                    max="9999999.99"
+                                    @input="machineOnValidation"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
@@ -1015,11 +821,16 @@
                                 <input
                                     :disabled="props.report.closed === 1"
                                     id="formReportTravelTime"
-                                    type="text"
+                                    type="number"
                                     v-model="postForm.travel_time"
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
-                                    :placeholder="$t('report.form.travelTimePlaceholder')"
+                                    placeholder="0"
+                                    step="1"
+                                    value="0"
+                                    min="0"
+                                    max="10080"
+                                    @input="travelTimeValidation"
                                 />
                             </div>
                             <div class="flex items-center mt-4">
@@ -1203,7 +1014,7 @@
                 <div class="mt-8">
                     <div class="flex px-4">
                         <div class="w-full">
-                            <div class="flex items-center">
+                            <div v-if="props.report.closed !== 1" class="flex items-center">
                                 <label
                                     for="formReportParts"
                                     class="w-[100px] text-right mb-0 mr-[10px]"
@@ -1229,7 +1040,7 @@
                                     deselect-label=""
                                 ></multiselect>
                                 <button
-                                    :disabled="props.report.closed === 1"
+                                    :disabled="props.report.closed === 1 || !form.selectedPart"
                                     class="btn btn-secondary gap-2"
                                     @click="addNewPart"
                                 >
@@ -1259,6 +1070,10 @@
                                         ></line>
                                     </svg>
                                 </button>
+                                <div class="w-[50px] flex justify-end pr-[15px]">
+                                    <div v-if="loaders.parts.waiting" class="waiting-loader"></div>
+                                    <div v-if="loaders.parts.searching" class="searching-loader mr-[-9px]"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1306,7 +1121,10 @@
                                                 placeholder="Quantity"
                                                 v-model="item.quantity"
                                                 value="1"
+                                                step="1"
+                                                max="255"
                                                 min="0"
+                                                @input="partQtyValidation($event,i)"
                                             />
                                         </td>
                                         <td>
@@ -1591,6 +1409,9 @@ const store = useAppStore();
 const catalogParts = ref([]);
 const page = usePage();
 const user = computed(() => page.props.auth);
+const loaders = ref({
+    parts: { waiting: true, searching: false},
+});
 
 defineOptions({
     layout: [SiteLayout, AppLayout],
@@ -1647,6 +1468,11 @@ const dateTime: any = ref({
     position: store.rtlClass === "rtl" ? "auto right" : "auto left",
 });
 
+const basic: any = ref({
+    dateFormat: 'Y-m-d',
+    position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
+});
+
 const form = reactive({
     selectedMachine: null,
     selectedMachine2: null,
@@ -1675,7 +1501,7 @@ onMounted(() => {
     sortCatalogData();
     //set default data
     console.log(props.report);
-    console.log(props.report.machines);
+    //console.log(props.report.machines);
     postForm.machines = Array.from(
         { length: props.report.machines.length },
         (_, index) => ({
@@ -1704,6 +1530,10 @@ onMounted(() => {
         (data) => data.id === props.report.machines[0].id
     )[0];
 
+    if (form.selectedMachine.production_line?.id === null) {
+        form.selectedMachine.production_line = null;
+    }
+
     if (props.report.user_id)
         form.selectedUser = props.catalogUsers.filter(
             (data) => data.id === props.report.user_id
@@ -1717,6 +1547,8 @@ onMounted(() => {
     form.selectedContact = form.selectedBranch?.branch_managers.filter(
         (data) => data.id === props.report.branch_manager_id
     )[0];
+    postForm.service_date = props.report.service_date;
+    postForm.service_timezone = props.report.service_timezone;
     postForm.transport = props.report.transport;
     postForm.pieces = props.report.pieces;
     postForm.sogd = props.report.sogd;
@@ -1804,15 +1636,26 @@ const removeItem = (item: any = null) => {
     );
 };
 
+function removeMachineDetail(index, indexDetail) {
+    postForm.machines[index].machine_details.splice(indexDetail, 1);
+};
+
 const addNewPart = () => {
-    console.log(form.selectedPart);
-    postForm.service_parts.push(form.selectedPart);
+    if (!form.selectedPart) return;
+    const existingPartIndex = postForm.service_parts.findIndex(part => part.id === form.selectedPart.id);
+    if (existingPartIndex !== -1) {
+        postForm.service_parts[existingPartIndex].quantity += 1;
+    } else {
+        postForm.service_parts.push({ ...form.selectedPart, quantity: 0 });
+    }
 };
 
 const postForm = reactive({
     user_id: null,
     shift_id: null,
     pieces: null,
+    service_date: null,
+    service_timezone: null,
     sogd: null,
     time_on: null,
     travel_time: null,
@@ -1851,6 +1694,37 @@ function transportValidation(index) {
     });
 }
 
+function partQtyValidation(event,index) {
+    event.target.value = event.target.value.replace(/^0+/, '') || '0';
+
+    const part = postForm.service_parts[index];
+
+    part.quantity = Math.max(0, Math.min(Number(part.quantity), 255));
+}
+
+function machineOnValidation(event) {
+    postForm.time_on = parseFloat(postForm.time_on).toFixed(2);
+    postForm.time_on = Math.max(0.00, Math.min(Number(postForm.time_on), 9999999.99));
+}
+
+function dtValidation(event, indexMachine, indexDetail) {
+    postForm.machines[indexMachine].machine_details[indexDetail].dt = parseInt(postForm.machines[indexMachine].machine_details[indexDetail].dt);
+    postForm.machines[indexMachine].machine_details[indexDetail].dt = Math.max(0, Math.min(Number(postForm.machines[indexMachine].machine_details[indexDetail].dt), 999999));
+}
+
+function finalDtValidation(event, indexMachine) {
+    postForm.machines[indexMachine].dt = parseInt(postForm.machines[indexMachine].dt);
+    postForm.machines[indexMachine].dt = Math.max(0, Math.min(Number(postForm.machines[indexMachine].dt), 999999));
+}
+
+function partsValidation(event) {
+    postForm.pieces = Math.max(0, Math.min(Number(postForm.pieces), 999999999999));
+}
+
+function travelTimeValidation(event) {
+    postForm.travel_time = Math.max(0, Math.min(Number(postForm.travel_time), 10080));
+}
+
 let timeoutId = ref(null);
 function selectPartChange(searchQuery, id) {
     catalogParts.value = [];
@@ -1861,6 +1735,8 @@ function selectPartChange(searchQuery, id) {
 
     if (timeoutId.value) clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(() => {
+        loaders.value.parts.searching = true;
+        loaders.value.parts.waiting = false;
         fetch("/parts/autocomplete", {
             method: "POST",
             headers: {
@@ -1876,6 +1752,10 @@ function selectPartChange(searchQuery, id) {
             })
             .catch((error) => {
                 console.error("Error:", error);
+            })
+            .finally(() => {
+                loaders.value.parts.searching = false;
+                loaders.value.parts.waiting = true;
             });
     }, 750);
 }

@@ -208,6 +208,48 @@
                                 </li>
                                 <li class="nav-item">
                                     <Link
+                                        href="/listExpenses"
+                                        :class="{
+                                            active:
+                                                $page.url === '/listExpenses'
+                                        }"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
+                                        <div class="flex items-center">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><path opacity="0.5" d="M16 4.00195C18.175 4.01406 19.3529 4.11051 20.1213 4.87889C21 5.75757 21 7.17179 21 10.0002V16.0002C21 18.8286 21 20.2429 20.1213 21.1215C19.2426 22.0002 17.8284 22.0002 15 22.0002H9C6.17157 22.0002 4.75736 22.0002 3.87868 21.1215C3 20.2429 3 18.8286 3 16.0002V10.0002C3 7.17179 3 5.75757 3.87868 4.87889C4.64706 4.11051 5.82497 4.01406 8 4.00195" stroke="currentColor" stroke-width="1.5"></path><path d="M8 14H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M7 10.5H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M9 17.5H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M8 3.5C8 2.67157 8.67157 2 9.5 2H14.5C15.3284 2 16 2.67157 16 3.5V4.5C16 5.32843 15.3284 6 14.5 6H9.5C8.67157 6 8 5.32843 8 4.5V3.5Z" stroke="currentColor" stroke-width="1.5"></path></svg>
+
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                {{ $t('sidebar.expenses')}}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </li>
+                                <li class="nav-item">
+                                    <Link
+                                        href="/listAdvanceRequests"
+                                        :class="{
+                                            active:
+                                                $page.url === '/listAdvanceRequests'
+                                        }"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
+                                        <div class="flex items-center">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><path opacity="0.5" d="M16 4.00195C18.175 4.01406 19.3529 4.11051 20.1213 4.87889C21 5.75757 21 7.17179 21 10.0002V16.0002C21 18.8286 21 20.2429 20.1213 21.1215C19.2426 22.0002 17.8284 22.0002 15 22.0002H9C6.17157 22.0002 4.75736 22.0002 3.87868 21.1215C3 20.2429 3 18.8286 3 16.0002V10.0002C3 7.17179 3 5.75757 3.87868 4.87889C4.64706 4.11051 5.82497 4.01406 8 4.00195" stroke="currentColor" stroke-width="1.5"></path><path d="M8 14H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M7 10.5H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M9 17.5H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M8 3.5C8 2.67157 8.67157 2 9.5 2H14.5C15.3284 2 16 2.67157 16 3.5V4.5C16 5.32843 15.3284 6 14.5 6H9.5C8.67157 6 8 5.32843 8 4.5V3.5Z" stroke="currentColor" stroke-width="1.5"></path></svg>
+
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                {{ $t('sidebar.expensesAdvanceRequest')}}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </li>
+                                <li class="nav-item">
+                                    <Link
                                         href="/parts"
                                         :class="{
                                             active: $page.url.startsWith(
@@ -224,6 +266,26 @@
                                                 class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
                                             >
                                                 {{ $t('sidebar.parts')}}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </li>
+                                <li class="nav-item">
+                                    <Link
+                                        href="/machines"
+                                        :class="{
+                                            active: $page.url === '/machines',
+                                        }"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
+                                        <div class="flex items-center">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"></circle><path opacity="0.5" d="M13.7654 2.15224C13.3978 2 12.9319 2 12 2C11.0681 2 10.6022 2 10.2346 2.15224C9.74457 2.35523 9.35522 2.74458 9.15223 3.23463C9.05957 3.45834 9.0233 3.7185 9.00911 4.09799C8.98826 4.65568 8.70226 5.17189 8.21894 5.45093C7.73564 5.72996 7.14559 5.71954 6.65219 5.45876C6.31645 5.2813 6.07301 5.18262 5.83294 5.15102C5.30704 5.08178 4.77518 5.22429 4.35436 5.5472C4.03874 5.78938 3.80577 6.1929 3.33983 6.99993C2.87389 7.80697 2.64092 8.21048 2.58899 8.60491C2.51976 9.1308 2.66227 9.66266 2.98518 10.0835C3.13256 10.2756 3.3397 10.437 3.66119 10.639C4.1338 10.936 4.43789 11.4419 4.43786 12C4.43783 12.5581 4.13375 13.0639 3.66118 13.3608C3.33965 13.5629 3.13248 13.7244 2.98508 13.9165C2.66217 14.3373 2.51966 14.8691 2.5889 15.395C2.64082 15.7894 2.87379 16.193 3.33973 17C3.80568 17.807 4.03865 18.2106 4.35426 18.4527C4.77508 18.7756 5.30694 18.9181 5.83284 18.8489C6.07289 18.8173 6.31632 18.7186 6.65204 18.5412C7.14547 18.2804 7.73556 18.27 8.2189 18.549C8.70224 18.8281 8.98826 19.3443 9.00911 19.9021C9.02331 20.2815 9.05957 20.5417 9.15223 20.7654C9.35522 21.2554 9.74457 21.6448 10.2346 21.8478C10.6022 22 11.0681 22 12 22C12.9319 22 13.3978 22 13.7654 21.8478C14.2554 21.6448 14.6448 21.2554 14.8477 20.7654C14.9404 20.5417 14.9767 20.2815 14.9909 19.902C15.0117 19.3443 15.2977 18.8281 15.781 18.549C16.2643 18.2699 16.8544 18.2804 17.3479 18.5412C17.6836 18.7186 17.927 18.8172 18.167 18.8488C18.6929 18.9181 19.2248 18.7756 19.6456 18.4527C19.9612 18.2105 20.1942 17.807 20.6601 16.9999C21.1261 16.1929 21.3591 15.7894 21.411 15.395C21.4802 14.8691 21.3377 14.3372 21.0148 13.9164C20.8674 13.7243 20.6602 13.5628 20.3387 13.3608C19.8662 13.0639 19.5621 12.558 19.5621 11.9999C19.5621 11.4418 19.8662 10.9361 20.3387 10.6392C20.6603 10.4371 20.8675 10.2757 21.0149 10.0835C21.3378 9.66273 21.4803 9.13087 21.4111 8.60497C21.3592 8.21055 21.1262 7.80703 20.6602 7C20.1943 6.19297 19.9613 5.78945 19.6457 5.54727C19.2249 5.22436 18.693 5.08185 18.1671 5.15109C17.9271 5.18269 17.6837 5.28136 17.3479 5.4588C16.8545 5.71959 16.2644 5.73002 15.7811 5.45096C15.2977 5.17191 15.0117 4.65566 14.9909 4.09794C14.9767 3.71848 14.9404 3.45833 14.8477 3.23463C14.6448 2.74458 14.2554 2.35523 13.7654 2.15224Z" stroke="currentColor" stroke-width="1.5"></path></svg>
+
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                {{ $t('sidebar.machines')}}
                                             </span>
                                         </div>
                                     </Link>
@@ -424,15 +486,14 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="#"
-                                                                class="text-gray-300 cursor-no-drop"
+                                                                href="/reports/errors"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/reports/codes'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >{{ $t('sidebar.codes')}} (N/A)</Link
+                                                                >Errors</Link
                                                             >
                                                         </li>
                                                         <li
@@ -441,15 +502,14 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="#"
-                                                                class="text-gray-300 cursor-no-drop"
+                                                                href="/reports/causes"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/reports/failures'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >{{ $t('sidebar.failures')}} (N/A)</Link
+                                                                >Causes</Link
                                                             >
                                                         </li>
                                                         <li
@@ -458,27 +518,88 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="#"
-                                                                class="text-gray-300 cursor-no-drop"
+                                                                href="/reports/solutions"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/reports/statuses'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >{{ $t('sidebar.status')}} (N/A)</Link
+                                                                >Solutions</Link
                                                             >
                                                         </li>
                                                     </ul>
                                                 </vue-collapsible>
                                             </li>
-                                            <li>
-                                                <Link
-                                                    href="#"
-                                                    class="text-gray-300 cursor-no-drop"
-                                                    @click="toggleMobileMenu"
-                                                    >{{ $t('sidebar.machines')}} (N/A)</Link
+                                            <li class="menu nav-item">
+                                                <button
+                                                    type="button"
+                                                    class="w-full before:bg-gray-300 before:w-[5px] before:h-[5px] before:rounded ltr:before:mr-2 rtl:before:ml-2 dark:text-[#888ea8] hover:bg-gray-100 dark:hover:bg-gray-900"
+                                                    @click="
+                                                        subActive === 'machines'
+                                                            ? (subActive = null)
+                                                            : (subActive =
+                                                                  'machines')
+                                                    "
                                                 >
+                                                    {{ $t('sidebar.machines')}}
+                                                    <div
+                                                        class="ltr:ml-auto rtl:mr-auto rtl:rotate-180"
+                                                        :class="{
+                                                            '!rotate-90':
+                                                                subActive ===
+                                                                'machines',
+                                                        }"
+                                                    >
+                                                        <svg
+                                                            width="16"
+                                                            height="16"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path
+                                                                opacity="0.5"
+                                                                d="M6.25 19C6.25 19.3139 6.44543 19.5946 6.73979 19.7035C7.03415 19.8123 7.36519 19.7264 7.56944 19.4881L13.5694 12.4881C13.8102 12.2073 13.8102 11.7928 13.5694 11.5119L7.56944 4.51194C7.36519 4.27364 7.03415 4.18773 6.73979 4.29662C6.44543 4.40551 6.25 4.68618 6.25 5.00004L6.25 19Z"
+                                                                fill="currentColor"
+                                                            />
+                                                            <path
+                                                                fill-rule="evenodd"
+                                                                clip-rule="evenodd"
+                                                                d="M10.5119 19.5695C10.1974 19.2999 10.161 18.8264 10.4306 18.5119L16.0122 12L10.4306 5.48811C10.161 5.17361 10.1974 4.70014 10.5119 4.43057C10.8264 4.161 11.2999 4.19743 11.5695 4.51192L17.5695 11.5119C17.8102 11.7928 17.8102 12.2072 17.5695 12.4881L11.5695 19.4881C11.2999 19.8026 10.8264 19.839 10.5119 19.5695Z"
+                                                                fill="currentColor"
+                                                            />
+                                                        </svg>
+                                                    </div>
+                                                </button>
+
+                                                <vue-collapsible
+                                                    :isOpen="
+                                                        subActive === 'machines'
+                                                    "
+                                                >
+                                                    <ul
+                                                        :unmount="false"
+                                                        class="sub-menu text-gray-500"
+                                                    >
+                                                        <li
+                                                            @click="
+                                                                toggleMobileMenu
+                                                            "
+                                                        >
+                                                            <Link
+                                                                href="/machines/clients"
+                                                                :class="{
+                                                                    active: $page.url.startsWith(
+                                                                        '/machines/clients'
+                                                                    ),
+                                                                }"
+                                                                target="_blank"
+                                                                >{{ $t('sidebar.clients')}}</Link
+                                                            >
+                                                        </li>
+                                                    </ul>
+                                                </vue-collapsible>
                                             </li>
                                             <li>
                                                 <Link
@@ -575,6 +696,27 @@
                                                 class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
                                             >
                                                 My reports
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </li>
+                                <li class="nav-item">
+                                    <Link
+                                        href="/listExpenses"
+                                        :class="{
+                                            active:
+                                                $page.url === '/listExpenses'
+                                        }"
+                                        class="group"
+                                        @click="toggleMobileMenu"
+                                    >
+                                        <div class="flex items-center">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"><path opacity="0.5" d="M16 4.00195C18.175 4.01406 19.3529 4.11051 20.1213 4.87889C21 5.75757 21 7.17179 21 10.0002V16.0002C21 18.8286 21 20.2429 20.1213 21.1215C19.2426 22.0002 17.8284 22.0002 15 22.0002H9C6.17157 22.0002 4.75736 22.0002 3.87868 21.1215C3 20.2429 3 18.8286 3 16.0002V10.0002C3 7.17179 3 5.75757 3.87868 4.87889C4.64706 4.11051 5.82497 4.01406 8 4.00195" stroke="currentColor" stroke-width="1.5"></path><path d="M8 14H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M7 10.5H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M9 17.5H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M8 3.5C8 2.67157 8.67157 2 9.5 2H14.5C15.3284 2 16 2.67157 16 3.5V4.5C16 5.32843 15.3284 6 14.5 6H9.5C8.67157 6 8 5.32843 8 4.5V3.5Z" stroke="currentColor" stroke-width="1.5"></path></svg>
+
+                                            <span
+                                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                                            >
+                                                {{ $t('sidebar.expenses')}}
                                             </span>
                                         </div>
                                     </Link>
