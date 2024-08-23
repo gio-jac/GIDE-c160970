@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Module extends Model
 {
+    //error
     use HasFactory;
     /*
     public function models(): BelongsToMany{

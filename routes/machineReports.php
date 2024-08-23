@@ -11,6 +11,9 @@ use App\Http\Controllers\machine_reports\MachineController;
 use App\Http\Controllers\machine_reports\ClientController;
 use App\Http\Controllers\machine_reports\BranchController;
 use App\Http\Controllers\machine_reports\BranchManagerController;
+use App\Http\Controllers\machine_reports\FailureController;
+use App\Http\Controllers\machine_reports\FailureTypeController;
+use App\Http\Controllers\machine_reports\ModuleController;
 
 Route::middleware('auth')->group(function () {
     Route::resource('/users/types', UserTypeController::class);
@@ -18,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::resource('/parts', PartController::class);
     Route::post('/parts/excel', [PartController::class, 'storeExcel'])->name('parts.storeExcel');
+    Route::resource('/reports/causes', FailureController::class);
+    Route::resource('/reports/solutions', FailureTypeController::class);
+    Route::resource('/reports/errors', ModuleController::class);
     Route::resource('/reports/statuses', StatusController::class);
     Route::resource('/reports/codes', CodeController::class);
     Route::get('/reports/{report}/close',[ReportController::class, 'closeReport'])->name('reports.close');
