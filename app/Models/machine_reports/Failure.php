@@ -10,6 +10,10 @@ class Failure extends Model
 {
     //Cause
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
     /*
     public function modules(): BelongsToMany{
         return $this->belongsToMany(Module::class, 'modules_failures', 'failure_id', 'module_id')->withTimestamps();

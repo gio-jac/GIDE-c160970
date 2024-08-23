@@ -10,6 +10,10 @@ class FailureType extends Model
 {
     //Solution
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
     /*
     public function failures(): BelongsToMany{
         return $this->belongsToMany(Failure::class, 'failures_failure_types', 'failure_type_id', 'failure_id')->withTimestamps();
