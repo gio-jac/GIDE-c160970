@@ -24,11 +24,8 @@
     "sidebar.customers": "Clientes",
     "sidebar.regions": "Regiones",
     "sidebar.assignments": "Asignaciones",
-<<<<<<< Updated upstream
     "sidebar.clients": "Clientes",
-=======
     "sidebar.expensesAdvanceRequest": "Solicitud de anticipo",
->>>>>>> Stashed changes
     "header.signout": "Cerrar sesión",
     "user.index.newUser": "Crear usuario",
     "user.index.col.parteId": "Parte ID",
