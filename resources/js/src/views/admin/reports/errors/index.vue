@@ -88,7 +88,7 @@
                         <template #actions="data">
                             <div class="flex gap-4 items-center justify-center">
                                 <Link
-                                    :href="`/machines/${data.value.id}/edit`"
+                                    :href="`/reports/errors/${data.value.id}/edit`"
                                     class="hover:text-info"
                                 >
                                     <svg

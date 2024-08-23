@@ -54,7 +54,10 @@ class FailureController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $cause = Failure::findOrFail($id);
+        return Inertia::render('admin/reports/causes/edit',[
+            'cause' => $cause
+        ]);
     }
 
     /**
@@ -62,7 +65,20 @@ class FailureController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $cause = Failure::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'name' => ['required', 'max:255', 'unique:failures,name,'.$cause->id],
+            'is_active' => ['required'],
+        ]);
+
+        if($request->input("requested_translation")){
+            $validatedData["updated_translation"] = false;
+        }
+        
+        $cause->update($validatedData);
+
+        return to_route('causes.edit', ['cause' => $cause->id]);
     }
 
     /**

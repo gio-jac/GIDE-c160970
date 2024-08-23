@@ -54,7 +54,10 @@ class FailureTypeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $solution = FailureType::findOrFail($id);
+        return Inertia::render('admin/reports/solutions/edit',[
+            'solution' => $solution
+        ]);
     }
 
     /**
@@ -62,7 +65,20 @@ class FailureTypeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $solution = FailureType::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'name' => ['required', 'max:255', 'unique:failure_types,name,'.$solution->id],
+            'is_active' => ['required'],
+        ]);
+
+        if($request->input("requested_translation")){
+            $validatedData["updated_translation"] = false;
+        }
+        
+        $solution->update($validatedData);
+
+        return to_route('solutions.edit', ['solution' => $solution->id]);
     }
 
     /**

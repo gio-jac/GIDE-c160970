@@ -54,7 +54,10 @@ class ModuleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $error = Module::findOrFail($id);
+        return Inertia::render('admin/reports/errors/edit',[
+            'error' => $error
+        ]);
     }
 
     /**
@@ -62,7 +65,20 @@ class ModuleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $error = Module::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'name' => ['required', 'max:255', 'unique:modules,name,'.$error->id],
+            'is_active' => ['required'],
+        ]);
+
+        if($request->input("requested_translation")){
+            $validatedData["updated_translation"] = false;
+        }
+        
+        $error->update($validatedData);
+
+        return to_route('errors.edit', ['error' => $error->id]);
     }
 
     /**
