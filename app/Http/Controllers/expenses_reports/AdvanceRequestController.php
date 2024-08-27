@@ -41,6 +41,9 @@ class AdvanceRequestController extends Controller
                 "users.emp",
                 "cost_centers.cc",
                 "cost_centers.name",
+                "users.nombre",
+                "users.apellido_paterno",
+                "users.apellido_materno",
                 "departments.department",
                 DB::raw("CONCAT(users.nombre, ' ', users.apellido_paterno, ' ', COALESCE(users.apellido_materno, '')) as nombre_completo"),
                 DB::raw("
@@ -76,7 +79,14 @@ class AdvanceRequestController extends Controller
                 "users.apellido_materno",
                 "cost_centers.cc",
                 "cost_centers.name ",
-                "departments.department"
+                "departments.department",
+                DB::raw("CONCAT(users.nombre, ' ', users.apellido_paterno, ' ', COALESCE(users.apellido_materno, '')) as nombre_completo"),
+                DB::raw("
+                    CASE advance_requests.status
+                        WHEN 0 THEN 'Proceso'
+                        ELSE 'Aprobado'
+                    END as status_text
+                ")
             )
             ->where('expenses.user_id', '=', $userAuth->id)
             ->get();
@@ -141,7 +151,14 @@ class AdvanceRequestController extends Controller
                 "users.apellido_materno",
                 "cost_centers.cc",
                 "cost_centers.name as costCenter",
-                "departments.department"
+                "departments.department",
+                DB::raw("CONCAT(users.nombre, ' ', users.apellido_paterno, ' ', COALESCE(users.apellido_materno, '')) as nombre_completo"),
+                DB::raw("
+                    CASE advance_requests.status
+                        WHEN 0 THEN 'Proceso'
+                        ELSE 'Aprobado'
+                    END as status_text
+                ")
             )
             ->where('advance_requests.id', '=', $id)
             ->get();
