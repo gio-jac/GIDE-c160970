@@ -8,19 +8,19 @@
                 <div class="datatable invoice-table">
                     <div class="mb-4.5 px-5 flex md:items-center md:flex-row flex-col gap-5">
                         <div class="ltr:ml-auto rtl:mr-auto flex">
-                            <input v-model="search" type="text" class="form-input" :placeholder="$t('user.index.searchPlaceholder')" />
+                            <input v-model="searchQuery" type="text" class="form-input" :placeholder="$t('user.index.searchPlaceholder')" />
                         </div>
                     </div>
 
                     <vue3-datatable
                         ref="datatable"
-                        :rows="currentData"
+                        :rows="filteredData"
                         :columns="cols"
-                        :totalRows="currentData?.length"
+                        :totalRows="filteredData?.length"
                         :hasCheckbox="false"
                         :sortable="true"
-                        :search="search"
-                        :columnFilter="true"
+                        :search="searchQuery"
+                        :columnFilter="false"
                         skin="whitespace-nowrap bh-table-hover"
                         firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                         lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg> '
@@ -38,19 +38,19 @@
                             {{ formatDateReference(data.value.depositDate) }}
                         </template>
 
-                        <template #status="data">
+                        <template #status_text="data">
                             <div class="flex items-center font-semibold">
                                 <span
                                     class="badge"
                                     :class="[ classStatus(data.value.status) ]"
-                                    >{{ formatStatus(data.value.status) }}</span
+                                    >{{ data.value.status_text }}</span
                                 >
                             </div>
                         </template>
                         
                         <template #actions="data">
                             <div class="flex gap-4 items-center justify-center">
-                                <button type="button" class="btn btn-warning" @click="selectRow(data.value)" v-if="data.value.status === 0">
+                                <button type="button"  @click="selectRow(data.value)" v-if="data.value.status === 0">
                                     <svg
                                         width="24"
                                         height="24"
@@ -79,7 +79,7 @@
                                         ></path>
                                     </svg>
                                 </button>
-                                <button type="button" class="btn btn-info" @click="selectRowSearch(data.value)" v-else-if="data.value.status === 1">
+                                <button type="button"  @click="selectRowSearch(data.value)" v-else-if="data.value.status === 1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                                     </svg>
@@ -217,16 +217,46 @@
                                                             <form @submit.prevent="submitForm">
                                                                 <h1 style="font-size: 18px; font-weight: 800;">Datos generales</h1>
                                                                 <div style="border: solid 1px; padding: 15px; margin-top: 20px">
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.applicant') }} {{ form.name }}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.NoEmp') }} {{form.emp}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.purposeTravel') }} {{form.purposeTravel}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.destiny') }}: {{form.destinyFrom}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.destinyTo') }}: {{form.destinyTo}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.dateTravel') }} {{ formatDateRange(form.endingDate) }}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.payAdvanceTravel') }} ${{form.payAdvance}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.applicant') }} {{formatDateNormal(form.requestDate)}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.CCTravel') }} {{form.cc}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.departmentTravel') }} {{form.department}}</label>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.applicant') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{ form.name }}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.NoEmp') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.emp}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.purposeTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.purposeTravel}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.destiny') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.destinyFrom}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.destinyTo') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.destinyTo}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.dateTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{ formatDateRange(form.endingDate) }}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.payAdvanceTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">${{formatCurrencyNum(form.payAdvance)}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.applicant') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{formatDateNormal(form.requestDate)}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.CCTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.cc}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.departmentTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.department}}</label>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="flex mt-5">
                                                                     <label >{{ $t('expenses.AdvanceRequestlist.dateDepositTravel') }}</label>
@@ -322,19 +352,58 @@
                                                             <form @submit.prevent="submitForm">
                                                                 <h1 style="font-size: 18px; font-weight: 800;">Datos generales</h1>
                                                                 <div style="border: solid 1px; padding: 15px; margin-top: 20px">
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.applicant') }} {{ form.name }}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.NoEmp') }} {{form.emp}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.purposeTravel') }} {{form.purposeTravel}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.destiny') }}: {{form.destinyFrom}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.destinyTo') }}: {{form.destinyTo}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.dateTravel') }} {{ formatDateRange(form.endingDate) }}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.payAdvanceTravel') }} ${{form.payAdvance}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.applicant') }} {{formatDateNormal(form.requestDate)}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.CCTravel') }} {{form.cc}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.departmentTravel') }} {{form.department}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.dateDepositTravel') }} {{formatDateReference(form.depositDate)}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.referenceTravel') }} {{form.reference}}</label>
-                                                                    <label >{{ $t('expenses.AdvanceRequestlist.comentTravel') }} {{form.coment}}</label>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.applicant') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{ form.name }}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.NoEmp') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.emp}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.purposeTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.purposeTravel}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.destiny') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.destinyFrom}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.destinyTo') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.destinyTo}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.dateTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{ formatDateRange(form.endingDate) }}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.payAdvanceTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">${{formatCurrencyNum(form.payAdvance)}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.applicant') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{formatDateNormal(form.requestDate)}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.CCTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.cc}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.departmentTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.department}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.dateDepositTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{formatDateReference(form.depositDate)}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.referenceTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.reference}}</label>
+                                                                    </div>
+                                                                    <div class="flex flex-row justify-evenly ">
+                                                                        <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.comentTravel') }}</b>
+                                                                        <label class="basis-1/2" style="color: #4361ee;">{{form.coment}}</label>
+                                                                    </div>
                                                                 </div>
                                                                 
                                                                 <div class="flex justify-end items-center mt-8">
@@ -354,7 +423,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ref, onMounted, computed, reactive } from "vue";
+    import { ref, onMounted, computed, reactive, toRaw } from "vue";
     import Vue3Datatable from "@bhplugin/vue3-datatable";
     import AppLayout from "@/layouts/app-layout.vue";
     import SiteLayout from "@/layouts/app.vue";
@@ -381,7 +450,6 @@
         },
     });
 
-    const currentData: any = ref(null);
     const form = reactive({
         id: '',
         reference: '',
@@ -402,6 +470,7 @@
         department: '',
         coment: ''
     });
+
 
     const selectRow = (data) => {
         form.id = data.id;
@@ -447,18 +516,16 @@
         modal3.value = true;
     };
 
-    
-    
-    
+    const currentData: any = ref([]);
     const datatable: any = ref(null);
-    const search = ref("");
+    const searchQuery = ref("");
     const cols = computed(() => [
-        { field: "nombre", title: t("expenses.AdvanceRequestlist.nombre"), filter: false},
+        { field: "nombre_completo", title: t("expenses.AdvanceRequestlist.nombre"), filter: false},
         { field: "destinyTo", title: t("expenses.AdvanceRequestlist.destinyTo"), filter: false },
         { field: "payAdvance", title: t("expenses.AdvanceRequestlist.payAdvance"), filter: false },
         { field: "requestDate", title: t("expenses.liAdvanceRequestlistst.requestDate"), filter: false },
         { field: "reference", title: t("expenses.AdvanceRequestlist.reference"), filter: false },
-        { field: "status", title: t("expenses.AdvanceRequestlist.status"), filter: false},
+        { field: "status_text", title: t("expenses.AdvanceRequestlist.status"), filter: false},
         {
             field: "actions",
             title: t("expenses.AdvanceRequestlist.actions"),
@@ -468,27 +535,35 @@
         },
     ]);
 
-    onMounted(() => {
-        currentData.value = [...props.advanceRequests];
+    
+    const filteredData = computed(() => {
+        if (!searchQuery.value) {
+            currentData.value = [...props.advanceRequests];
+            return currentData.value; // Return the full list if no query
+        }
+
+        const query = searchQuery.value.toLowerCase();
+        const filteredExpenses = [];
+        const rawExpenses = toRaw(props.advanceRequests);
+
+        rawExpenses.forEach((item, index) => {
+            if (item.nombre_completo?.toLowerCase().includes(query) || item.destinyTo?.toLowerCase().includes(query) 
+            || item.payAdvance?.toLowerCase().includes(query) || item.requestDate?.toLowerCase().includes(query) 
+            || item.reference?.toLowerCase().includes(query) || item.status_text?.toLowerCase().includes(query)) {
+                filteredExpenses.push(item);
+            }
+        });
+
+        currentData.value = [...filteredExpenses];
+        return currentData.value;
     });
 
-    const formatStatus = (status) => {
-        if (status === 0) {
-            return 'Proceso';
-        } else if (status === 1 ) {
-            return 'Aprovado';
-        }else{
-            return 'Negado';
-        }
-    };
 
     function classStatus(status){
         if(status == 0)
             return 'bg-yellow-500';
         if(status == 1)
-            return 'bg-green-500';
-        if(status == 2)
-            return 'bg-red-500'
+           return 'bg-blue-500';
     }
 
     const formatDateRange = (data) => {
@@ -535,6 +610,22 @@
         if(!value.apellido_materno)
             value.apellido_materno = '';
         return value.nombre + ' ' + value.apellido_paterno + ' ' + value.apellido_materno;
+    }
+
+    function formatCurrencyNum(num) {
+        num = num.toString().replace(/\$|\,/g, '');
+        if (isNaN(num))
+            num = "0";
+        var sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num * 100 + 0.50000000001);
+        var cents = num % 100;
+        num = Math.floor(num / 100).toString();
+        if (cents < 10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+            num = num.substring(0, num.length - (4 * i + 3)) + ',' +
+                        num.substring(num.length - (4 * i + 3));
+        return (((sign) ? '' : '-') + num + '.' + cents);
     }
 
     function generarReferencia(){
