@@ -348,7 +348,7 @@
     "expense.edit.expenseType.10": "MISCELANEUS",
     "expense.edit.city": "Estado y ciudad",
     "expense.edit.amount": "Gasto ($)",
-    "expense.edit.tip": "Propina ($)",
+    "expense.edit.tip": "Propina ($) (max 10%)",
     "expense.edit.daysAway": "Días afuera",
     "expense.edit.daysAwayPersonal": "Días afuera personales",
     "expense.edit.daysAwayTotal": "Días afuera totales",
@@ -386,7 +386,7 @@
     "expense.edit.tickets": "Tickets",
     "expense.edit.process": "Procesando...",
     "expense.edit.processData": "Por favor espera mientras se procesa la información",
-    "expense.edit.concept": "Por concepto de (Nota)",
+    "expense.edit.conceptApprove": "Por concepto de (Nota)",
     
     
 

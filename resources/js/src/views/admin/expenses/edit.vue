@@ -84,11 +84,11 @@
                                                         </div>
                                                         <div style="margin-right: 10px; margin-left: 10px">
                                                             <label for="inputAmount">{{ $t("expense.edit.amount") }}</label>
-                                                            <input  type="number" step=".5" class="form-input" v-model="week.inputAmount" required/>
+                                                            <input  type="number" step=".01" class="form-input" v-model="week.inputAmount" @input="updateMaxTip(index)" required/>
                                                         </div>
                                                         <div v-if="week.selectExpense == '5' || week.selectExpense == '6' || week.selectExpense == '7'" style="margin-right: 10px; margin-left: 10px">
                                                             <label for="inputTip">{{ $t("expense.edit.tip") }}</label>
-                                                            <input  type="number" step=".5" class="form-input" v-model="week.inputTip" required/>
+                                                            <input  type="number" step=".01" class="form-input" v-model="week.inputTip" @input="updateTip(index)" required/>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary" style="height: fit-content; margin-top: 25px;">Agregar</button>
                                                     </div>
@@ -504,11 +504,11 @@
                                                     </div>
                                                     <div  style="margin-right: 10px; margin-left: 10px">
                                                         <label >{{ $t("expense.edit.amount") }}</label>
-                                                        <input  type="number" step=".5" class="form-input" v-model="tickets.amount" required/>
+                                                        <input  type="number" step=".01" class="form-input" v-model="tickets.amount" required/>
                                                     </div>
                                                     <div v-if="tickets.typeTicket == 1" style="margin-right: 10px; margin-left: 10px">
                                                         <label >{{ $t("expense.edit.concept") }}</label>
-                                                        <input  type="text" step=".5" class="form-input" v-model="tickets.concept" required/>
+                                                        <input  type="text" step=".01" class="form-input" v-model="tickets.concept" required/>
                                                     </div>
                                                     <div v-if="tickets.typeTicket == 0" style="margin-right: 10px; margin-left: 10px">
                                                         <label >{{ $t("expense.edit.photo") }}</label>
@@ -668,7 +668,7 @@
                                     </div>
                                     <div class="flex flex-row justify-evenly ">
                                         <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.payAdvanceTravel') }}</b>
-                                        <label class="basis-1/2" style="color: #4361ee;">${{expense.payAdvance}}</label>
+                                        <label class="basis-1/2" style="color: #4361ee;">${{formatCurrencyNum(expense.payAdvance)}}</label>
                                     </div>
                                     <div class="flex flex-row justify-evenly ">
                                         <b class="basis-1/2">{{ $t('expenses.AdvanceRequestlist.dateDepositTravel') }}</b>
@@ -777,7 +777,7 @@
                                 </form>
                                 <form  v-if="expense.status == 2 && userAuth == 1" @submit.prevent="submitFormTransferRequestReport">
                                     <div class="m-4">
-                                        <label>{{ $t("expense.edit.concept") }}</label>
+                                        <label>{{ $t("expense.edit.conceptApprove") }}</label>
                                         <textarea v-model="concept.value" class="form-input"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-success  gap-2 m-4">
@@ -838,7 +838,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { ref,  reactive, onMounted  } from "vue";
+    import { ref,  reactive, onMounted, computed  } from "vue";
     import {  router  } from "@inertiajs/vue3";
     import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogOverlay } from '@headlessui/vue';
     import AppLayout from "@/layouts/app-layout.vue";
@@ -860,9 +860,6 @@
     const concept: any = reactive({
         value: ''
     });
-    
-    
-    
 
     const { t } = useI18n();
 
@@ -1030,6 +1027,18 @@
                     divReturn.style.background = 'lightblue';
             }
         }
+
+        // Método para ajustar la propina si excede el máximo permitido
+        const updateTip = (index) => {
+            const maxTip = ExpenseGeneral.value[index].inputAmount * 0.10;
+            if (ExpenseGeneral.value[index].inputTip > maxTip) {
+                ExpenseGeneral.value[index].inputTip = maxTip;
+            }
+        };
+
+        const updateMaxTip = (index) => {
+            ExpenseGeneral.value[index].inputTip = 0;
+        };
 
         const submitForm = (index) => {
             

@@ -39,12 +39,16 @@ class AdvanceRequestController extends Controller
                 "expenses.purposeTravel",
                 "advance_requests.approveBy",
                 "users.emp",
-                "users.nombre",
-                "users.apellido_paterno",
-                "users.apellido_materno",
                 "cost_centers.cc",
                 "cost_centers.name",
-                "departments.department"
+                "departments.department",
+                DB::raw("CONCAT(users.nombre, ' ', users.apellido_paterno, ' ', COALESCE(users.apellido_materno, '')) as nombre_completo"),
+                DB::raw("
+                    CASE advance_requests.status
+                        WHEN 0 THEN 'Proceso'
+                        ELSE 'Aprobado'
+                    END as status_text
+                ")
             )
             ->get();
         }else{

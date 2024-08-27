@@ -726,7 +726,7 @@ class ExpensesController extends Controller
         // Guardar el archivo modificado
         $writer = new Xlsx($spreadsheet);
         $fileName = 'reporte_modificado.xlsx';
-        $filePath = storage_path('app/excel/' . $fileName);
+        $filePath = public_path('excel/' . $fileName);
         $writer->save($filePath);
 
         // Opción 1: Descargar el archivo al navegador
