@@ -199,8 +199,9 @@ const datatable: any = ref(null);
 const search = ref("");
 const cols = computed(() => [
     { field: "id", title: "ID" },
-    { field: "name", title: "Name" },
-    { field: "updated_translation", title: "Updated Translation" },
+    { field: "name", title: "Name (EN)" },
+    { field: "es", title: "ES" },
+    { field: "pt", title: "PT" },
     { field: "is_active", title: t("user.index.col.active") },
     {
         field: "actions",

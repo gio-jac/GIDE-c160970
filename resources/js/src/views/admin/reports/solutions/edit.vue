@@ -18,11 +18,11 @@
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClient">Solution Name</label>
+                    <label for="formClient">Solution Name (EN) <span class="text-red-500">*</span></label>
                     <input
                         id="formClient"
                         type="text"
-                        placeholder="Enter Solution Name"
+                        placeholder="Enter Solution Name (EN)"
                         class="form-input"
                         v-model="form.name"
                     />
@@ -30,20 +30,31 @@
                         <p class="text-danger mt-1">{{ errors.name }}</p>
                     </template>
                 </div>
-                <div>
-                    <label for="formTranslation">Request Translation</label>
-                    <label class="w-12 h-6 relative">
-                        <input
-                            type="checkbox"
-                            class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer"
-                            id="formTranslation"
-                            v-model="form.requested_translation"
-                        />
-                        <span
-                            for="formTranslation"
-                            class="bg-[#ebedf2] dark:bg-dark block h-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"
-                        ></span>
-                    </label>
+                <div :class="{ 'has-error': errors.code }">
+                    <label for="formClientES">Solution Name (ES)</label>
+                    <input
+                        id="formClientES"
+                        type="text"
+                        placeholder="Enter Solution Name (ES)"
+                        class="form-input"
+                        v-model="form.es"
+                    />
+                    <template v-if="errors.es">
+                        <p class="text-danger mt-1">{{ errors.es }}</p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.code }">
+                    <label for="formClientPT">Solution Name (PT)</label>
+                    <input
+                        id="formClientPT"
+                        type="text"
+                        placeholder="Enter Solution Name (PT)"
+                        class="form-input"
+                        v-model="form.pt"
+                    />
+                    <template v-if="errors.pt">
+                        <p class="text-danger mt-1">{{ errors.pt }}</p>
+                    </template>
                 </div>
                 <div>
                     <label for="formActive">{{ $t("part.new.activePart") }}</label>
@@ -87,6 +98,8 @@ const props = defineProps({
 
 const form = reactive({
     name: props.solution.name,
+    es: props.solution.es,
+    pt: props.solution.pt,
     is_active: props.solution.is_active === 1 ? true : false,
     requested_translation: false,
 });
