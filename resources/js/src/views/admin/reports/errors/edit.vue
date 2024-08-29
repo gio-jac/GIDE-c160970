@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
@@ -97,11 +97,23 @@ const props = defineProps({
 });
 
 const form = reactive({
-    name: props.error.name,
-    es: props.error.es,
-    pt: props.error.pt,
+    name: (props.error.name ?? '').toUpperCase(),
+    es: (props.error.es ?? '').toUpperCase(),
+    pt: (props.error.pt ?? '').toUpperCase(),
     is_active: props.error.is_active === 1 ? true : false,
     requested_translation: false,
+});
+
+watch(() => form.name, (newValue) => {
+    form.name = newValue.toUpperCase();
+});
+
+watch(() => form.es, (newValue) => {
+    form.es = newValue.toUpperCase();
+});
+
+watch(() => form.pt, (newValue) => {
+    form.pt = newValue.toUpperCase();
 });
 
 function submit() {
