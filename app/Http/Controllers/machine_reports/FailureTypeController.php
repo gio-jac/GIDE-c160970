@@ -4,6 +4,7 @@ namespace App\Http\Controllers\machine_reports;
 
 use App\Http\Controllers\Controller;
 use App\Models\machine_reports\FailureType;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -36,6 +37,8 @@ class FailureTypeController extends Controller
     {
         FailureType::create($request->validate([
             'name' => ['required', 'max:255', 'unique:failure_types'],
+            'es' => ['nullable', 'max:100', Rule::unique('failure_types')->whereNull('es')],
+            'pt' => ['nullable', 'max:100', Rule::unique('failure_types')->whereNull('pt')],
         ]));
 
         return to_route('solutions.index');
@@ -69,6 +72,8 @@ class FailureTypeController extends Controller
 
         $validatedData = $request->validate([
             'name' => ['required', 'max:255', 'unique:failure_types,name,'.$solution->id],
+            'es' => ['nullable', 'max:100', Rule::unique('failure_types')->ignore($solution->id)->whereNull('es')],
+            'pt' => ['nullable', 'max:100', Rule::unique('failure_types')->ignore($solution->id)->whereNull('pt')],
             'is_active' => ['required'],
         ]);
 

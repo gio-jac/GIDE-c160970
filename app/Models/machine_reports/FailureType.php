@@ -13,6 +13,8 @@ class FailureType extends Model
 
     protected $fillable = [
         'name',
+        'es',
+        'pt',
         'updated_translation',
         'is_active',
     ];
