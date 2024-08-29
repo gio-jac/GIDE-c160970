@@ -18,16 +18,42 @@
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClient">Error Name</label>
+                    <label for="formClient">Error Name (EN) <span class="text-red-500">*</span></label>
                     <input
                         id="formClient"
                         type="text"
-                        placeholder="Enter Error Name"
+                        placeholder="Enter Error Name (EN)"
                         class="form-input"
                         v-model="form.name"
                     />
                     <template v-if="errors.name">
                         <p class="text-danger mt-1">{{ errors.name }}</p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.code }">
+                    <label for="formClientES">Error Name (ES)</label>
+                    <input
+                        id="formClientES"
+                        type="text"
+                        placeholder="Enter Error Name (ES)"
+                        class="form-input"
+                        v-model="form.es"
+                    />
+                    <template v-if="errors.es">
+                        <p class="text-danger mt-1">{{ errors.es }}</p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.code }">
+                    <label for="formClientPT">Error Name (PT)</label>
+                    <input
+                        id="formClientPT"
+                        type="text"
+                        placeholder="Enter Error Name (PT)"
+                        class="form-input"
+                        v-model="form.pt"
+                    />
+                    <template v-if="errors.pt">
+                        <p class="text-danger mt-1">{{ errors.pt }}</p>
                     </template>
                 </div>
                 <button type="submit" class="btn btn-primary !mt-6">{{ $t("user.create.add") }}</button>
@@ -49,6 +75,8 @@ defineProps({ errors: Object });
 
 const form = reactive({
     name: null,
+    es: null,
+    pt: null,
     is_active: true,
 });
 

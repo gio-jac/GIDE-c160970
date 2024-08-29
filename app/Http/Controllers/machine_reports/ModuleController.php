@@ -4,6 +4,7 @@ namespace App\Http\Controllers\machine_reports;
 
 use App\Http\Controllers\Controller;
 use App\Models\machine_reports\Module;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -36,6 +37,8 @@ class ModuleController extends Controller
     {
         Module::create($request->validate([
             'name' => ['required', 'max:255', 'unique:modules'],
+            'es' => ['nullable', 'max:100', Rule::unique('modules')->whereNull('es')],
+            'pt' => ['nullable', 'max:100', Rule::unique('modules')->whereNull('pt')],
         ]));
 
         return to_route('errors.index');
@@ -69,6 +72,8 @@ class ModuleController extends Controller
 
         $validatedData = $request->validate([
             'name' => ['required', 'max:255', 'unique:modules,name,'.$error->id],
+            'es' => ['nullable', 'max:100', Rule::unique('modules')->ignore($error->id)->whereNull('es')],
+            'pt' => ['nullable', 'max:100', Rule::unique('modules')->ignore($error->id)->whereNull('pt')],
             'is_active' => ['required'],
         ]);
 
