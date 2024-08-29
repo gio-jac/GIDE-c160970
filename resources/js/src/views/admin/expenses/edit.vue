@@ -473,7 +473,14 @@
                     >
                     <DialogOverlay class="fixed inset-0 bg-[black]/60" />
                     </TransitionChild>
-                    <div class="fixed inset-0 overflow-y-auto">
+                    <div 
+                        ref="dialog"
+                        :style="{ top: `${modalPosition.y}px`, left: `${modalPosition.x}px` }"
+                        @mousedown="startDragging"
+                        @mouseup="stopDragging"
+                        @mousemove="drag"
+                        class="fixed inset-0 overflow-y-auto"
+                    >
                         <div class="flex min-h-full items-center justify-center px-4 py-8">
                             <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95" >
                                 <DialogPanel class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl text-black dark:text-white-dark">
@@ -485,7 +492,17 @@
                                         </svg>
                                     </button>
                                     <div class="text-lg font-bold bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
-                                        Tickets de comprobante           
+                                        Tickets de comprobante de "{{ titleTicket.value === 0 ? $t("expense.edit.expenseType.1")  
+                                                            : titleTicket.value === 1 ? $t("expense.edit.expenseType.2")
+                                                            : titleTicket.value === 2 ? $t("expense.edit.expenseType.3") 
+                                                            : titleTicket.value === 3 ? $t("expense.edit.expenseType.4") 
+                                                            : titleTicket.value === 4 ? $t("expense.edit.expenseType.5") 
+                                                            : titleTicket.value === 5 ? $t("expense.edit.expenseType.6") 
+                                                            : titleTicket.value === 6 ? $t("expense.edit.expenseType.7") 
+                                                            : titleTicket.value === 7 ? $t("expense.edit.expenseType.8") 
+                                                            : titleTicket.value === 8 ? $t("expense.edit.expenseType.9") 
+                                                            : $t("expense.edit.expenseType.10")
+                                                        }}"      
                                     </div>
                                     <div class="p-5">
                                         <div v-if="expense.status == 0" class="space-y-2 p-4 text-white-dark text-[13px]">
@@ -557,7 +574,6 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                        
                                     </div>
                                 </DialogPanel>
                             </TransitionChild>
@@ -857,9 +873,34 @@
     const modalTicket = ref(false);
     const modalTicketPrev = ref(false);
     const selectedImageUrl = ref('');
+    const titleTicket: any = reactive({
+        value: ''
+    });
     const concept: any = reactive({
         value: ''
     });
+
+    const dialog = ref(null);
+    const isDragging = ref(false);
+    const modalPosition = reactive({ x: 0, y: 0 });
+    const offset = reactive({ x: 0, y: 0 });
+
+    const startDragging = (event) => {
+      isDragging.value = true;
+      offset.x = event.clientX - modalPosition.x;
+      offset.y = event.clientY - modalPosition.y;
+    };
+
+    const drag = (event) => {
+      if (isDragging.value) {
+        modalPosition.x = event.clientX - offset.x;
+        modalPosition.y = event.clientY - offset.y;
+      }
+    };
+
+    const stopDragging = () => {
+      isDragging.value = false;
+    };
 
     const { t } = useI18n();
 
@@ -1481,6 +1522,7 @@
             tickets.typeTicket = 0;
             tickets.amount=  '';
             tickets.concept = '';
+            titleTicket.value = ExpenseGeneral.value[tickets.index].entries[tickets.entrieIndex].selectExpense;
             tickets.entries = ExpenseGeneral.value[tickets.index].entries[tickets.entrieIndex].tickets;
             modalTicket.value = true;
         } 

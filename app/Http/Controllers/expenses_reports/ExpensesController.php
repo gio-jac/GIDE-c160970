@@ -421,6 +421,7 @@ class ExpensesController extends Controller
             'advance_requests.depositDate',
             'advance_requests.coment',
             'advance_requests.approveBy as approveByAdvancePay',
+            'advance_requests.reference',
             'users.nombre',
             'users.emp',
             'users.apellido_paterno',
@@ -725,7 +726,7 @@ class ExpensesController extends Controller
 
         // Guardar el archivo modificado
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'reporte_modificado.xlsx';
+        $fileName = $expenses->reference . '.xlsx';
         $filePath = public_path('excel/' . $fileName);
         $writer->save($filePath);
 
