@@ -117,9 +117,9 @@
                 $failureType = [];
                 $dt = [];
                 foreach($machineDetails as $detail){
-                    $module[] = !empty($detail['module']['es']) ? $detail['module']['es'] : $detail['module']['name'];
-                    $failure[] = !empty($detail['failure']['es']) ? $detail['failure']['es'] : $detail['failure']['name'];
-                    $failureType[] = !empty($detail['failureType']['es']) ? $detail['failureType']['es'] : $detail['failureType']['name'];
+                    $module[] = $detail['module']['es'] ?? $detail['module']['name'] ?? 'N/A';
+                    $failure[] = $detail['failure']['es'] ?? $detail['failure']['name'] ?? 'N/A';
+                    $failureType[] = $detail['failureType']['es'] ?? $detail['failureType']['name'] ?? 'N/A';
                     $dt[] = !empty($detail['dt']) ? $detail['dt'].' min.' : '0 min.';
                 }
             @endphp
