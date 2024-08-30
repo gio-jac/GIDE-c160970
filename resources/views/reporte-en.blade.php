@@ -116,9 +116,9 @@
         $failureType = [];
         $dt = [];
         foreach($report->machineDetails as $detail){
-            $module[] = !empty($detail['module']['name']) ? __('error.'.$detail['module']['id'],[],null,$detail['module']['name']) : 'N/A';
-            $failure[] = !empty($detail['failure']['name']) ? __('failures.'.$detail['failure']['id'],[],null,$detail['failure']['name']) : 'N/A';
-            $failureType[] = !empty($detail['failureType']['name']) ? __('failureType.'.$detail['failureType']['id'],[],null,$detail['failureType']['name']) : 'N/A';
+            $module[] = !empty($detail['module']['name']) ? $detail['module']['name'] : 'N/A';
+            $failure[] = !empty($detail['failure']['name']) ? $detail['failure']['name'] : 'N/A';
+            $failureType[] = !empty($detail['failureType']['name']) ? $detail['failureType']['name'] : 'N/A';
             $dt[] = !empty($detail['dt']) ? $detail['dt'].' min.' : '0 min.';
         }
     @endphp
