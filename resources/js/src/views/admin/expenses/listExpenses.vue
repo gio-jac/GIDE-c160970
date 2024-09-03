@@ -93,7 +93,7 @@
                                                             </div>
                                                             <div class="mt-5">
                                                                 <label for="travelReason">Anticipo</label>
-                                                                <input type="number" class="form-input flex-1" id="travelAdvance" v-model="form.travelAdvance" required />
+                                                                <input type="number" class="form-input flex-1" step="0.01" id="travelAdvance" v-model="form.travelAdvance" required />
                                                             </div>
                                                             <div class="mt-5">
                                                                 <label for="travelDate">Fecha inicio de viaje</label>
