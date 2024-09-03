@@ -607,11 +607,11 @@
                                     </div>
                                     <div class="form-group mt-5">
                                         <label for="exchangeRate">Tipo de cambio:</label>
-                                        <input type="number" id="exchangeRate" class="form-input" step=".01" v-model.number="formCalculator.exchangeRate" required/>
+                                        <input type="number" id="exchangeRate" class="form-input" step=".000001" v-model.number="formCalculator.exchangeRate" required/>
                                     </div>
                                     <div class="form-group mt-5">
                                         <label for="amount">Cantidad a cambiar:</label>
-                                        <input type="number" class="form-input" id="amount" step=".01" v-model.number="formCalculator.amount" required />
+                                        <input type="number" class="form-input" id="amount" step=".000001" v-model.number="formCalculator.amount" required />
                                     </div>
                                     <button type="submit" class="btn btn-primary mt-5">Calcular</button>
                                 </form>
@@ -1178,21 +1178,23 @@
 
         const submitFormMeal = (index) => {
 
-            Swal.fire({
-                title: t("expense.edit.process"),
-                text: t("expense.edit.processData"),
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                customClass: "sweet-alerts",
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
+            
 
             // actualizamos el entrie del meal 
             const formMeal = ExpenseMeals.value[index];
             for(const meal of formMeal.entries){
                 if(meal.id == formMeal.idMeal){
+                    Swal.fire({
+                        title: t("expense.edit.process"),
+                        text: t("expense.edit.processData"),
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        customClass: "sweet-alerts",
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
                     const form = new FormData();
                     form.append('uuidExpense', props.expense.uuid);
                     form.append('id', meal.id);
@@ -1240,52 +1242,55 @@
 
         const submitFormOther = (index) => {
 
-            Swal.fire({
-                title: t("expense.edit.process"),
-                text: t("expense.edit.processData"),
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                customClass: "sweet-alerts",
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
+            
             // actualizamos el entrie del meal 
-            const formOther = ExpenseOther.value[index];
-            for(const other of formOther.entries){
-                if(other.id == formOther.idOther){
-                    
-                    const form = new FormData();
-                    form.append('uuidExpense', props.expense.uuid);
-                    form.append('id', other.id);
-                    form.append('description', formOther.description);
+            
+                const formOther = ExpenseOther.value[index];
+                for(const other of formOther.entries){
+                    if(other.id == formOther.idOther){
+                        Swal.fire({
+                            title: t("expense.edit.process"),
+                            text: t("expense.edit.processData"),
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            customClass: "sweet-alerts",
+                            didOpen: () => {
+                                Swal.showLoading();
+                            },
+                        });
+                        const form = new FormData();
+                        form.append('uuidExpense', props.expense.uuid);
+                        form.append('id', other.id);
+                        form.append('description', formOther.description);
 
-                    router.post(`/updateExpensesOthers`, form, {
-                        onSuccess: (page) => {
-                            expenseOthers.value = page.props.expenseOthers;
-                            agregarExpensesTablas();
-                            Swal.close();
-                        },
-                        onError: (error) => {
-                            console.log(error);
-                            let errorMessages = "";
+                        router.post(`/updateExpensesOthers`, form, {
+                            onSuccess: (page) => {
+                                expenseOthers.value = page.props.expenseOthers;
+                                agregarExpensesTablas();
+                                Swal.close();
+                            },
+                            onError: (error) => {
+                                console.log(error);
+                                let errorMessages = "";
 
-                            for (const key in error) {
-                                const fieldName = key.replace("_id", "");
-                                errorMessages += `<p>${error[key]}</p>`;
-                            }
-                            Swal.close();
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                html: errorMessages,
-                                customClass: "sweet-alerts",
-                            });
-                        },
-                        onFinish: () => {},
-                    });     
+                                for (const key in error) {
+                                    const fieldName = key.replace("_id", "");
+                                    errorMessages += `<p>${error[key]}</p>`;
+                                }
+                                Swal.close();
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    html: errorMessages,
+                                    customClass: "sweet-alerts",
+                                });
+                            },
+                            onFinish: () => {},
+                        });     
+                    }
                 }
-            }
+            
+            
 
             // Limpiar el formulario después de agregar la entrada
 

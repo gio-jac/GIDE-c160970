@@ -503,46 +503,46 @@ class ExpensesController extends Controller
 
         foreach ($expenseGenerals as $expenseGeneral) {
             if($expenseGeneral->dateExpense == $fechas[5]){
-                $row = 13;
+                $rowGeneral = 13;
             }else if($expenseGeneral->dateExpense == $fechas[4]){
-                $row = 19;
+                $rowGeneral = 19;
             }else if($expenseGeneral->dateExpense == $fechas[3]){
-                $row = 25;
+                $rowGeneral = 25;
             }else if($expenseGeneral->dateExpense == $fechas[2]){
-                $row = 31;
+                $rowGeneral = 31;
             }else if($expenseGeneral->dateExpense == $fechas[1]){
-                $row = 37;
+                $rowGeneral = 37;
             }else if($expenseGeneral->dateExpense == $fechas[0]){
-                $row = 43;
+                $rowGeneral = 43;
             }else if($expenseGeneral->dateExpense == $expenses->endingDate){
-                $row = 49;
+                $rowGeneral = 49;
             }
             if($expenseGeneral->selectExpense == 0){
-                $this->insertValue($sheet, $expenseGeneral, 'D', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'D', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 1){
-                $this->insertValue($sheet, $expenseGeneral, 'E', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'E', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 2){
-                $this->insertValue($sheet, $expenseGeneral, 'F', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'F', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 3){
-                $this->insertValue($sheet, $expenseGeneral, 'H', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'H', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 4){
-                $this->insertValue($sheet, $expenseGeneral, 'I', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'I', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 5){
                 if($expenseGeneral->tip > 0)
                     $expenseGeneral->amount = $expenseGeneral->amount + $expenseGeneral->tip;
-                $this->insertValue($sheet, $expenseGeneral, 'J', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'J', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 6){
                 if($expenseGeneral->tip > 0)
                     $expenseGeneral->amount = $expenseGeneral->amount + $expenseGeneral->tip;
-                $this->insertValue($sheet, $expenseGeneral, 'K', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'K', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 7){
                 if($expenseGeneral->tip > 0)
                     $expenseGeneral->amount = $expenseGeneral->amount + $expenseGeneral->tip;
-                $this->insertValue($sheet, $expenseGeneral, 'L', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'L', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 8){
-                $this->insertValue($sheet, $expenseGeneral, 'N', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'N', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 9){
-                $this->insertValue($sheet, $expenseGeneral, 'P', $row);
+                $this->insertValue($sheet, $expenseGeneral, 'P', $rowGeneral);
             }
         }
 
@@ -556,24 +556,24 @@ class ExpensesController extends Controller
 
         foreach ($expenseMeals as $expenseMeal) {
             if($expenseMeal->dateExpense == $fechas[5]){
-                $row = 66;
+                $rowMeal = 66;
             }else if($expenseMeal->dateExpense == $fechas[4]){
-                $row = 72;
+                $rowMeal = 72;
             }else if($expenseMeal->dateExpense == $fechas[3]){
-                $row = 78;
+                $rowMeal = 78;
             }else if($expenseMeal->dateExpense == $fechas[2]){
-                $row = 84;
+                $rowMeal = 84;
             }else if($expenseMeal->dateExpense == $fechas[1]){
-                $row = 90;
+                $rowMeal = 90;
             }else if($expenseMeal->dateExpense == $fechas[0]){
-                $row = 96;
+                $rowMeal = 96;
             }else if($expenseMeal->dateExpense == $expenses->endingDate){
-                $row = 102;
+                $rowMeal = 102;
             }
 
             // Iterar hasta encontrar una celda vacía
-            while ($sheet->getCell('C' . $row)->getValue() !== null) {
-                $row++; // Moverse a la siguiente fila
+            while ($sheet->getCell('C' . $rowMeal)->getValue() !== null) {
+                $rowMeal++; // Moverse a la siguiente fila
             }
 
             $pursose = '';
@@ -582,10 +582,10 @@ class ExpensesController extends Controller
             if($expenseMeal->selectExpense == 7) $pursose = 'DINNER';
 
             $descriptionMeal = 'City: '.$expenseMeal->city.', Restaurant: '.$expenseMeal->restaurant.', Time: '.$expenseMeal->time;
-            $sheet->setCellValue('C' . $row, $descriptionMeal);
-            $sheet->setCellValue('H' . $row, $pursose);
-            $sheet->setCellValue('J' . $row, $expenseMeal->amount);
-            $sheet->setCellValue('k' . $row, $expenseMeal->tip);
+            $sheet->setCellValue('C' . $rowMeal, $descriptionMeal);
+            $sheet->setCellValue('H' . $rowMeal, $pursose);
+            $sheet->setCellValue('J' . $rowMeal, $expenseMeal->amount);
+            $sheet->setCellValue('k' . $rowMeal, $expenseMeal->tip);
         }
 
         $sheet->setCellValue('M67', $fechas[5]);
@@ -606,36 +606,36 @@ class ExpensesController extends Controller
 
         foreach ($expenseOthers as $expenseOther) {
             if($expenseOther->dateExpense == $fechas[5]){
-                $row = 66;
+                $rowOther = 66;
             }else if($expenseOther->dateExpense == $fechas[4]){
-                $row = 72;
+                $rowOther = 72;
             }else if($expenseOther->dateExpense == $fechas[3]){
-                $row = 78;
+                $rowOther = 78;
             }else if($expenseOther->dateExpense == $fechas[2]){
-                $row = 84;
+                $rowOther = 84;
             }else if($expenseOther->dateExpense == $fechas[1]){
-                $row = 90;
+                $rowOther = 90;
             }else if($expenseOther->dateExpense == $fechas[0]){
-                $row = 96;
+                $rowOther = 96;
             }else if($expenseOther->dateExpense == $expenses->endingDate){
-                $row = 102;
+                $rowOther = 102;
             }
 
             // Iterar hasta encontrar una celda vacía
-            while ($sheet->getCell('C' . $row)->getValue() !== null) {
-                $row++; // Moverse a la siguiente fila
+            while ($sheet->getCell('C' . $rowOther)->getValue() !== null) {
+                $rowOther++; // Moverse a la siguiente fila
             }
 
             if($expenseOther->selectExpense == 1){
-                $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $row);
+                $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $rowOther);
             }else if($expenseOther->selectExpense == 2){
-                $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $row);
+                $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $rowOther);
             }else if($expenseOther->selectExpense == 3){
-                $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $row);
+                $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $rowOther);
             }else if($expenseOther->selectExpense == 4){
-                $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $row);
+                $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $rowOther);
             }else {
-                $this->insertValueExpenseOther($sheet, $expenseOther, 'T', 'W', $row);
+                $this->insertValueExpenseOther($sheet, $expenseOther, 'T', 'W', $rowOther);
             }
         }
 
