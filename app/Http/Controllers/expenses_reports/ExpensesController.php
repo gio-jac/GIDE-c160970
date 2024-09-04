@@ -622,19 +622,32 @@ class ExpensesController extends Controller
             }
 
             // Iterar hasta encontrar una celda vacía
-            while ($sheet->getCell('C' . $rowOther)->getValue() !== null) {
-                $rowOther++; // Moverse a la siguiente fila
-            }
+            
 
             if($expenseOther->selectExpense == 1){
+                while ($sheet->getCell('N' . $rowOther)->getValue() !== null) {
+                    $rowOther++; // Moverse a la siguiente fila
+                }
                 $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $rowOther);
             }else if($expenseOther->selectExpense == 2){
+                while ($sheet->getCell('N' . $rowOther)->getValue() !== null) {
+                    $rowOther++; // Moverse a la siguiente fila
+                }
                 $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $rowOther);
             }else if($expenseOther->selectExpense == 3){
+                while ($sheet->getCell('N' . $rowOther)->getValue() !== null) {
+                    $rowOther++; // Moverse a la siguiente fila
+                }
                 $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $rowOther);
             }else if($expenseOther->selectExpense == 4){
+                while ($sheet->getCell('N' . $rowOther)->getValue() !== null) {
+                    $rowOther++; // Moverse a la siguiente fila
+                }
                 $this->insertValueExpenseOther($sheet, $expenseOther, 'N', 'Q', $rowOther);
             }else {
+                while ($sheet->getCell('T' . $rowOther)->getValue() !== null) {
+                    $rowOther++; // Moverse a la siguiente fila
+                }
                 $this->insertValueExpenseOther($sheet, $expenseOther, 'T', 'W', $rowOther);
             }
         }
