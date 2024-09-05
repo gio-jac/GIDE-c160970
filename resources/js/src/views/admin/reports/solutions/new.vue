@@ -6,7 +6,7 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/reports/solutions">Solutions</Link></li>
+                    <li><Link href="/reports/solutions">{{ $t('sidebar.solutions') }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
@@ -18,11 +18,11 @@
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClient">Solution Name (EN) <span class="text-red-500">*</span></label>
+                    <label for="formClient">{{ $t('solutions.new.nameSolutionEN') }} <span class="text-red-500">*</span></label>
                     <input
                         id="formClient"
                         type="text"
-                        placeholder="Enter Solution Name (EN)"
+                        :placeholder="$t('solutions.new.nameSolutionPlaceholderEN')"
                         class="form-input"
                         v-model="form.name"
                     />
@@ -31,11 +31,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClientES">Solution Name (ES)</label>
+                    <label for="formClientES">{{ $t('solutions.new.nameSolutionES') }}</label>
                     <input
                         id="formClientES"
                         type="text"
-                        placeholder="Enter Solution Name (ES)"
+                        :placeholder="$t('solutions.new.nameSolutionPlaceholderES')"
                         class="form-input"
                         v-model="form.es"
                     />
@@ -44,11 +44,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClientPT">Solution Name (PT)</label>
+                    <label for="formClientPT">{{ $t('solutions.new.nameSolutionPT') }}</label>
                     <input
                         id="formClientPT"
                         type="text"
-                        placeholder="Enter Solution Name (PT)"
+                        :placeholder="$t('solutions.new.nameSolutionPlaceholderPT')"
                         class="form-input"
                         v-model="form.pt"
                     />

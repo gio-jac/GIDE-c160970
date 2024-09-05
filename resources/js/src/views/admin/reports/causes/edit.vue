@@ -6,7 +6,7 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/reports/causes">Causes</Link></li>
+                    <li><Link href="/reports/causes">{{ $t('sidebar.causes') }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
@@ -18,11 +18,11 @@
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClient">Cause Name (EN) <span class="text-red-500">*</span></label>
+                    <label for="formClient">{{ $t('causes.new.nameCauseEN') }} <span class="text-red-500">*</span></label>
                     <input
                         id="formClient"
                         type="text"
-                        placeholder="Enter Cause Name (EN)"
+                        :placeholder="$t('causes.new.nameCausePlaceholderEN')"
                         class="form-input"
                         v-model="form.name"
                     />
@@ -31,11 +31,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClientES">Cause Name (ES)</label>
+                    <label for="formClientES">{{ $t('causes.new.nameCauseES') }}</label>
                     <input
                         id="formClientES"
                         type="text"
-                        placeholder="Enter Cause Name (ES)"
+                        :placeholder="$t('causes.new.nameCausePlaceholderES')"
                         class="form-input"
                         v-model="form.es"
                     />
@@ -44,11 +44,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClientPT">Cause Name (PT)</label>
+                    <label for="formClientPT">{{ $t('causes.new.nameCausePT') }}</label>
                     <input
                         id="formClientPT"
                         type="text"
-                        placeholder="Enter Cause Name (PT)"
+                        :placeholder="$t('causes.new.nameCausePlaceholderPT')"
                         class="form-input"
                         v-model="form.pt"
                     />
@@ -57,7 +57,7 @@
                     </template>
                 </div>
                 <div>
-                    <label for="formActive">{{ $t("part.new.activePart") }}</label>
+                    <label for="formActive">{{ $t("causes.edit.activeCause") }}</label>
                     <label class="w-12 h-6 relative">
                         <input
                             type="checkbox"
