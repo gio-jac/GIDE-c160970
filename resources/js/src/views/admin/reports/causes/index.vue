@@ -29,7 +29,7 @@
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                 </svg>
-                                New Cause
+                                {{ $t("causes.index.newCause") }}
                             </Link>
                         </div>
                         <div class="ltr:ml-auto rtl:mr-auto">
@@ -199,7 +199,7 @@ const datatable: any = ref(null);
 const search = ref("");
 const cols = computed(() => [
     { field: "id", title: "ID" },
-    { field: "name", title: "Name (EN)" },
+    { field: "name", title: t("errors.general.name") + " (EN)" },
     { field: "es", title: "ES" },
     { field: "pt", title: "PT" },
     { field: "is_active", title: t("user.index.col.active") },
