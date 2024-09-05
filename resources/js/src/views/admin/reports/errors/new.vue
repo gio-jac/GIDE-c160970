@@ -6,7 +6,7 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/reports/errors">Errors</Link></li>
+                    <li><Link href="/reports/errors">{{ $t('sidebar.errors') }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
@@ -18,11 +18,11 @@
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClient">Error Name (EN) <span class="text-red-500">*</span></label>
+                    <label for="formClient">{{ $t('errors.new.nameErrorEN') }} <span class="text-red-500">*</span></label>
                     <input
                         id="formClient"
                         type="text"
-                        placeholder="Enter Error Name (EN)"
+                        :placeholder="$t('errors.new.nameErrorPlaceholderEN')"
                         class="form-input"
                         v-model="form.name"
                     />
@@ -31,11 +31,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClientES">Error Name (ES)</label>
+                    <label for="formClientES">{{ $t('errors.new.nameErrorES') }}</label>
                     <input
                         id="formClientES"
                         type="text"
-                        placeholder="Enter Error Name (ES)"
+                        :placeholder="$t('errors.new.nameErrorPlaceholderES')"
                         class="form-input"
                         v-model="form.es"
                     />
@@ -44,11 +44,11 @@
                     </template>
                 </div>
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClientPT">Error Name (PT)</label>
+                    <label for="formClientPT">{{ $t('errors.new.nameErrorPT') }}</label>
                     <input
                         id="formClientPT"
                         type="text"
-                        placeholder="Enter Error Name (PT)"
+                        :placeholder="$t('errors.new.nameErrorPlaceholderPT')"
                         class="form-input"
                         v-model="form.pt"
                     />
