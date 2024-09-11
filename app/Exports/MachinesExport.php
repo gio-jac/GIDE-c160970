@@ -5,8 +5,9 @@ namespace App\Exports;
 use App\Models\machine_reports\Machine;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class MachinesExport implements FromCollection, WithHeadings
+class MachinesExport implements FromCollection, WithHeadings, WithColumnWidths
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -36,6 +37,13 @@ class MachinesExport implements FromCollection, WithHeadings
             'Modelo Maquina',
             'Segmento',
             'Numero de Linea'
+        ];
+    }
+
+    public function columnWidths(): array
+    {
+        return [
+            'B' => 20,  // Set column B width to 20
         ];
     }
 }
