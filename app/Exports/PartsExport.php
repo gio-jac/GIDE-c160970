@@ -16,7 +16,7 @@ class PartsExport implements FromCollection, WithHeadings
         return Part::select(['id','num_part','descripcion'])->get()->map(function ($part) {
             return [
                 'id' => $part->id,
-                'num_part' => "'" . $part->num_part,
+                'num_part' => \PhpOffice\PhpSpreadsheet\Shared\StringHelper::formatNumber($part->num_part),
                 'descripcion' => $part->descripcion
             ];
         });
