@@ -23,6 +23,8 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ServiceReportExport;
 
 class ReportController extends Controller
 {
@@ -493,5 +495,10 @@ class ReportController extends Controller
         $pdf = Pdf::loadView("{$view}-{$lang}", compact('catalogCodes', 'report'));
 
         return $pdf->download("{$report->complete_id}.pdf");
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(new ServiceReportExport, 'service-reports.xlsx');
     }
 }

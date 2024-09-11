@@ -9,6 +9,8 @@ use App\Models\machine_reports\ProductionLine;
 use App\Models\machine_reports\Client;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MachinesExport;
 
 class MachineController extends Controller
 {
@@ -161,5 +163,10 @@ class MachineController extends Controller
             ->get();
 
         return response()->json($results);
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(new MachinesExport, 'machines.xlsx');
     }
 }
