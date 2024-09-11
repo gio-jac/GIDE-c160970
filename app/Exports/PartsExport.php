@@ -5,10 +5,9 @@ namespace App\Exports;
 use App\Models\machine_reports\Part;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PartsExport implements FromCollection, WithHeadings, WithColumnFormatting
+class PartsExport implements FromCollection, WithHeadings, WithColumnWidths
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -33,10 +32,10 @@ class PartsExport implements FromCollection, WithHeadings, WithColumnFormatting
         ];
     }
 
-    public function columnFormats(): array
+    public function columnWidths(): array
     {
         return [
-            'B' => NumberFormat::FORMAT_TEXT,
+            'B' => 20,  // Set column B width to 20
         ];
     }
 }
