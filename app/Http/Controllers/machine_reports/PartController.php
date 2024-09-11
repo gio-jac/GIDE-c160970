@@ -8,6 +8,7 @@ use App\Imports\PartsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Exports\PartsExport;
 
 class PartController extends Controller
 {
@@ -119,5 +120,10 @@ class PartController extends Controller
             ->get();
 
         return response()->json($results);
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(new PartsExport, 'parts.xlsx');
     }
 }
