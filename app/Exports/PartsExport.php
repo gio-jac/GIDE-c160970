@@ -5,16 +5,21 @@ namespace App\Exports;
 use App\Models\machine_reports\Part;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
 
-class PartsExport implements FromCollection, WithHeadings, WithMapping
+class PartsExport implements FromCollection, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return Part::select(['id','num_part','descripcion'])->get();
+        return Part::select(['id','num_part','descripcion'])->get()->map(function ($part) {
+            return [
+                'id' => $part->id,
+                'num_part' => (string) $part->num_part,
+                'descripcion' => $part->descripcion
+            ];
+        });
     }
 
     public function headings(): array
@@ -23,15 +28,6 @@ class PartsExport implements FromCollection, WithHeadings, WithMapping
             'ID',
             'Numero de Parte',
             'Descripcion'
-        ];
-    }
-
-    public function map($row): array
-    {
-        return [
-            $row->id,
-            \PhpOffice\PhpSpreadsheet\Shared\StringHelper::formatValue($row->num_part),
-            $row->descripcion,
         ];
     }
 }
