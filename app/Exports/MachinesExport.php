@@ -53,6 +53,7 @@ class MachinesExport implements FromCollection, WithHeadings, WithColumnWidths, 
     {
         return [
             'B' => ['alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT]],
+            'G' => ['alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT]],
         ];
     }
 }
