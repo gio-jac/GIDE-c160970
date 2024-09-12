@@ -6,8 +6,11 @@ use App\Models\machine_reports\ServiceReport;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ServiceReportPartsSheet implements FromCollection, WithTitle, WithHeadings
+class ServiceReportPartsSheet implements FromCollection, WithTitle, WithHeadings, WithColumnWidths, WithStyles
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -25,6 +28,20 @@ class ServiceReportPartsSheet implements FromCollection, WithTitle, WithHeadings
                 ];
             });
         });
+    }
+
+    public function columnWidths(): array
+    {
+        return [
+            'C' => 20,  // Set column B width to 20
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            'C' => ['alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT]],
+        ];
     }
     
     public function headings(): array
