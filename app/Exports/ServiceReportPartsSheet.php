@@ -27,7 +27,7 @@ class ServiceReportPartsSheet implements FromCollection, WithTitle, WithHeadings
                     'quantity'=> $part->quantity,
                 ];
             });
-        });
+        })->orderByAsc('report_id', 'asc');
     }
 
     public function columnWidths(): array
