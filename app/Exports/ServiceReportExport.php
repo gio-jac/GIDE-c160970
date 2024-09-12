@@ -12,6 +12,7 @@ class ServiceReportExport implements WithMultipleSheets
             'Reports' => new ServiceReportSheet(),
             'Machines' => new ServiceReportMachinesSheet(),
             'Machines Errors' => new ServiceReportMachinesErrorsSheet(),
+            'Parts' => new ServiceReportPartsSheet(),
         ];
     }
 }
