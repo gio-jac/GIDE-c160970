@@ -6,8 +6,11 @@ use App\Models\machine_reports\ServiceReport;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ServiceReportMachinesSheet implements FromCollection, WithHeadings, WithTitle
+class ServiceReportMachinesSheet implements FromCollection, WithHeadings, WithColumnWidths, WithTitle, WithStyles
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -19,9 +22,7 @@ class ServiceReportMachinesSheet implements FromCollection, WithHeadings, WithTi
                 return [
                     'report_id' => $report->id,
                     'complete_id' => $report->complete_id,
-                    'machine_id' => $machine->serial,
-                    'transport_time_1' => $machine->pivot->transport_time_1,
-                    'transport_time_2' => $machine->pivot->transport_time_2,
+                    'serial' => $machine->serial,
                     'transport_1' => $machine->pivot->transport_1,
                     'transport_2' => $machine->pivot->transport_2,
                     'transport_3' => $machine->pivot->transport_3,
@@ -35,16 +36,28 @@ class ServiceReportMachinesSheet implements FromCollection, WithHeadings, WithTi
     public function headings(): array
     {
         return [
-            'Report ID',
-            'Complete ID',
-            'Machine ID',
-            'Transport Time 1',
-            'Transport Time 2',
-            'Transport 1',
-            'Transport 2',
-            'Transport 3',
-            'DT',
-            'Signature Client Name',
+            'ID Reporte',
+            'Nombre Archivo',
+            'Serial Maquina',
+            'Transporte Inicial',
+            'Transporte Final',
+            'Tiempo Extra',
+            'DT Final',
+            'Nombre de Firma',
+        ];
+    }
+
+    public function columnWidths(): array
+    {
+        return [
+            'C' => 20,  // Set column B width to 20
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            'C' => ['alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT]],
         ];
     }
 
