@@ -11,6 +11,7 @@ class ServiceReportExport implements WithMultipleSheets
         return [
             'Reports' => new ServiceReportSheet(),
             'Machines' => new ServiceReportMachinesSheet(),
+            'Machines Errors' => new ServiceReportMachinesErrorsSheet(),
         ];
     }
 }
