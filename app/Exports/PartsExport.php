@@ -16,13 +16,7 @@ class PartsExport implements FromCollection, WithHeadings, WithColumnWidths, Wit
     */
     public function collection()
     {
-        return Part::select(['id','num_part','descripcion'])->get()->map(function ($part) {
-            return [
-                'id' => $part->id,
-                'num_part' => $part->num_part,
-                'descripcion' => $part->descripcion
-            ];
-        });
+        return Part::select(['id','num_part','descripcion'])->get();
     }
 
     public function headings(): array
