@@ -54,6 +54,11 @@ class ServiceReport extends Model
         return $this->hasOne(Shift::class, 'id', 'shift_id');
     }
 
+    public function code(): HasOne
+    {
+        return $this->hasOne(Code::class, 'id', 'code_id');
+    }
+
     public function branchManager(): HasOne
     {
         return $this->hasOne(BranchManager::class, 'id', 'branch_manager_id');
