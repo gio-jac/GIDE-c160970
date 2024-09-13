@@ -8,7 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class FailureType extends Model
 {
+    //Solution
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'es',
+        'pt',
+        'updated_translation',
+        'is_active',
+    ];
     /*
     public function failures(): BelongsToMany{
         return $this->belongsToMany(Failure::class, 'failures_failure_types', 'failure_type_id', 'failure_id')->withTimestamps();

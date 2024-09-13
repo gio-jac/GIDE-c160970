@@ -8,7 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Module extends Model
 {
+    //error
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'es',
+        'pt',
+        'updated_translation',
+        'is_active',
+    ];
     /*
     public function models(): BelongsToMany{
         return $this->belongsToMany(MachineModels::class, 'models_modules', 'module_id', 'machine_model_id')->withTimestamps();

@@ -444,15 +444,14 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="#"
-                                                                class="text-gray-300 cursor-no-drop"
+                                                                href="/reports/errors"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/reports/codes'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >{{ $t('sidebar.codes')}} (N/A)</Link
+                                                                >{{ $t('sidebar.errors')}}</Link
                                                             >
                                                         </li>
                                                         <li
@@ -461,15 +460,14 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="#"
-                                                                class="text-gray-300 cursor-no-drop"
+                                                                href="/reports/causes"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/reports/failures'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >{{ $t('sidebar.failures')}} (N/A)</Link
+                                                                >{{ $t('sidebar.causes')}}</Link
                                                             >
                                                         </li>
                                                         <li
@@ -478,15 +476,14 @@
                                                             "
                                                         >
                                                             <Link
-                                                                href="#"
-                                                                class="text-gray-300 cursor-no-drop"
+                                                                href="/reports/solutions"
                                                                 :class="{
                                                                     active: $page.url.startsWith(
                                                                         '/reports/statuses'
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >{{ $t('sidebar.status')}} (N/A)</Link
+                                                                >{{ $t('sidebar.solutions')}}</Link
                                                             >
                                                         </li>
                                                     </ul>
