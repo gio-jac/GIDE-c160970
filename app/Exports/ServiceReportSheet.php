@@ -76,7 +76,7 @@ class ServiceReportSheet implements FromCollection, WithHeadings, WithColumnWidt
                 'is_tested' => $report->is_tested === 1 ? 'Si' : 'No',
                 'notes' => $report->notes,
             ];
-        });
+        })->sortBy('id');
     }
 
     public function headings(): array
