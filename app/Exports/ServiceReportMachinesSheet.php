@@ -30,7 +30,7 @@ class ServiceReportMachinesSheet implements FromCollection, WithHeadings, WithCo
                     'signature_client_name' => $machine->pivot->signature_client_name,
                 ];
             });
-        });
+        })->sortBy('report_id');
     }
     
     public function headings(): array
