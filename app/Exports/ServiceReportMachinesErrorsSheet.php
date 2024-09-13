@@ -29,7 +29,7 @@ class ServiceReportMachinesErrorsSheet implements FromCollection, WithTitle, Wit
                     'dt' => $detail->dt
                 ];
             });
-        });
+        })->sortBy('report_id');
     }
 
     public function headings(): array
