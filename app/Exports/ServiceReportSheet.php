@@ -114,6 +114,7 @@ class ServiceReportSheet implements FromCollection, WithHeadings, WithColumnWidt
     public function columnWidths(): array
     {
         return [
+            'G' => 13,
             'R' => 13,
         ];
     }
