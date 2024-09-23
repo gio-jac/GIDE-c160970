@@ -361,6 +361,12 @@ class ExpensesController extends Controller
         return redirect()->route('expenses.show', $request->input('uuid'))->with('success');
     }
 
+    public function deleteCalculatorExpense(Request $request){
+        ExpenseCalculator::where('id', $request->input('id'))->delete();
+        return redirect()->route('expenses.show', $request->input('uuid'))->with('success');
+    }
+    
+
     public function transferRequestReport(string $id) {
 
         try {

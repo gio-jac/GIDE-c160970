@@ -364,18 +364,29 @@
     "expenses.list.errorDateTravelEnd": "Por favor seleccione un sábado.",
     "expenses.list.expenseCreated": "Se agrego correctamente el gasto.",
     "expenses.list.success": "¡Exitoso!",
+    "expenses.list.reason": "Razón de viaje",
+    "expenses.list.destinyFrom": "Destino desde",
+    "expenses.list.destinyTo": "Destino hasta",
+    "expenses.list.advance": "Anticipo",
+    "expenses.list.dateTravel": "Fecha inicio de viaje",
+   
 
+    "expense.edit.expenseGeneral": "Gastos generales",
+    "expense.edit.expenseOther": "Gastos de transporte u otros",
+    "expense.edit.totalConcepts": "Total de conceptos:",
+    "expense.edit.totalwaist": "Total gastado ($): ",
+    "expense.edit.add": "Agregar",
     "expense.edit.expenseType": "Tipo de gasto",
-    "expense.edit.expenseType.1": "LODGING",
-    "expense.edit.expenseType.2": "TRANSPORT: AIR, RAIL, ETC",
-    "expense.edit.expenseType.3": "TRANSPORT: RENTAL CAR, LIMO, ETC",
-    "expense.edit.expenseType.4": "TRANSPORT: LOCAL TAXI, TOLLS & PUBLIC TRNSIT",
-    "expense.edit.expenseType.5": "TRANSPORT: AUTO EXPENSES",
-    "expense.edit.expenseType.6": "MEALS: BREAKFAST",
-    "expense.edit.expenseType.7": "MEALS: LUNCH",
-    "expense.edit.expenseType.8": "MEALS: DINNER",
-    "expense.edit.expenseType.9": "ENTERTAINMENT",
-    "expense.edit.expenseType.10": "MISCELANEUS",
+    "expense.edit.expenseType.1": "ALOJAMIENTO",
+    "expense.edit.expenseType.2": "TRANSPORTE: AÉREO, FERROCARRIL, ETC.",
+    "expense.edit.expenseType.3": "TRANSPORTE: COCHE DE ALQUILER, LIMUSINA, ETC.",
+    "expense.edit.expenseType.4": "TRANSPORTE: TAXIS LOCALES, PEAJES Y TRANSPORTE PÚBLICO",
+    "expense.edit.expenseType.5": "TRANSPORTE: GASTOS DE AUTO",
+    "expense.edit.expenseType.6": "COMIDAS: DESAYUNO",
+    "expense.edit.expenseType.7": "COMIDAS: ALMUERZO",
+    "expense.edit.expenseType.8": "COMIDAS: CENA",
+    "expense.edit.expenseType.9": "ENTRETENIMIENTO",
+    "expense.edit.expenseType.10": "MISCELÁNEOS",
     "expense.edit.city": "Estado y ciudad",
     "expense.edit.amount": "Gasto ($)",
     "expense.edit.tip": "Propina ($) (max 10%)",
@@ -417,9 +428,29 @@
     "expense.edit.process": "Procesando...",
     "expense.edit.processData": "Por favor espera mientras se procesa la información",
     "expense.edit.conceptApprove": "Por concepto de (Nota)",
+    "expense.edit.expenseMeals": "Gastos de comidas",
+    "expense.edit.expense": "Gasto",
+    "expense.edit.ticket": "Ticket",
+    "expense.edit.ticketBox": "Recibo caja",
+    "expense.edit.preview": "Previo:",
+    "expense.edit.calculatorMoney": "Calculadora de cambio de Moneda",
+    "expense.edit.typeCoin": "Tipo de moneda:",
+    "expense.edit.typeChange": "Tipo de cambio:",
+    "expense.edit.amountChange": "Cantidad a cambiar:",
+    "expense.edit.calculateTimes": "Calcular mult(x)",
+    "expense.edit.calculateDivide": "Calcular división(/)",
+    "expense.edit.coin": "Moneda",
+    "expense.edit.change": "Cambio",
+    "expense.edit.total": "Total",
+    "expense.edit.generalData": "Datos generales",
+    "expense.edit.report": "Reporte",
+    "expense.edit.approve": "Aprobado",
+    "expense.edit.notApprove": "No aprobado",
+    "expense.edit.finishReport": "Terminar reporte",
+    "expense.edit.reportTransfer": "Generar solicitud de transferencia ",
+    "expense.edit.ticketView": "Tickets de comprobante",
+    "expense.edit.ticketFrom": "Tickets de comprobante de ",
     
-    
-
     "expenses.AdvanceRequestlist.nombre": "Nombre solicitante",
     "expenses.AdvanceRequestlist.destiny": "Destino desde",
     "expenses.AdvanceRequestlist.destinyTo": "Destino hasta",
@@ -447,8 +478,7 @@
     "expenses.AdvanceRequestlist.approveByAdvancePay": "Autorizado por:",
     "expenses.AdvanceRequestlist.comentTravel": "Comentario:"
     
-
-
-
-
 }
+
+
+

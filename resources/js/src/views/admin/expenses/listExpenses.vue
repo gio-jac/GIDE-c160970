@@ -2,9 +2,7 @@
     <Head title="Expenses" />
     <div>
         <div>
-            <div
-                class="panel px-0 pb-1.5 border-[#e0e6ed] dark:border-[#1b2e4b]"
-            >
+            <div class="panel px-0 pb-1.5 border-[#e0e6ed] dark:border-[#1b2e4b]">
                 <div class="datatable invoice-table">
                     <div class="mb-4.5 px-5 flex md:items-center md:flex-row flex-col gap-5" >
                         <div class="flex items-center gap-2">
@@ -56,19 +54,17 @@
                                                             <line x1="6" y1="6" x2="18" y2="18"></line>
                                                         </svg>
                                                     </button>
-                                                    <div
-                                                        class="text-lg font-bold bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]"
-                                                    >
-                                                    {{ $t("expenses.list.newExpense") }}
+                                                    <div class="text-lg font-bold bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
+                                                        {{ $t("expenses.list.newExpense") }}
                                                     </div>
                                                     <div class="p-5">
                                                         <form @submit.prevent="submitForm">
                                                             <div>
-                                                                <label for="travelReason">Razón de viaje</label>
+                                                                <label for="travelReason">{{ $t("expenses.list.reason") }}</label>
                                                                 <input type="text" class="form-input flex-1" id="travelReason" v-model="form.travelReason" required />
                                                             </div>
                                                             <div class="mt-5">
-                                                                <label for="travelReason">Centro de costos</label>
+                                                                <label for="travelReason">{{ $t("expenses.list.cc") }}</label>
                                                                 <select  class="form-select text-white-dark" v-model="form.travelCenterCost">
                                                                     <option v-for="centerCost in props.centerCosts" :key="centerCost.id" :value="centerCost.id">
                                                                         {{ centerCost.cc }} - {{ centerCost.name }}
@@ -76,7 +72,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="mt-5">
-                                                                <label for="travelReason">Departamento</label>
+                                                                <label for="travelReason">{{ $t("expenses.list.department") }}</label>
                                                                 <select  class="form-select text-white-dark" v-model="form.travelDepartment">
                                                                     <option v-for="department in props.departments" :key="department.id" :value="department.id">
                                                                         {{ department.department }}
@@ -84,19 +80,19 @@
                                                                 </select>
                                                             </div>
                                                             <div class="mt-5">
-                                                                <label for="travelReason">Destino desde</label>
+                                                                <label for="travelReason">{{ $t("expenses.list.destinyFrom") }}</label>
                                                                 <input type="text" class="form-input flex-1" id="traveldestiny" v-model="form.travelDestinyFrom" required />
                                                             </div>
                                                             <div class="mt-5">
-                                                                <label for="travelReason">Destino hasta</label>
+                                                                <label for="travelReason">{{ $t("expenses.list.destinyTo") }}</label>
                                                                 <input type="text" class="form-input flex-1" id="traveldestiny" v-model="form.travelDestinyTo" required />
                                                             </div>
                                                             <div class="mt-5">
-                                                                <label for="travelReason">Anticipo</label>
+                                                                <label for="travelReason">{{ $t("expenses.list.advance") }}</label>
                                                                 <input type="number" class="form-input flex-1" step="0.01" id="travelAdvance" v-model="form.travelAdvance" required />
                                                             </div>
                                                             <div class="mt-5">
-                                                                <label for="travelDate">Fecha inicio de viaje</label>
+                                                                <label for="travelDate">{{ $t("expenses.list.dateTravel") }}</label>
                                                                 <input type="date" class="form-input flex-1" id="travelDateStart" v-model="form.travelDateStart"  @change="validateDateStart" required />
                                                             </div>
                                                             <div class="flex justify-end items-center mt-8">
@@ -269,23 +265,10 @@ const props = defineProps({
         }
     }
 
-    function validateDateEnd() {
-        const selectedDate = new Date(form.travelDateFinish);
-        if (selectedDate.getDay() !== 5) {
-            Swal.fire({
-                icon: "error",
-                title: t("expenses.list.error") ,
-                html: t("expenses.list.errorDateTravelEnd"),
-                customClass: "sweet-alerts",
-            });
-            form.travelDateFinish = '';
-        }
-    }
-
     function submitForm() {
         Swal.fire({
-            title: "Processing...",
-            text: "Please wait while the data is being updated.",
+            title: t("expense.edit.process"),
+            text: t("expense.edit.processData"),
             allowOutsideClick: false,
             showConfirmButton: false,
             customClass: "sweet-alerts",
@@ -363,17 +346,6 @@ const props = defineProps({
         return currentData.value;
     });
 
-    const formatStatus = (status) => {
-
-        if (status === 0) {
-            return 'Proceso';
-        } else if (status === 1 ) {
-            return 'Por aprobar';
-        }else{
-            return 'Aprobado';
-        }
-
-    };
 
     const formatDateRange = (data) => {
         const currentDate = new Date(data);
@@ -394,20 +366,6 @@ const props = defineProps({
         return `${formattedSixDaysAgoDate} - ${formattedCurrentDate}`;
     };
 
-    const formatDateNormal = (date) => {
-        if(date != null){
-            const currentDate = new Date(date);
-            currentDate.setDate(currentDate.getDate() +1);
-            const year = currentDate.getFullYear();
-            const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-            const day = String(currentDate.getDate()).padStart(2, '0');
-            return `${day}-${month}-${year}`;
-        }else{
-            return '';
-        }
-        
-    };
-
     function classStatus(status){
         if(status == 0)
             return 'bg-yellow-500';
@@ -417,12 +375,6 @@ const props = defineProps({
             return 'bg-blue-500'
         if(status == 3)
             return 'bg-blue-500'
-    }
-
-    function formatName(value){
-        if(!value.apellido_materno)
-            value.apellido_materno = '';
-        return value.nombre + ' ' + value.apellido_paterno + ' ' + value.apellido_materno;
     }
 
     function downloadReportTransfer(id) {
