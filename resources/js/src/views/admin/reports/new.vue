@@ -221,7 +221,7 @@
                                                         :key="tmodule"
                                                         :value="tmodule.id"
                                                     >
-                                                        {{ $t("catalogs.error."+tmodule.id,tmodule.name) }}
+                                                        {{ getTranslation(tmodule) }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -260,7 +260,7 @@
                                                         :key="failure"
                                                         :value="failure.id"
                                                     >
-                                                        {{ $t("catalogs.failures."+failure.id,failure.name) }}
+                                                        {{ getTranslation(failure) }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -301,7 +301,7 @@
                                                         :key="failuretype"
                                                         :value="failuretype.id"
                                                     >
-                                                        {{ $t("catalogs.failureType."+failuretype.id,failuretype.name) }}
+                                                        {{ getTranslation(failuretype) }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -1524,22 +1524,34 @@ onMounted(() => {
     sortCatalogData();
 });
 
+const currentLocale = computed(() => store.locale);
+
+function getTranslation(item) {
+    if(currentLocale.value === 'es' && item.es) {
+        return item.es;
+    }else if (currentLocale.value === 'pt' && item.pt) {
+        return item.pt;
+    }
+    return item.name;
+}
+
 watch(
-  () => store.locale,
+    currentLocale,
   () => {
+      console.log(currentLocale.value);
     sortCatalogData();
   }
 );
 
 function sortCatalogData() {
-  props.catalogModule.sort((a, b) => sortCatalogArray(a, b, 'catalogs.error'));
-  props.catalogFailures.sort((a, b) => sortCatalogArray(a, b, 'catalogs.failures'));
-  props.catalogTypes.sort((a, b) => sortCatalogArray(a, b, 'catalogs.failureType'));
+  props.catalogModule.sort((a, b) => sortCatalogArray(a, b));
+  props.catalogFailures.sort((a, b) => sortCatalogArray(a, b));
+  props.catalogTypes.sort((a, b) => sortCatalogArray(a, b));
 }
 
-function sortCatalogArray(a, b, prefix) {
-  const translateA = t(`${prefix}.${a.id}`, a.name);
-  const translateB = t(`${prefix}.${b.id}`, b.name);
+function sortCatalogArray(a, b) {
+  const translateA = getTranslation(a);
+  const translateB = getTranslation(b);
   return translateA.localeCompare(translateB);
 }
 

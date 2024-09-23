@@ -23,6 +23,8 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ServiceReportExport;
 
 class ReportController extends Controller
 {
@@ -460,45 +462,43 @@ class ReportController extends Controller
      * PDF Creation.
      */
     public function pdfReport(string $id,string $lang = 'en') {
-        $defaultLocale = app()->getLocale();
-        try {
-            $lang = substr($lang, 0, 2);
-            $report = ServiceReport::with([
-                'status',
-                'machines' => function($query){
-                    $query->orderBy('position', 'asc');
-                },
-                'machines.machine_model',
-                'machineDetails',
-                'machineDetails.module',
-                'machineDetails.failure',
-                'machineDetails.failureType',
-                'parts','parts.part',
-                'shift',
-                'user',
-                'branch',
-                'branch.client',
-                'branch.branchManagers',
-            ])->findOrFail($id);
+        $lang = substr($lang, 0, 2);
+        $report = ServiceReport::with([
+            'status',
+            'machines' => function($query){
+                $query->orderBy('position', 'asc');
+            },
+            'machines.machine_model',
+            'machineDetails',
+            'machineDetails.module',
+            'machineDetails.failure',
+            'machineDetails.failureType',
+            'parts','parts.part',
+            'shift',
+            'user',
+            'branch',
+            'branch.client',
+            'branch.branchManagers',
+        ])->findOrFail($id);
 
-            if (!$report->closed) {
-                abort(403, 'Report is not closed');
-                return;
-            }
-            
-            $catalogCodes = Code::where('is_active', 1)->get();
-            
-            $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';
-            $lang = $view === 'reporte-banxico' ? 'es' : $lang;
-            $lang = view()->exists("{$view}-{$lang}") ? $lang : 'en';
-            
-            app()->setLocale($lang);
-            
-            $pdf = Pdf::loadView("{$view}-{$lang}", compact('catalogCodes', 'report'));
-
-            return $pdf->download("{$report->complete_id}.pdf");
-        }finally {
-            app()->setLocale($defaultLocale);
+        if (!$report->closed) {
+            abort(403, 'Report is not closed');
+            return;
         }
+        
+        $catalogCodes = Code::where('is_active', 1)->get();
+        
+        $view = count($report->machines) === 1 ? 'reporte' : 'reporte-banxico';
+        $lang = $view === 'reporte-banxico' ? 'es' : $lang;
+        $lang = view()->exists("{$view}-{$lang}") ? $lang : 'en';
+        
+        $pdf = Pdf::loadView("{$view}-{$lang}", compact('catalogCodes', 'report'));
+
+        return $pdf->download("{$report->complete_id}.pdf");
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(new ServiceReportExport, 'service-reports.xlsx');
     }
 }

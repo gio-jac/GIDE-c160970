@@ -4,6 +4,7 @@ namespace App\Http\Controllers\machine_reports;
 
 use App\Http\Controllers\Controller;
 use App\Models\machine_reports\Failure;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -36,6 +37,8 @@ class FailureController extends Controller
     {
         Failure::create($request->validate([
             'name' => ['required', 'max:255', 'unique:failures'],
+            'es' => ['nullable', 'max:100', Rule::unique('failures')->whereNull('es')],
+            'pt' => ['nullable', 'max:100', Rule::unique('failures')->whereNull('pt')],
         ]));
 
         return to_route('causes.index');
@@ -69,6 +72,8 @@ class FailureController extends Controller
 
         $validatedData = $request->validate([
             'name' => ['required', 'max:255', 'unique:failures,name,'.$cause->id],
+            'es' => ['nullable', 'max:100', Rule::unique('failures')->ignore($cause->id)->whereNull('es')],
+            'pt' => ['nullable', 'max:100', Rule::unique('failures')->ignore($cause->id)->whereNull('pt')],
             'is_active' => ['required'],
         ]);
 

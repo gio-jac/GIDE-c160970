@@ -10,7 +10,7 @@
                                 :class="{ '!text-primary': accordiansExpenses === 0 }"
                                 @click="accordiansExpenses === 0 ? (accordiansExpenses = null) : (accordiansExpenses = 0)"
                             >
-                                Gastos generales
+                            {{ $t("expense.edit.expenseGeneral" ) }}
                                 <div class="ltr:ml-auto rtl:mr-auto" :class="{ 'rotate-180': accordians1 === 1 }">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
                                         <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -29,8 +29,8 @@
                                         >
                                         <div class="flex flex-row" style="text-align: left;">
                                             <span class="basis-1/4" style="width: 220px;">{{ $t("expense.edit.expenseDate."+index)}}  {{ formatDateNormal(week.date) }} </span>
-                                            <span class="basis-1/4" style="width: 200px;">Total de conceptos {{ week.totalConcepts }} </span> 
-                                            <span class="basis-1/4" style="width: 350px;">Total gastado ($): {{ formatCurrencyNum(week.totalExpense) }}</span>
+                                            <span class="basis-1/4" style="width: 200px;">{{ $t("expense.edit.totalConcepts" ) }} {{ week.totalConcepts }} </span> 
+                                            <span class="basis-1/4" style="width: 350px;">{{ $t("expense.edit.totalwaist" ) }} {{ formatCurrencyNum(week.totalExpense) }}</span>
                                         </div>
                                             
                                             <div  class="ltr:ml-auto rtl:mr-auto" :class="{ 'rotate-180': accordians2 === week.id }">
@@ -47,34 +47,34 @@
                                                             <label for="selectExpense">{{ $t("expense.edit.expenseType") }}</label>
                                                             <select  class="form-select text-white-dark" v-model="week.selectExpense" required>
                                                                 <option :value="0">
-                                                                    LODGING
+                                                                    {{ $t("expense.edit.expenseType.1") }}
                                                                 </option>
                                                                 <option :value="1">
-                                                                    TRANSPORT: AIR, RAIL, ETC
+                                                                    {{ $t("expense.edit.expenseType.2") }}
                                                                 </option>
                                                                 <option :value="2">
-                                                                    TRANSPORT: RENTAL CAR, LIMO, ETC
+                                                                    {{ $t("expense.edit.expenseType.3") }}
                                                                 </option>
                                                                 <option :value="3">
-                                                                    TRANSPORT: LOCAL TAXI, TOLLS & PUBLIC TRNSIT
+                                                                    {{ $t("expense.edit.expenseType.4") }}
                                                                 </option>
                                                                 <option :value="4">
-                                                                    TRANSPORT: AUTO EXPENSES
+                                                                    {{ $t("expense.edit.expenseType.5") }}
                                                                 </option>
                                                                 <option :value="5">
-                                                                    MEALS: BREAKFAST
+                                                                    {{ $t("expense.edit.expenseType.6") }}
                                                                 </option>
                                                                 <option :value="6">
-                                                                    MEALS: LUNCH
+                                                                    {{ $t("expense.edit.expenseType.7") }}
                                                                 </option>
                                                                 <option :value="7">
-                                                                    MEALS: DINNER
+                                                                    {{ $t("expense.edit.expenseType.8") }}
                                                                 </option>
                                                                 <option :value="8">
-                                                                    ENTERTAINMENT
+                                                                    {{ $t("expense.edit.expenseType.9") }}
                                                                 </option>
                                                                 <option :value="9">
-                                                                    MISCELANEUS
+                                                                    {{ $t("expense.edit.expenseType.10") }}
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -90,7 +90,7 @@
                                                             <label for="inputTip">{{ $t("expense.edit.tip") }}</label>
                                                             <input  type="number" step=".01" class="form-input" v-model="week.inputTip" @input="updateTip(index)" required/>
                                                         </div>
-                                                        <button type="submit" class="btn btn-primary" style="height: fit-content; margin-top: 25px;">Agregar</button>
+                                                        <button type="submit" class="btn btn-primary" style="height: fit-content; margin-top: 25px;">{{ $t("expense.edit.add") }}</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -154,7 +154,7 @@
                                 :class="{ '!text-primary': accordiansExpenses === 1 }"
                                 @click="accordiansExpenses === 1 ? (accordiansExpenses = null) : (accordiansExpenses = 1)"
                             >
-                                Gastos de comidas
+                            {{ $t("expense.edit.expenseMeals") }}
                                 <div class="ltr:ml-auto rtl:mr-auto" :class="{ 'rotate-180': accordians1 === 1 }">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
                                         <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -173,8 +173,8 @@
                                         >
                                         <div class="flex flex-row" style="text-align: left;">
                                             <span class="basis-1/4" style="width: 220px;">{{ $t("expense.edit.expenseDate."+index)}}   {{ formatDateNormal(meal.date) }}</span>
-                                            <span class="basis-1/4" style="width: 200px;">Total de conceptos {{ meal.totalConcepts }}</span> 
-                                            <span class="basis-1/4" style="width: 350px;">Total gastado ($): {{ formatCurrencyNum(meal.totalExpense) }}</span>
+                                            <span class="basis-1/4" style="width: 200px;">{{ $t("expense.edit.totalConcepts" ) }} {{ meal.totalConcepts }}</span> 
+                                            <span class="basis-1/4" style="width: 350px;">{{ $t("expense.edit.totalwaist" ) }} {{ formatCurrencyNum(meal.totalExpense) }}</span>
                                         </div>
                                             
                                             <div  class="ltr:ml-auto rtl:mr-auto" :class="{ 'rotate-180': accordiansMeals === meal.id }">
@@ -188,12 +188,12 @@
                                                 <form @submit.prevent="submitFormMeal(index)">
                                                     <div class="flex flex-row flex-wrap">
                                                         <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="restaurant">Restaurante</label>
+                                                            <label for="restaurant">{{ $t("expense.edit.restaurant" ) }}</label>
                                                             <input  type="text"  class="form-input" v-model="meal.restaurant" required/>
                                                             <input type="hidden" v-model="meal.idMeal">
                                                         </div>
                                                         <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="time">Hora</label>
+                                                            <label for="time">{{ $t("expense.edit.time" ) }}</label>
                                                             <input  type="time"  class="form-input" v-model="meal.time" required/>
                                                         </div>
                                                         <div style="margin-right: 10px; margin-left: 10px">
@@ -204,34 +204,34 @@
                                                             <label for="selectExpense">{{ $t("expense.edit.expenseType") }}</label>
                                                             <select  class="form-select text-white-dark" v-model="meal.selectExpense" disabled>
                                                                 <option :value="0">
-                                                                    LODGING
+                                                                    {{ $t("expense.edit.expenseType.1") }}
                                                                 </option>
                                                                 <option :value="1">
-                                                                    TRANSPORT: AIR, RAIL, ETC
+                                                                    {{ $t("expense.edit.expenseType.2") }}
                                                                 </option>
                                                                 <option :value="2">
-                                                                    TRANSPORT: RENTAL CAR, LIMO, ETC
+                                                                    {{ $t("expense.edit.expenseType.3") }}
                                                                 </option>
                                                                 <option :value="3">
-                                                                    TRANSPORT: LOCAL TAXI, TOLLS & PUBLIC TRNSIT
+                                                                    {{ $t("expense.edit.expenseType.4") }}
                                                                 </option>
                                                                 <option :value="4">
-                                                                    TRANSPORT: AUTO EXPENSES
+                                                                    {{ $t("expense.edit.expenseType.5") }}
                                                                 </option>
                                                                 <option :value="5">
-                                                                    MEALS: BREAKFAST
+                                                                    {{ $t("expense.edit.expenseType.6") }}
                                                                 </option>
                                                                 <option :value="6">
-                                                                    MEALS: LUNCH
+                                                                    {{ $t("expense.edit.expenseType.7") }}
                                                                 </option>
                                                                 <option :value="7">
-                                                                    MEALS: DINNER
+                                                                    {{ $t("expense.edit.expenseType.8") }}
                                                                 </option>
                                                                 <option :value="8">
-                                                                    ENTERTAINMENT
+                                                                    {{ $t("expense.edit.expenseType.9") }}
                                                                 </option>
                                                                 <option :value="9">
-                                                                    MISCELANEUS
+                                                                    {{ $t("expense.edit.expenseType.10") }}
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -243,7 +243,7 @@
                                                             <label for="tip">{{ $t("expense.edit.tip") }}</label>
                                                             <input  type="number" step=".01" class="form-input" v-model="meal.tip" disabled/>
                                                         </div>
-                                                        <button type="submit" class="btn btn-warning" style="height: fit-content; margin-top: 25px;">Actualizar</button>
+                                                        <button type="submit" class="btn btn-warning" style="height: fit-content; margin-top: 25px;">{{ $t("user.create.update") }}</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -320,7 +320,7 @@
                                 :class="{ '!text-primary': accordiansExpenses === 2 }"
                                 @click="accordiansExpenses === 2 ? (accordiansExpenses = null) : (accordiansExpenses = 2)"
                             >
-                                Gastos de transporte u otros
+                            {{ $t("expense.edit.expenseOther") }}
                                 <div class="ltr:ml-auto rtl:mr-auto" :class="{ 'rotate-180': accordiansExpenses === 2 }">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
                                         <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -339,8 +339,8 @@
                                         >
                                         <div class="flex flex-row" style="text-align: left;">
                                             <span class="basis-1/4" style="width: 220px;">{{ $t("expense.edit.expenseDate."+index)}}   {{ formatDateNormal(other.date) }}</span>
-                                            <span class="basis-1/4" style="width: 200px;">Total de conceptos {{ other.totalConcepts }}</span> 
-                                            <span class="basis-1/4" style="width: 350px;">Total gastado ($): {{ formatCurrencyNum(other.totalExpense) }}</span>
+                                            <span class="basis-1/4" style="width: 200px;">{{ $t("expense.edit.totalConcepts") }} {{ other.totalConcepts }}</span> 
+                                            <span class="basis-1/4" style="width: 350px;">{{ $t("expense.edit.totalwaist") }} {{ formatCurrencyNum(other.totalExpense) }}</span>
                                         </div>
                                             <div  class="ltr:ml-auto rtl:mr-auto" :class="{ 'rotate-180': accordiansOtherExpenses === other.id }">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -355,48 +355,48 @@
                                                         <div style="margin-right: 10px; margin-left: 10px">
                                                             <label for="selectExpense">{{ $t("expense.edit.expenseType") }}</label>
                                                             <select  class="form-select text-white-dark" v-model="other.selectExpense" disabled>
-                                                                    <option :value="0">
-                                                                        LODGING
-                                                                    </option>
-                                                                    <option :value="1">
-                                                                        TRANSPORT: AIR, RAIL, ETC
-                                                                    </option>
-                                                                    <option :value="2">
-                                                                        TRANSPORT: RENTAL CAR, LIMO, ETC
-                                                                    </option>
-                                                                    <option :value="3">
-                                                                        TRANSPORT: LOCAL TAXI, TOLLS & PUBLIC TRNSIT
-                                                                    </option>
-                                                                    <option :value="4">
-                                                                        TRANSPORT: AUTO EXPENSES
-                                                                    </option>
-                                                                    <option :value="5">
-                                                                        MEALS: BREAKFAST
-                                                                    </option>
-                                                                    <option :value="6">
-                                                                        MEALS: LUNCH
-                                                                    </option>
-                                                                    <option :value="7">
-                                                                        MEALS: DINNER
-                                                                    </option>
-                                                                    <option :value="8">
-                                                                        ENTERTAINMENT
-                                                                    </option>
-                                                                    <option :value="9">
-                                                                        MISCELANEUS
-                                                                    </option>
-                                                                </select>
+                                                                <option :value="0">
+                                                                    {{ $t("expense.edit.expenseType.1") }}
+                                                                </option>
+                                                                <option :value="1">
+                                                                    {{ $t("expense.edit.expenseType.2") }}
+                                                                </option>
+                                                                <option :value="2">
+                                                                    {{ $t("expense.edit.expenseType.3") }}
+                                                                </option>
+                                                                <option :value="3">
+                                                                    {{ $t("expense.edit.expenseType.4") }}
+                                                                </option>
+                                                                <option :value="4">
+                                                                    {{ $t("expense.edit.expenseType.5") }}
+                                                                </option>
+                                                                <option :value="5">
+                                                                    {{ $t("expense.edit.expenseType.6") }}
+                                                                </option>
+                                                                <option :value="6">
+                                                                    {{ $t("expense.edit.expenseType.7") }}
+                                                                </option>
+                                                                <option :value="7">
+                                                                    {{ $t("expense.edit.expenseType.8") }}
+                                                                </option>
+                                                                <option :value="8">
+                                                                    {{ $t("expense.edit.expenseType.9") }}
+                                                                </option>
+                                                                <option :value="9">
+                                                                    {{ $t("expense.edit.expenseType.10") }}
+                                                                </option>
+                                                            </select>
                                                             <input type="hidden" v-model="other.idOther">
                                                         </div>
                                                         <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="time">Descripción</label>
+                                                            <label for="time">{{ $t("expense.edit.description") }}</label>
                                                             <input  type="text"  class="form-input" v-model="other.description" required/>
                                                         </div>
                                                         <div style="margin-right: 10px;">
-                                                            <label for="purpose">Gasto</label>
+                                                            <label for="purpose">{{ $t("expense.edit.expense") }}</label>
                                                             <input  type="text"  class="form-input" v-model="other.amount" disabled/>
                                                         </div>
-                                                        <button type="submit" class="btn btn-warning" style="height: fit-content; margin-top: 25px;">Actualizar</button>
+                                                        <button type="submit" class="btn btn-warning" style="height: fit-content; margin-top: 25px;">{{ $t("user.create.update") }}</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -492,7 +492,7 @@
                                         </svg>
                                     </button>
                                     <div class="text-lg font-bold bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
-                                        Tickets de comprobante de "{{ titleTicket.value === 0 ? $t("expense.edit.expenseType.1")  
+                                        {{ $t("expense.edit.ticketFrom") }} "{{ titleTicket.value === 0 ? $t("expense.edit.expenseType.1")  
                                                             : titleTicket.value === 1 ? $t("expense.edit.expenseType.2")
                                                             : titleTicket.value === 2 ? $t("expense.edit.expenseType.3") 
                                                             : titleTicket.value === 3 ? $t("expense.edit.expenseType.4") 
@@ -512,10 +512,10 @@
                                                         <label for="selectExpense">{{ $t("expense.edit.ticketType") }}</label>
                                                         <select  class="form-select text-white-dark" v-model="tickets.typeTicket" required>
                                                             <option :value="0">
-                                                                Ticket
+                                                                {{ $t("expense.edit.ticket") }}
                                                             </option>
                                                             <option :value="1">
-                                                                Recibo caja
+                                                                {{ $t("expense.edit.ticketBox") }}
                                                             </option>
                                                         </select>
                                                     </div>
@@ -531,12 +531,12 @@
                                                         <label >{{ $t("expense.edit.photo") }}</label>
                                                         <input type="file" @change="onFileChange" accept="image/*" id="imagenTicket" required>
                                                     </div>
-                                                    <button type="submit" class="btn btn-warning" style="height: fit-content; margin-top: 25px;">Agregar</button>
+                                                    <button type="submit" class="btn btn-warning" style="height: fit-content; margin-top: 25px;">{{ $t("expense.edit.add") }}</button>
                                                 </div> 
                                             </form>      
                                         </div>                 
                                             <div v-if="tickets.file" style="margin-right: 10px; ">
-                                                <h2>Previo:</h2>
+                                                <h2>{{ $t("expense.edit.preview") }}</h2>
                                                 <img :src="tickets.file" alt="Image preview" style="height: 200px;"/>
                                             </div>
                                             <div class="space-y-2 p-4 text-white-dark text-[13px]">
@@ -590,7 +590,7 @@
                         :class="{ '!text-primary': accordians1 === 1 }"
                         @click="accordians1 === 1 ? (accordians1 = null) : (accordians1 = 1)"
                     >
-                        Calculadora de cambio de Moneda
+                        {{ $t("expense.edit.calculatorMoney") }}
                         <div class="ltr:ml-auto rtl:mr-auto" :class="{ 'rotate-180': accordians1 === 1 }">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
                                 <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -600,40 +600,53 @@
                     <vue-collapsible :isOpen="accordians1 === 1">
                         <div class="panel sticky top-[75px] left-0">
                             <div class="grid xl:grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4">
-                                <form v-if="expense.status == 0" @submit.prevent="calculateTotal">
+                                <div v-if="expense.status == 0">
                                     <div class="form-group">
-                                        <label for="exchangeRate">Tipo de moneda:</label>
+                                        <label for="exchangeRate">{{ $t("expense.edit.typeCoin") }}</label>
                                         <input type="text" id="exchangeRate" class="form-input" v-model="formCalculator.moneda" required />
                                     </div>
                                     <div class="form-group mt-5">
-                                        <label for="exchangeRate">Tipo de cambio:</label>
+                                        <label for="exchangeRate">{{ $t("expense.edit.typeChange") }}</label>
                                         <input type="number" id="exchangeRate" class="form-input" step=".000001" v-model.number="formCalculator.exchangeRate" required/>
                                     </div>
                                     <div class="form-group mt-5">
-                                        <label for="amount">Cantidad a cambiar:</label>
+                                        <label for="amount">{{ $t("expense.edit.amountChange") }}</label>
                                         <input type="number" class="form-input" id="amount" step=".000001" v-model.number="formCalculator.amount" required />
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-5">Calcular</button>
-                                </form>
+                                    <div class="flex mt-5">
+                                        <button class="btn btn-primary" @click="calculateTotal()">{{ $t("expense.edit.calculateTimes") }}</button>
+                                        <button class="btn btn-primary ml-2" @click="calculateTotalDivi()">{{ $t("expense.edit.calculateDivide") }}</button>
+                                    </div>
+                                </div>
                                 <div class="space-y-2 text-white-dark text-[13px]">
-                                    <table border="1">
-                                        <thead>
-                                            <tr style="background-color: #2196f3 !important; color: black;">
-                                                <th>Moneda</th>
-                                                <th>Cantidad</th>
-                                                <th>Cambio</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(cambio, entryIndex) in formCalculator.entries" :key="entryIndex">
-                                                <td>{{ cambio.currency }}</td>
-                                                <td>{{ cambio.amount }}</td>
-                                                <td>{{ cambio.change }}</td>
-                                                <td>{{ formatCurrencyNum(cambio.total) }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-container" style="max-width: 100%; overflow-x: auto;">
+                                        <table border="1">
+                                            <thead>
+                                                <tr style="background-color: #2196f3 !important; color: black;">
+                                                    <th>{{ $t("expense.edit.coin") }}</th>
+                                                    <th>{{ $t("report.form.quantity") }}</th>
+                                                    <th>{{ $t("report.form.change") }}</th>
+                                                    <th>{{ $t("expense.edit.total") }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(cambio, entryIndex) in formCalculator.entries" :key="entryIndex">
+                                                    <td>{{ cambio.currency }}</td>
+                                                    <td>{{ formatCurrencyCalcu(cambio.amount) }}</td>
+                                                    <td>{{ formatCurrencyCalcu(cambio.change) }}</td>
+                                                    <td>{{ formatCurrencyCalcu(cambio.total) }}</td>
+                                                    <td>
+                                                        <button v-if="expense.status == 0" class="btn btn-danger" @click="deleteEntryCalculator(cambio.id, entryIndex)">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                                            </svg>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -646,7 +659,7 @@
                         :class="{ '!text-primary': accordians1 === 2 }"
                         @click="accordians1 === 2 ? (accordians1 = null) : (accordians1 = 2)"
                     >
-                        Datos generales
+                        {{ $t("expense.edit.generalData") }}
                         <div class="ltr:ml-auto rtl:mr-auto" :class="{ 'rotate-180': accordians1 === 2 }">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
                                 <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -726,13 +739,13 @@
                                         <path d="M7.5 5.5a.5.5 0 0 0-1 0v.634l-.549-.317a.5.5 0 1 0-.5.866L6 7l-.549.317a.5.5 0 1 0 .5.866l.549-.317V8.5a.5.5 0 1 0 1 0v-.634l.549.317a.5.5 0 1 0 .5-.866L8 7l.549-.317a.5.5 0 1 0-.5-.866l-.549.317zm-2 4.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
                                         <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
                                     </svg>
-                                    Reporte                              
+                                    {{ $t('expense.edit.report') }}                              
                                 </button>
                                 <button v-if="expense.status == 1 && userAuth == 1" class="ml-2 btn btn-success" @click="aproveReport()">
-                                    Aprobado                            
+                                    {{ $t('expense.edit.approve') }}                            
                                 </button>
                                 <button v-if="expense.status == 1 && userAuth == 1" class="ml-2 btn btn-danger" @click="noAproveReport()">
-                                    No aprobado                            
+                                    {{ $t('expense.edit.notApprove') }}                             
                                 </button>
                                 <form  v-if="expense.status == 0" @submit.prevent="submitFormFinishReport">
                                     <div class="m-4">
@@ -788,7 +801,7 @@
                                             <path d="M17 22V21C17 19.1144 17 18.1716 16.4142 17.5858C15.8284 17 14.8856 17 13 17H11C9.11438 17 8.17157 17 7.58579 17.5858C7 18.1716 7 19.1144 7 21V22" stroke="currentColor" stroke-width="1.5"/>
                                             <path opacity="0.5" d="M7 8H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                         </svg>
-                                        Terminar reporte
+                                        {{ $t("expense.edit.finishReport") }}
                                     </button>
                                 </form>
                                 <form  v-if="expense.status == 2 && userAuth == 1" @submit.prevent="submitFormTransferRequestReport">
@@ -802,7 +815,7 @@
                                             <path d="M17 22V21C17 19.1144 17 18.1716 16.4142 17.5858C15.8284 17 14.8856 17 13 17H11C9.11438 17 8.17157 17 7.58579 17.5858C7 18.1716 7 19.1144 7 21V22" stroke="currentColor" stroke-width="1.5"/>
                                             <path opacity="0.5" d="M7 8H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                         </svg>
-                                        Generar solicitud de transferencia 
+                                        {{ $t("expense.edit.reportTransfer") }}
                                     </button>
                                 </form>
                                 
@@ -840,7 +853,7 @@
                                         </svg>
                                     </button>
                                     <div class="text-lg font-bold bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
-                                        Tickets de comprobante           
+                                        {{ $t("expense.edit.ticketView") }}
                                     </div>
                                     <div class="p-5">
                                         <img :src="selectedImageUrl" id="imagenTicketPrev" @load="handleImageTicketLoad" alt="Image">
@@ -1177,8 +1190,6 @@
         }
 
         const submitFormMeal = (index) => {
-
-            
 
             // actualizamos el entrie del meal 
             const formMeal = ExpenseMeals.value[index];
@@ -1567,6 +1578,108 @@
         }
 
     // fin funciones tickets    
+
+    function deleteEntryCalculator(id, entryIndex){
+        Swal.fire({
+            title: t("expense.edit.process"),
+            text: t("expense.edit.processData"),
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            customClass: "sweet-alerts",
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        const form = new FormData();
+        form.append('id', id);
+        form.append('uuid', props.expense.uuid);
+
+        router.post(`/deleteCalculatorsExpense`, form, {
+            onSuccess: (page) => {
+                formCalculator.entries.splice(entryIndex, 1);
+                formCalculator.moneda = '';
+                formCalculator.amount = '';
+                formCalculator.total = '';
+                formCalculator.exchangeRate = '';       
+                Swal.close();
+            },
+            onError: (error) => {
+                console.log(error);
+                let errorMessages = "";
+
+                for (const key in error) {
+                    const fieldName = key.replace("_id", "");
+                    errorMessages += `<p>${error[key]}</p>`;
+                }
+                Swal.close();
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    html: errorMessages,
+                    customClass: "sweet-alerts",
+                });
+            },
+            onFinish: () => {},
+        });
+    }
+
+    function calculateTotalDivi(){
+        Swal.fire({
+            title: t("expense.edit.process"),
+            text: t("expense.edit.processData"),
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            customClass: "sweet-alerts",
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        formCalculator.total = formCalculator.amount / formCalculator.exchangeRate;
+        const newEntry = {
+            amount: formCalculator.amount,
+            currency: formCalculator.moneda,
+            total: formCalculator.total,
+            change: formCalculator.exchangeRate,
+                
+        };
+
+        const form = new FormData();
+
+        form.append('datos', JSON.stringify(newEntry));
+        form.append('id', props.expense.id);
+        form.append('uuid', props.expense.uuid);
+            
+        router.post(`/createCalculatorsExpense`, form, {
+            onSuccess: (page) => {
+                formCalculator.entries.push(newEntry);
+                formCalculator.moneda = '';
+                formCalculator.amount = '';
+                formCalculator.total = '';
+                formCalculator.exchangeRate = '';       
+                Swal.close();
+            },
+            onError: (error) => {
+                console.log(error);
+                let errorMessages = "";
+
+                for (const key in error) {
+                    const fieldName = key.replace("_id", "");
+                    errorMessages += `<p>${error[key]}</p>`;
+                }
+                Swal.close();
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    html: errorMessages,
+                    customClass: "sweet-alerts",
+                });
+            },
+            onFinish: () => {},
+        });
+
+    }
     
     function calculateTotal() {
         Swal.fire({
@@ -1623,8 +1736,6 @@
             onFinish: () => {},
         });
 
-        
-        
     }
 
     function generateUUID() {
@@ -1661,6 +1772,35 @@
         for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
             num = num.substring(0, num.length - (4 * i + 3)) + ',' +
                         num.substring(num.length - (4 * i + 3));
+        return (((sign) ? '' : '-') + num + '.' + cents);
+    }
+
+    function formatCurrencyCalcu(num) {
+        num = num.toString().replace(/\$|\,/g, '');
+        if (isNaN(num))
+            num = "0";
+        
+        var sign = (num == (num = Math.abs(num)));
+        
+        // Multiplicamos por 10^6 (1,000,000) para obtener 6 decimales
+        num = Math.floor(num * 1000000 + 0.50000000001);
+        
+        // Obtenemos los decimales (últimos 6 dígitos)
+        var cents = num % 1000000;
+        
+        // Formateamos el número entero
+        num = Math.floor(num / 1000000).toString();
+        
+        // Convertimos los decimales a cadena y aseguramos que sean 6 dígitos
+        cents = cents.toString().padStart(6, '0');
+        
+        // Añadimos las comas en los miles para el número entero
+        for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) {
+            num = num.substring(0, num.length - (4 * i + 3)) + ',' +
+                num.substring(num.length - (4 * i + 3));
+        }
+        
+        // Devolvemos el número formateado con signo, número entero y decimales
         return (((sign) ? '' : '-') + num + '.' + cents);
     }
 

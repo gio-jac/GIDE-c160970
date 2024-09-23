@@ -6,7 +6,7 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/reports/causes">Causes</Link></li>
+                    <li><Link href="/reports/causes">{{ $t('sidebar.causes') }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
@@ -18,11 +18,11 @@
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClient">Cause Name</label>
+                    <label for="formClient">{{ $t('causes.new.nameCauseEN') }} <span class="text-red-500">*</span></label>
                     <input
                         id="formClient"
                         type="text"
-                        placeholder="Enter Cause Name"
+                        :placeholder="$t('causes.new.nameCausePlaceholderEN')"
                         class="form-input"
                         v-model="form.name"
                     />
@@ -30,23 +30,34 @@
                         <p class="text-danger mt-1">{{ errors.name }}</p>
                     </template>
                 </div>
-                <div>
-                    <label for="formTranslation">Request Translation</label>
-                    <label class="w-12 h-6 relative">
-                        <input
-                            type="checkbox"
-                            class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer"
-                            id="formTranslation"
-                            v-model="form.requested_translation"
-                        />
-                        <span
-                            for="formTranslation"
-                            class="bg-[#ebedf2] dark:bg-dark block h-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"
-                        ></span>
-                    </label>
+                <div :class="{ 'has-error': errors.code }">
+                    <label for="formClientES">{{ $t('causes.new.nameCauseES') }}</label>
+                    <input
+                        id="formClientES"
+                        type="text"
+                        :placeholder="$t('causes.new.nameCausePlaceholderES')"
+                        class="form-input"
+                        v-model="form.es"
+                    />
+                    <template v-if="errors.es">
+                        <p class="text-danger mt-1">{{ errors.es }}</p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.code }">
+                    <label for="formClientPT">{{ $t('causes.new.nameCausePT') }}</label>
+                    <input
+                        id="formClientPT"
+                        type="text"
+                        :placeholder="$t('causes.new.nameCausePlaceholderPT')"
+                        class="form-input"
+                        v-model="form.pt"
+                    />
+                    <template v-if="errors.pt">
+                        <p class="text-danger mt-1">{{ errors.pt }}</p>
+                    </template>
                 </div>
                 <div>
-                    <label for="formActive">{{ $t("part.new.activePart") }}</label>
+                    <label for="formActive">{{ $t("causes.edit.activeCause") }}</label>
                     <label class="w-12 h-6 relative">
                         <input
                             type="checkbox"
@@ -67,7 +78,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
@@ -86,9 +97,23 @@ const props = defineProps({
 });
 
 const form = reactive({
-    name: props.cause.name,
+    name: (props.cause.name ?? '').toUpperCase(),
+    es: (props.cause.es ?? '').toUpperCase(),
+    pt: (props.cause.pt ?? '').toUpperCase(),
     is_active: props.cause.is_active === 1 ? true : false,
     requested_translation: false,
+});
+
+watch(() => form.name, (newValue) => {
+    form.name = newValue.toUpperCase();
+});
+
+watch(() => form.es, (newValue) => {
+    form.es = newValue.toUpperCase();
+});
+
+watch(() => form.pt, (newValue) => {
+    form.pt = newValue.toUpperCase();
 });
 
 function submit() {

@@ -6,7 +6,7 @@
                 <ol
                     class="flex text-gray-500 font-semibold dark:text-white-dark"
                 >
-                    <li><Link href="/reports/solutions">Solutions</Link></li>
+                    <li><Link href="/reports/solutions">{{ $t('sidebar.solutions') }}</Link></li>
                     <li class="before:content-['/'] before:px-1.5">
                         <a
                             href="javascript:;"
@@ -18,16 +18,42 @@
             </div>
             <form class="space-y-5" @submit.prevent="submit">
                 <div :class="{ 'has-error': errors.code }">
-                    <label for="formClient">Solution Name</label>
+                    <label for="formClient">{{ $t('solutions.new.nameSolutionEN') }} <span class="text-red-500">*</span></label>
                     <input
                         id="formClient"
                         type="text"
-                        placeholder="Enter Solution Name"
+                        :placeholder="$t('solutions.new.nameSolutionPlaceholderEN')"
                         class="form-input"
                         v-model="form.name"
                     />
                     <template v-if="errors.name">
                         <p class="text-danger mt-1">{{ errors.name }}</p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.code }">
+                    <label for="formClientES">{{ $t('solutions.new.nameSolutionES') }}</label>
+                    <input
+                        id="formClientES"
+                        type="text"
+                        :placeholder="$t('solutions.new.nameSolutionPlaceholderES')"
+                        class="form-input"
+                        v-model="form.es"
+                    />
+                    <template v-if="errors.es">
+                        <p class="text-danger mt-1">{{ errors.es }}</p>
+                    </template>
+                </div>
+                <div :class="{ 'has-error': errors.code }">
+                    <label for="formClientPT">{{ $t('solutions.new.nameSolutionPT') }}</label>
+                    <input
+                        id="formClientPT"
+                        type="text"
+                        :placeholder="$t('solutions.new.nameSolutionPlaceholderPT')"
+                        class="form-input"
+                        v-model="form.pt"
+                    />
+                    <template v-if="errors.pt">
+                        <p class="text-danger mt-1">{{ errors.pt }}</p>
                     </template>
                 </div>
                 <button type="submit" class="btn btn-primary !mt-6">{{ $t("user.create.add") }}</button>
@@ -37,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
@@ -49,7 +75,21 @@ defineProps({ errors: Object });
 
 const form = reactive({
     name: null,
+    es: null,
+    pt: null,
     is_active: true,
+});
+
+watch(() => form.name, (newValue) => {
+    form.name = newValue ? newValue.toUpperCase() : null;
+});
+
+watch(() => form.es, (newValue) => {
+    form.es = newValue ? newValue.toUpperCase() : null;
+});
+
+watch(() => form.pt, (newValue) => {
+    form.pt = newValue ? newValue.toUpperCase() : null;
 });
 
 function submit() {

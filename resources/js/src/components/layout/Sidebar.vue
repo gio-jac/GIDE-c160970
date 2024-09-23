@@ -493,7 +493,7 @@
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Errors</Link
+                                                                >{{ $t('sidebar.errors')}}</Link
                                                             >
                                                         </li>
                                                         <li
@@ -509,7 +509,7 @@
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Causes</Link
+                                                                >{{ $t('sidebar.causes')}}</Link
                                                             >
                                                         </li>
                                                         <li
@@ -525,7 +525,7 @@
                                                                     ),
                                                                 }"
                                                                 target="_blank"
-                                                                >Solutions</Link
+                                                                >{{ $t('sidebar.solutions')}}</Link
                                                             >
                                                         </li>
                                                     </ul>

@@ -13,6 +13,8 @@ Route::middleware('auth')->group(function () {
     Route::post('deleteTicketsExpense', [ExpensesController::class, 'deleteTicketExpense'])->name('expenses.deleteTicketExpense');
     Route::get('/imagesTickets/{id}', [ExpensesController::class, 'showImageTickets'])->name('images.showTickets');
     Route::post('createCalculatorsExpense', [ExpensesController::class, 'createCalculatorExpense'])->name('expenses.createCalculatorExpense');
+    Route::post('deleteCalculatorsExpense', [ExpensesController::class, 'deleteCalculatorExpense'])->name('expenses.deleteCalculatorExpense');
+    
     Route::post('/updateExpensesMeals', [ExpensesController::class, 'updateExpensesMeal'])->name('expenses.updateExpensesMeal');
     Route::post('/updateExpensesOthers', [ExpensesController::class, 'updateExpensesOther'])->name('expenses.updateExpensesOther');
     Route::post('/finishExpensesReports', [ExpensesController::class, 'finishExpensesReport'])->name('expenses.finishExpensesReport');
