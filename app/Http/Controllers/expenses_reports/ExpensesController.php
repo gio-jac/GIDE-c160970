@@ -27,6 +27,8 @@ use Carbon\Carbon;
 use NumberFormatter;
 use Intervention\Image\Facades\Image as ImageIntervention;
 use DateTime;
+use ZipArchive;
+
 
 class ExpensesController extends Controller
 {
@@ -62,8 +64,8 @@ class ExpensesController extends Controller
         $expenseMeals = ExpenseMeal::where('expense_id', $expenses->id)->get(); 
         $expenseOthers = ExpenseOther::where('expense_id', $expenses->id)->get(); 
         $expenseTickets = ExpenseTicket::where('expense_id', $expenses->id)
-            ->select(['id', 'expense_id', 'uuid', 'amount', 'concept'])
-            ->selectRaw('IF(ticket IS NOT NULL, false, true) AS typeTicket')
+            ->select(['id', 'expense_id', 'uuid', 'amount', 'concept', 'ticketPdf'])
+            ->selectRaw('IF(ticket IS NOT NULL OR ticketPdf IS NOT NULL, 0, 1) AS typeTicket')
             ->get();
         $expenseCalculator = ExpenseCalculator::where('expense_id', $expenses->id)->get();    
             
@@ -127,11 +129,14 @@ class ExpensesController extends Controller
 
         $centerCosts = CostCenter::All();
         $departments = Department::All();
+        $users = User::All();
 
         return Inertia::render('admin/expenses/listExpenses', [
             'expenses' => $expenses,
             'centerCosts' => $centerCosts,
-            'departments' => $departments
+            'departments' => $departments,
+            'user' => $userAuth,
+            'usersList' => $users
         ]);
 
     }
@@ -154,7 +159,7 @@ class ExpensesController extends Controller
         $expense = Expense::create([
             'uuid' => $uuid,
             'endingDate' => $endingDate,
-            'user_id' => $userAuth->id, 
+            'user_id' => $request->travelPerson, 
             'department_id' => $request->travelDepartment, 
             'cc_id' => $request->travelCenterCost,
             'advanceRequest_id' => $AdvanceRequest->id,
@@ -218,7 +223,6 @@ class ExpensesController extends Controller
 
         $ExpenseMeal = ExpenseMeal::findOrFail($request->id);
         $ExpenseMeal->restaurant = $request->restaurant;
-        $ExpenseMeal->time = $request->time;
         $ExpenseMeal->save();
 
         return redirect()->route('expenses.show', $request->uuidExpense)->with('success');
@@ -289,31 +293,23 @@ class ExpensesController extends Controller
 
         return redirect()->route('expenses.show', $request->input('uuidExpense') )->with('success');
     }
-   
-    public function createTicketExpense(Request $request) {
+
+    public function createTicketExpense(Request $request){
         if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
 
-            $request->validate([
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:3048',
-            ]);
-
-            // Optimizar la imagen
-            $image = $request->file('image');
-            $imageIntervention = ImageIntervention::make($image)->resize(800, 800, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            })->encode('png', 85);
-
-            $binaryImage = $imageIntervention->encode('png')->getEncoded();
-            $data = json_decode($request->input('datos'), true);
+            // Si el archivo es una imagen (jpeg, png, etc.)
+            if (in_array($extension, ['jpeg', 'png', 'jpg', 'gif'])) {
+                return $this->processImage($file, $request);
+            }
             
-            $ticket = ExpenseTicket::create([
-                'expense_id' => $data['idExpense'],
-                'uuid' => $data['idGeneral'],
-                'amount' => $data['amount'], 
-                'concept' => $data['concept'] ?? null,
-                'ticket' => $binaryImage
-            ]);
+            // Si el archivo es un PDF, convertirlo a imágenes
+            if ($extension === 'pdf') {
+                return $this->processPdf($file, $request);
+            }
+
+            return response()->json(['error' => 'Formato no compatible'], 400);
         }else{
             $data = json_decode($request->input('datos'), true);
             
@@ -324,19 +320,79 @@ class ExpensesController extends Controller
                 'concept' => $data['concept'] ?? null,
                 'ticket' => null
             ]);
+
+            return redirect()->route('expenses.show', $data['uuidExpense'])->with('success');
         }
+
+    }
+
+    private function processImage($image, $request){
+       
+        $imageIntervention = ImageIntervention::make($image)->resize(800, 800, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        })->encode('png', 85);
+
+        $binaryImage = $imageIntervention->encode('png')->getEncoded();
+        $data = json_decode($request->input('datos'), true);
+        
+        $ticket = ExpenseTicket::create([
+            'expense_id' => $data['idExpense'],
+            'uuid' => $data['idGeneral'],
+            'amount' => $data['amount'], 
+            'concept' => $data['concept'] ?? null,
+            'ticket' => $binaryImage,
+            'ticketPdf' => null // No hay PDF, se mantiene null
+        ]);
 
         return redirect()->route('expenses.show', $data['uuidExpense'])->with('success');
     }
 
+    private function processPdf($pdfFile, $request){
+        // Obtener datos del request
+        $data = json_decode($request->input('datos'), true);
+
+        // Buscar el ExpenseGeneral para obtener fechaExpense
+        $expenseGeneral = ExpenseGeneral::where('id', $data['idGeneral'])->first();
+
+        // Crear el registro en la base de datos primero
+        $ticket = ExpenseTicket::create([
+            'expense_id' => $data['idExpense'],
+            'uuid' => $data['idGeneral'],
+            'amount' => $data['amount'],
+            'concept' => $data['concept'] ?? null,
+            'ticket' => null, // No guardamos imágenes, solo la ruta del PDF
+            'ticketPdf' => null // Se actualizará después de guardar el archivo
+        ]);
+
+        // Construir el nombre del archivo con el ID del ticket recién creado
+        $fileName = "{$ticket->id}_{$expenseGeneral->dateExpense}.pdf";
+
+        // Guardar el PDF en storage con el nuevo nombre
+        $pdfPath = $pdfFile->storeAs('tickets', $fileName, 'public');
+
+        // Actualizar la ruta en la base de datos
+        $ticket->update(['ticketPdf' => $pdfPath]);
+
+        return redirect()->route('expenses.show', $data['uuidExpense'])->with('success');
+    }
+   
+
     public function deleteTicketExpense(Request $request) {
         $data = json_decode($request->input('datos'), true);
-        $image = ExpenseTicket::find($data['id']);
+        $ticket = ExpenseTicket::find($data['id']);
 
-        if ($image) {
-            // Eliminar el registro
-            $image->delete();
+        if ($ticket) {
+            // Si existe un archivo PDF asociado, eliminarlo del almacenamiento
+            if ($ticket->ticketPdf) {
+                $pdfPath = storage_path("app/public/{$ticket->ticketPdf}");
+                if (file_exists($pdfPath)) {
+                    unlink($pdfPath);
+                }
+            }
 
+            // Eliminar el registro de la base de datos
+            $ticket->delete();
         }
         return redirect()->route('expenses.show', $request->input('uuidExpense') )->with('success');
     }
@@ -447,12 +503,12 @@ class ExpensesController extends Controller
         $expenseOthers = ExpenseOther::where('expense_id', $expenses->id)->get(); 
         $expenseTickets = ExpenseTicket::where('expense_tickets.expense_id', $expenses->id)
             ->select(['expense_tickets.id', 'expense_tickets.expense_id', 'expense_tickets.uuid', 'expense_tickets.amount', 'concept', 'ticket', 'expense_generals.dateExpense'])
-            ->selectRaw('IF(ticket IS NOT NULL, false, true) AS typeTicket')
+            ->selectRaw('IF(ticket IS NOT NULL OR ticketPdf IS NOT NULL, 0, 1) AS typeTicket')
             ->join('expense_generals', 'expense_generals.id', '=', 'expense_tickets.uuid')
             ->get();
         $expenseTicketsVales = ExpenseTicket::where('expense_tickets.expense_id', $expenses->id)
             ->select(['expense_tickets.id', 'expense_tickets.expense_id', 'expense_tickets.uuid', 'expense_tickets.amount', 'concept', 'ticket', 'expense_generals.dateExpense'])
-            ->selectRaw('IF(ticket IS NOT NULL, false, true) AS typeTicket')
+            ->selectRaw('IF(ticket IS NOT NULL OR ticketPdf IS NOT NULL, 0, 1) AS typeTicket')
             ->join('expense_generals', 'expense_generals.id', '=', 'expense_tickets.uuid')
             ->havingRaw('typeTicket = true')
             ->get();
@@ -534,16 +590,28 @@ class ExpensesController extends Controller
             }else if($expenseGeneral->selectExpense == 4){
                 $this->insertValue($sheet, $expenseGeneral, 'I', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 5){
-                if($expenseGeneral->tip > 0)
-                    $expenseGeneral->amount = $expenseGeneral->amount + $expenseGeneral->tip;
+                if($expenseGeneral->tip > 0){
+                    $amountTip = $expenseGeneral->amount;
+                    $expenseGeneral->amount = $expenseGeneral->tip;
+                    $this->insertValue($sheet, $expenseGeneral, 'P', $rowGeneral);
+                }
+                $expenseGeneral->amount = $amountTip;
                 $this->insertValue($sheet, $expenseGeneral, 'J', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 6){
-                if($expenseGeneral->tip > 0)
-                    $expenseGeneral->amount = $expenseGeneral->amount + $expenseGeneral->tip;
+                if($expenseGeneral->tip > 0){
+                    $amountTip = $expenseGeneral->amount;
+                    $expenseGeneral->amount = $expenseGeneral->tip;
+                    $this->insertValue($sheet, $expenseGeneral, 'P', $rowGeneral);
+                }
+                $expenseGeneral->amount = $amountTip;
                 $this->insertValue($sheet, $expenseGeneral, 'K', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 7){
-                if($expenseGeneral->tip > 0)
-                    $expenseGeneral->amount = $expenseGeneral->amount + $expenseGeneral->tip;
+                if($expenseGeneral->tip > 0){
+                    $amountTip = $expenseGeneral->amount;
+                    $expenseGeneral->amount = $expenseGeneral->tip;
+                    $this->insertValue($sheet, $expenseGeneral, 'P', $rowGeneral);
+                }
+                $expenseGeneral->amount = $amountTip;
                 $this->insertValue($sheet, $expenseGeneral, 'L', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 8){
                 $this->insertValue($sheet, $expenseGeneral, 'N', $rowGeneral);
@@ -587,7 +655,7 @@ class ExpensesController extends Controller
             if($expenseMeal->selectExpense == 6) $pursose = 'LUNCH';
             if($expenseMeal->selectExpense == 7) $pursose = 'DINNER';
 
-            $descriptionMeal = 'City: '.$expenseMeal->city.', Restaurant: '.$expenseMeal->restaurant.', Time: '.$expenseMeal->time;
+            $descriptionMeal = 'City: '.$expenseMeal->city.', Restaurant: '.$expenseMeal->restaurant;
             $sheet->setCellValue('C' . $rowMeal, $descriptionMeal);
             $sheet->setCellValue('H' . $rowMeal, $pursose);
             $sheet->setCellValue('J' . $rowMeal, $expenseMeal->amount);
@@ -749,12 +817,39 @@ class ExpensesController extends Controller
         $filePath = public_path('excel/' . $fileName);
         $writer->save($filePath);
 
-        // Opción 1: Descargar el archivo al navegador
-        return response()->download($filePath)->deleteFileAfterSend(true);
+        // Obtener los tickets con ticketPdf no null
+            $tickets = ExpenseTicket::where('expense_id', $expenses->id)
+            ->whereNotNull('ticketPdf')
+            ->get();
+        // Crear el archivo ZIP
+        $zip = new ZipArchive;
+        $zipFileName = public_path("excel/{$expenses->reference}_with_pdfs.zip");
+
+        if ($zip->open($zipFileName, ZipArchive::CREATE) === TRUE) {
+            // Agregar el archivo Excel al ZIP
+            $zip->addFile($filePath, $fileName);
+
+            // Agregar los PDFs de los tickets al ZIP
+            foreach ($tickets as $ticket) {
+                $pdfPath = storage_path("app/public/{$ticket->ticketPdf}");
+                if (file_exists($pdfPath)) {
+                    $zip->addFile($pdfPath, basename($pdfPath));
+                }
+            }
+
+            // Cerrar el archivo ZIP
+            $zip->close();
+
+            // Eliminar el archivo Excel original (opcional)
+            unlink($filePath);
+
+            // Descargar el archivo ZIP
+            return response()->download($zipFileName)->deleteFileAfterSend(true);
+        }
+        return response()->json(['error' => 'Failed to create ZIP file'], 500);
     }
 
-    function adjustCell($cell, $rowOffset)
-    {
+    function adjustCell($cell, $rowOffset){
         // Extraer la columna y la fila del formato "A1"
         preg_match('/([A-Z]+)(\d+)/', $cell, $matches);
         $column = $matches[1];  // Columna (letra)

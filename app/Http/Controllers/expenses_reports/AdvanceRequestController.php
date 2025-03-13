@@ -78,7 +78,7 @@ class AdvanceRequestController extends Controller
                 "users.apellido_paterno",
                 "users.apellido_materno",
                 "cost_centers.cc",
-                "cost_centers.name ",
+                "cost_centers.name",
                 "departments.department",
                 DB::raw("CONCAT(users.nombre, ' ', users.apellido_paterno, ' ', COALESCE(users.apellido_materno, '')) as nombre_completo"),
                 DB::raw("
@@ -98,11 +98,11 @@ class AdvanceRequestController extends Controller
         return Inertia::render('admin/expenses/listAdvanceRequest', [
             'advanceRequests' => $advanceRequest,
             'centerCosts' => $centerCosts,
-            'departments' => $departments
+            'departments' => $departments,
+            'user' => $userAuth
         ]);
 
     }
-
 
     public function updateAdvancePay(Request $request ){
         $userAuth = Auth::user();
@@ -170,4 +170,45 @@ class AdvanceRequestController extends Controller
            
         }
     }
+
+    public function listCenterCost(){
+      
+        $centerCosts = CostCenter::where('status', 0)->get();
+
+        return Inertia::render('admin/expenses/listCostCenters', [
+            'centerCosts' => $centerCosts
+        ]);
+
+    }
+
+    public function addCenterCost(Request $request){
+        $centerCost = CostCenter::create([
+            'cc' => $request->cc,
+            'name' => $request->name
+        ]);
+
+        return redirect()->route('advanceRequest.listCenterCost')->with('success');
+    }
+
+    public function updateCenterCost(Request $request){
+
+        $centerCost = CostCenter::findOrFail($request->id);
+        $centerCost->cc = $request->cc;
+        $centerCost->name = $request->name;
+        $centerCost->save();
+
+        return redirect()->route('advanceRequest.listCenterCost')->with('success');
+    }
+
+    public function deleteCenterCost(Request $request){
+
+        $centerCost = CostCenter::findOrFail($request->id);
+        $centerCost->status = 1;
+        $centerCost->save();
+
+        return redirect()->route('advanceRequest.listCenterCost')->with('success');
+    }
+
+    
+    
 }

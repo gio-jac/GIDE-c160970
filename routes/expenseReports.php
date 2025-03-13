@@ -27,5 +27,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/advanceRequestReports/{report}/file', [AdvanceRequestController::class, 'advanceRequestReport'])->name('advanceRequest.file');
     Route::get('/listAdvanceRequests', [AdvanceRequestController::class, 'listAdvanceRequest'])->name('advanceRequest.list');
     Route::post('/updateAdvancePayExpenses', [AdvanceRequestController::class, 'updateAdvancePay'])->name('advanceRequest.update');
+
+    Route::get('/listCenterCosts', [AdvanceRequestController::class, 'listCenterCost'])->name('advanceRequest.listCenterCost');
+    Route::post('/addCenterCosts', [AdvanceRequestController::class, 'addCenterCost'])->name('advanceRequest.addCenterCost');
+    Route::post('/updateCenterCosts', [AdvanceRequestController::class, 'updateCenterCost'])->name('advanceRequest.updateCenterCost'); 
+    Route::post('/deleteCenterCosts', [AdvanceRequestController::class, 'deleteCenterCost'])->name('advanceRequest.deleteCenterCost'); 
     
 });

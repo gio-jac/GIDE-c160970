@@ -48,9 +48,9 @@
                             </div>
                         </template>
                         
-                        <template #actions="data">
+                        <template #actions="data" >
                             <div class="flex gap-4 items-center justify-center">
-                                <button type="button"  @click="selectRow(data.value)" v-if="data.value.status === 0">
+                                <button type="button"  @click="selectRow(data.value)" v-if="user.user_type_id === 1 && data.value.status === 0">
                                     <svg
                                         width="24"
                                         height="24"
@@ -448,6 +448,10 @@
             type: Array,
             required: true,
         },
+        user: {
+            type: Object,
+            required: true,
+        }
     });
 
     const form = reactive({

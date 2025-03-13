@@ -78,6 +78,14 @@
                                                                 </option>
                                                             </select>
                                                         </div>
+                                                        <div v-if="week.selectExpense == '5' || week.selectExpense == '6' || week.selectExpense == '7'" style="margin-right: 10px; margin-left: 10px">
+                                                            <label for="restaurant">{{ $t("expense.edit.restaurant" ) }}</label>
+                                                            <input  type="text"  class="form-input" v-model="week.restaurant" required/>
+                                                        </div>
+                                                        <div v-if="week.selectExpense != '5' && week.selectExpense != '6' && week.selectExpense != '7'" style="margin-right: 10px; margin-left: 10px">
+                                                            <label for="time">{{ $t("expense.edit.description") }}</label>
+                                                            <input  type="text"  class="form-input" v-model="week.description" required/>
+                                                        </div>
                                                         <div style="margin-right: 10px; margin-left: 10px">
                                                             <label for="inputCity">{{ $t("expense.edit.city") }}</label>
                                                             <input  type="text"  class="form-input" v-model="week.inputCity" required/>
@@ -184,87 +192,22 @@
                                             </div>
                                         </button>
                                         <vue-collapsible :isOpen="accordiansMeals === meal.id">
-                                            <div v-if="expense.status == 0" class="space-y-2 p-4 text-white-dark text-[13px]">
-                                                <form @submit.prevent="submitFormMeal(index)">
-                                                    <div class="flex flex-row flex-wrap">
-                                                        <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="restaurant">{{ $t("expense.edit.restaurant" ) }}</label>
-                                                            <input  type="text"  class="form-input" v-model="meal.restaurant" required/>
-                                                            <input type="hidden" v-model="meal.idMeal">
-                                                        </div>
-                                                        <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="time">{{ $t("expense.edit.time" ) }}</label>
-                                                            <input  type="time"  class="form-input" v-model="meal.time" required/>
-                                                        </div>
-                                                        <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="city">{{ $t("expense.edit.city") }}</label>
-                                                            <input  type="text"  class="form-input" v-model="meal.city" disabled/>
-                                                        </div>
-                                                        <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="selectExpense">{{ $t("expense.edit.expenseType") }}</label>
-                                                            <select  class="form-select text-white-dark" v-model="meal.selectExpense" disabled>
-                                                                <option :value="0">
-                                                                    {{ $t("expense.edit.expenseType.1") }}
-                                                                </option>
-                                                                <option :value="1">
-                                                                    {{ $t("expense.edit.expenseType.2") }}
-                                                                </option>
-                                                                <option :value="2">
-                                                                    {{ $t("expense.edit.expenseType.3") }}
-                                                                </option>
-                                                                <option :value="3">
-                                                                    {{ $t("expense.edit.expenseType.4") }}
-                                                                </option>
-                                                                <option :value="4">
-                                                                    {{ $t("expense.edit.expenseType.5") }}
-                                                                </option>
-                                                                <option :value="5">
-                                                                    {{ $t("expense.edit.expenseType.6") }}
-                                                                </option>
-                                                                <option :value="6">
-                                                                    {{ $t("expense.edit.expenseType.7") }}
-                                                                </option>
-                                                                <option :value="7">
-                                                                    {{ $t("expense.edit.expenseType.8") }}
-                                                                </option>
-                                                                <option :value="8">
-                                                                    {{ $t("expense.edit.expenseType.9") }}
-                                                                </option>
-                                                                <option :value="9">
-                                                                    {{ $t("expense.edit.expenseType.10") }}
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                        <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="amount">{{ $t("expense.edit.amount") }}</label>
-                                                            <input  type="number" step=".01" class="form-input" v-model="meal.amount" disabled/>
-                                                        </div>
-                                                        <div  style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="tip">{{ $t("expense.edit.tip") }}</label>
-                                                            <input  type="number" step=".01" class="form-input" v-model="meal.tip" disabled/>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-warning" style="height: fit-content; margin-top: 25px;">{{ $t("user.create.update") }}</button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                            
                                             <div class="space-y-2 p-4 text-white-dark text-[13px]">
                                                 <table border="1">
                                                     <thead>
                                                     <tr style="background-color: #2196f3 !important; color: black;">
                                                         <th>{{ $t("expense.edit.restaurant") }}</th>
                                                         <th>{{ $t("expense.edit.city") }}</th>
-                                                        <th>{{ $t("expense.edit.time") }}</th>
                                                         <th>{{ $t("expense.edit.expenseType") }}</th>
                                                         <th>{{ $t("expense.edit.amount") }}</th>
                                                         <th>{{ $t("expense.edit.tip") }}</th>
-                                                        <th>{{ $t("expense.edit.actions") }}</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     <tr v-for="(entryMeal, entryIndex) in meal.entries" :key="entryIndex">
                                                         <td>{{ entryMeal.restaurant }}</td>
                                                         <td>{{ entryMeal.city }}</td>
-                                                        <td>{{ entryMeal.time }}</td>
                                                         <td> {{ entryMeal.selectExpense === '0' ? $t("expense.edit.expenseType.1")  
                                                             : entryMeal.selectExpense === '1' ? $t("expense.edit.expenseType.2")
                                                             : entryMeal.selectExpense === '2' ? $t("expense.edit.expenseType.3") 
@@ -279,31 +222,7 @@
                                                         
                                                         <td>{{ formatCurrencyNum(entryMeal.amount) }}</td>
                                                         <td>{{ formatCurrencyNum(entryMeal.tip) }}</td>
-                                                        <td class="flex">
-                                                            <button v-if="expense.status == 0" class="btn btn-warning" @click="modifyExpenseMeal(index, entryIndex)">
-                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
-                                                                    <path
-                                                                        opacity="0.5"
-                                                                        d="M22 10.5V12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2H13.5"
-                                                                        stroke="currentColor"
-                                                                        stroke-width="1.5"
-                                                                        stroke-linecap="round"
-                                                                    ></path>
-                                                                    <path
-                                                                        d="M17.3009 2.80624L16.652 3.45506L10.6872 9.41993C10.2832 9.82394 10.0812 10.0259 9.90743 10.2487C9.70249 10.5114 9.52679 10.7957 9.38344 11.0965C9.26191 11.3515 9.17157 11.6225 8.99089 12.1646L8.41242 13.9L8.03811 15.0229C7.9492 15.2897 8.01862 15.5837 8.21744 15.7826C8.41626 15.9814 8.71035 16.0508 8.97709 15.9619L10.1 15.5876L11.8354 15.0091C12.3775 14.8284 12.6485 14.7381 12.9035 14.6166C13.2043 14.4732 13.4886 14.2975 13.7513 14.0926C13.9741 13.9188 14.1761 13.7168 14.5801 13.3128L20.5449 7.34795L21.1938 6.69914C22.2687 5.62415 22.2687 3.88124 21.1938 2.80624C20.1188 1.73125 18.3759 1.73125 17.3009 2.80624Z"
-                                                                        stroke="currentColor"
-                                                                        stroke-width="1.5"
-                                                                    ></path>
-                                                                    <path
-                                                                        opacity="0.5"
-                                                                        d="M16.6522 3.45508C16.6522 3.45508 16.7333 4.83381 17.9499 6.05034C19.1664 7.26687 20.5451 7.34797 20.5451 7.34797M10.1002 15.5876L8.4126 13.9"
-                                                                        stroke="currentColor"
-                                                                        stroke-width="1.5"
-                                                                    ></path>
-                                                                </svg>
-                                                            </button>
-                                                            
-                                                        </td>
+                                                        
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -349,57 +268,7 @@
                                             </div>
                                         </button>
                                         <vue-collapsible :isOpen="accordiansOtherExpenses === other.id">
-                                            <div v-if="expense.status == 0" class="space-y-2 p-4 text-white-dark text-[13px]">
-                                                <form @submit.prevent="submitFormOther(index)">
-                                                    <div class="flex flex-row flex-wrap">
-                                                        <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="selectExpense">{{ $t("expense.edit.expenseType") }}</label>
-                                                            <select  class="form-select text-white-dark" v-model="other.selectExpense" disabled>
-                                                                <option :value="0">
-                                                                    {{ $t("expense.edit.expenseType.1") }}
-                                                                </option>
-                                                                <option :value="1">
-                                                                    {{ $t("expense.edit.expenseType.2") }}
-                                                                </option>
-                                                                <option :value="2">
-                                                                    {{ $t("expense.edit.expenseType.3") }}
-                                                                </option>
-                                                                <option :value="3">
-                                                                    {{ $t("expense.edit.expenseType.4") }}
-                                                                </option>
-                                                                <option :value="4">
-                                                                    {{ $t("expense.edit.expenseType.5") }}
-                                                                </option>
-                                                                <option :value="5">
-                                                                    {{ $t("expense.edit.expenseType.6") }}
-                                                                </option>
-                                                                <option :value="6">
-                                                                    {{ $t("expense.edit.expenseType.7") }}
-                                                                </option>
-                                                                <option :value="7">
-                                                                    {{ $t("expense.edit.expenseType.8") }}
-                                                                </option>
-                                                                <option :value="8">
-                                                                    {{ $t("expense.edit.expenseType.9") }}
-                                                                </option>
-                                                                <option :value="9">
-                                                                    {{ $t("expense.edit.expenseType.10") }}
-                                                                </option>
-                                                            </select>
-                                                            <input type="hidden" v-model="other.idOther">
-                                                        </div>
-                                                        <div style="margin-right: 10px; margin-left: 10px">
-                                                            <label for="time">{{ $t("expense.edit.description") }}</label>
-                                                            <input  type="text"  class="form-input" v-model="other.description" required/>
-                                                        </div>
-                                                        <div style="margin-right: 10px;">
-                                                            <label for="purpose">{{ $t("expense.edit.expense") }}</label>
-                                                            <input  type="text"  class="form-input" v-model="other.amount" disabled/>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-warning" style="height: fit-content; margin-top: 25px;">{{ $t("user.create.update") }}</button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                            
                                             <div class="space-y-2 p-4 text-white-dark text-[13px]">
                                                 <table border="1">
                                                     <thead>
@@ -407,7 +276,6 @@
                                                             <th>{{ $t("expense.edit.expenseType") }}</th>
                                                             <th>{{ $t("expense.edit.description") }}</th>
                                                             <th>{{ $t("expense.edit.amount") }}</th>
-                                                            <th>{{ $t("expense.edit.actions") }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -425,31 +293,7 @@
                                                         }}</td>
                                                         <td>{{ entryOther.description }}</td>
                                                         <td>{{ formatCurrencyNum(entryOther.amount) }}</td>
-                                                        <td >
-                                                            <button v-if="expense.status == 0" class="btn btn-warning" @click="modifyExpenseOther(index, entryIndex)">
-                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
-                                                                    <path
-                                                                        opacity="0.5"
-                                                                        d="M22 10.5V12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2H13.5"
-                                                                        stroke="currentColor"
-                                                                        stroke-width="1.5"
-                                                                        stroke-linecap="round"
-                                                                    ></path>
-                                                                    <path
-                                                                        d="M17.3009 2.80624L16.652 3.45506L10.6872 9.41993C10.2832 9.82394 10.0812 10.0259 9.90743 10.2487C9.70249 10.5114 9.52679 10.7957 9.38344 11.0965C9.26191 11.3515 9.17157 11.6225 8.99089 12.1646L8.41242 13.9L8.03811 15.0229C7.9492 15.2897 8.01862 15.5837 8.21744 15.7826C8.41626 15.9814 8.71035 16.0508 8.97709 15.9619L10.1 15.5876L11.8354 15.0091C12.3775 14.8284 12.6485 14.7381 12.9035 14.6166C13.2043 14.4732 13.4886 14.2975 13.7513 14.0926C13.9741 13.9188 14.1761 13.7168 14.5801 13.3128L20.5449 7.34795L21.1938 6.69914C22.2687 5.62415 22.2687 3.88124 21.1938 2.80624C20.1188 1.73125 18.3759 1.73125 17.3009 2.80624Z"
-                                                                        stroke="currentColor"
-                                                                        stroke-width="1.5"
-                                                                    ></path>
-                                                                    <path
-                                                                        opacity="0.5"
-                                                                        d="M16.6522 3.45508C16.6522 3.45508 16.7333 4.83381 17.9499 6.05034C19.1664 7.26687 20.5451 7.34797 20.5451 7.34797M10.1002 15.5876L8.4126 13.9"
-                                                                        stroke="currentColor"
-                                                                        stroke-width="1.5"
-                                                                    ></path>
-                                                                </svg>
-                                                            </button>
-                                                            
-                                                        </td>
+                                                        
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -493,16 +337,16 @@
                                     </button>
                                     <div class="text-lg font-bold bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
                                         {{ $t("expense.edit.ticketFrom") }} "{{ titleTicket.value === 0 ? $t("expense.edit.expenseType.1")  
-                                                            : titleTicket.value === 1 ? $t("expense.edit.expenseType.2")
-                                                            : titleTicket.value === 2 ? $t("expense.edit.expenseType.3") 
-                                                            : titleTicket.value === 3 ? $t("expense.edit.expenseType.4") 
-                                                            : titleTicket.value === 4 ? $t("expense.edit.expenseType.5") 
-                                                            : titleTicket.value === 5 ? $t("expense.edit.expenseType.6") 
-                                                            : titleTicket.value === 6 ? $t("expense.edit.expenseType.7") 
-                                                            : titleTicket.value === 7 ? $t("expense.edit.expenseType.8") 
-                                                            : titleTicket.value === 8 ? $t("expense.edit.expenseType.9") 
-                                                            : $t("expense.edit.expenseType.10")
-                                                        }}"      
+                                            : titleTicket.value === 1 ? $t("expense.edit.expenseType.2")
+                                            : titleTicket.value === 2 ? $t("expense.edit.expenseType.3") 
+                                            : titleTicket.value === 3 ? $t("expense.edit.expenseType.4") 
+                                            : titleTicket.value === 4 ? $t("expense.edit.expenseType.5") 
+                                            : titleTicket.value === 5 ? $t("expense.edit.expenseType.6") 
+                                            : titleTicket.value === 6 ? $t("expense.edit.expenseType.7") 
+                                            : titleTicket.value === 7 ? $t("expense.edit.expenseType.8") 
+                                            : titleTicket.value === 8 ? $t("expense.edit.expenseType.9") 
+                                            : $t("expense.edit.expenseType.10")
+                                        }}"      
                                     </div>
                                     <div class="p-5">
                                         <div v-if="expense.status == 0" class="space-y-2 p-4 text-white-dark text-[13px]">
@@ -510,7 +354,7 @@
                                                 <div class="flex flex-row flex-wrap">
                                                     <div style="margin-right: 10px; width: 150px;">
                                                         <label for="selectExpense">{{ $t("expense.edit.ticketType") }}</label>
-                                                        <select  class="form-select text-white-dark" v-model="tickets.typeTicket" required>
+                                                        <select  class="form-select text-white-dark" v-model="tickets.typeTicket" @change="onSelectTicketExpense" required>
                                                             <option :value="0">
                                                                 {{ $t("expense.edit.ticket") }}
                                                             </option>
@@ -529,7 +373,7 @@
                                                     </div>
                                                     <div v-if="tickets.typeTicket == 0" style="margin-right: 10px; margin-left: 10px">
                                                         <label >{{ $t("expense.edit.photo") }}</label>
-                                                        <input type="file" @change="onFileChange" accept="image/*" id="imagenTicket" required>
+                                                        <input type="file" @change="onFileChange" accept="image/*,.pdf" id="imagenTicket" required>
                                                     </div>
                                                     <button type="submit" class="btn btn-warning" style="height: fit-content; margin-top: 25px;">{{ $t("expense.edit.add") }}</button>
                                                 </div> 
@@ -557,12 +401,17 @@
                                                         <td>{{ ticket.amount }}</td>
                                                         <td>{{ ticket.concept }}</td>
                                                         <td class="flex">
-                                                            <button v-if="ticket.typeTicket === 0" class="btn btn-primary" @click="ticketsOpenFile(ticket)">
+                                                            <button v-if="ticket.typeTicket === 0 && ticket.ticketPdf == null" class="btn btn-primary" @click="ticketsOpenFile(ticket)">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-image" viewBox="0 0 16 16">
                                                                     <path d="M8.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
                                                                     <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8l-2.083-2.083a.5.5 0 0 0-.76.063L8 11 5.835 9.7a.5.5 0 0 0-.611.076L3 12z"/>
                                                                 </svg>
                                                             </button>
+                                                            <a v-if="ticket.ticketPdf" class="btn btn-primary" :href="`/storage/${ticket.ticketPdf}`" target="_blank">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                                                                    <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z"/>
+                                                                </svg>
+                                                            </a>
                                                             <button v-if="expense.status == 0" class="ml-2 btn btn-danger" @click="deleteEntryTicket(ticket)">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
@@ -984,7 +833,7 @@
             dates.push(new Date(date));
             date.setDate(date.getDate() - 1)
         }
-        return dates
+        return dates.reverse();
     }
 
     const formatDateNormal = (date) => {
@@ -1026,6 +875,8 @@
         id: index,
         date: date,
         selectExpense: '',
+        description: '',
+        restaurant: '',
         inputCity: '',
         inputTip: 0,
         entries: [],
@@ -1039,7 +890,6 @@
         date: date,
         idMeal: '',
         restaurant: '',
-        time: '',
         selectExpense: '',
         city: '',
         tip: 0,
@@ -1134,7 +984,7 @@
                     amount: formGeneral.inputAmount,
                     selectExpense: formGeneral.selectExpense,
                     tip: formGeneral.inputTip,
-                    restaurant: '',
+                    restaurant: formGeneral.restaurant,
                     time: ''
                 };
 
@@ -1145,7 +995,7 @@
                     idGeneral: newEntryGeneral.id,
                     amount: formGeneral.inputAmount,
                     selectExpense: formGeneral.selectExpense,
-                    description: ''
+                    description: formGeneral.description
                 };
 
                 form.other = newEntryOther;
@@ -1164,6 +1014,8 @@
                     formGeneral.inputCity = '';
                     formGeneral.inputAmount = 0;
                     formGeneral.selectExpense = '';
+                    formGeneral.restaurant = '';
+                    formGeneral.description = '';
                     formGeneral.inputTip = 0;
 
                     Swal.close();
@@ -1242,7 +1094,6 @@
             // Limpiar el formulario después de agregar la entrada
 
             formMeal.restaurant = '';
-            formMeal.time = '';
             formMeal.purpose = '';
             formMeal.city = '';
             formMeal.tip = '';
@@ -1536,12 +1387,29 @@
             tickets.entrieIndex = entryIndex;
             tickets.file = null;
             tickets.typeTicket = 0;
-            tickets.amount=  '';
+            tickets.amount=  ExpenseGeneral.value[tickets.index].entries[tickets.entrieIndex].amount;
             tickets.concept = '';
             titleTicket.value = ExpenseGeneral.value[tickets.index].entries[tickets.entrieIndex].selectExpense;
             tickets.entries = ExpenseGeneral.value[tickets.index].entries[tickets.entrieIndex].tickets;
             modalTicket.value = true;
         } 
+
+        function onSelectTicketExpense(){
+            if (tickets.typeTicket === 0) {
+                console.log("Seleccionado: Ticket");
+                tickets.amount=  ExpenseGeneral.value[tickets.index].entries[tickets.entrieIndex].amount;
+                // Aquí puedes agregar la lógica que necesites para el ticket normal
+            } else if (tickets.typeTicket === 1) {
+                var select = ExpenseGeneral.value[tickets.index].entries[tickets.entrieIndex].selectExpense;
+                if(select == 5 || select == 6 || select == 7){
+                    tickets.amount =  ExpenseGeneral.value[tickets.index].entries[tickets.entrieIndex].tip;
+                    tickets.concept =  'Propina';
+                }
+                
+                console.log("Seleccionado: Ticket Box");
+                // Aquí puedes agregar la lógica que necesites para el ticket box
+            }
+        }
 
         function hasMultipleTickets(formIndex, entryIndex){
             return ExpenseGeneral.value[formIndex].entries[entryIndex].tickets.length > 0;
