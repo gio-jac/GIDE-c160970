@@ -92,7 +92,7 @@ class AdvanceRequestController extends Controller
             ->get();
         }
 
-        $centerCosts = CostCenter::All();
+        $centerCosts = CostCenter::where('status', 0)->get();
         $departments = Department::All();
 
         return Inertia::render('admin/expenses/listAdvanceRequest', [

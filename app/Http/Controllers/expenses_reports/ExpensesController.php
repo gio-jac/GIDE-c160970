@@ -57,7 +57,7 @@ class ExpensesController extends Controller
         ->where('expenses.uuid', $id)
         ->first();
             
-        $centerControls = CostCenter::All();
+        $centerCosts = CostCenter::where('status', 0)->get();
         $departments = Department::All();
 
         $expenseGenerals = ExpenseGeneral::where('expense_id', $expenses->id)->get(); 
@@ -73,7 +73,7 @@ class ExpensesController extends Controller
 
         return Inertia::render('admin/expenses/edit', [
             'expense' => $expenses,
-            'centerControls' => $centerControls,
+            'centerControls' => $centerCosts,
             'departments' => $departments,
             'expenseGenerals' => $expenseGenerals,
             'expenseMeals' => $expenseMeals,
@@ -127,7 +127,7 @@ class ExpensesController extends Controller
             ->get();
         }
 
-        $centerCosts = CostCenter::All();
+        $centerCosts = CostCenter::where('status', 0)->get();
         $departments = Department::All();
         $users = User::All();
 
