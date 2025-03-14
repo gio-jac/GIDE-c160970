@@ -6,7 +6,7 @@
                 <div class="datatable invoice-table">
                     <div class="mb-4.5 px-5 flex md:items-center md:flex-row flex-col gap-5" >
                         <div class="flex items-center gap-2">
-                            <button type="button" class="btn btn-info" @click="modal2 = true">{{ $t("expenses.list.newExpense") }}</button>
+                            <button v-if="user.user_type_id === 1" type="button" class="btn btn-info" @click="modal2 = true">{{ $t("expenses.list.newExpense") }}</button>
                             <TransitionRoot appear :show="modal2" as="template">
                                 <Dialog as="div" @close="modal2 = false" class="relative z-[51]">
                                     <TransitionChild
@@ -59,6 +59,14 @@
                                                     </div>
                                                     <div class="p-5">
                                                         <form @submit.prevent="submitForm">
+                                                            <div class="mt-5">
+                                                                <label for="travelPerson">{{ $t("expenses.list.person") }}</label>
+                                                                <select  class="form-select text-white-dark" v-model="form.travelPerson">
+                                                                    <option v-for="userList in props.usersList" :key="userList.id" :value="userList.id">
+                                                                        {{ userList.nombre }} - {{ userList.apellido_paterno }} {{ userList.apellido_materno }}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
                                                             <div>
                                                                 <label for="travelReason">{{ $t("expenses.list.reason") }}</label>
                                                                 <input type="text" class="form-input flex-1" id="travelReason" v-model="form.travelReason" required />
@@ -221,6 +229,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Swal from "sweetalert2";
 
+
 const modal2 = ref(false);
 defineOptions({
     layout: [SiteLayout, AppLayout],
@@ -239,10 +248,20 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    user: {
+        type: Object,
+        required: true,
+    },
+    usersList: {
+        type: Array,
+        required: true,
+    },
 });
 
+    
     const form = reactive({
         travelReason: '',
+        travelPerson: '',
         traveldepartment: '',
         travelCenterCost: '',
         traveldestinyFrom: '',

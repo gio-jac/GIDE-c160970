@@ -11,6 +11,7 @@ class CostCenter extends Model
 
     protected $fillable = [
         'cc',
-        'name'
+        'name',
+        'status'
     ];
 }

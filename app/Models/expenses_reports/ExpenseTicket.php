@@ -15,7 +15,8 @@ class ExpenseTicket extends Model
         'uuid',
         'concept',
         'amount',
-        'ticket'
+        'ticket', 
+        'ticketPdf'
     ];
 
     public function expense(): BelongsTo
