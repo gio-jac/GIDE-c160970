@@ -450,13 +450,63 @@
                         <div class="panel sticky top-[75px] left-0">
                             <div class="grid xl:grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4">
                                 <div v-if="expense.status == 0">
-                                    <div class="form-group">
-                                        <label for="exchangeRate">{{ $t("expense.edit.typeCoin") }}</label>
-                                        <input type="text" id="exchangeRate" class="form-input" v-model="formCalculator.moneda" required />
+                                    <div class="form-group mt-5">
+                                        <label for="moneda">{{ $t("expense.edit.coinChange") }}</label>
+                                            <Combobox v-model="formCalculator.moneda"  v-slot="{ open }">
+                                                <div class="relative">
+                                                    <ComboboxInput
+                                                        class="w-full border rounded p-2"
+                                                        @change="handleMonedaChange($event.target.value)"
+                                                        placeholder="Selecciona o ingresa moneda"
+                                                        
+                                                    />
+                                                    <div v-show="open">
+                                                        <ComboboxOptions 
+                                                            class="absolute w-full bg-white border rounded shadow mt-1"
+                                                            style="z-index: 100000;"
+                                                            >
+                                                            <ComboboxOption
+                                                                v-for="(entry, index) in recentEntries"
+                                                                :key="index"
+                                                                :value="entry"
+                                                                class="p-2 cursor-pointer hover:bg-gray-200"
+                                                                @click="selectPreviousEntry(entry)"
+                                                            >
+                                                                {{ entry.moneda }} 
+                                                            </ComboboxOption>
+                                                        </ComboboxOptions>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </Combobox>
                                     </div>
                                     <div class="form-group mt-5">
                                         <label for="exchangeRate">{{ $t("expense.edit.typeChange") }}</label>
-                                        <input type="number" id="exchangeRate" class="form-input" step=".000001" v-model.number="formCalculator.exchangeRate" required/>
+                                            <Combobox v-model.number="formCalculator.exchangeRate"  v-slot="{ open }">
+                                                <div class="relative">
+                                                    <ComboboxInput
+                                                        class="w-full border rounded p-2"
+                                                        @change="handleChangeExchangeRate($event.target.value)"
+                                                        placeholder="Selecciona o ingresa el tipo de cambio"
+                                                    />
+                                                    <div v-show="open">
+                                                        <ComboboxOptions 
+                                                            class="absolute w-full bg-white border rounded shadow mt-1"
+                                                            >
+                                                            <ComboboxOption
+                                                                v-for="(entry, index) in recentEntriesExchangeRate"
+                                                                :key="index"
+                                                                :value="entry"
+                                                                class="p-2 cursor-pointer hover:bg-gray-200"
+                                                                @click="selectPreviousEntryExchangeRate(entry)"
+                                                            >
+                                                                {{ entry.exchangeRate }} 
+                                                            </ComboboxOption>
+                                                        </ComboboxOptions>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </Combobox>
                                     </div>
                                     <div class="form-group mt-5">
                                         <label for="amount">{{ $t("expense.edit.amountChange") }}</label>
@@ -468,21 +518,21 @@
                                     </div>
                                 </div>
                                 <div class="space-y-2 text-white-dark text-[13px]">
-                                    <div class="table-container" style="max-width: 100%; overflow-x: auto;">
+                                    <div class="table-container" style="max-height: 250px; max-width: 100%; overflow-x: auto; overflow-y: auto;">
                                         <table border="1">
                                             <thead>
                                                 <tr style="background-color: #2196f3 !important; color: black;">
                                                     <th>{{ $t("expense.edit.coin") }}</th>
+                                                    <th>{{ $t("expense.edit.typeChange") }}</th>
                                                     <th>{{ $t("report.form.quantity") }}</th>
-                                                    <th>{{ $t("report.form.change") }}</th>
                                                     <th>{{ $t("expense.edit.total") }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="(cambio, entryIndex) in formCalculator.entries" :key="entryIndex">
                                                     <td>{{ cambio.currency }}</td>
-                                                    <td>{{ formatCurrencyCalcu(cambio.amount) }}</td>
                                                     <td>{{ formatCurrencyCalcu(cambio.change) }}</td>
+                                                    <td>{{ formatCurrencyCalcu(cambio.amount) }}</td>
                                                     <td>{{ formatCurrencyCalcu(cambio.total) }}</td>
                                                     <td>
                                                         <button v-if="expense.status == 0" class="btn btn-danger" @click="deleteEntryCalculator(cambio.id, entryIndex)">
@@ -718,7 +768,7 @@
 <script lang="ts" setup>
     import { ref,  reactive, onMounted, computed  } from "vue";
     import {  router  } from "@inertiajs/vue3";
-    import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogOverlay } from '@headlessui/vue';
+    import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogOverlay, Combobox, ComboboxInput, ComboboxOptions, ComboboxOption } from '@headlessui/vue';
     import AppLayout from "@/layouts/app-layout.vue";
     import SiteLayout from "@/layouts/app.vue";
     import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
@@ -727,6 +777,8 @@
     import { useI18n } from 'vue-i18n';
     import Swal from "sweetalert2";
 
+    
+    
     const accordians2: any = ref(0);
     const accordians1: any = ref(2);
     const accordiansExpenses: any = ref(0);
@@ -734,6 +786,7 @@
     const accordiansOtherExpenses: any = ref(0);
     const modalTicket = ref(false);
     const modalTicketPrev = ref(false);
+    const showOptions = ref(false);
     const selectedImageUrl = ref('');
     const titleTicket: any = reactive({
         value: ''
@@ -816,14 +869,76 @@
     const expenseMeal: any = ref(props.expenseMeals);
     const expenseOthers: any = ref(props.expenseOthers);
     const expenseTickets: any = ref(props.expenseTickets);
+
     const expenseCalculator: any = ref(props.expenseCalculator);
-    const formCalculator: any = reactive({
-        change: 0,
+    const formCalculator = ref({
+        moneda: '',
+        exchangeRate: 0,
         amount: 0,
         total: 0,
         currency: '',
-        entries: expenseCalculator
+        entries: expenseCalculator,
     });
+
+    const uniqueCurrencies = [...new Set(expenseCalculator.value.map(e => e.currency))];
+    const recentEntries = ref(uniqueCurrencies.slice(0, 3).map(currency => ({ moneda: currency })));
+
+    // Función para actualizar moneda cuando el usuario escribe manualmente
+    const handleMonedaChange = (newValue) => {
+        formCalculator.value.moneda = newValue;
+    };
+
+    // Función para seleccionar valores previos y rellenar los campos
+    const selectPreviousEntry = (entry) => {
+        formCalculator.value.moneda = entry.moneda;
+    };
+
+    // Guarda los últimos 3 registros en recentEntries
+    const updateRecentEntries = () => {
+        const newEntry = {
+            moneda: formCalculator.value.moneda
+        };
+
+        // Evitar duplicados
+        const exists = recentEntries.value.find(e => e.moneda === newEntry.moneda);
+        if (!exists) {
+            recentEntries.value.unshift(newEntry);
+            if (recentEntries.value.length > 3) {
+                recentEntries.value.pop(); // Solo conservar los últimos 3
+            }
+        }
+    };
+
+    const uniqueCurrenciesExchangeRate = [...new Set(expenseCalculator.value.map(e => e.change))];
+    const recentEntriesExchangeRate = ref(uniqueCurrenciesExchangeRate.slice(0, 3).map(change => ({ exchangeRate: change })));
+
+    // Función para actualizar moneda cuando el usuario escribe manualmente
+    const handleChangeExchangeRate = (newValue) => {
+        formCalculator.value.exchangeRate = newValue;
+    };
+
+    // Función para seleccionar valores previos y rellenar los campos
+    const selectPreviousEntryExchangeRate = (entry) => {
+        formCalculator.value.exchangeRate = entry.exchangeRate;
+    };
+
+    // Guarda los últimos 3 registros en recentEntries
+    const updateRecentEntriesExchangeRate = () => {
+        const newEntry = {
+            exchangeRate: formCalculator.value.exchangeRate
+        };
+
+        // Evitar duplicados
+        const exists = recentEntriesExchangeRate.value.find(e => e.exchangeRate === newEntry.exchangeRate);
+        if (!exists) {
+            recentEntriesExchangeRate.value.unshift(newEntry);
+            if (recentEntriesExchangeRate.value.length > 3) {
+                recentEntriesExchangeRate.value.pop(); // Solo conservar los últimos 3
+            }
+        }
+    };
+    
+
 
     // Función para formatear la fecha
     const generateDates = (startDate) => {
@@ -1465,11 +1580,11 @@
 
         router.post(`/deleteCalculatorsExpense`, form, {
             onSuccess: (page) => {
-                formCalculator.entries.splice(entryIndex, 1);
-                formCalculator.moneda = '';
-                formCalculator.amount = '';
-                formCalculator.total = '';
-                formCalculator.exchangeRate = '';       
+                formCalculator.value.entries.splice(entryIndex, 1);
+                formCalculator.value.moneda = '';
+                formCalculator.value.amount = 0;
+                formCalculator.value.total = 0;
+                formCalculator.value.exchangeRate = 0;       
                 Swal.close();
             },
             onError: (error) => {
@@ -1504,12 +1619,12 @@
             },
         });
 
-        formCalculator.total = formCalculator.amount / formCalculator.exchangeRate;
+        formCalculator.value.total = formCalculator.value.amount / formCalculator.value.exchangeRate;
         const newEntry = {
-            amount: formCalculator.amount,
-            currency: formCalculator.moneda,
-            total: formCalculator.total,
-            change: formCalculator.exchangeRate,
+            amount: formCalculator.value.amount,
+            currency: formCalculator.value.moneda,
+            total: formCalculator.value.total,
+            change: formCalculator.value.exchangeRate,
                 
         };
 
@@ -1521,11 +1636,13 @@
             
         router.post(`/createCalculatorsExpense`, form, {
             onSuccess: (page) => {
-                formCalculator.entries.push(newEntry);
-                formCalculator.moneda = '';
-                formCalculator.amount = '';
-                formCalculator.total = '';
-                formCalculator.exchangeRate = '';       
+                formCalculator.value.entries.push(newEntry);
+                updateRecentEntries();
+                updateRecentEntriesExchangeRate();
+                formCalculator.value.moneda = '';
+                formCalculator.value.amount = 0;
+                formCalculator.value.total = 0;
+                formCalculator.value.exchangeRate = 0;     
                 Swal.close();
             },
             onError: (error) => {
@@ -1561,12 +1678,12 @@
             },
         });
 
-        formCalculator.total = formCalculator.exchangeRate * formCalculator.amount;
+        formCalculator.value.total = formCalculator.value.exchangeRate * formCalculator.value.amount;
         const newEntry = {
-            amount: formCalculator.amount,
-            currency: formCalculator.moneda,
-            total: formCalculator.total,
-            change: formCalculator.exchangeRate,
+            amount: formCalculator.value.amount,
+            currency: formCalculator.value.moneda,
+            total: formCalculator.value.total,
+            change: formCalculator.value.exchangeRate,
                 
         };
 
@@ -1578,11 +1695,13 @@
             
         router.post(`/createCalculatorsExpense`, form, {
             onSuccess: (page) => {
-                formCalculator.entries.push(newEntry);
-                formCalculator.moneda = '';
-                formCalculator.amount = '';
-                formCalculator.total = '';
-                formCalculator.exchangeRate = '';       
+                formCalculator.value.entries.push(newEntry);
+                updateRecentEntries();
+                updateRecentEntriesExchangeRate();
+                formCalculator.value.moneda = '';
+                formCalculator.value.amount = 0;
+                formCalculator.value.total = 0;
+                formCalculator.value.exchangeRate = 0;       
                 Swal.close();
             },
             onError: (error) => {

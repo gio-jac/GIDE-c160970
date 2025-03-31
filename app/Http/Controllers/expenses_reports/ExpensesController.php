@@ -594,24 +594,27 @@ class ExpensesController extends Controller
                     $amountTip = $expenseGeneral->amount;
                     $expenseGeneral->amount = $expenseGeneral->tip;
                     $this->insertValue($sheet, $expenseGeneral, 'P', $rowGeneral);
+                    $expenseGeneral->amount = $amountTip;
                 }
-                $expenseGeneral->amount = $amountTip;
+                
                 $this->insertValue($sheet, $expenseGeneral, 'J', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 6){
                 if($expenseGeneral->tip > 0){
                     $amountTip = $expenseGeneral->amount;
                     $expenseGeneral->amount = $expenseGeneral->tip;
                     $this->insertValue($sheet, $expenseGeneral, 'P', $rowGeneral);
+                    $expenseGeneral->amount = $amountTip;
                 }
-                $expenseGeneral->amount = $amountTip;
+                
                 $this->insertValue($sheet, $expenseGeneral, 'K', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 7){
                 if($expenseGeneral->tip > 0){
                     $amountTip = $expenseGeneral->amount;
                     $expenseGeneral->amount = $expenseGeneral->tip;
                     $this->insertValue($sheet, $expenseGeneral, 'P', $rowGeneral);
+                    $expenseGeneral->amount = $amountTip;
                 }
-                $expenseGeneral->amount = $amountTip;
+                
                 $this->insertValue($sheet, $expenseGeneral, 'L', $rowGeneral);
             }else if($expenseGeneral->selectExpense == 8){
                 $this->insertValue($sheet, $expenseGeneral, 'N', $rowGeneral);

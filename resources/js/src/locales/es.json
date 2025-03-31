@@ -397,6 +397,7 @@
     "expense.edit.daysAwayTotal": "Días afuera totales",
     "expense.edit.purpose": "Motivo del viaje",
     "expense.edit.calculator": "Calculadora",
+    "expense.edit.coinChange": "Tipo de moneda",
     "expense.edit.moneyChange": "Tipo de cambio",
     "expense.edit.moneyChangeAmount": "Cantidad de cambio",
     "expense.edit.moneyChangeTotal": "Total de cambio",
