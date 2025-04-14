@@ -34,8 +34,11 @@ class ReportController extends Controller
     public function index()
     {
         $userAuth = Auth::user();
+        $threeMonthsAgo = now()->subMonths(3);
+
         if($userAuth->user_type_id === 1){
             $reports = ServiceReport::where('is_active', true)
+                ->where('created_at', '>=', $threeMonthsAgo)
                 ->with(['machines.machine_model', 'status', 'user', 'branch.city'])
                 ->get()
                 ->map(function ($report) {
@@ -43,7 +46,7 @@ class ReportController extends Controller
                     return $report;
                 });
         }else{
-            $reports = ServiceReport::where('user_id', $userAuth->id)->where('is_active', true)->with(['machines.machine_model','status', 'user', 'branch.city'])->get();
+            $reports = ServiceReport::where('user_id', $userAuth->id)->where('created_at', '>=', $threeMonthsAgo)->where('is_active', true)->with(['machines.machine_model','status', 'user', 'branch.city'])->get();
         }
         $catalogCountry = Country::where('is_active', 1)->get();
         
