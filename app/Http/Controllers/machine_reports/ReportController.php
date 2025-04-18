@@ -49,11 +49,58 @@ class ReportController extends Controller
             $reports = ServiceReport::where('user_id', $userAuth->id)->where('created_at', '>=', $threeMonthsAgo)->where('is_active', true)->with(['machines.machine_model','status', 'user', 'branch.city'])->get();
         }
         $catalogCountry = Country::where('is_active', 1)->get();
+
+        $catalogYearReports = ServiceReport::selectRaw('YEAR(created_at) as year')
+            ->where('is_active', true)
+            ->groupBy('year')
+            ->orderBy('year', 'desc')
+            ->get();
         
         return Inertia::render('admin/reports/index', [
             'reports' => $reports,
-            'catalogCountry' => $catalogCountry
+            'catalogCountry' => $catalogCountry,
+            'catalogYearReports' => $catalogYearReports
         ]);
+    }
+
+    public function filterReports(Request $request){
+        $userAuth = Auth::user();
+        $filter = $request->input('filter');
+
+        $baseQuery = ServiceReport::where('is_active', true)
+            ->with(['machines.machine_model', 'status', 'user', 'branch.city']);
+
+        if(!($userAuth->user_type_id === 1)){
+            $baseQuery->where('user_id', $userAuth->id);
+        }
+
+        $this->applyDateFilter($baseQuery, $filter);
+
+        $reports = $baseQuery->get();
+
+        if($userAuth->user_type_id === 1){
+            $reports->map(function ($report) {
+                $report->user_full_name = $report->user->full_name;
+                return $report;
+            });
+        }
+
+        return Inertia::render('admin/reports/index', [
+            'reports' => $reports,
+        ]);
+    }
+
+    protected function applyDateFilter($query, $filter){
+        switch ($filter) {
+            case '3months':
+                $query->where('created_at', '>=', now()->subMonths(3));
+            break;
+            case 'all':
+            break;
+            default:
+                $query->whereYear('created_at', $filter);
+            break;
+        }
     }
 
     /**
