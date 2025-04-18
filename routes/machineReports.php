@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/{report}/reopen', [ReportController::class, 'reOpenReport'])->name('reports.reopen');
     Route::get('/reports/{report}/{locale}/file', [ReportController::class, 'pdfReport'])->name('reports.file');
     Route::get('/reports/export', [ReportController::class, 'exportExcel'])->name('reports.exportExcel');
+    Route::get('/reports/filterByDate', [ReportController::class, 'filterReports'])->name('reports.filterByDate');
     Route::resource('/reports', ReportController::class);
 
     // Machine routes
