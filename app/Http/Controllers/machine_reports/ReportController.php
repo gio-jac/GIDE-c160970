@@ -51,8 +51,13 @@ class ReportController extends Controller
         $catalogCountry = Country::where('is_active', 1)->get();
 
         $catalogYearReports = ServiceReport::selectRaw('YEAR(created_at) as year')
-            ->where('is_active', true)
-            ->groupBy('year')
+            ->where('is_active', true);
+
+        if(!($userAuth->user_type_id === 1)){
+            $catalogYearReports->where('user_id', $userAuth->id);
+        }
+        
+        $catalogYearReports->groupBy('year')
             ->orderBy('year', 'desc')
             ->get();
         
