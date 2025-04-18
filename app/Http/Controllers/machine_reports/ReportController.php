@@ -37,16 +37,56 @@ class ReportController extends Controller
         $threeMonthsAgo = now()->subMonths(3);
 
         if($userAuth->user_type_id === 1){
-            $reports = ServiceReport::where('is_active', true)
+            $reports = ServiceReport::query()->where('is_active', true)
                 ->where('created_at', '>=', $threeMonthsAgo)
-                ->with(['machines.machine_model', 'status', 'user', 'branch.city'])
+                ->select([
+                    'id',
+                    'complete_id',
+                    'user_id',
+                    'status_id',
+                    'branch_id',
+                    'created_at',
+                ])
+                ->with(['status:id,status', 'user:id,nombre,apellido_paterno,apellido_materno','branch:id,city_id','branch.city:id,name,country_id',
+                'machines' => function ($query) {
+                    $query->select([
+                        'machines.id',
+                        'serial',
+                        'only_dt',
+                        'machine_model_id',
+                    ])
+                    ->where('only_dt', 0)
+                    ->with(['machine_model:id,model']);
+                }])
                 ->get()
                 ->map(function ($report) {
                     $report->user_full_name = $report->user->full_name;
                     return $report;
                 });
         }else{
-            $reports = ServiceReport::where('user_id', $userAuth->id)->where('created_at', '>=', $threeMonthsAgo)->where('is_active', true)->with(['machines.machine_model','status', 'user', 'branch.city'])->get();
+            $reports = ServiceReport::query()->where('is_active', true)
+                ->where('user_id', $userAuth->id)
+                ->where('created_at', '>=', $threeMonthsAgo)
+                ->select([
+                    'id',
+                    'complete_id',
+                    'user_id',
+                    'status_id',
+                    'branch_id',
+                    'created_at',
+                ])
+                ->with(['status:id,status', 'user:id,nombre,apellido_paterno,apellido_materno','branch:id,city_id','branch.city:id,name,country_id',
+                'machines' => function ($query) {
+                    $query->select([
+                        'machines.id',
+                        'serial',
+                        'only_dt',
+                        'machine_model_id',
+                    ])
+                    ->where('only_dt', 0)
+                    ->with(['machine_model:id,model']);
+                }])
+                ->get();
         }
         $catalogCountry = Country::where('is_active', 1)->get();
 
@@ -71,10 +111,29 @@ class ReportController extends Controller
         $userAuth = Auth::user();
         $filter = $request->input('filter');
 
-        $baseQuery = ServiceReport::where('is_active', true)
-            ->with(['machines.machine_model', 'status', 'user', 'branch.city']);
+        $baseQuery = ServiceReport::query()
+            ->where('is_active', true)
+            ->select([
+                'id',
+                'complete_id',
+                'user_id',
+                'status_id',
+                'branch_id',
+                'created_at',
+            ])
+            ->with(['status:id,status', 'user:id,nombre,apellido_paterno,apellido_materno','branch:id,city_id','branch.city:id,name,country_id',
+                'machines' => function ($query) {
+                    $query->select([
+                        'machines.id',
+                        'serial',
+                        'only_dt',
+                        'machine_model_id',
+                    ])
+                    ->where('only_dt', 0)
+                    ->with(['machine_model:id,model']);
+                }]);
 
-        if(!($userAuth->user_type_id === 1)){
+        if($userAuth->user_type_id !== 1){
             $baseQuery->where('user_id', $userAuth->id);
         }
 
