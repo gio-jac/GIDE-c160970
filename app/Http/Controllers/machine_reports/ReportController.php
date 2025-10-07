@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Excel as ExcelFormat;
 use App\Exports\ServiceReportExport;
+use App\Exports\ServiceReportsUnifiedExport;
 
 class ReportController extends Controller
 {
@@ -613,6 +614,6 @@ class ReportController extends Controller
 
     public function exportExcel(Request $request)
     {
-        return Excel::download(new ServiceReportExport, 'service-reports.csv', ExcelFormat::CSV);
+        return Excel::download(new ServiceReportsUnifiedExport, 'service-reports.csv', ExcelFormat::CSV);
     }
 }
