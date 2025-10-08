@@ -612,8 +612,8 @@ class ReportController extends Controller
         return $pdf->download("{$report->complete_id}.pdf");
     }
 
-    public function exportExcel(Request $request)
+    public function exportExcel(string $span)
     {
-        return Excel::download(new ServiceReportsUnifiedExport, 'service-reports.csv', ExcelFormat::CSV);
+        return Excel::download(new ServiceReportsUnifiedExport($span), 'service-reports.csv', ExcelFormat::CSV);
     }
 }
