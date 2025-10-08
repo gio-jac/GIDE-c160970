@@ -9,12 +9,17 @@ use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 
 class ServiceReportsUnifiedExport implements FromCollection, WithHeadings, WithCustomCsvSettings
 {
+    public function __construct(
+        private string $span = 'all'
+    ) {
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        $reports = ServiceReport::with([
+        $baseQuery = ServiceReport::query()->with([
             'user',
             'shift',
             'code',
@@ -31,9 +36,21 @@ class ServiceReportsUnifiedExport implements FromCollection, WithHeadings, WithC
             'machineDetails.failureType',
             'parts',
             'parts.part',
-        ])
-        ->orderBy('id')
-        ->get();
+        ]);
+
+        switch ($this->span) {
+            case '3months':
+                $baseQuery->where('created_at', '>=', now()->subMonths(3));
+            break;
+            case 'all':
+            break;
+            default:
+                $baseQuery->whereYear('created_at', $this->span);
+            break;
+        }
+
+        $reports = $baseQuery->orderBy('id')
+            ->get();
 
         return $reports->map(function ($r) {
             $machinesRaw = $r->machines
