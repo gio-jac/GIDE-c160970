@@ -629,4 +629,11 @@ class ReportController extends Controller
     {
         return Excel::download(new ServiceReportsUnifiedExport($span), 'service-reports.csv', ExcelFormat::CSV);
     }
+
+    public function getBranches(string $id) {
+        return Branch::select(
+            'id',
+            'address',
+        )->where('client_id', $id)->where('is_active', 1)->get();
+    }
 }

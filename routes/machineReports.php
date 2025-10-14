@@ -49,4 +49,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/machine/{serial}', [MachineController::class, 'getMachine'])->name('machines.getMachine');
     Route::resource('/machines/clients', ClientController::class);
     Route::resource('/machines', MachineController::class);
+
+    Route::get('/clients/{id}/branches', [ReportController::class, 'getBranches'])->name('clients.getBranches');
 });

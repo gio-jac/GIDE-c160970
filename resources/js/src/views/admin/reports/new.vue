@@ -3,7 +3,21 @@
     <div>
         <div class="flex xl:flex-row flex-col gap-2.5">
             <div class="panel px-0 flex-1 py-6 ltr:xl:mr-6 rtl:xl:ml-6">
-                <div class="flex px-4" v-if="user.type === 1">
+                <div class="flex px-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formServiceDate"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
+                                >{{ $t("report.form.serviceDate") }}
+                                <span class="text-red-500">*</span></label
+                            >
+
+                            <flat-pickr id="formServiceDate" v-model="postForm.service_date" class="form-input flex-1" :config="basic"></flat-pickr>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex px-4 mt-4" v-if="user.type === 1">
                     <div class="w-full">
                         <div class="flex items-center">
                             <label
@@ -73,13 +87,26 @@
                     <div class="w-full">
                         <div class="flex items-center">
                             <label
-                                for="formServiceDate"
+                                for="formCatalogClient"
                                 class="w-[140px] text-right mb-0 mr-[10px]"
-                                >{{ $t("report.form.serviceDate") }}
-                                <span class="text-red-500">*</span></label
+                                >Cliente <span class="text-red-500">*</span></label
                             >
-
-                            <flat-pickr id="formServiceDate" v-model="postForm.service_date" class="form-input flex-1" :config="basic"></flat-pickr>
+                            <multiselect
+                                id="formCatalogClient"
+                                :options="catalogClients"
+                                @select="selectedClientChange"
+                                v-model="form.selectedClient"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                :placeholder="$t('report.form.default')"
+                                :custom-label="
+                                    ({ name }) =>
+                                        `${name}`
+                                "
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
                         </div>
                     </div>
                 </div>
@@ -89,18 +116,19 @@
                             <label
                                 for="formCatalogClient"
                                 class="w-[140px] text-right mb-0 mr-[10px]"
-                                >Cliente <span class="text-red-500">*</span></label
+                                >Sucursal <span class="text-red-500">*</span></label
                             >
                             <multiselect
-                                id="formCatalogClient"
-                                :options="catalogClients"
+                                id="formCatalogBranches"
+                                :options="branchesCatalog"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="
-                                    ({ name }) =>
-                                        `${name}`
+                                    ({ address }) =>
+                                        `${address}`
                                 "
+                                :disabled="branchesCatalog.length === 0"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
@@ -1458,6 +1486,7 @@ import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 import "flatpickr/dist/flatpickr.css";
 import Swal from "sweetalert2";
 import { useI18n } from 'vue-i18n';
+import axios from 'axios'
 
 const { t } = useI18n();
 const store = useAppStore();
@@ -1528,6 +1557,7 @@ const basic: any = ref({
 });
 
 const form = reactive({
+    selectedClient: null,
     selectedMachineModel: null,
     selectedSearchMachine: null,
     selectedMachine: null,
@@ -1543,6 +1573,8 @@ const form = reactive({
     selectedUser: null,
     selectedStatus: null,
 });
+
+const branchesCatalog = ref([]);
 
 onMounted(() => {
     //set default data
@@ -1799,6 +1831,13 @@ function partsValidation(event) {
 
 function travelTimeValidation(event) {
     postForm.travel_time = Math.max(0, Math.min(Number(postForm.travel_time), 10080));
+}
+
+async function selectedClientChange(selectedOption) {
+    console.log(selectedOption.id);
+    const { data } = await axios.get(`/clients/${selectedOption.id}/branches`);
+    console.log(data);
+    branchesCatalog.value = data;
 }
 
 function machineModelChange(selectedOption) {
