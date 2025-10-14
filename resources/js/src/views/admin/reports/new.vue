@@ -121,6 +121,7 @@
                             <multiselect
                                 id="formCatalogBranches"
                                 :options="branchesCatalog"
+                                v-model="form.selectedBranch"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
@@ -129,6 +130,33 @@
                                         ` ${city.name} - ${address}`
                                 "
                                 :disabled="branchesCatalog.length === 0"
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formCatalogContact"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
+                                >Contacto <span class="text-red-500">*</span></label
+                            >
+                            <multiselect
+                                id="formCatalogContact"
+                                :options="form.selectedBranch ? form.selectedBranch.branch_managers : []"
+                                v-model="form.selectedContact"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                :placeholder="$t('report.form.default')"
+                                :custom-label="
+                                    ({ name }) =>
+                                        ` ${name}`
+                                "
+                                :disabled="!form.selectedBranch"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
@@ -1575,6 +1603,7 @@ const form = reactive({
 });
 
 const branchesCatalog = ref([]);
+const selectedBranch = ref(null);
 
 onMounted(() => {
     //set default data
