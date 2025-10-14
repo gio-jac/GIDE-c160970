@@ -13,6 +13,7 @@ class Client extends Model
     protected $fillable = [
         'name',
         'is_active',
+        'multiple',
     ];
 
     public function branches(): HasMany

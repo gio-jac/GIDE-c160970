@@ -3,75 +3,7 @@
     <div>
         <div class="flex xl:flex-row flex-col gap-2.5">
             <div class="panel px-0 flex-1 py-6 ltr:xl:mr-6 rtl:xl:ml-6">
-                <div class="flex px-4">
-                    <div class="w-full">
-                        <div class="flex items-center">
-                            <label
-                                for="formMachineModel"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >{{ $t("report.form.machineModel") }}
-                                <span class="text-red-500">*</span></label
-                            >
-
-                            <multiselect
-                                id="formMachineModel"
-                                :options="catalogMachineModels"
-                                @select="machineModelChange"
-                                v-model="form.selectedMachineModel"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ model }) =>
-                                        `${model}`
-                                "
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex px-4 mt-4">
-                    <div class="w-full">
-                        <div class="flex items-center">
-                            <label
-                                for="formMachine"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >{{ $t("report.form.machineSerial") }}
-                                <span class="text-red-500">*</span></label
-                            >
-
-                            <multiselect
-                                @select="machineChange"
-                                id="formMachine"
-                                :options="catalogMachines"
-                                v-model="form.selectedSearchMachine"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ serial }) =>
-                                        `${serial}`
-                                "
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                            <tippy target="machineid" trigger="focus">Usado para la búsqueda y selección de máquina, utiliza el siguiente formato:<br>"Serial - Modelo de máquina"</tippy>
-                            <div class="w-[50px] flex justify-end pr-[15px]">
-                                <div v-if="loaders.machines.waiting" class="waiting-loader"></div>
-                                <div v-if="loaders.machines.searching" class="searching-loader mr-[-9px]"></div>
-                            </div>
-                        </div>
-                        <template v-if="errors.machines">
-                            <p class="text-danger mt-1 text-center">
-                                {{ errors.machines }}
-                            </p>
-                        </template>
-                    </div>
-                </div>
-                <div class="flex px-4 mt-4" v-if="user.type === 1">
+                <div class="flex px-4" v-if="user.type === 1">
                     <div class="w-full">
                         <div class="flex items-center">
                             <label
@@ -151,6 +83,104 @@
                         </div>
                     </div>
                 </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formCatalogClient"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
+                                >Cliente <span class="text-red-500">*</span></label
+                            >
+                            <multiselect
+                                id="formCatalogClient"
+                                :options="catalogClients"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                :placeholder="$t('report.form.default')"
+                                :custom-label="
+                                    ({ name }) =>
+                                        `${name}`
+                                "
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formMachineModel"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
+                                >{{ $t("report.form.machineModel") }}
+                                <span class="text-red-500">*</span></label
+                            >
+
+                            <multiselect
+                                id="formMachineModel"
+                                :options="catalogMachineModels"
+                                @select="machineModelChange"
+                                v-model="form.selectedMachineModel"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                :placeholder="$t('report.form.default')"
+                                :custom-label="
+                                    ({ model }) =>
+                                        `${model}`
+                                "
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formMachine"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
+                                >{{ $t("report.form.machineSerial") }}
+                                <span class="text-red-500">*</span></label
+                            >
+
+                            <multiselect
+                                @select="machineChange"
+                                id="formMachine"
+                                :options="catalogMachines"
+                                v-model="form.selectedSearchMachine"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                :placeholder="$t('report.form.default')"
+                                :custom-label="
+                                    ({ serial }) =>
+                                        `${serial}`
+                                "
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                            <tippy target="machineid" trigger="focus">Usado para la búsqueda y selección de máquina, utiliza el siguiente formato:<br>"Serial - Modelo de máquina"</tippy>
+                            <div class="w-[50px] flex justify-end pr-[15px]">
+                                <div v-if="loaders.machines.waiting" class="waiting-loader"></div>
+                                <div v-if="loaders.machines.searching" class="searching-loader mr-[-9px]"></div>
+                            </div>
+                        </div>
+                        <template v-if="errors.machines">
+                            <p class="text-danger mt-1 text-center">
+                                {{ errors.machines }}
+                            </p>
+                        </template>
+                    </div>
+                </div>
+                
+                
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="text-lg">{{ $t("report.form.machines") }}</div>
@@ -1475,6 +1505,10 @@ const props = defineProps({
         required: true,
     },
     catalogMachineModels: {
+        type: Array,
+        required: true,
+    },
+    catalogClients: {
         type: Array,
         required: true,
     },

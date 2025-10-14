@@ -18,6 +18,7 @@ use App\Models\machine_reports\Module;
 use App\Models\machine_reports\Failure;
 use App\Models\machine_reports\FailureType;
 use App\Models\machine_reports\Country;
+use App\Models\machine_reports\Client;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -217,6 +218,13 @@ class ReportController extends Controller
             },
         ])->get();*/
         $catalogStatus = Status::where('is_active', 1)->get();
+
+
+
+        $catalogClients = Client::select(
+            'id',
+            'name',
+        )->where('is_active', 1)->orderBy('name')->get();
         
         return Inertia::render('admin/reports/new',[
             'catalogCodes' => $catalogCodes,
@@ -227,7 +235,12 @@ class ReportController extends Controller
             'catalogModule' => $catalogModule,
             'catalogFailures' => $catalogFailures,
             'catalogTypes' => $catalogTypes,
-            'catalogMachineModels' => $catalogMachineModels
+            'catalogMachineModels' => $catalogMachineModels,
+            
+
+
+
+            'catalogClients' => $catalogClients
         ]);
     }
 
