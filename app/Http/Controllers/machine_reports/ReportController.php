@@ -631,9 +631,10 @@ class ReportController extends Controller
     }
 
     public function getBranches(string $id) {
-        return Branch::select(
+        return Branch::with(['city:id,name'])->select(
             'id',
             'address',
+            'city_id',
         )->where('client_id', $id)->where('is_active', 1)->get();
     }
 }

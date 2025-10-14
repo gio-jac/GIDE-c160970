@@ -125,8 +125,8 @@
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="
-                                    ({ address }) =>
-                                        `${address}`
+                                    ({ address,city }) =>
+                                        ` ${city.name} - ${address}`
                                 "
                                 :disabled="branchesCatalog.length === 0"
                                 selected-label=""
