@@ -119,6 +119,7 @@
                                 >Sucursal <span class="text-red-500">*</span></label
                             >
                             <multiselect
+                                @select="() => form.selectedContact = null"
                                 id="formCatalogBranches"
                                 :options="branchesCatalog"
                                 v-model="form.selectedBranch"
@@ -1894,6 +1895,10 @@ function travelTimeValidation(event) {
 
 async function selectedClientChange(selectedOption) {
     console.log(selectedOption.id);
+    form.selectedMachine = null;
+    form.selectedMachine2 = null;
+    form.selectedBranch = null;
+    form.selectedContact = null;
     try {
         const [ branchesRes, machinesRes ] = await Promise.all([
             axios.get(`/clients/${selectedOption.id}/branches`),
