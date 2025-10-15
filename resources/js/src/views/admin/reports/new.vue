@@ -239,6 +239,65 @@
                 
                 
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
+
+                <div class="mt-6 px-4">
+                    <div class="flex items-center">
+                        <div id="dataset-tabs" class="flex-1">
+                        <div
+                            role="tablist"
+                            aria-label="Conjuntos"
+                            class="flex items-end gap-1 overflow-x-auto border-b border-[#e0e6ed] dark:border-[#1b2e4b] pb-0.5"
+                        >
+                            <!-- Active tab -->
+                            <button
+                                type="button"
+                                role="tab"
+                                aria-selected="true"
+                                tabindex="0"
+                                class="-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-blue-600 text-sm font-medium text-slate-900 dark:text-slate-100"
+                            >
+                                #1
+                            </button>
+
+                            <!-- Inactive tabs -->
+                            <button
+                                type="button"
+                                role="tab"
+                                aria-selected="false"
+                                tabindex="-1"
+                                class="-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-transparent text-sm text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                            >
+                                #2
+                            </button>
+                            <button
+                                type="button"
+                                role="tab"
+                                aria-selected="false"
+                                tabindex="-1"
+                                class="-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-transparent text-sm text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                            >
+                                #3
+                            </button>
+
+                            <!-- Botón Agregar (visual, no funcional) -->
+                            <div class="ml-2 -mb-px h-9 flex items-center">
+                            <button
+                                type="button"
+                                class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800"
+                                aria-label="Agregar conjunto"
+                                title="Agregar conjunto"
+                            >
+                                <!-- plus icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/>
+                                </svg>
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="mt-8 px-4">
                     
                     <div class="w-full">
