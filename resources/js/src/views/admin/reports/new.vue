@@ -164,35 +164,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex px-4 mt-4">
-                    <div class="w-full">
-                        <div class="flex items-center">
-                            <label
-                                for="formCatalogMachines"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >Maquinas <span class="text-red-500">*</span></label
-                            >
-                            <multiselect
-                                id="formCatalogMachines"
-                                :options="machinesCatalog"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ serial,machine_model }) =>
-                                        `${machine_model.model} - ${serial}`
-                                "
-                                :disabled="machinesCatalog.length === 0"
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                        </div>
-                    </div>
-                </div>
 
 
-
+                <!-- 
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
@@ -260,12 +234,38 @@
                             </p>
                         </template>
                     </div>
-                </div>
+                </div>-->
                 
                 
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
-                    <div class="text-lg">{{ $t("report.form.machines") }}</div>
+                    
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formCatalogMachines"
+                                class="text-lg font-normal mb-0 mr-[10px]"
+                                >{{ $t("report.form.machines") }} <span class="text-red-500">*</span></label
+                            >
+                            <multiselect
+                                id="formCatalogMachines"
+                                :options="machinesCatalog"
+                                v-model="form.selectedMachine2"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                :placeholder="$t('report.form.default')"
+                                :custom-label="
+                                    ({ serial,machine_model }) =>
+                                        `${machine_model.model} - ${serial}`
+                                "
+                                :disabled="machinesCatalog.length === 0"
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
+                    </div>
+                        
                     <template v-if="form.selectedMachine">
                         <div
                             class="flex flex-wrap justify-evenly"
