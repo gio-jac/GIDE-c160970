@@ -20,4 +20,9 @@ class Client extends Model
     {
         return $this->hasMany(Branch::class,'client_id', 'id');
     }
+
+    public function machines(): HasMany
+    {
+        return $this->hasMany(Machine::class, 'client_id', 'id');
+    }
 }

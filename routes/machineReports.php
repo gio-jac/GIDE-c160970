@@ -51,4 +51,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('/machines', MachineController::class);
 
     Route::get('/clients/{id}/branches', [ReportController::class, 'getBranches'])->name('clients.getBranches');
+    Route::get('/clients/{id}/machines', [ReportController::class, 'getMachines'])->name('clients.getMachines');
 });

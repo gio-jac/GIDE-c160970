@@ -164,6 +164,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="flex px-4 mt-4">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <label
+                                for="formCatalogMachines"
+                                class="w-[140px] text-right mb-0 mr-[10px]"
+                                >Maquinas <span class="text-red-500">*</span></label
+                            >
+                            <multiselect
+                                id="formCatalogMachines"
+                                :options="machinesCatalog"
+                                class="custom-multiselect flex-1"
+                                :searchable="true"
+                                :placeholder="$t('report.form.default')"
+                                :custom-label="
+                                    ({ serial,machine_model }) =>
+                                        `${machine_model.model} - ${serial}`
+                                "
+                                :disabled="machinesCatalog.length === 0"
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                            ></multiselect>
+                        </div>
+                    </div>
+                </div>
 
 
 
@@ -1571,7 +1597,7 @@ const props = defineProps({
     },
 });
 
-console.log(props.catalogModule);
+console.log(props.catalogClients);
 
 const dateTime: any = ref({
     enableTime: true,
@@ -1603,7 +1629,7 @@ const form = reactive({
 });
 
 const branchesCatalog = ref([]);
-const selectedBranch = ref(null);
+const machinesCatalog = ref([]);
 
 onMounted(() => {
     //set default data
@@ -1864,9 +1890,20 @@ function travelTimeValidation(event) {
 
 async function selectedClientChange(selectedOption) {
     console.log(selectedOption.id);
-    const { data } = await axios.get(`/clients/${selectedOption.id}/branches`);
-    console.log(data);
-    branchesCatalog.value = data;
+    try {
+        const [ branchesRes, machinesRes ] = await Promise.all([
+            axios.get(`/clients/${selectedOption.id}/branches`),
+            axios.get(`/clients/${selectedOption.id}/machines`)
+        ]);
+
+        branchesCatalog.value = branchesRes.data;
+        machinesCatalog.value = machinesRes.data;
+    } catch (e) {
+        branchesCatalog.value = []
+        machinesCatalog.value = []
+    } finally {
+        console.log(branchesCatalog.value, machinesCatalog.value);
+    }
 }
 
 function machineModelChange(selectedOption) {

@@ -221,7 +221,7 @@ class ReportController extends Controller
 
 
 
-        $catalogClients = Client::select(
+        $catalogClients = Client::with(['machines'])->select(
             'id',
             'name',
         )->where('is_active', 1)->orderBy('name')->get();
@@ -639,5 +639,9 @@ class ReportController extends Controller
             'address',
             'city_id',
         )->where('client_id', $id)->where('is_active', 1)->get();
+    }
+
+    public function getMachines(string $id) {
+        return Machine::with(['machine_model:id,model'])->select('serial','machine_model_id')->where('client_id', $id)->where('is_active', 1)->orderBy('serial')->get();
     }
 }
