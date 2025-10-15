@@ -708,7 +708,7 @@
                         </div>
                     </template>
                 </div>
-
+                <!-- 
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="flex justify-between lg:flex-row flex-col">
@@ -890,7 +890,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div
