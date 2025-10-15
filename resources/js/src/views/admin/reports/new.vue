@@ -248,6 +248,7 @@
                                 >{{ $t("report.form.machines") }} <span class="text-red-500">*</span></label
                             >
                             <multiselect
+                                @select="machineChangeNew"
                                 id="formCatalogMachines"
                                 :options="machinesCatalog"
                                 v-model="form.selectedMachine2"
@@ -268,14 +269,15 @@
                         
                     <template v-if="form.selectedMachine">
                         <div
-                            class="flex flex-wrap justify-evenly"
+                            class="flex flex-wrap justify-evenly mt-4"
                         >
                             <div
-                                v-for="(machine, index) in getMachines()"
+                                v-for="(machine, index) in machinesListing"
                                 :key="machine"
                                 :class="{
                                     'bg-[#ececf9]': machine.only_dt !== 1,
                                     'bg-gray-100': machine.only_dt === 1,
+                                    'ring-2 ring-amber-500 ring-offset-1': machinesListing.length > 1 && machine.serial === form.selectedMachine.serial
                                 }"
                                 class="rounded-md p-4 mb-4"
                             >
@@ -1839,6 +1841,8 @@ const postForm = reactive({
     service_parts: [],
 });
 
+const machinesListing = computed(() => form.selectedMachine?.production_line?.machines ?? [form.selectedMachine]);
+
 function getMachines() {
     return form.selectedMachine?.production_line?.machines || [form.selectedMachine];
 }
@@ -1928,6 +1932,19 @@ function machineModelChange(selectedOption) {
             loaders.value.machines.searching = false;
             loaders.value.machines.waiting = true;
         });
+}
+
+async function machineChangeNew(selectedOption) {
+    console.log(selectedOption);
+    try {
+        const machineRes = await axios.get(`/machine/${selectedOption.serial}`);
+        form.selectedMachine = machineRes.data;
+    } catch (e) {
+        console.error("Error:", e);
+        form.selectedMachine = null;
+    } finally {
+        console.log(form.selectedMachine);
+    }
 }
 
 function machineChange(selectedOption) {
