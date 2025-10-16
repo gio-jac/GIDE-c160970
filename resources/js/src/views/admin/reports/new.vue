@@ -1076,12 +1076,12 @@
                                 name="formReportCode"
                                 class="form-radio"
                                 :value="code.id"
-                                v-model="postForm.code_id"
+                                v-model="tabs[selectedTab].code_id"
                             />
                             <div class="flex flex-col">
                                 <span>{{ code.code }}</span>
                                 <span
-                                    v-if="postForm.code_id === code.id"
+                                    v-if="tabs[selectedTab].code_id === code.id"
                                     class="text-xs"
                                     >{{ $t("catalogs.codes."+code.id, code.description) }}</span
                                 >
@@ -1098,7 +1098,7 @@
                             <textarea
                                 id="formReportActions"
                                 name="formReportActions"
-                                v-model="postForm.actions_taken"
+                                v-model="tabs[selectedTab].actions_taken"
                                 rows="3"
                                 class="form-textarea flex-1"
                                 :placeholder="$t('report.form.actionsTakenPlaceholder')"
@@ -1583,7 +1583,7 @@ import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 import "flatpickr/dist/flatpickr.css";
 import Swal from "sweetalert2";
 import { useI18n } from 'vue-i18n';
-import axios from 'axios'
+import axios from 'axios';
 
 const { t } = useI18n();
 const store = useAppStore();
@@ -1696,6 +1696,8 @@ const tabs = ref([{
     travel_time: null,
     report_type_id: 1,
     reported_error: "",
+    code_id: null,
+    actions_taken: "",
 }]);
 const selectedTab = ref(0);
 function addTab() {
@@ -1722,6 +1724,8 @@ function addTab() {
     travel_time: null,
     report_type_id: 1,
     reported_error: "",
+    code_id: null,
+    actions_taken: "",
 });
 }
 
