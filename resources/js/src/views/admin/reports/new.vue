@@ -252,9 +252,6 @@
                                     v-for="(tab, index) in tabs"
                                     :key="index"
                                     type="button"
-                                    role="tab"
-                                    aria-selected="true"
-                                    tabindex="0"
                                     class="-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-transparent text-sm text-slate-500 hover:text-slate-700 hover:border-slate-300"
                                     :class="{'-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-blue-600 text-sm font-medium text-slate-900 dark:text-slate-100': index == selectedTab}"
                                 >
@@ -266,8 +263,9 @@
                                 <button
                                     v-if="tabs.length < 10"
                                     type="button"
+                                    :disabled="disableAddTab"
                                     @click="addTab()"
-                                    class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800"
+                                    class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
                                 >
                                     <!-- plus icon -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -293,7 +291,7 @@
                                 @select="machineChangeNew"
                                 id="formCatalogMachines"
                                 :options="machinesCatalog"
-                                v-model="form.selectedMachine2"
+                                v-model="tabs[selectedTab].selectedMachine2"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
@@ -309,7 +307,7 @@
                         </div>
                     </div>
                         
-                    <template v-if="form.selectedMachine">
+                    <template v-if="tabs[selectedTab].selectedMachine2">
                         <div
                             class="flex flex-wrap justify-evenly mt-4"
                         >
@@ -319,7 +317,7 @@
                                 :class="{
                                     'bg-[#ececf9]': machine.only_dt !== 1,
                                     'bg-gray-100': machine.only_dt === 1,
-                                    'ring-2 ring-amber-500 ring-offset-1': machinesListing.length > 1 && machine.serial === form.selectedMachine.serial
+                                    'ring-2 ring-amber-500 ring-offset-1': machinesListing.length > 1 && machine.serial === tabs[selectedTab].selectedMachine?.serial
                                 }"
                                 class="rounded-md p-4 mb-4"
                             >
@@ -337,7 +335,7 @@
                                         <div
                                             v-for="(
                                                 detail, indexDetail
-                                            ) in postForm.machines[index]
+                                            ) in postForm.tabs[selectedTab].machines[index]
                                                 .machine_details"
                                             :key="detail"
                                             class="flex-[100%] flex justify-evenly flex-wrap"
@@ -348,7 +346,7 @@
                                             >
                                                 <label
                                                     :for="
-                                                        'formModule' +
+                                                        'formModule' + selectedTab +
                                                         index +
                                                         indexDetail
                                                     "
@@ -356,12 +354,12 @@
                                                 >
                                                 <select
                                                     :id="
-                                                        'formModule' +
+                                                        'formModule' + selectedTab +
                                                         index +
                                                         indexDetail
                                                     "
                                                     :name="
-                                                        'formModule' +
+                                                        'formModule' + selectedTab +
                                                         index +
                                                         indexDetail
                                                     "
@@ -502,7 +500,7 @@
                                                 <button
                                                     type="button"
                                                     @click="removeMachineDetail(index,indexDetail)"
-                                                    v-if="postForm.machines[index].machine_details.length > 1"
+                                                    v-if="postForm.tabs[selectedTab].machines[index]?.machine_details?.length > 1"
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -538,7 +536,7 @@
                                                 class="btn btn-secondary gap-2"
                                                 @click="
                                                     addMachineDetail(
-                                                        postForm.machines[index]
+                                                        postForm.tabs[selectedTab].machines[index]
                                                             .machine_details
                                                     )
                                                 "
@@ -605,7 +603,8 @@
                                                                 index
                                                             "
                                                             v-model="
-                                                                postForm
+                                                                postForm.tabs[
+                                                                    selectedTab]
                                                                     .machines[
                                                                     index
                                                                 ].transport_1
@@ -644,7 +643,7 @@
                                                                 index
                                                             "
                                                             v-model="
-                                                                postForm
+                                                                postForm.tabs[selectedTab]
                                                                     .machines[
                                                                     index
                                                                 ].transport_2
@@ -682,7 +681,7 @@
                                                                 index
                                                             "
                                                             v-model="
-                                                                postForm
+                                                                postForm.tabs[selectedTab]
                                                                     .machines[
                                                                     index
                                                                 ].transport_3
@@ -709,7 +708,7 @@
                                                 <input
                                                     id="formShiftTotal11"
                                                     v-model="
-                                                        postForm.machines[index]
+                                                        postForm.tabs[selectedTab].machines[index]
                                                             .transport_1
                                                     "
                                                     @input="
@@ -735,7 +734,7 @@
                                                 :id="'formReportDT' + index"
                                                 type="number"
                                                 v-model="
-                                                    postForm.machines[index].dt
+                                                    postForm.tabs[selectedTab].machines[index].dt
                                                 "
                                                 :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
@@ -1358,7 +1357,7 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div
-                        v-if="form.selectedMachine"
+                        v-if="tabs[selectedTab].selectedMachine"
                         class="flex flex-wrap justify-evenly w-full"
                     >
                         <template
@@ -1379,7 +1378,7 @@
                                     :id="`formSignatureName-${machine.serial}`"
                                     type="text"
                                     :name="`formSignatureName-${machine.serial}`"
-                                    v-model="postForm.machines[index].signature_client_name"
+                                    v-model="postForm.tabs[selectedTab].machines[index].signature_client_name"
                                     class="form-input flex-1"
                                     :placeholder="$t('report.form.signatureNamePlaceholder')"
                                 />
@@ -1672,10 +1671,46 @@ const form = reactive({
     selectedStatus: null,
 });
 
-const tabs = ref([{}]);
+const disableAddTab = computed(() => tabs.value.some(t => !t.selectedMachine))
+
+const tabs = ref([{
+    selectedClient: null,
+    selectedMachineModel: null,
+    selectedSearchMachine: null,
+    selectedMachine: null,
+    selectedMachine2: null,
+    selectedBranch: null,
+    selectedModule: null,
+    selectedFailure: null,
+    selectedContact: null,
+    selectedShift: null,
+    selectedPart: null,
+    addNewPart: [],
+    selectedCode: null,
+    selectedUser: null,
+    selectedStatus: null,
+    machines: [],
+}]);
 const selectedTab = ref(0);
 function addTab() {
-    tabs.value.push({});
+    tabs.value.push({
+    selectedClient: null,
+    selectedMachineModel: null,
+    selectedSearchMachine: null,
+    selectedMachine: null,
+    selectedMachine2: null,
+    selectedBranch: null,
+    selectedModule: null,
+    selectedFailure: null,
+    selectedContact: null,
+    selectedShift: null,
+    selectedPart: null,
+    addNewPart: [],
+    selectedCode: null,
+    selectedUser: null,
+    selectedStatus: null,
+    machines: [],
+});
 }
 
 const branchesCatalog = ref([]);
@@ -1795,7 +1830,7 @@ const removeItem = (item: any = null) => {
 };
 
 function removeMachineDetail(index, indexDetail) {
-    postForm.machines[index].machine_details.splice(indexDetail, 1);
+    postForm.tabs[selectedTab.value].machines[index].machine_details.splice(indexDetail, 1);
 };
 
 const addNewPart = () => {
@@ -1824,7 +1859,7 @@ const updateMachines = (selectedMachine) => {
 
     const totalMachines = selectedMachine.production_line?.machines.length || 1;
 
-    postForm.machines = Array.from({ length: totalMachines }, (_, index) => {
+    (postForm.tabs[selectedTab.value] ??= {machines: []}).machines = Array.from({ length: totalMachines }, (_, index) => {
         const machineId =
             totalMachines === 1
                 ? selectedMachine.id
@@ -1853,7 +1888,10 @@ const updateMachines = (selectedMachine) => {
     console.log(`There are ${totalMachines} machines in production line`);
 };
 
-watch(() => form.selectedMachine, updateMachines, { immediate: true });
+watch(() => tabs.value.map(t => t.selectedMachine), (arr) => {
+    const i = selectedTab.value;
+    updateMachines(arr[i]);
+}, { immediate: true, deep: false });
 
 function getCurrentDate() {
   const now = new Date();
@@ -1885,11 +1923,17 @@ const postForm = reactive({
     status_id: null,
     is_tested: null,
     notes: "",
+    tabs: [] as Array<any>,
     machines: [] as Array<any>,
     service_parts: [],
 });
 
-const machinesListing = computed(() => form.selectedMachine?.production_line?.machines ?? [form.selectedMachine]);
+const machinesListing = computed(() => {
+    const tab = tabs.value?.[selectedTab.value];
+    const sel = tab?.selectedMachine;
+    const list = sel?.production_line?.machines;
+    return Array.isArray(list) && list.length ? list : (sel ? [sel] : []);
+});
 
 function getMachines() {
     return form.selectedMachine?.production_line?.machines || [form.selectedMachine];
@@ -1991,8 +2035,10 @@ async function machineChangeNew(selectedOption) {
     try {
         const machineRes = await axios.get(`/machine/${selectedOption.serial}`);
         form.selectedMachine = machineRes.data;
+        tabs.value[selectedTab.value].selectedMachine = machineRes.data;
     } catch (e) {
         console.error("Error:", e);
+        tabs.value[selectedTab.value].selectedMachine = null;
         form.selectedMachine = null;
     } finally {
         console.log(form.selectedMachine);
