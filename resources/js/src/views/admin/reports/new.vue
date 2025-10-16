@@ -949,7 +949,7 @@
                                     v-tippy:pieces
                                     id="formReportPieces"
                                     type="number"
-                                    v-model="postForm.pieces"
+                                    v-model="tabs[selectedTab].pieces"
                                     name="formReportPieces"
                                     step="1"
                                     class="form-input flex-1"
@@ -971,7 +971,7 @@
                                     v-tippy:sogd
                                     id="formReportSOGD"
                                     type="text"
-                                    v-model="postForm.sogd"
+                                    v-model="tabs[selectedTab].sogd"
                                     name="formReportSOGD"
                                     class="form-input flex-1"
                                     :placeholder="$t('report.form.SOGDPlaceholder')"
@@ -991,7 +991,7 @@
                                     id="formReportOnTime"
                                     step="0.01"
                                     type="number"
-                                    v-model="postForm.time_on"
+                                    v-model="tabs[selectedTab].time_on"
                                     name="formReportOnTime"
                                     class="form-input flex-1"
                                     placeholder="0.00"
@@ -1012,7 +1012,7 @@
                                     v-tippy:traveltime
                                     id="formReportTravelTime"
                                     type="number"
-                                    v-model="postForm.travel_time"
+                                    v-model="tabs[selectedTab].travel_time"
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
                                     placeholder="0"
@@ -1034,7 +1034,7 @@
                                 <select
                                     id="formReportType"
                                     name="formReportType"
-                                    v-model="postForm.report_type_id"
+                                    v-model="tabs[selectedTab].report_type_id"
                                     class="form-select text-white-dark flex-1"
                                     required
                                 >
@@ -1690,6 +1690,11 @@ const tabs = ref([{
     selectedUser: null,
     selectedStatus: null,
     machines: [],
+    pieces: null,
+    sogd: null,
+    time_on: null,
+    travel_time: null,
+    report_type_id: 1,
 }]);
 const selectedTab = ref(0);
 function addTab() {
@@ -1710,6 +1715,11 @@ function addTab() {
     selectedUser: null,
     selectedStatus: null,
     machines: [],
+    pieces: null,
+    sogd: null,
+    time_on: null,
+    travel_time: null,
+    report_type_id: 1,
 });
 }
 
