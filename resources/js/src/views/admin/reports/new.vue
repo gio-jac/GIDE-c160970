@@ -532,7 +532,7 @@
                                         </div>
                                         <div class="w-full flex justify-center">
                                             <button
-                                                v-if="machine.only_dt !== 1"
+                                                v-if="machine.only_dt !== 1 && postForm.tabs[selectedTab].machines[index]?.machine_details?.length < 5"
                                                 class="btn btn-secondary gap-2"
                                                 @click="
                                                     addMachineDetail(
@@ -1888,10 +1888,10 @@ const updateMachines = (selectedMachine) => {
     console.log(`There are ${totalMachines} machines in production line`);
 };
 
-watch(() => tabs.value.map(t => t.selectedMachine), (arr) => {
+/*watch(() => tabs.value.map(t => t.selectedMachine), (arr) => {
     const i = selectedTab.value;
     updateMachines(arr[i]);
-}, { immediate: true, deep: false });
+}, { immediate: true, deep: false });*/
 
 function getCurrentDate() {
   const now = new Date();
@@ -2036,6 +2036,8 @@ async function machineChangeNew(selectedOption) {
         const machineRes = await axios.get(`/machine/${selectedOption.serial}`);
         form.selectedMachine = machineRes.data;
         tabs.value[selectedTab.value].selectedMachine = machineRes.data;
+        (postForm.tabs[selectedTab.value] ??= { machines: [] });
+        updateMachines(machineRes.data);
     } catch (e) {
         console.error("Error:", e);
         tabs.value[selectedTab.value].selectedMachine = null;
