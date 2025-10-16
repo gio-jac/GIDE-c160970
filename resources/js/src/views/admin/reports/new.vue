@@ -1054,7 +1054,7 @@
                                     id="formReportedError"
                                     name="formReportedError"
                                     rows="3"
-                                    v-model="postForm.reported_error"
+                                    v-model="tabs[selectedTab].reported_error"
                                     class="form-textarea flex-1"
                                     :placeholder="$t('report.form.reportedErrorPlaceholder')"
                                     required
@@ -1695,6 +1695,7 @@ const tabs = ref([{
     time_on: null,
     travel_time: null,
     report_type_id: 1,
+    reported_error: "",
 }]);
 const selectedTab = ref(0);
 function addTab() {
@@ -1720,6 +1721,7 @@ function addTab() {
     time_on: null,
     travel_time: null,
     report_type_id: 1,
+    reported_error: "",
 });
 }
 
