@@ -1747,6 +1747,8 @@ function travelTimeValidation() {
 }
 
 async function onClientSelect(option: { id: number }) {
+    if (form.selectedClient?.id === option.id) return;
+    
     tabId = 0;
     tabs.value = [createTab()];
     selectedTab.value = 0;
