@@ -1738,6 +1738,23 @@ const canAddTab = computed(() => tabs.value.every(t => !!t.selectedMachine));
 
 const partSearch = ref<Part | null>(null);
 
+const createMachineDetail = (): MachineDetail => ({
+  module_id: null,
+  failure_id: null,
+  failure_type_id: null,
+  dt: null,
+});
+
+const createPostTabMachine = (machine_id: number): PostTabMachine => ({
+  machine_id,
+  machine_details: [createMachineDetail()],
+  transport_1: null,
+  transport_2: null,
+  transport_3: null,
+  dt: null,
+  signature_client_name: null,
+});
+
 let tabId = 0;
 
 const createTab = (): Tab => ({
@@ -1819,15 +1836,7 @@ const updateMachines = (selectedMachine: SelectedMachine | null) => {
 
     const list = machineGroup(selectedMachine);
 
-    ensurePostTab(selectedTab.value).machines = list.map<PostTabMachine>((m) => ({
-        machine_id: m.id,
-        machine_details: [{ module_id: null, failure_id: null, failure_type_id: null, dt: null }],
-        transport_1: null,
-        transport_2: null,
-        transport_3: null,
-        dt: null,
-        signature_client_name: null,
-    }));
+    ensurePostTab(selectedTab.value).machines = list.map((m) => createPostTabMachine(m.id));
 };
 
 /*watch(() => tabs.value.map(t => t.selectedMachine), (arr) => {
@@ -2064,7 +2073,7 @@ function addMachineDetailAt(i: number): void {
     const list = activePostTab.value?.machines?.[i]?.machine_details;
     if (!list) return;
     if (list.length < LIMITS.MACHINE_DETAILS_MAX) {
-        list.push({ module_id: null, failure_id: null, failure_type_id: null, dt: null });
+        list.push(createMachineDetail());
     }
 }
 
