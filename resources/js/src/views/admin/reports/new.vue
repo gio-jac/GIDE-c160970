@@ -296,7 +296,7 @@
                                 @select="machineChangeNew"
                                 id="formCatalogMachines"
                                 :options="machinesCatalog"
-                                v-model="tabs[selectedTab].selectedMachine"
+                                v-model="activeTab.selectedMachine"
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
@@ -313,17 +313,17 @@
                         </div>
                     </div>
                         
-                    <template v-if="tabs[selectedTab].selectedMachine">
+                    <template v-if="activeTab.selectedMachine">
                         <div
                             class="flex flex-wrap justify-evenly mt-4"
                         >
                             <div
                                 v-for="(machine, index) in machinesListing"
-                                :key="`${tabs[selectedTab].id}-${machine.id ?? machine.serial ?? index}`"
+                                :key="`${activeTab.id}-${machine.id ?? machine.serial ?? index}`"
                                 :class="{
                                     'bg-[#ececf9]': machine.only_dt !== 1,
                                     'bg-gray-100': machine.only_dt === 1,
-                                    'ring-2 ring-amber-500 ring-offset-1': machinesListing.length > 1 && machine.serial === tabs[selectedTab].selectedMachine?.serial
+                                    'ring-2 ring-amber-500 ring-offset-1': machinesListing.length > 1 && machine.serial === activeTab.selectedMachine?.serial
                                 }"
                                 class="rounded-md p-4 mb-4"
                             >
@@ -336,12 +336,12 @@
                                             ?? '-'
                                     }}
                                 </div>
-                                <div class="w-full" v-if="postForm.tabs[selectedTab]?.machines?.[index]">
+                                <div class="w-full" v-if="activePostTab?.machines?.[index]">
                                     <div class="flex justify-evenly flex-wrap">
                                         <div
                                             v-for="(
                                                 detail, indexDetail
-                                            ) in postForm.tabs[selectedTab].machines[index]
+                                            ) in activePostTab.machines[index]
                                                 .machine_details"
                                             :key="indexDetail"
                                             class="flex-[100%] flex justify-evenly flex-wrap"
@@ -504,7 +504,7 @@
                                                 <button
                                                     type="button"
                                                     @click="removeMachineDetail(index,indexDetail)"
-                                                    v-if="postForm.tabs[selectedTab].machines[index]?.machine_details?.length > 1"
+                                                    v-if="activePostTab.machines[index]?.machine_details?.length > 1"
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -536,12 +536,12 @@
                                         </div>
                                         <div class="w-full flex justify-center">
                                             <button
-                                                v-if="machine.only_dt !== 1 && postForm.tabs[selectedTab]?.machines?.[index]?.machine_details?.length < 5"
+                                                v-if="machine.only_dt !== 1 && activePostTab?.machines?.[index]?.machine_details?.length < 5"
                                                 type="button"
                                                 class="btn btn-secondary gap-2"
                                                 @click="
                                                     addMachineDetail(
-                                                        postForm.tabs[selectedTab].machines[index]
+                                                        activePostTab.machines[index]
                                                             .machine_details
                                                     )
                                                 "
@@ -643,7 +643,7 @@
                                                                 index
                                                             "
                                                             v-model="
-                                                                postForm.tabs[selectedTab]
+                                                                activePostTab
                                                                     .machines[
                                                                     index
                                                                 ].transport_2
@@ -681,7 +681,7 @@
                                                                 index
                                                             "
                                                             v-model="
-                                                                postForm.tabs[selectedTab]
+                                                                activePostTab
                                                                     .machines[
                                                                     index
                                                                 ].transport_3
@@ -701,14 +701,14 @@
                                                     </div>
                                                 </div>
                                             </template>
-                                            <template v-else-if="postForm.tabs[selectedTab]?.machines?.[index]">
+                                            <template v-else-if="activePostTab?.machines?.[index]">
                                                 <label for="formShiftTotal11"
                                                     >{{ $t("report.form.transport") }}</label
                                                 >
                                                 <input
                                                     id="formShiftTotal11"
                                                     v-model="
-                                                        postForm.tabs[selectedTab].machines[index]
+                                                        activePostTab.machines[index]
                                                             .transport_1
                                                     "
                                                     @input="
@@ -733,11 +733,11 @@
                                             <input
                                                 :id="'formReportDT' + index"
                                                 type="number"
-                                                v-model.number="postForm.tabs[selectedTab].machines[index].dt"
+                                                v-model.number="activePostTab.machines[index].dt"
                                                 :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
                                                 :placeholder="$t('report.form.dtPlaceholder')"
-                                                @input="finalDtValidation(postForm.tabs[selectedTab].machines[index])"
+                                                @input="finalDtValidation(activePostTab.machines[index])"
                                             />
                                         </div>
                                     </div>
@@ -947,7 +947,7 @@
                                     v-tippy:pieces
                                     id="formReportPieces"
                                     type="number"
-                                    v-model="tabs[selectedTab].pieces"
+                                    v-model="activeTab.pieces"
                                     name="formReportPieces"
                                     step="1"
                                     class="form-input flex-1"
@@ -968,7 +968,7 @@
                                     v-tippy:sogd
                                     id="formReportSOGD"
                                     type="text"
-                                    v-model="tabs[selectedTab].sogd"
+                                    v-model="activeTab.sogd"
                                     name="formReportSOGD"
                                     class="form-input flex-1"
                                     :placeholder="$t('report.form.SOGDPlaceholder')"
@@ -988,7 +988,7 @@
                                     id="formReportOnTime"
                                     step="0.01"
                                     type="number"
-                                    v-model="tabs[selectedTab].time_on"
+                                    v-model="activeTab.time_on"
                                     name="formReportOnTime"
                                     class="form-input flex-1"
                                     placeholder="0.00"
@@ -1008,7 +1008,7 @@
                                     v-tippy:traveltime
                                     id="formReportTravelTime"
                                     type="number"
-                                    v-model="tabs[selectedTab].travel_time"
+                                    v-model="activeTab.travel_time"
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
                                     placeholder="0"
@@ -1029,7 +1029,7 @@
                                 <select
                                     id="formReportType"
                                     name="formReportType"
-                                    v-model="tabs[selectedTab].report_type_id"
+                                    v-model="activeTab.report_type_id"
                                     class="form-select text-white-dark flex-1"
                                     required
                                 >
@@ -1049,7 +1049,7 @@
                                     id="formReportedError"
                                     name="formReportedError"
                                     rows="3"
-                                    v-model="tabs[selectedTab].reported_error"
+                                    v-model="activeTab.reported_error"
                                     class="form-textarea flex-1"
                                     :placeholder="$t('report.form.reportedErrorPlaceholder')"
                                     required
@@ -1071,12 +1071,12 @@
                                 name="formReportCode"
                                 class="form-radio"
                                 :value="code.id"
-                                v-model="tabs[selectedTab].code_id"
+                                v-model="activeTab.code_id"
                             />
                             <div class="flex flex-col">
                                 <span>{{ code.code }}</span>
                                 <span
-                                    v-if="tabs[selectedTab].code_id === code.id"
+                                    v-if="activeTab.code_id === code.id"
                                     class="text-xs"
                                     >{{ $t("catalogs.codes."+code.id, code.description) }}</span
                                 >
@@ -1093,7 +1093,7 @@
                             <textarea
                                 id="formReportActions"
                                 name="formReportActions"
-                                v-model="tabs[selectedTab].actions_taken"
+                                v-model="activeTab.actions_taken"
                                 rows="3"
                                 class="form-textarea flex-1"
                                 :placeholder="$t('report.form.actionsTakenPlaceholder')"
@@ -1107,7 +1107,7 @@
                     <div class="flex flex-wrap justify-evenly">
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="!tabs[selectedTab].selectedMachine?.production_line_id"
+                            v-if="!activeTab.selectedMachine?.production_line_id"
                         >
                             <label for="formReportReportedTime">
                                 {{ $t("report.form.reported") }}
@@ -1115,14 +1115,14 @@
                             <flat-pickr
                                 id="formReportReportedTime"
                                 name="formReportReportedTime"
-                                v-model="tabs[selectedTab].reported"
+                                v-model="activeTab.reported"
                                 class="form-input flex-1"
                                 :config="dateTime"
                             ></flat-pickr>
                         </div>
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="!tabs[selectedTab].selectedMachine?.production_line_id"
+                            v-if="!activeTab.selectedMachine?.production_line_id"
                         >
                             <label for="formReportTimeDeparture">
                                 {{ $t("report.form.departure") }}
@@ -1130,7 +1130,7 @@
                             <flat-pickr
                                 id="formReportTimeDeparture"
                                 name="formReportTimeDeparture"
-                                v-model="tabs[selectedTab].departure"
+                                v-model="activeTab.departure"
                                 class="form-input flex-1"
                                 :config="dateTime"
                             ></flat-pickr>
@@ -1140,7 +1140,7 @@
                             <flat-pickr
                                 id="formReportTimeArrival"
                                 name="formReportTimeArrival"
-                                v-model="tabs[selectedTab].arrival"
+                                v-model="activeTab.arrival"
                                 class="form-input flex-1"
                                 :config="dateTime"
                             ></flat-pickr>
@@ -1152,7 +1152,7 @@
                             <flat-pickr
                                 id="formReportTimeFinished"
                                 name="formReportTimeFinished"
-                                v-model="tabs[selectedTab].finished"
+                                v-model="activeTab.finished"
                                 class="form-input flex-1"
                                 :config="dateTime"
                             ></flat-pickr>
@@ -1168,7 +1168,7 @@
                                     name="formReportStatus"
                                     class="form-radio"
                                     :value="status.id"
-                                    v-model="tabs[selectedTab].status_id"
+                                    v-model="activeTab.status_id"
                                 />
                                 <span>{{ $t("catalogs.status."+status.id,status.status) }}</span>
                             </label>
@@ -1177,7 +1177,7 @@
                             <label class="inline-flex">
                                 <input
                                     type="checkbox"
-                                    v-model="tabs[selectedTab].is_tested"
+                                    v-model="activeTab.is_tested"
                                     class="form-checkbox rounded-full"
                                 />
                                 <span>Test OK</span>
@@ -1264,7 +1264,7 @@
                             </thead>
                             <tbody>
                                 <template
-                                    v-if="tabs[selectedTab].service_parts.length <= 0"
+                                    v-if="activeTab.service_parts.length <= 0"
                                 >
                                     <tr>
                                         <td
@@ -1276,7 +1276,7 @@
                                     </tr>
                                 </template>
                                 <template
-                                    v-for="(item, i) in tabs[selectedTab].service_parts"
+                                    v-for="(item, i) in activeTab.service_parts"
                                     :key="item.id ?? i"
                                 >
                                     <tr class="align-top">
@@ -1344,22 +1344,22 @@
                             name="notes"
                             class="form-textarea min-h-[130px]"
                             :placeholder="$t('report.form.remarksPlaceholder')"
-                            v-model="tabs[selectedTab].notes"
+                            v-model="activeTab.notes"
                         ></textarea>
                     </div>
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div
-                        v-if="tabs[selectedTab].selectedMachine && postForm.tabs[selectedTab]"
+                        v-if="activeTab.selectedMachine && activePostTab"
                         class="flex flex-wrap justify-evenly w-full"
                     >
                         <template
                             v-for="(machine,index) in machinesListing"
-                            :key="`${tabs[selectedTab].id}-${machine.id ?? machine.serial ?? index}`"
+                            :key="`${activeTab.id}-${machine.id ?? machine.serial ?? index}`"
                         >
                             <div
-                                v-if="machine.only_dt !== 1 && postForm.tabs[selectedTab]?.machines?.[index]"
+                                v-if="machine.only_dt !== 1 && activePostTab?.machines?.[index]"
                                 class="text-center min-w-[270px]"
                             >
                                 <label
@@ -1372,7 +1372,7 @@
                                     :id="`formSignatureName-${machine.serial}`"
                                     type="text"
                                     :name="`formSignatureName-${machine.serial}`"
-                                    v-model="postForm.tabs[selectedTab].machines[index].signature_client_name"
+                                    v-model="activePostTab.machines[index].signature_client_name"
                                     class="form-input flex-1"
                                     :placeholder="$t('report.form.signatureNamePlaceholder')"
                                 />
@@ -1593,6 +1593,9 @@ const loaders = ref({
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
+
+const activeTab = computed(() => tabs.value[selectedTab.value]);
+const activePostTab = computed(() => postForm.tabs[selectedTab.value]);
 
 const props = defineProps({
     errors: Object,
