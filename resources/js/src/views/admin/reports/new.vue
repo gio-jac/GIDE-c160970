@@ -400,11 +400,11 @@
                                                 </div>
                                             </template>
                                             <template v-else-if="activePostTab?.machines?.[index]">
-                                                <label for="formShiftTotal11"
+                                                <label :for="`formShiftTotal11-${index}`"
                                                     >{{ $t("report.form.transport") }}</label
                                                 >
                                                 <input
-                                                    id="formShiftTotal11"
+                                                    :id="`formShiftTotal11-${index}`"
                                                     v-model="
                                                         activePostTab.machines[index]
                                                             .transport_1
