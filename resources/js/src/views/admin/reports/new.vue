@@ -34,7 +34,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="defaultPlaceholder"
+                                :placeholder="t('report.form.default')"
                                 :custom-label="(u) => `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -63,7 +63,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
-                                :placeholder="defaultPlaceholder"
+                                :placeholder="t('report.form.default')"
                                 :custom-label="(s) => t(`catalogs.shift.${s.id ?? ''}`, s.name ?? '-')"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -90,7 +90,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="defaultPlaceholder"
+                                :placeholder="t('report.form.default')"
                                 :custom-label="(c) => c.name ?? '-'"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -113,7 +113,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="defaultPlaceholder"
+                                :placeholder="t('report.form.default')"
                                 :custom-label="(b) => `${b.address ?? '-'}${(b.city?.name && b.city.name.trim()) ? ' · ' + b.city.name : ''}`"
                                 :disabled="!branchesCatalog.length"
                                 v-bind="multiselectLabels"
@@ -136,7 +136,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="defaultPlaceholder"
+                                :placeholder="t('report.form.default')"
                                 :custom-label="(c) => c.name ?? '-'"
                                 :disabled="!form.selectedBranch"
                                 v-bind="multiselectLabels"
@@ -202,7 +202,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="defaultPlaceholder"
+                                :placeholder="t('report.form.default')"
                                 :custom-label="(m) => `${m.serial ?? '-'}${(m.machine_model?.model && m.machine_model.model.trim()) ? ' · ' + m.machine_model.model : ''}`"
                                 :disabled="!machinesCatalog.length"
                                 v-bind="multiselectLabels"
@@ -259,7 +259,7 @@
                                                         required
                                                     >
                                                         <option :value="null">
-                                                            {{ defaultPlaceholder }}
+                                                            {{ t('report.form.default') }}
                                                         </option>
                                                         <option
                                                             v-for="opt in detailOptions[cfg.optionsKey]"
@@ -1034,7 +1034,6 @@ import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 
 const { t } = useI18n();
-const defaultPlaceholder = computed(() => t('report.form.default'));
 const store = useAppStore();
 
 const user = computed(() => usePage().props.auth as { type: number } | undefined);
@@ -1063,9 +1062,9 @@ const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => getPostTab(selectedTab.value));
 
 const detailOptions = computed(() => ({
-    module: sortByTranslation(props.catalogModule),
-    failure: sortByTranslation(props.catalogFailures),
-    type: sortByTranslation(props.catalogTypes),
+    module: [...props.catalogModule].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b))),
+    failure: [...props.catalogFailures].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b))),
+    type:   [...props.catalogTypes].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b))),
 }));
 
 type LocalizedItem = { id: number; name?: string; es?: string; pt?: string };
@@ -1153,9 +1152,6 @@ function getTranslation(item: LocalizedItem): string {
     if (locale === 'pt' && item.pt) return item.pt;
     return item.name ?? '';
 }
-
-const sortByTranslation = (arr: LocalizedItem[]) =>
-    [...arr].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b)));
 
 const addNewPart = () => {
     if (!partSearch.value) return;
