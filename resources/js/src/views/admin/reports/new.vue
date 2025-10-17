@@ -263,7 +263,7 @@
                                                         required
                                                     >
                                                         <option :value="null">
-                                                            {{ $t("report.form.default") }}
+                                                            {{ defaultOptionText }}
                                                         </option>
                                                         <option
                                                             v-for="opt in detailOptions[cfg.optionsKey]"
@@ -1047,6 +1047,7 @@ import axios from 'axios';
 
 const { t } = useI18n();
 const defaultPlaceholder = computed(() => t('report.form.default'));
+const defaultOptionText = computed(() => t('report.form.default'));
 const store = useAppStore();
 
 const page = usePage();
