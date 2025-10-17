@@ -1111,16 +1111,13 @@ const props = defineProps<{
 
 const datePosition = computed(() => (store.rtlClass === 'rtl' ? 'auto right' : 'auto left'));
 
-const dateTime = computed(() => ({
-    enableTime: true,
-    dateFormat: "Y-m-d H:i",
-    position: datePosition.value,
-}));
+function makePickerConfig(dateFormat: string, enableTime = false) {
+  return { enableTime, dateFormat, position: datePosition.value };
+}
 
-const basic = computed(() => ({
-    dateFormat: 'Y-m-d',
-    position: datePosition.value,
-}));
+const dateTime = computed(() => makePickerConfig("Y-m-d H:i", true));
+
+const basic = computed(() => makePickerConfig('Y-m-d'));
 
 interface HeaderSelection {
   selectedClient: { id: number; name?: string } | null;
