@@ -143,7 +143,7 @@
                             >
                             <multiselect
                                 id="formCatalogContact"
-                                :options="form.selectedBranch ? form.selectedBranch.branch_managers : []"
+                                :options="branchManagers"
                                 v-model="form.selectedContact"
                                 track-by="id"
                                 class="custom-multiselect flex-1"
@@ -256,7 +256,7 @@
                                 <button
                                     v-if="tabs.length < 10"
                                     type="button"
-                                    :disabled="disableAddTab"
+                                    :disabled="!canAddTab"
                                     @click="addTab()"
                                     class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
                                 >
@@ -1657,7 +1657,11 @@ const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => postForm.tabs[selectedTab.value]);
 
 const hasSelectedBranch = computed<boolean>(() => !!form.selectedBranch);
-const hasActiveMachine  = computed<boolean>(() => !!activeTab.value?.selectedMachine);
+const hasActiveMachine = computed<boolean>(() => !!activeTab.value?.selectedMachine);
+
+const branchManagers = computed(() =>
+  form.selectedBranch?.branch_managers ?? []
+);
 
 type LocalizedItem = { id: number; name?: string; es?: string; pt?: string };
 
@@ -1670,7 +1674,7 @@ const props = defineProps<{
     catalogModule: Array<LocalizedItem>;
     catalogFailures: Array<LocalizedItem>;
     catalogTypes: Array<LocalizedItem>;
-    catalogMachineModels: Array<{ id: number; model: string }>;
+    //catalogMachineModels: Array<{ id: number; model: string }>;
     catalogClients: Array<{ id: number; name: string }>;
 }>();
 
@@ -1712,7 +1716,7 @@ const labelMachine = (m: { serial: string; machine_model: { model: string } }) =
 const labelPart = (p: { num_part: string; descripcion: string }) =>
   `${p.num_part} - ${p.descripcion}`;
 
-const disableAddTab = computed<boolean>(() => tabs.value.some(t => !t.selectedMachine));
+const canAddTab = computed(() => tabs.value.every(t => !!t.selectedMachine));
 
 const partSearch = ref<Part | null>(null);
 
