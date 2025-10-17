@@ -66,6 +66,7 @@
                                 id="formShift"
                                 :options="props.catalogShifts"
                                 v-model="form.selectedShift"
+                                track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
                                 :placeholder="$t('report.form.default')"
