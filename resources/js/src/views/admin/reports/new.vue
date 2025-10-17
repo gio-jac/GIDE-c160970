@@ -2000,7 +2000,14 @@ function partsValidation(event) {
 }
 
 function travelTimeValidation(event) {
-    postForm.travel_time = Math.max(0, Math.min(Number(postForm.travel_time), 10080));
+    const tab = tabs.value[selectedTab.value];
+    const n = Number(tab.travel_time);
+
+    if(Number.isFinite(n)) {
+        tab.travel_time = Math.max(0, Math.min(10080, Math.trunc(n)));
+    } else {
+        tab.travel_time = 0;
+    }
 }
 
 async function selectedClientChange(selectedOption) {
