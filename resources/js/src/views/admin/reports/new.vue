@@ -1786,7 +1786,7 @@ const updateMachines = (selectedMachine) => {
         selectedMachine.production_line = null;
     }
 
-    const totalMachines = selectedMachine.production_line?.machines.length || 1;
+    const totalMachines = selectedMachine.production_line?.machines?.length ?? 1;
 
     (postForm.tabs[selectedTab.value] ??= {machines: []}).machines = Array.from({ length: totalMachines }, (_, index) => {
         const machineId =
