@@ -947,7 +947,7 @@ const LIMITS = {
     PART_QTY_MAX: 255,
     MACHINE_DETAILS_MAX: 5,
     TABS_MAX: 10,
-};
+} as const;
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 
 const transportConfig = [
