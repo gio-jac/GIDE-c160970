@@ -1180,7 +1180,6 @@
                                     type="checkbox"
                                     v-model="tabs[selectedTab].is_tested"
                                     class="form-checkbox rounded-full"
-                                    checked
                                 />
                                 <span>Test OK</span>
                             </label>
