@@ -1302,7 +1302,7 @@
                                         <td>
                                             <button
                                                 type="button"
-                                                @click="removeItem(item)"
+                                                @click="removeItem(i)"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -1567,7 +1567,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, reactive, computed, watch } from "vue";
+import { ref, reactive, computed } from "vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
 import AppLayout from "@/layouts/app-layout.vue";
@@ -1728,10 +1728,8 @@ const typeOptions = computed(() =>
   )
 );
 
-const removeItem = (item: any = null) => {
-    tabs.value[selectedTab.value].service_parts = tabs.value[selectedTab.value].service_parts.filter(
-        (d: any) => d.id != item.id
-    );
+const removeItem = (index: number) => {
+    tabs.value[selectedTab.value].service_parts.splice(index, 1);
 };
 
 function removeMachineDetail(index, indexDetail) {
