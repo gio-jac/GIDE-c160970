@@ -1055,8 +1055,7 @@ const defaultPlaceholder = computed(() => t('report.form.default'));
 const dtPlaceholder = computed(() => t('report.form.dtPlaceholder'));
 const store = useAppStore();
 
-const page = usePage();
-const user = computed<{ type: number } | undefined>(() => page.props.auth as { type: number } | undefined);
+const user = computed<{ type: number } | undefined>(() => usePage().props.auth as { type: number } | undefined);
 
 type Part = { id: number; num_part: string; descripcion: string };
 type ServicePart = { id?: number; num_part?: string; descripcion?: string; quantity?: number };
