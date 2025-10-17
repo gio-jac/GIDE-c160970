@@ -1112,7 +1112,7 @@
                     <div class="flex flex-wrap justify-evenly">
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="!form.selectedMachine?.production_line_id"
+                            v-if="!tabs[selectedTab].selectedMachine?.production_line_id"
                         >
                             <label for="formReportReportedTime">
                                 {{ $t("report.form.reported") }}
@@ -1120,14 +1120,14 @@
                             <flat-pickr
                                 id="formReportReportedTime"
                                 name="formReportReportedTime"
-                                v-model="postForm.reported"
+                                v-model="tabs[selectedTab].reported"
                                 class="form-input flex-1"
                                 :config="dateTime"
                             ></flat-pickr>
                         </div>
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="!form.selectedMachine?.production_line_id"
+                            v-if="!tabs[selectedTab].selectedMachine?.production_line_id"
                         >
                             <label for="formReportTimeDeparture">
                                 {{ $t("report.form.departure") }}
@@ -1135,7 +1135,7 @@
                             <flat-pickr
                                 id="formReportTimeDeparture"
                                 name="formReportTimeDeparture"
-                                v-model="postForm.departure"
+                                v-model="tabs[selectedTab].departure"
                                 class="form-input flex-1"
                                 :config="dateTime"
                             ></flat-pickr>
@@ -1145,7 +1145,7 @@
                             <flat-pickr
                                 id="formReportTimeArrival"
                                 name="formReportTimeArrival"
-                                v-model="postForm.arrival"
+                                v-model="tabs[selectedTab].arrival"
                                 class="form-input flex-1"
                                 :config="dateTime"
                             ></flat-pickr>
@@ -1157,7 +1157,7 @@
                             <flat-pickr
                                 id="formReportTimeFinished"
                                 name="formReportTimeFinished"
-                                v-model="postForm.finished"
+                                v-model="tabs[selectedTab].finished"
                                 class="form-input flex-1"
                                 :config="dateTime"
                             ></flat-pickr>
@@ -1173,7 +1173,7 @@
                                     name="formReportStatus"
                                     class="form-radio"
                                     :value="status.id"
-                                    v-model="postForm.status_id"
+                                    v-model="tabs[selectedTab].status_id"
                                 />
                                 <span>{{ $t("catalogs.status."+status.id,status.status) }}</span>
                             </label>
@@ -1182,7 +1182,7 @@
                             <label class="inline-flex">
                                 <input
                                     type="checkbox"
-                                    v-model="postForm.is_tested"
+                                    v-model="tabs[selectedTab].is_tested"
                                     class="form-checkbox rounded-full"
                                     checked
                                 />
@@ -1698,6 +1698,12 @@ const tabs = ref([{
     reported_error: "",
     code_id: null,
     actions_taken: "",
+    reported: null,
+    departure: null,
+    arrival: null,
+    finished: null,
+    status_id: null,
+    is_tested: null,
 }]);
 const selectedTab = ref(0);
 function addTab() {
@@ -1726,6 +1732,12 @@ function addTab() {
     reported_error: "",
     code_id: null,
     actions_taken: "",
+    reported: null,
+    departure: null,
+    arrival: null,
+    finished: null,
+    status_id: null,
+    is_tested: null,
 });
 }
 
