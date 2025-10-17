@@ -313,7 +313,7 @@
                         >
                             <div
                                 v-for="(machine, index) in machinesListing"
-                                :key="machine"
+                                :key="`${tabs[selectedTab].id}-${machine.id ?? machine.serial ?? index}`"
                                 :class="{
                                     'bg-[#ececf9]': machine.only_dt !== 1,
                                     'bg-gray-100': machine.only_dt === 1,
