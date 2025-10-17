@@ -1837,31 +1837,14 @@ function getCurrentDate() {
   return `${year}-${month}-${day}`;
 }
 
-const postForm = reactive({
-    user_id: null,
-    shift_id: null,
-    pieces: null,
-    service_date: getCurrentDate(),
-    service_timezone: new Date().toString().match(/([A-Z]+[\+-][0-9]+)/)[1],
-    sogd: null,
-    time_on: null,
-    travel_time: null,
-    report_type_id: 1,
-    branch_id: null,
-    branch_manager_id: null,
-    reported_error: "",
-    code_id: null,
-    actions_taken: "",
-    reported: null,
-    arrival: null,
-    finished: null,
-    departure: null,
-    status_id: null,
-    is_tested: null,
-    notes: "",
-    tabs: [{ machines: [] as PostTabMachine[] }] as PostTab[],
-    machines: [] as Array<any>,
-    service_parts: [],
+const postForm = reactive<{
+  service_date: string;
+  service_timezone: string;
+  tabs: PostTab[];
+}>({
+  service_date: getCurrentDate(),
+  service_timezone: new Date().toString().match(/([A-Z]+[\+-][0-9]+)/)![1],
+  tabs: [{ machines: [] as PostTabMachine[] }],
 });
 
 const machinesListing = computed(() => {
