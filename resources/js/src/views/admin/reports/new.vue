@@ -391,9 +391,9 @@
                                                             @input="transportValidation(index)"
                                                             type="number"
                                                             class="form-input"
-                                                            min="0.0"
+                                                            :min="LIMITS.TRANSPORT_MIN"
                                                             :max="LIMITS.TRANSPORT_MAX"
-                                                            step="0.1"
+                                                            :step="LIMITS.TRANSPORT_STEP"
                                                             :placeholder="zeroPlaceholder"
                                                         />
                                                     </div>
@@ -417,9 +417,9 @@
                                                     name="formShiftTotal11"
                                                     class="form-input text-white-dark"
                                                     type="number"
-                                                    min="0.0"
+                                                    :min="LIMITS.TRANSPORT_MIN"
                                                     :max="LIMITS.TRANSPORT_MAX"
-                                                    step="0.1"
+                                                    :step="LIMITS.TRANSPORT_STEP"
                                                     :placeholder="zeroPlaceholder"
                                                 />
                                             </template>
@@ -947,6 +947,8 @@ const LIMITS = {
     PART_QTY_MAX: 255,
     MACHINE_DETAILS_MAX: 5,
     TABS_MAX: 10,
+    TRANSPORT_MIN: 0.0,
+    TRANSPORT_STEP: 0.1,
 } as const;
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 
