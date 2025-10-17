@@ -1772,7 +1772,7 @@ const failureOptions = computed(() => sortByTranslation(props.catalogFailures));
 const typeOptions = computed(() => sortByTranslation(props.catalogTypes));  
 
 const removeItem = (index: number) => {
-    tabs.value[selectedTab.value].service_parts.splice(index, 1);
+    activeTab.value.service_parts.splice(index, 1);
 };
 
 function removeMachineDetail(index, indexDetail) {
@@ -1783,11 +1783,11 @@ function removeMachineDetail(index, indexDetail) {
 
 const addNewPart = () => {
     if (!partSearch.value) return;
-    const existingPartIndex = tabs.value[selectedTab.value].service_parts.findIndex(part => part.id === partSearch.value.id);
+    const existingPartIndex = activeTab.value.service_parts.findIndex(p => p.id === partSearch.value!.id);
     if (existingPartIndex !== -1) {
-        tabs.value[selectedTab.value].service_parts[existingPartIndex].quantity += 1;
+        activeTab.value.service_parts[existingPartIndex].quantity! += 1;
     } else {
-        tabs.value[selectedTab.value].service_parts.push({ ...partSearch.value, quantity: 1 });
+        activeTab.value.service_parts.push({ ...partSearch.value, quantity: 1 });
     }
 };
 
@@ -1960,10 +1960,10 @@ async function onMachineSelect(option: { serial: string }) {
         const { data } = await axios.get(`/machine/${option.serial}`);
         ensurePostTab(selectedTab.value);
         updateMachines(data);
-        tabs.value[selectedTab.value].selectedMachine = data;
+        activeTab.value.selectedMachine = data;
     } catch (e) {
         console.error("Error:", e);
-        tabs.value[selectedTab.value].selectedMachine = null;
+        activeTab.value.selectedMachine = null;
     }
 }
 
