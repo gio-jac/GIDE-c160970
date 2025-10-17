@@ -1010,12 +1010,7 @@ type SelectedMachine = {
 
 interface Tab {
   id: number;
-  selectedClient: { id: number; name?: string } | null;
   selectedMachine: SelectedMachine | null;
-  selectedBranch: { id: number; address?: string; city?: { name: string }; branch_managers?: Array<{ id: number; name: string }> } | null;
-  selectedContact: { id: number; name?: string; email?: string; phone?: string } | null;
-  selectedShift: { id: number; name?: string } | null;
-  selectedUser: { id: number; emp?: string; nombre?: string; apellido_paterno?: string } | null;
   pieces: number | null;
   sogd: string | null;
   time_on: number | null;
@@ -1067,7 +1062,7 @@ type UserAuth = { type: number };
 const showUserField = computed(() => user.value?.type === 1);
 type Part = { id: number; num_part: string; descripcion: string };
 type ServicePart = { id?: number; num_part?: string; descripcion?: string; quantity?: number };
-type Branch = NonNullable<Tab['selectedBranch']>;
+type Branch = { id: number; address?: string; city?: { name: string }; branch_managers?: Array<{ id: number; name: string }> };
 type Machine = SelectedMachine;
 
 const catalogParts = ref<Part[]>([]);
@@ -1208,12 +1203,7 @@ let tabId = 0;
 
 const createTab = (): Tab => ({
     id: ++tabId,
-    selectedClient: null,
     selectedMachine: null,
-    selectedBranch: null,
-    selectedContact: null,
-    selectedShift: null,
-    selectedUser: null,
     pieces: null,
     sogd: null,
     time_on: null,
