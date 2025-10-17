@@ -1161,8 +1161,8 @@ const labelContact = (c: { name?: string }) => c.name ?? '-';
 const labelMachine = (m: { serial: string; machine_model?: { model?: string } }) =>
     `${m.machine_model?.model ?? '-'} - ${m.serial}`;
 
-const labelPart = (p: { num_part: string; descripcion: string }) =>
-  `${p.num_part} - ${p.descripcion}`;
+const labelPart = (p: { num_part?: string; descripcion?: string }) =>
+  `${p.num_part ?? '-'} - ${p.descripcion ?? '-'}`;
 
 const multiselectLabels = {
     selectedLabel: '',
