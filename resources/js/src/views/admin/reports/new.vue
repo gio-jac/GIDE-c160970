@@ -1635,7 +1635,11 @@ const store = useAppStore();
 
 const page = usePage();
 const user = computed(() => page.props.auth);
-const catalogParts = ref([]);
+type Part = { id: number; num_part: string; descripcion: string };
+type Branch = NonNullable<Tab['selectedBranch']>;
+type Machine = SelectedMachine;
+
+const catalogParts = ref<Part[]>([]);
 //const catalogMachines = ref([]);
 type LoaderFlags = { waiting: boolean; searching: boolean };
 const loaders = reactive<{ parts: LoaderFlags }>({
@@ -1705,9 +1709,9 @@ const labelMachine = (m: { serial: string; machine_model: { model: string } }) =
 const labelPart = (p: { num_part: string; descripcion: string }) =>
   `${p.num_part} - ${p.descripcion}`;
 
-const disableAddTab = computed(() => tabs.value.some(t => !t.selectedMachine))
+const disableAddTab = computed<boolean>(() => tabs.value.some(t => !t.selectedMachine));
 
-const partSearch = ref(null);
+const partSearch = ref<Part | null>(null);
 
 let tabId = 0;
 
@@ -1745,8 +1749,8 @@ function addTab() {
     postForm.tabs.push({ machines: [] as PostTabMachine[] });
 }
 
-const branchesCatalog = ref([]);
-const machinesCatalog = ref([]);
+const branchesCatalog = ref<Branch[]>([]);
+const machinesCatalog = ref<Machine[]>([]);
 
 const currentLocale = computed(() => store.locale);
 
