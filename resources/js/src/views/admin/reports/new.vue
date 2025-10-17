@@ -304,7 +304,7 @@
                                             </div>
                                             <div
                                                 class="flex"
-                                                v-if="machine.only_dt !== 1"
+                                                v-if="!isDTOnly(machine)"
                                             >
                                                 <button
                                                     type="button"
@@ -375,7 +375,7 @@
                                         </div>
                                         <div
                                             class="py-2"
-                                            v-if="machine.only_dt !== 1"
+                                            v-if="!isDTOnly(machine)"
                                         >
                                             <template v-if="isMultiTransport(machine)">
                                                 <div class="w-full flex justify-evenly flex-wrap">
