@@ -482,10 +482,8 @@
                                                         indexDetail
                                                     "
                                                     type="number"
-                                                    v-model="
-                                                        detail.dt
-                                                    "
-                                                    @input="dtValidation($event,index,indexDetail)"
+                                                    v-model="detail.dt"
+                                                    @input="dtValidation(detail)"
                                                     min="0"
                                                     max="999999"
                                                     step="1"
@@ -1978,9 +1976,9 @@ function machineOnValidation(event) {
     }
 }
 
-function dtValidation(event, indexMachine, indexDetail) {
-    postForm.tabs[selectedTab.value].machines[indexMachine].machine_details[indexDetail].dt = parseInt(postForm.tabs[selectedTab.value].machines[indexMachine].machine_details[indexDetail].dt);
-    postForm.tabs[selectedTab.value].machines[indexMachine].machine_details[indexDetail].dt = Math.max(0, Math.min(Number(postForm.tabs[selectedTab.value].machines[indexMachine].machine_details[indexDetail].dt), 999999));
+function dtValidation(detail) {
+    const n = Number(detail.dt);
+    detail.dt = Number.isFinite(n) ? Math.max(0, Math.min(999999, Math.trunc(n))) : 0;
 }
 
 function finalDtValidation(event, indexMachine) {
