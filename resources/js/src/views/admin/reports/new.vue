@@ -1637,7 +1637,8 @@ const page = usePage();
 const user = computed(() => page.props.auth);
 const catalogParts = ref([]);
 //const catalogMachines = ref([]);
-const loaders = ref({
+type LoaderFlags = { waiting: boolean; searching: boolean };
+const loaders = reactive<{ parts: LoaderFlags }>({
     //machines: { waiting: true, searching: false },
     parts: { waiting: true, searching: false},
 });
@@ -1977,8 +1978,8 @@ const debounce = <F extends (...args: any[]) => void>(fn: F, ms = 300) => {
 };
 //let timeoutIdMachine = ref(null);
 const runPartsAutocomplete = debounce((q: string) => {
-  loaders.value.parts.searching = true;
-  loaders.value.parts.waiting = false;
+  loaders.parts.searching = true;
+  loaders.parts.waiting = false;
   axios
     .post("/parts/autocomplete", { query: q })
     .then(({ data }) => {
@@ -1986,8 +1987,8 @@ const runPartsAutocomplete = debounce((q: string) => {
     })
     .catch((error) => console.error("Error:", error))
     .finally(() => {
-      loaders.value.parts.searching = false;
-      loaders.value.parts.waiting = true;
+      loaders.parts.searching = false;
+      loaders.parts.waiting = true;
     });
 }, 750);
 
