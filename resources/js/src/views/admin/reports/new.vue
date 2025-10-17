@@ -1577,6 +1577,69 @@ const LIMITS = {
 };
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 
+interface MachineDetail {
+  module_id: number | null;
+  failure_id: number | null;
+  failure_type_id: number | null;
+  dt: number | null;
+}
+
+interface PostTabMachine {
+  machine_id: number;
+  machine_details: MachineDetail[];
+  transport_1: number | null;
+  transport_2: number | null;
+  transport_3: number | null;
+  dt: number | null;
+  signature_client_name: string | null;
+}
+
+type PostTab = { machines: PostTabMachine[] };
+
+type SelectedMachine = {
+  id: number;
+  serial: string;
+  only_dt?: number;
+  line_num?: number | string;
+  production_line?: {
+    id: number | null;
+    machines: Array<{
+      id: number;
+      serial?: string;
+      only_dt?: number;
+      machine_model?: { model?: string; model_segment?: { segment?: string; is_multi_transport?: number } };
+    }>;
+  } | null;
+  machine_model?: { model?: string; model_segment?: { segment?: string; is_multi_transport?: number } };
+};
+
+interface Tab {
+  id: number;
+  selectedClient: { id: number; name?: string } | null;
+  selectedMachine: SelectedMachine | null;
+  selectedBranch: { id: number; address?: string; city?: { name: string }; branch_managers?: Array<{ id: number; name: string }> } | null;
+  selectedContact: { id: number; name?: string; email?: string; phone?: string } | null;
+  selectedShift: { id: number; name?: string } | null;
+  selectedUser: { id: number; emp?: string; nombre?: string; apellido_paterno?: string } | null;
+  machines: any[]; // kept for now (will clean next)
+  pieces: number | null;
+  sogd: string | null;
+  time_on: number | null;
+  travel_time: number | null;
+  report_type_id: 1 | 2;
+  reported_error: string;
+  code_id: number | null;
+  actions_taken: string;
+  reported: string | null;
+  departure: string | null;
+  arrival: string | null;
+  finished: string | null;
+  status_id: number | null;
+  is_tested: boolean | null;
+  service_parts: Array<{ id?: number; num_part?: string; descripcion?: string; quantity?: number }>;
+  notes: string;
+}
+
 import { ref, reactive, computed } from "vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
@@ -1605,7 +1668,8 @@ defineOptions({
     layout: [SiteLayout, AppLayout],
 });
 
-const ensurePostTab = (i: number) => (postForm.tabs[i] ??= { machines: [] });
+const ensurePostTab = (i: number): PostTab =>
+    (postForm.tabs[i] ??= {machines: [] as PostTabMachine[]});
 
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => postForm.tabs[selectedTab.value]);
@@ -1650,7 +1714,7 @@ const partSearch = ref(null);
 
 let tabId = 0;
 
-const createTab = () => ({
+const createTab = (): Tab => ({
     id: ++tabId,
     selectedClient: null,
     selectedMachine: null,
@@ -1677,11 +1741,11 @@ const createTab = () => ({
     notes: "",
 });
 
-const tabs = ref([createTab()]);
-const selectedTab = ref(0);
+const tabs = ref<Tab[]>([createTab()]);
+const selectedTab = ref<number>(0);
 function addTab() {
     tabs.value.push(createTab());
-    postForm.tabs.push({ machines: [] });
+    postForm.tabs.push({ machines: [] as PostTabMachine[] });
 }
 
 const branchesCatalog = ref([]);
@@ -1726,7 +1790,7 @@ const addNewPart = () => {
     }
 };
 
-const updateMachines = (selectedMachine) => {
+const updateMachines = (selectedMachine: SelectedMachine | null) => {
     if (!selectedMachine) return;
 
     if (selectedMachine.production_line?.id === null) {
@@ -1735,11 +1799,11 @@ const updateMachines = (selectedMachine) => {
 
     const totalMachines = selectedMachine.production_line?.machines?.length ?? 1;
 
-    ensurePostTab(selectedTab.value).machines = Array.from({ length: totalMachines }, (_, index) => {
+    ensurePostTab(selectedTab.value).machines = Array.from({ length: totalMachines }, (_, index): PostTabMachine => {
         const machineId =
             totalMachines === 1
                 ? selectedMachine.id
-                : selectedMachine.production_line.machines[index].id;
+                : selectedMachine.production_line!.machines[index].id;
 
         return {
             machine_id: machineId,
@@ -1795,7 +1859,7 @@ const postForm = reactive({
     status_id: null,
     is_tested: null,
     notes: "",
-    tabs: [{ machines: [] }] as Array<any>,
+    tabs: [{ machines: [] as PostTabMachine[] }] as PostTab[],
     machines: [] as Array<any>,
     service_parts: [],
 });
