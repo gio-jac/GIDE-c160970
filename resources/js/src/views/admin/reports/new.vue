@@ -1025,14 +1025,6 @@ interface Tab {
   notes: string;
 }
 
-const API = {
-  reports: '/reports',
-  partsAutocomplete: '/parts/autocomplete',
-  clientBranches: (id: number) => `/clients/${id}/branches`,
-  clientMachines: (id: number) => `/clients/${id}/machines`,
-  machineBySerial: (serial: string) => `/machine/${serial}`,
-} as const;
-
 import { ref, reactive, computed } from "vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
@@ -1051,7 +1043,7 @@ const defaultPlaceholder = computed(() => t('report.form.default'));
 const dtPlaceholder = computed(() => t('report.form.dtPlaceholder'));
 const store = useAppStore();
 
-const user = computed<{ type: number } | undefined>(() => usePage().props.auth as { type: number } | undefined);
+const user = computed(() => usePage().props.auth as { type: number } | undefined);
 
 type Part = { id: number; num_part: string; descripcion: string };
 type ServicePart = { id?: number; num_part?: string; descripcion?: string; quantity?: number };
@@ -1247,8 +1239,8 @@ async function onClientSelect(option: { id: number }) {
     machinesCatalog.value = [];
     try {
         const [ branchesRes, machinesRes ] = await Promise.all([
-            axios.get(API.clientBranches(option.id)),
-            axios.get(API.clientMachines(option.id)),
+            axios.get(`/clients/${option.id}/branches`),
+            axios.get(`/clients/${option.id}/machines`),
         ]);
 
         branchesCatalog.value = branchesRes.data;
@@ -1263,7 +1255,7 @@ async function onMachineSelect(option: { serial: string }) {
     if (activeTab.value?.selectedMachine?.serial === option.serial) return;
 
     try {
-        const { data } = await axios.get(API.machineBySerial(option.serial));
+        const { data } = await axios.get(`/machine/${option.serial}`);
         getPostTab(selectedTab.value).machines = toMachineList(data).map(m => createPostTabMachine(m.id));
         activeTab.value.selectedMachine = data;
     } catch (e) {
@@ -1279,7 +1271,7 @@ const runPartsAutocomplete = (q: string) => {
         loaders.parts.searching = true;
         loaders.parts.waiting = false;
         try {
-            const { data } = await axios.post(API.partsAutocomplete, { query: q });
+            const { data } = await axios.post('/parts/autocomplete', { query: q });
             catalogParts.value = data ?? [];
         }catch(e) {
             console.error("Error:", e);
@@ -1386,7 +1378,7 @@ function submit() {
         didOpen: () => Swal.showLoading(),
     });
 
-    router.post(API.reports, payload, {
+    router.post('/reports', payload, {
         onSuccess: () => Swal.close(),
         onError: (error) => {
             let errorMessages = "";
