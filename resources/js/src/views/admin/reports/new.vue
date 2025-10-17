@@ -2118,7 +2118,6 @@ function submit() {
             let errorMessages = "";
 
             for (const key in error) {
-                const fieldName = key.replace("_id", "");
                 errorMessages += `<p>${error[key]}</p>`;
             }
             Swal.close();
