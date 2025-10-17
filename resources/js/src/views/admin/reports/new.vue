@@ -118,7 +118,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="(b) => `${b.address ?? '-'}${withPrefix(b.city?.name)}`"
+                                :custom-label="(b) => `${b.address ?? '-'}${(b.city?.name && b.city.name.trim()) ? ' · ' + b.city.name : ''}`"
                                 :disabled="!branchesCatalog.length"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -175,7 +175,7 @@
                                     v-if="tabs.length < LIMITS.TABS_MAX"
                                     type="button"
                                     :disabled="!tabs.every(t => !!t.selectedMachine)"
-                                    @click="addTab()"
+                                    @click="tabs.length < LIMITS.TABS_MAX && tabs.push(createTab())"
                                     class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
                                 >
                                     <!-- plus icon -->
@@ -207,7 +207,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="(m) => `${m.serial ?? '-'}${withPrefix(m.machine_model?.model)}`"
+                                :custom-label="(m) => `${m.serial ?? '-'}${(m.machine_model?.model && m.machine_model.model.trim()) ? ' · ' + m.machine_model.model : ''}`"
                                 :disabled="!machinesCatalog.length"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -222,8 +222,8 @@
                                 v-for="(machine, index) in machinesListing"
                                 :key="String(machine.id ?? machine.serial)"
                                 :class="{
-                                    'bg-[#ececf9]': !isDTOnly(machine),
-                                    'bg-gray-100': isDTOnly(machine),
+                                    'bg-[#ececf9]': !toBool(machine?.only_dt),
+                                    'bg-gray-100': toBool(machine?.only_dt),
                                     'ring-2 ring-amber-500 ring-offset-1': machinesListing.length > 1 && machine.serial === activeTab.selectedMachine?.serial
                                 }"
                                 class="rounded-md p-4 mb-4"
@@ -247,7 +247,7 @@
                                             :key="indexDetail"
                                             class="flex-[100%] flex justify-evenly flex-wrap"
                                         >
-                                            <template v-if="!isDTOnly(machine)">
+                                            <template v-if="!toBool(machine?.only_dt)">
                                                 <div
                                                     v-for="cfg in detailSelects"
                                                     :key="cfg.key"
@@ -277,7 +277,7 @@
                                             </template>
                                             <div
                                                 class="p-2 flex-auto sm:flex-1"
-                                                v-if="!isDTOnly(machine)"
+                                                v-if="!toBool(machine?.only_dt)"
                                             >
                                                 <label :for="
                                                         'formErrorDT' +
@@ -294,7 +294,7 @@
                                                     "
                                                     type="number"
                                                     v-model.number="detail.dt"
-                                                    @input="clampDt(detail)"
+                                                    @input="clampField(detail as any, 'dt', { min: 0, max: LIMITS.DT_MAX })"
                                                     min="0"
                                                     :max="LIMITS.DT_MAX"
                                                     step="1"
@@ -304,11 +304,11 @@
                                             </div>
                                             <div
                                                 class="flex"
-                                                v-if="!isDTOnly(machine)"
+                                                v-if="!toBool(machine?.only_dt)"
                                             >
                                                 <button
                                                     type="button"
-                                                    @click="removeMachineDetailAt(index, indexDetail)"
+                                                    @click="activePostTab.machines[index].machine_details.splice(indexDetail, 1)"
                                                     v-if="activePostTab.machines[index]?.machine_details?.length > 1"
                                                 >
                                                     <svg
@@ -341,7 +341,7 @@
                                         </div>
                                         <div class="w-full flex justify-center">
                                             <button
-                                                v-if="!isDTOnly(machine) && activePostTab.machines[index]?.machine_details?.length < 5"
+                                                v-if="!toBool(machine?.only_dt) && activePostTab.machines[index]?.machine_details?.length < 5"
                                                 type="button"
                                                 class="btn btn-secondary gap-2"
                                                 @click="addMachineDetailAt(index)"
@@ -375,9 +375,9 @@
                                         </div>
                                         <div
                                             class="py-2"
-                                            v-if="!isDTOnly(machine)"
+                                            v-if="!toBool(machine?.only_dt)"
                                         >
-                                            <template v-if="isMultiTransport(machine)">
+                                            <template v-if="toBool(machine?.machine_model?.model_segment?.is_multi_transport)">
                                                 <div class="w-full flex justify-evenly flex-wrap">
                                                     <div
                                                         v-for="cfg in transportConfig"
@@ -388,7 +388,7 @@
                                                         <input
                                                             :id="`formTransport${cfg.idx}${index}`"
                                                             v-model.number="activePostTab.machines[index][cfg.key]"
-                                                            @input="transportValidation(index)"
+                                                            @input="clampField(activePostTab.machines[index] as any, 'transport_1', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX }); clampField(activePostTab.machines[index] as any, 'transport_2', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX }); clampField(activePostTab.machines[index] as any, 'transport_3', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX })"
                                                             type="number"
                                                             class="form-input"
                                                             :min="LIMITS.TRANSPORT_MIN"
@@ -409,11 +409,7 @@
                                                         activePostTab.machines[index]
                                                             .transport_1
                                                     "
-                                                    @input="
-                                                        transportValidation(
-                                                            index
-                                                        )
-                                                    "
+                                                    @input="clampField(activePostTab.machines[index] as any, 'transport_1', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX }); clampField(activePostTab.machines[index] as any, 'transport_2', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX }); clampField(activePostTab.machines[index] as any, 'transport_3', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX })"
                                                     name="formShiftTotal11"
                                                     class="form-input text-white-dark"
                                                     type="number"
@@ -434,7 +430,7 @@
                                                 v-model.number="activePostTab.machines[index].dt"
                                                 class="form-input text-white-dark"
                                                 :placeholder="dtPlaceholder"
-                                                @input="clampDt(activePostTab.machines[index])"
+                                                @input="clampField(activePostTab.machines[index] as any, 'dt', { min: 0, max: LIMITS.DT_MAX })"
                                             />
                                         </div>
                                     </div>
@@ -470,7 +466,7 @@
                                     placeholder="0"
                                     min="0"
                                     :max="LIMITS.PIECES_MAX"
-                                    @input="partsValidation"
+                                    @input="clampField(activeTab as any, 'pieces', { min: 0, max: LIMITS.PIECES_MAX })"
                                 />
                                 <tippy target="pieces" trigger="focus">Utilizado como contador de billetes<br> Máximo: 999 999 999 999</tippy>
                             </div>
@@ -510,7 +506,7 @@
                                     placeholder="0.00"
                                     :min="LIMITS.TIME_ON_MIN"
                                     :max="LIMITS.TIME_ON_MAX"
-                                    @input="machineOnValidation"
+                                    @input="clampField(activeTab as any, 'time_on', { decimals: 2, min: LIMITS.TIME_ON_MIN, max: LIMITS.TIME_ON_MAX })"
                                 />
                                 <tippy target="ontime" trigger="focus">Utilizado para registrar el tiempo de funcionamiento de la máquina<br> Máximo: 9 999 999.99</tippy>
                             </div>
@@ -531,7 +527,7 @@
                                     :step="LIMITS.TRAVEL_TIME_STEP"
                                     :min="LIMITS.TRAVEL_TIME_MIN"
                                     :max="LIMITS.TRAVEL_TIME_MAX"
-                                    @input="travelTimeValidation"
+                                    @input="clampField(activeTab as any, 'travel_time', { min: LIMITS.TRAVEL_TIME_MIN, max: LIMITS.TRAVEL_TIME_MAX })"
                                 />
                                 <tippy target="traveltime" trigger="focus">Utilizado para registrar el tiempo de traslado<br> Máximo: 10 080 minutos</tippy>
                             </div>
@@ -806,13 +802,13 @@
                                                 :step="LIMITS.PART_QTY_STEP"
                                                 :max="LIMITS.PART_QTY_MAX"
                                                 :min="LIMITS.PART_QTY_MIN"
-                                                @input="partQtyValidation(i)"
+                                                @input="clampField(item as any, 'quantity', { min: LIMITS.PART_QTY_MIN, max: LIMITS.PART_QTY_MAX })"
                                             />
                                         </td>
                                         <td>
                                             <button
                                                 type="button"
-                                                @click="removePartAt(i)"
+                                                @click="activeTab.service_parts.splice(i, 1)"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -870,7 +866,7 @@
                             :key="String(machine.id ?? machine.serial)"
                         >
                             <div
-                                v-if="!isDTOnly(machine) && activePostTab.machines[index]"
+                                v-if="!toBool(machine?.only_dt) && activePostTab.machines[index]"
                                 class="text-center min-w-[270px]"
                             >
                                 <label
@@ -1080,11 +1076,6 @@ const getPostTab = (i: number): PostTab => {
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => getPostTab(selectedTab.value));
 
-const isDTOnly = (m?: { only_dt?: number } | null) => toBool(m?.only_dt);
-const isMultiTransport = (
-    m?: { machine_model?: { model_segment?: { is_multi_transport?: number | boolean | string } } } | null
-) => toBool(m?.machine_model?.model_segment?.is_multi_transport);
-
 const detailOptions = computed(() => ({
   module: moduleOptions.value,
   failure: failureOptions.value,
@@ -1140,8 +1131,6 @@ const form = reactive<HeaderSelection>({
     selectedUser: null,
 });
 
-const withPrefix = (s?: string | null, prefix = ' · ') => (s && s.trim() ? `${prefix}${s}` : '');
-
 const multiselectLabels = {
     selectedLabel: '',
     selectLabel: '',
@@ -1192,10 +1181,6 @@ const createTab = (): Tab => ({
 
 const tabs = ref<Tab[]>([createTab()]);
 const selectedTab = ref<number>(0);
-function addTab() {
-    if (tabs.value.length >= LIMITS.TABS_MAX) return;
-    tabs.value.push(createTab());
-}
 
 const branchesCatalog = ref<Branch[]>([]);
 const machinesCatalog = ref<SelectedMachine[]>([]);
@@ -1212,17 +1197,7 @@ const sortByTranslation = (arr: LocalizedItem[]) =>
 
 const moduleOptions = computed(() => sortByTranslation(props.catalogModule));
 const failureOptions = computed(() => sortByTranslation(props.catalogFailures));
-const typeOptions = computed(() => sortByTranslation(props.catalogTypes));  
-
-const removePartAt = (index: number) => {
-    activeTab.value.service_parts.splice(index, 1);
-};
-
-function removeMachineDetailAt(i: number, j: number): void {
-    const m = activePostTab.value.machines[i];
-    if (!m?.machine_details || m.machine_details.length <= 1) return;
-    m.machine_details.splice(j, 1);
-};
+const typeOptions = computed(() => sortByTranslation(props.catalogTypes));
 
 const addNewPart = () => {
     if (!partSearch.value) return;
@@ -1250,15 +1225,6 @@ const machinesListing = computed(() => {
     return toMachineList(sm);
 });
 
-function transportValidation(index: number) {
-    const m = activePostTab.value.machines[index];
-    if (!m) return;
-
-    transportConfig.forEach(({ key }) => {
-        clampField(m as Record<string, unknown>, key, { decimals: 1, min: 0, max: LIMITS.TRANSPORT_MAX });
-    });
-}
-
 const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decimals = 0, min, max }: { decimals?: number; min: number; max: number }) => {
     const raw = Number(obj[key]) || 0;
     const normalized = decimals === 0
@@ -1266,28 +1232,6 @@ const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decim
         : Math.round(raw * 10 ** decimals) / 10 ** decimals;
     obj[key] = clamp(normalized, min, max) as any;
 };
-
-function partQtyValidation(index: number) {
-    const p = activeTab.value.service_parts[index];
-    if (!p) return;
-    clampField(p as Record<string, unknown>, 'quantity', { min: 1, max: LIMITS.PART_QTY_MAX });
-}
-
-function machineOnValidation() {
-    clampField(activeTab.value as unknown as Record<string, any>, 'time_on', { decimals: 2, min: 0, max: LIMITS.TIME_ON_MAX });
-}
-
-const clampDt = (target: { dt: number | null }) => {
-    clampField(target, 'dt', { min: 0, max: LIMITS.DT_MAX });
-};
-
-function partsValidation() {
-    clampField(activeTab.value as unknown as Record<string, any>, 'pieces', { min: 0, max: LIMITS.PIECES_MAX });
-}
-
-function travelTimeValidation() {
-    clampField(activeTab.value as unknown as Record<string, any>, 'travel_time', { min: 0, max: LIMITS.TRAVEL_TIME_MAX });
-}
 
 async function onClientSelect(option: { id: number }) {
     if (form.selectedClient?.id === option.id) return;
