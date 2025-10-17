@@ -1158,16 +1158,17 @@ const formatUserLabel = (u: { emp?: string; nombre?: string; apellido_paterno?: 
     `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`;
 
 const formatShiftLabel = (s: { id?: number; name?: string }) =>
-    `${t('catalogs.shift.' + (s.id ?? ''), s.name ?? '-')}`;
+    `${t(`catalogs.shift.${s.id ?? ''}`, s.name ?? '-')}`;
 
 const formatClientLabel = (c: { name?: string }) => c.name ?? '-';
 
-const formatBranchLabel = (b: { address?: string; city?: { name?: string } }) => `${b.city?.name ?? '-'} - ${b.address ?? '-'}`;
+const formatBranchLabel = (b: { id?: number; address?: string; city?: { name: string } }) =>
+    `${b.address ?? '-'}${b.city?.name ? ` · ${b.city.name}` : ''}`;
 
 const formatContactLabel = (c: { name?: string }) => c.name ?? '-';
 
-const formatMachineLabel = (m: { serial: string; machine_model?: { model?: string } }) =>
-    `${m.machine_model?.model ?? '-'} - ${m.serial}`;
+const formatMachineLabel = (m: { serial?: string; machine_model?: { model?: string } }) =>
+    `${m.serial ?? '-'}${m.machine_model?.model ? ` · ${m.machine_model.model}` : ''}`;
 
 const formatPartLabel = (p: { num_part?: string; descripcion?: string }) =>
   `${p.num_part ?? '-'} - ${p.descripcion ?? '-'}`;
