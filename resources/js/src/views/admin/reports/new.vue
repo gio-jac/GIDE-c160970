@@ -491,7 +491,7 @@
                                                     v-model.number="detail.dt"
                                                     @input="clampDt(detail)"
                                                     min="0"
-                                                    max="999999"
+                                                    :max="LIMITS.DT_MAX"
                                                     step="1"
                                                     class="form-input text-white-dark"
                                                     :placeholder="$t('report.form.dtPlaceholder')"
@@ -617,7 +617,7 @@
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
-                                                            max="9999.9"
+                                                            :max="LIMITS.TRANSPORT_MAX"
                                                             step="0.1"
                                                             placeholder="0.0"
                                                         />
@@ -656,7 +656,7 @@
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
-                                                            max="9999.9"
+                                                            :max="LIMITS.TRANSPORT_MAX"
                                                             step="0.1"
                                                             placeholder="0.0"
                                                         />
@@ -694,7 +694,7 @@
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
-                                                            max="9999.9"
+                                                            :max="LIMITS.TRANSPORT_MAX"
                                                             step="0.1"
                                                             placeholder="0.0"
                                                         />
@@ -953,7 +953,7 @@
                                     class="form-input flex-1"
                                     placeholder="0"
                                     min="0"
-                                    max="999999999999"
+                                    :max="LIMITS.PIECES_MAX"
                                     @input="partsValidation"
                                 />
                                 <tippy target="pieces" trigger="focus">Utilizado como contador de billetes<br> Máximo: 999 999 999 999</tippy>
@@ -993,7 +993,7 @@
                                     class="form-input flex-1"
                                     placeholder="0.00"
                                     min="0.00"
-                                    max="9999999.99"
+                                    :max="LIMITS.TIME_ON_MAX"
                                     @input="machineOnValidation"
                                 />
                                 <tippy target="ontime" trigger="focus">Utilizado para registrar el tiempo de funcionamiento de la máquina<br> Máximo: 9 999 999.99</tippy>
@@ -1014,7 +1014,7 @@
                                     placeholder="0"
                                     step="1"
                                     min="0"
-                                    max="10080"
+                                    :max="LIMITS.TRAVEL_TIME_MAX"
                                     @input="travelTimeValidation"
                                 />
                                 <tippy target="traveltime" trigger="focus">Utilizado para registrar el tiempo de traslado<br> Máximo: 10 080 minutos</tippy>
@@ -1293,7 +1293,7 @@
                                                 placeholder="Quantity"
                                                 v-model="item.quantity"
                                                 step="1"
-                                                max="255"
+                                                :max="LIMITS.PART_QTY_MAX"
                                                 min="1"
                                                 @input="partQtyValidation(i)"
                                             />
