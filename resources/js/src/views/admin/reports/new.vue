@@ -1302,8 +1302,7 @@ function transportValidation(index: number) {
     if (!m) return;
 
     transportConfig.forEach(({ key }) => {
-        const n = Number(m[key]) || 0;
-        m[key] = clamp(Math.round(n * 10) / 10, 0, LIMITS.TRANSPORT_MAX);
+        clampField(m as Record<string, unknown>, key, { decimals: 1, min: 0, max: LIMITS.TRANSPORT_MAX });
     });
 }
 
@@ -1316,26 +1315,24 @@ const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decim
 };
 
 function partQtyValidation(index: number) {
-    const p = activeTab.value.service_parts[index];
-    const n = Math.trunc(Number(p.quantity) || 1);
-    p.quantity = clamp(n, 1, LIMITS.PART_QTY_MAX);
+    const p = activeTab.value.service_parts[index]!;
+    clampField(p as Record<string, unknown>, 'quantity', { min: 1, max: LIMITS.PART_QTY_MAX });
 }
 
 function machineOnValidation() {
-  clampField(activeTab.value, 'time_on', { decimals: 2, min: 0, max: LIMITS.TIME_ON_MAX });
+    clampField(activeTab.value, 'time_on', { decimals: 2, min: 0, max: LIMITS.TIME_ON_MAX });
 }
 
 const clampDt = (target: { dt: number | null }) => {
-    const n = Math.trunc(Number(target.dt) || 0);
-    target.dt = clamp(n, 0, LIMITS.DT_MAX);
+    clampField(target, 'dt', { min: 0, max: LIMITS.DT_MAX });
 };
 
 function partsValidation() {
-  clampField(activeTab.value, 'pieces', { min: 0, max: LIMITS.PIECES_MAX });
+    clampField(activeTab.value, 'pieces', { min: 0, max: LIMITS.PIECES_MAX });
 }
 
 function travelTimeValidation() {
-  clampField(activeTab.value, 'travel_time', { min: 0, max: LIMITS.TRAVEL_TIME_MAX });
+    clampField(activeTab.value, 'travel_time', { min: 0, max: LIMITS.TRAVEL_TIME_MAX });
 }
 
 async function onClientSelect(option: { id: number }) {
