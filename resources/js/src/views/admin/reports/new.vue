@@ -1797,6 +1797,8 @@ function machineModelChange(selectedOption) {
 }*/
 
 async function onMachineSelect(option: { serial: string }) {
+    if (activeTab.value?.selectedMachine?.serial === option.serial) return;
+
     try {
         const { data } = await axios.get(API.machineBySerial(option.serial));
         ensurePostTab(selectedTab.value);
