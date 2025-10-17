@@ -1648,7 +1648,6 @@ const form = reactive({
     selectedClient: null,
     selectedMachineModel: null,
     selectedSearchMachine: null,
-    selectedMachine: null,
     selectedBranch: null,
     selectedModule: null,
     selectedFailure: null,
@@ -1929,8 +1928,7 @@ async function selectedClientChange(selectedOption) {
     tabs.value = [createTab()];
     selectedTab.value = 0;
     postForm.tabs = [{ machines: [] }];
-    
-    form.selectedMachine = null;
+
     form.selectedBranch = null;
     form.selectedContact = null;
     branchesCatalog.value = [];
@@ -1981,7 +1979,6 @@ async function machineChangeNew(selectedOption) {
         const { data } = await axios.get(`/machine/${selectedOption.serial}`);
         postForm.tabs[selectedTab.value] ??= { machines: [] };
         updateMachines(data);
-        form.selectedMachine = data;
         tabs.value[selectedTab.value].selectedMachine = data;
     } catch (e) {
         console.error("Error:", e);
