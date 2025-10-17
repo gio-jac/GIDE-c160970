@@ -1179,8 +1179,8 @@ const createTab = (): Tab => ({
     notes: "",
 });
 
-const tabs = ref<Tab[]>([createTab()]);
-const selectedTab = ref<number>(0);
+const tabs = ref([createTab()]);
+const selectedTab = ref(0);
 
 const branchesCatalog = ref<Branch[]>([]);
 const machinesCatalog = ref<SelectedMachine[]>([]);
