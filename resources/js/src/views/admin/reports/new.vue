@@ -602,7 +602,7 @@
                                                                 'formTransport1' +
                                                                 index
                                                             "
-                                                            v-model="
+                                                            v-model.number="
                                                                 postForm.tabs[
                                                                     selectedTab]
                                                                     .machines[
@@ -642,7 +642,7 @@
                                                                 'formTransport2' +
                                                                 index
                                                             "
-                                                            v-model="
+                                                            v-model.number="
                                                                 activePostTab
                                                                     .machines[
                                                                     index
@@ -680,7 +680,7 @@
                                                                 'formTransport3' +
                                                                 index
                                                             "
-                                                            v-model="
+                                                            v-model.number="
                                                                 activePostTab
                                                                     .machines[
                                                                     index
@@ -947,7 +947,7 @@
                                     v-tippy:pieces
                                     id="formReportPieces"
                                     type="number"
-                                    v-model="activeTab.pieces"
+                                    v-model.number="activeTab.pieces"
                                     name="formReportPieces"
                                     step="1"
                                     class="form-input flex-1"
@@ -988,7 +988,7 @@
                                     id="formReportOnTime"
                                     step="0.01"
                                     type="number"
-                                    v-model="activeTab.time_on"
+                                    v-model.number="activeTab.time_on"
                                     name="formReportOnTime"
                                     class="form-input flex-1"
                                     placeholder="0.00"
@@ -1008,7 +1008,7 @@
                                     v-tippy:traveltime
                                     id="formReportTravelTime"
                                     type="number"
-                                    v-model="activeTab.travel_time"
+                                    v-model.number="activeTab.travel_time"
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
                                     placeholder="0"
@@ -1566,6 +1566,17 @@
 </template>
 
 <script lang="ts" setup>
+const LIMITS = {
+  PIECES_MAX: 999_999_999_999,
+  TIME_ON_MAX: 9_999_999.99,
+  TRAVEL_TIME_MAX: 10_080,
+  DT_MAX: 999_999,
+  TRANSPORT_MAX: 9_999.9,
+  PART_QTY_MAX: 255,
+  MACHINE_DETAILS_MAX: 5,
+};
+const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+
 import { ref, reactive, computed } from "vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
@@ -1829,67 +1840,48 @@ const machinesListing = computed(() => {
     return Array.isArray(list) && list.length ? list : (sel ? [sel] : []);
 });
 
-function transportValidation(index) {
-    const machine = postForm.tabs[selectedTab.value]?.machines?.[index];
-    if (!machine) return;
+function transportValidation(index: number) {
+    const m = activePostTab.value?.machines?.[index];
+    if (!m) return;
 
-    const fields = ["transport_1", "transport_2", "transport_3"];
-    for (const f of fields) {
-        const n = Number(machine[f]);
-        
-        machine[f] = Number.isFinite(n)
-            ? Math.max(0, Math.min(9999.9, Math.round(n * 10) / 10))
-            : 0;
-    }
+    (["transport_1", "transport_2", "transport_3"] as const).forEach(k => {
+        const n = Number(m[k]) || 0;
+        m[k] = clamp(Math.round(n * 10) / 10, 0, LIMITS.TRANSPORT_MAX);
+    });
 }
 
-function partQtyValidation(index) {
-    const part = tabs.value[selectedTab.value].service_parts[index];
-    const n = Number(part.quantity);
-    part.quantity = Number.isFinite(n) ? Math.max(1, Math.min(255, Math.trunc(n))) : 1;
+function partQtyValidation(index: number) {
+    const p = activeTab.value.service_parts[index];
+    const n = Math.trunc(Number(p.quantity) || 1);
+    p.quantity = clamp(n, 1, LIMITS.PART_QTY_MAX);
 }
 
 function machineOnValidation() {
-    const tab = tabs.value[selectedTab.value];
-    const n = Number(tab.time_on);
-
-    if(Number.isFinite(n)) {
-        tab.time_on = Math.max(0, Math.min(9999999.99, Math.round(n * 100) / 100));
-    } else {
-        tab.time_on = 0;
-    }
+    const tab = activeTab.value;
+    const n = Number(tab.time_on) || 0;
+    tab.time_on = clamp(Math.round(n * 100) / 100, 0, LIMITS.TIME_ON_MAX);
 }
 
-function dtValidation(detail) {
-    const n = Number(detail.dt);
-    detail.dt = Number.isFinite(n) ? Math.max(0, Math.min(999999, Math.trunc(n))) : 0;
+function dtValidation(detail: { dt: number | null }) {
+    const n = Math.trunc(Number(detail.dt) || 0);
+    detail.dt = clamp(n, 0, LIMITS.DT_MAX);
 }
 
-function finalDtValidation(machine) {
-    const n = Number(machine.dt);
-    machine.dt = Number.isFinite(n) ? Math.max(0, Math.min(999999, Math.trunc(n))) : 0;
+function finalDtValidation(machine: { dt: number | null }) {
+    const n = Math.trunc(Number(machine.dt) || 0);
+    machine.dt = clamp(n, 0, LIMITS.DT_MAX);
 }
 
 function partsValidation() {
-    const tab = tabs.value[selectedTab.value];
-    const n = Number(tab.pieces);
-
-    if(Number.isFinite(n)) {
-        tab.pieces = Math.max(0, Math.min(999999999999, Math.trunc(n)));
-    } else {
-        tab.pieces = 0;
-    }
+    const tab = activeTab.value;
+    const n = Math.trunc(Number(tab.pieces) || 0);
+    tab.pieces = clamp(n, 0, LIMITS.PIECES_MAX);
 }
 
 function travelTimeValidation() {
-    const tab = tabs.value[selectedTab.value];
-    const n = Number(tab.travel_time);
-
-    if(Number.isFinite(n)) {
-        tab.travel_time = Math.max(0, Math.min(10080, Math.trunc(n)));
-    } else {
-        tab.travel_time = 0;
-    }
+    const tab = activeTab.value;
+    const n = Math.trunc(Number(tab.travel_time) || 0);
+    tab.travel_time = clamp(n, 0, LIMITS.TRAVEL_TIME_MAX);
 }
 
 async function selectedClientChange(selectedOption) {
