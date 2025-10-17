@@ -158,78 +158,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                <!-- 
-                <div class="flex px-4 mt-4">
-                    <div class="w-full">
-                        <div class="flex items-center">
-                            <label
-                                for="formMachineModel"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >{{ $t("report.form.machineModel") }}
-                                <span class="text-red-500">*</span></label
-                            >
-
-                            <multiselect
-                                id="formMachineModel"
-                                :options="catalogMachineModels"
-                                @select="machineModelChange"
-                                v-model="form.selectedMachineModel"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ model }) =>
-                                        `${model}`
-                                "
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex px-4 mt-4">
-                    <div class="w-full">
-                        <div class="flex items-center">
-                            <label
-                                for="formMachine"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >{{ $t("report.form.machineSerial") }}
-                                <span class="text-red-500">*</span></label
-                            >
-
-                            <multiselect
-                                @select="machineChange"
-                                id="formMachine"
-                                :options="catalogMachines"
-                                v-model="form.selectedSearchMachine"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ serial }) =>
-                                        `${serial}`
-                                "
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                            <tippy target="machineid" trigger="focus">Usado para la búsqueda y selección de máquina, utiliza el siguiente formato:<br>"Serial - Modelo de máquina"</tippy>
-                            <div class="w-[50px] flex justify-end pr-[15px]">
-                                <div v-if="loaders.machines.waiting" class="waiting-loader"></div>
-                                <div v-if="loaders.machines.searching" class="searching-loader mr-[-9px]"></div>
-                            </div>
-                        </div>
-                        <template v-if="errors.machines">
-                            <p class="text-danger mt-1 text-center">
-                                {{ errors.machines }}
-                            </p>
-                        </template>
-                    </div>
-                </div>-->
-                
                 
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
 
@@ -535,190 +463,9 @@
                         </div>
                     </template>
                 </div>
-                <!-- 
+
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
-                <div class="mt-8 px-4">
-                    <div class="flex justify-between lg:flex-row flex-col">
-                        <div
-                            class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6"
-                        >
-                            <div class="text-lg">
-                                {{ $t("report.form.branches") }} <span class="text-red-500">*</span>
-                            </div>
 
-                            <multiselect
-                                v-tippy:branches
-                                id="formBranches"
-                                :disabled="form.selectedMachine ? false : true"
-                                :options="
-                                    form.selectedMachine
-                                        ? form.selectedMachine.client.branches
-                                        : []
-                                "
-                                v-model="form.selectedBranch"
-                                class="custom-multiselect flex-1"
-                                :searchable="true"
-                                :custom-label="({ city }) => `${city.name}`"
-                                :placeholder="$t('report.form.branchPlaceholder')"
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
-                            ></multiselect>
-                            <tippy target="branches" placement="left" trigger="focus">Selección de la dirección de la sucursal asociada al cliente de la máquina seleccionada</tippy>
-
-                            <template v-if="errors.branch_id">
-                                <p class="text-danger mt-1 text-center">
-                                    {{ errors.branch_id }}
-                                </p>
-                            </template>
-                            <div class="text-lg">
-                                {{ $t("report.form.contacts") }} <span class="text-red-500">*</span>
-                            </div>
-                            <select
-                                v-tippy:contacts
-                                id="formContacts"
-                                name="formContacts"
-                                class="form-select text-white-dark"
-                                v-model="form.selectedContact"
-                                required
-                            >
-                                <option :value="null">
-                                    {{ $t("report.form.default") }}
-                                </option>
-                                <option
-                                    v-for="contact in form.selectedBranch
-                                        ?.branch_managers"
-                                    :key="contact.id"
-                                    :value="contact"
-                                >
-                                    {{ contact.name }}
-                                </option>
-                            </select>
-                            <tippy target="contacts" placement="left" trigger="focus">Selección del contacto asociado a la dirección de la sucursal seleccionada</tippy>
-
-                            <template v-if="errors.branch_manager_id">
-                                <p class="text-danger mt-1 text-center">
-                                    {{ errors.branch_manager_id }}
-                                </p>
-                            </template>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formClient"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.client") }}</label
-                                >
-                                <input
-                                    id="formClient"
-                                    type="text"
-                                    name="formClient"
-                                    class="form-input flex-1"
-                                    readonly
-                                    :value="form.selectedMachine?.client.name"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formCustomerName"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.name") }}</label
-                                >
-                                <input
-                                    id="formCustomerName"
-                                    type="text"
-                                    name="formCustomerName"
-                                    class="form-input flex-1"
-                                    readonly
-                                    :value="form.selectedContact?.name"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formCustomerEmail"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.email") }}</label
-                                >
-                                <input
-                                    id="formCustomerEmail"
-                                    type="email"
-                                    name="formCustomerEmail"
-                                    class="form-input flex-1"
-                                    readonly
-                                    :value="form.selectedContact?.email"
-                                />
-                            </div>
-                            <div class="mt-4 flex items-center">
-                                <label
-                                    for="formCustomerPhone"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.phone") }}</label
-                                >
-                                <input
-                                    id="formCustomerPhone"
-                                    type="text"
-                                    name="formCustomerPhone"
-                                    class="form-input flex-1"
-                                    readonly
-                                    :value="form.selectedContact?.phone"
-                                />
-                            </div>
-                        </div>
-                        <div class="lg:w-1/2 w-full">
-                            <div class="text-lg">{{ $t("report.form.machineData") }}</div>
-                            <div class="flex items-center mt-4">
-                                <label
-                                    for="formMachineSerial"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.serial") }}</label
-                                >
-                                <input
-                                    id="formMachineSerial"
-                                    type="text"
-                                    name="formMachineSerial"
-                                    class="form-input flex-1"
-                                    :value="form.selectedMachine?.serial"
-                                    readonly
-                                />
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <label
-                                    for="formMachineType"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.type") }}</label
-                                >
-                                <input
-                                    id="formMachineType"
-                                    type="text"
-                                    name="formMachineType"
-                                    class="form-input flex-1"
-                                    :value="
-                                        form.selectedMachine?.machine_model
-                                            .model
-                                    "
-                                    readonly
-                                />
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <label
-                                    for="formMachineSegment"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.segment") }}</label
-                                >
-                                <input
-                                    id="formMachineSegment"
-                                    type="text"
-                                    name="formMachineSegment"
-                                    class="form-input flex-1"
-                                    :value="
-                                        form.selectedMachine?.machine_model
-                                            .model_segment.segment
-                                    "
-                                    readonly
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-                <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div
                         class="flex justify-between lg:flex-row flex-col flex-wrap"
@@ -1168,75 +915,6 @@
                 </div>
             </div>
             <div class="xl:w-96 w-full xl:mt-0 mt-6">
-                <!--
-                <div class="panel mb-5" v-if="user.type === 2">
-                    <div class="text-lg">Active reports</div>
-                    <div class="flex flex-wrap justify-evenly text-center">
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            4d25f6c6
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            80dffdc4
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            b5048b20
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            62b7e603
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            5c44f51b
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            6e4283bc
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            3f7dad51
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            152b38ec
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            c217f4ef
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary my-2"
-                        >
-                            b0684858
-                        </button>
-                    </div>
-                    <div class="w-full text-center mt-8">
-                        <a href="#">Show all</a>
-                    </div>
-                </div>-->
                 <div class="panel sticky top-[75px] left-0">
                     <div
                         class="grid xl:grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4"
@@ -1274,76 +952,6 @@
                             </svg>
                             {{ $t('report.form.saveReport') }}
                         </button>
-                        <!--
-                        <button type="button" class="btn btn-info w-full gap-2">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-6 h-6"
-                            >
-                                <path
-                                    opacity="0.5"
-                                    d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                ></path>
-                                <path
-                                    d="M8.5 12.5L10.5 14.5L15.5 9.5"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                ></path>
-                            </svg>
-                            Close Report
-                        </button>-->
-                        <!--
-                        <router-link to="/apps/invoice/preview" class="btn btn-primary w-full gap-2">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0">
-                                <path
-                                    opacity="0.5"
-                                    d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                ></path>
-                                <path
-                                    d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                ></path>
-                            </svg>
-                            Preview
-                        </router-link>
-                        --><!--
-                        <a href="" class="btn btn-secondary w-full gap-2">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0"
-                            >
-                                <path
-                                    opacity="0.5"
-                                    d="M17 9.00195C19.175 9.01406 20.3529 9.11051 21.1213 9.8789C22 10.7576 22 12.1718 22 15.0002V16.0002C22 18.8286 22 20.2429 21.1213 21.1215C20.2426 22.0002 18.8284 22.0002 16 22.0002H8C5.17157 22.0002 3.75736 22.0002 2.87868 21.1215C2 20.2429 2 18.8286 2 16.0002L2 15.0002C2 12.1718 2 10.7576 2.87868 9.87889C3.64706 9.11051 4.82497 9.01406 7 9.00195"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                    stroke-linecap="round"
-                                ></path>
-                                <path
-                                    d="M12 2L12 15M12 15L9 11.5M12 15L15 11.5"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                ></path>
-                            </svg>
-                            Download PDF
-                        </a>-->
                     </div>
                 </div>
             </div>
@@ -1468,10 +1076,8 @@ type Branch = NonNullable<Tab['selectedBranch']>;
 type Machine = SelectedMachine;
 
 const catalogParts = ref<Part[]>([]);
-//const catalogMachines = ref([]);
 type LoaderFlags = { waiting: boolean; searching: boolean };
 const loaders = reactive<{ parts: LoaderFlags }>({
-    //machines: { waiting: true, searching: false },
     parts: { waiting: true, searching: false},
 });
 defineOptions({
@@ -1509,7 +1115,6 @@ const props = defineProps<{
     catalogModule: Array<LocalizedItem>;
     catalogFailures: Array<LocalizedItem>;
     catalogTypes: Array<LocalizedItem>;
-    //catalogMachineModels: Array<{ id: number; model: string }>;
     catalogClients: Array<{ id: number; name: string }>;
 }>();
 
@@ -1666,11 +1271,6 @@ const updateMachines = (selectedMachine: SelectedMachine | null) => {
     ensurePostTab(selectedTab.value).machines = list.map((m) => createPostTabMachine(m.id));
 };
 
-/*watch(() => tabs.value.map(t => t.selectedMachine), (arr) => {
-    const i = selectedTab.value;
-    updateMachines(arr[i]);
-}, { immediate: true, deep: false });*/
-
 function getCurrentDate() {
   const now = new Date();
   const year = now.getFullYear();
@@ -1771,30 +1371,6 @@ async function onClientSelect(option: { id: number }) {
         machinesCatalog.value = []
     }
 }
-/*
-function machineModelChange(selectedOption) {
-    loaders.value.machines.searching = true;
-    loaders.value.machines.waiting = false;
-
-    fetch(`/machines/model/${selectedOption.id}`, {
-        method: "get",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": page.props.csrf,
-        },
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            machinesCatalog.value = data;
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        })
-        .finally(() => {
-            loaders.value.machines.searching = false;
-            loaders.value.machines.waiting = true;
-        });
-}*/
 
 async function onMachineSelect(option: { serial: string }) {
     if (activeTab.value?.selectedMachine?.serial === option.serial) return;
@@ -1809,31 +1385,6 @@ async function onMachineSelect(option: { serial: string }) {
         activeTab.value.selectedMachine = null;
     }
 }
-
-/*
-function machineChange(selectedOption) {
-    loaders.value.machines.searching = true;
-    loaders.value.machines.waiting = false;
-
-    fetch(`/machine/${selectedOption.serial}`, {
-        method: "get",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": page.props.csrf,
-        },
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            form.selectedMachine = data;
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        })
-        .finally(() => {
-            loaders.value.machines.searching = false;
-            loaders.value.machines.waiting = true;
-        });
-}*/
 
 const debounce = <F extends (...args: any[]) => void>(fn: F, ms = 300) => {
   let id: number | undefined;
@@ -1864,41 +1415,6 @@ function selectPartChange(searchQuery: string) {
 
     runPartsAutocomplete(searchQuery);
 }
-
-/*
-function selectMachineChange(searchQuery, id) {
-    machinesCatalog.value = [];
-    if (searchQuery.length <= 0) {
-        if (timeoutIdMachine.value) clearTimeout(timeoutIdMachine.value);
-        return;
-    }
-
-    if (timeoutIdMachine.value) clearTimeout(timeoutIdMachine.value);
-    timeoutIdMachine.value = setTimeout(() => {
-        loaders.value.machines.searching = true;
-        loaders.value.machines.waiting = false;
-        fetch("/machines/autocomplete", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": page.props.csrf,
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({ query: searchQuery }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                machinesCatalog.value = data;
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            })
-            .finally(() => {
-                loaders.value.machines.searching = false;
-                loaders.value.machines.waiting = true;
-            });
-    }, 750);
-}*/
 
 function addMachineDetailAt(i: number): void {
     const list = activePostTab.value?.machines?.[i]?.machine_details;
