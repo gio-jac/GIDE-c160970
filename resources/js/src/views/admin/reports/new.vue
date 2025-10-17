@@ -35,10 +35,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ emp, nombre, apellido_paterno }) =>
-                                        `${emp} - ${nombre} ${apellido_paterno}`
-                                "
+                                :custom-label="labelUser"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
@@ -71,7 +68,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
                                 :placeholder="$t('report.form.default')"
-                                :custom-label="({ id, name }) => `${$t('catalogs.shift.'+id, name)}`"
+                                :custom-label="labelShift"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
@@ -102,10 +99,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ name }) =>
-                                        `${name}`
-                                "
+                                :custom-label="labelClient"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
@@ -130,10 +124,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ address,city }) =>
-                                        ` ${city.name} - ${address}`
-                                "
+                                :custom-label="labelBranch"
                                 :disabled="branchesCatalog.length === 0"
                                 selected-label=""
                                 select-label=""
@@ -158,10 +149,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ name }) =>
-                                        ` ${name}`
-                                "
+                                :custom-label="labelContact"
                                 :disabled="!form.selectedBranch"
                                 selected-label=""
                                 select-label=""
@@ -301,10 +289,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
-                                :custom-label="
-                                    ({ serial,machine_model }) =>
-                                        `${machine_model.model} - ${serial}`
-                                "
+                                :custom-label="labelMachine"
                                 :disabled="machinesCatalog.length === 0"
                                 selected-label=""
                                 select-label=""
@@ -1205,10 +1190,7 @@
                                     class="custom-multiselect flex-1"
                                     :searchable="true"
                                     :placeholder="$t('report.form.partsPlaceholder')"
-                                    :custom-label="
-                                        ({ num_part, descripcion }) =>
-                                            `${num_part} - ${descripcion}`
-                                    "
+                                    :custom-label="labelPart"
                                     :preserveSearch="true"
                                     selected-label=""
                                     select-label=""
@@ -1707,6 +1689,25 @@ const form = reactive({
     selectedShift: null,
     selectedUser: null,
 });
+
+const labelUser = (u: { emp: string; nombre: string; apellido_paterno: string }) =>
+  `${u.emp} - ${u.nombre} ${u.apellido_paterno}`;
+
+const labelShift = (s: { id: number; name: string }) =>
+  `${t('catalogs.shift.' + s.id, s.name)}`;
+
+const labelClient = (c: { name: string }) => `${c.name}`;
+
+const labelBranch = (b: { address: string; city: { name: string } }) =>
+  ` ${b.city.name} - ${b.address}`;
+
+const labelContact = (c: { name: string }) => ` ${c.name}`;
+
+const labelMachine = (m: { serial: string; machine_model: { model: string } }) =>
+  `${m.machine_model.model} - ${m.serial}`;
+
+const labelPart = (p: { num_part: string; descripcion: string }) =>
+  `${p.num_part} - ${p.descripcion}`;
 
 const disableAddTab = computed(() => tabs.value.some(t => !t.selectedMachine))
 
