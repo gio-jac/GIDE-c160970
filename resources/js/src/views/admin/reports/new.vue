@@ -304,7 +304,7 @@
                         >
                             <div
                                 v-for="(machine, index) in machinesListing"
-                                :key="`${activeTab.id}-${machine.id ?? machine.serial ?? index}`"
+                                :key="machineKey(machine, index)"
                                 :class="{
                                     'bg-[#ececf9]': machine.only_dt !== 1,
                                     'bg-gray-100': machine.only_dt === 1,
@@ -1338,7 +1338,7 @@
                     >
                         <template
                             v-for="(machine,index) in machinesListing"
-                            :key="`${activeTab.id}-${machine.id ?? machine.serial ?? index}`"
+                            :key="machineKey(machine, index)"
                         >
                             <div
                                 v-if="machine.only_dt !== 1 && activePostTab?.machines?.[index]"
@@ -1837,6 +1837,9 @@ function getCurrentDate() {
   const day = String(now.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+
+const machineKey = (m: { id?: number; serial?: string }, idx: number) =>
+  `${activeTab.value.id}-${m.id ?? m.serial ?? idx}`;
 
 const postForm = reactive<{
   service_date: string;
