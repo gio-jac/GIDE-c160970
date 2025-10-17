@@ -2091,6 +2091,7 @@ function addMachineDetail(machine) {
             module_id: null,
             failure_id: null,
             failure_type_id: null,
+            dt: null,
         });
     }
 }
