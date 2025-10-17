@@ -1591,7 +1591,7 @@ const store = useAppStore();
 const page = usePage();
 const user = computed(() => page.props.auth);
 const catalogParts = ref([]);
-const catalogMachines = ref([]);
+//const catalogMachines = ref([]);
 const loaders = ref({
     machines: { waiting: true, searching: false },
     parts: { waiting: true, searching: false},
@@ -2045,7 +2045,7 @@ function machineModelChange(selectedOption) {
     })
         .then((response) => response.json())
         .then((data) => {
-            catalogMachines.value = data;
+            machinesCatalog.value = data;
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -2134,7 +2134,7 @@ function selectPartChange(searchQuery, id) {
 }
 
 function selectMachineChange(searchQuery, id) {
-    catalogMachines.value = [];
+    machinesCatalog.value = [];
     if (searchQuery.length <= 0) {
         if (timeoutIdMachine.value) clearTimeout(timeoutIdMachine.value);
         return;
@@ -2155,7 +2155,7 @@ function selectMachineChange(searchQuery, id) {
         })
             .then((response) => response.json())
             .then((data) => {
-                catalogMachines.value = data;
+                machinesCatalog.value = data;
             })
             .catch((error) => {
                 console.error("Error:", error);
