@@ -2125,9 +2125,12 @@ function buildPayload(): ReportPayload {
         finished: t.finished ?? null,
         status_id: t.status_id ?? null,
         is_tested: !!t.is_tested,
-        service_parts: (t.service_parts ?? []).map(
-            (p) => ({ id: Number(p.id), quantity: Number(p.quantity ?? 1) } as ServicePartPayload)
-        ),
+        service_parts: (t.service_parts ?? [])
+            .filter((p): p is { id: number; quantity?: number } => p.id != null)
+            .map((p) => ({
+                id: Number(p.id),
+                quantity: clamp(Math.trunc(Number(p.quantity ?? 1)), 1, LIMITS.PART_QTY_MAX),
+            })),
         notes: t.notes ?? "",
         machines: postForm.tabs[i]?.machines ?? [],
     }));
