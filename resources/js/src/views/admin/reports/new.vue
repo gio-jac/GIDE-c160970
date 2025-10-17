@@ -1841,13 +1841,18 @@ function getCurrentDate() {
 const machineKey = (m: { id?: number; serial?: string }, idx: number) =>
   `${activeTab.value.id}-${m.id ?? m.serial ?? idx}`;
 
+const tzToken = () => {
+    const m = new Date().toString().match(/([A-Z]+[\+-]\d{4})/);
+    return m?.[1] ?? 'UTC+0000';
+};
+
 const postForm = reactive<{
   service_date: string;
   service_timezone: string;
   tabs: PostTab[];
 }>({
   service_date: getCurrentDate(),
-  service_timezone: new Date().toString().match(/([A-Z]+[\+-][0-9]+)/)![1],
+  service_timezone: tzToken(),
   tabs: [{ machines: [] as PostTabMachine[] }],
 });
 
