@@ -378,7 +378,7 @@
                                                             {{ $t("report.form.default") }}
                                                         </option>
                                                         <option
-                                                            v-for="tmodule in props.catalogModule"
+                                                            v-for="tmodule in moduleOptions"
                                                             :key="tmodule.id"
                                                             :value="tmodule.id"
                                                         >
@@ -417,7 +417,7 @@
                                                             {{ $t("report.form.default") }}
                                                         </option>
                                                         <option
-                                                            v-for="failure in props.catalogFailures"
+                                                            v-for="failure in failureOptions"
                                                             :key="failure.id"
                                                             :value="failure.id"
                                                         >
@@ -458,7 +458,7 @@
                                                             {{ $t("report.form.default") }}
                                                         </option>
                                                         <option
-                                                            v-for="failuretype in props.catalogTypes"
+                                                            v-for="failuretype in typeOptions"
                                                             :key="failuretype.id"
                                                             :value="failuretype.id"
                                                         >
@@ -1715,10 +1715,6 @@ function addTab() {
 const branchesCatalog = ref([]);
 const machinesCatalog = ref([]);
 
-onMounted(() => {
-    sortCatalogData();
-});
-
 const currentLocale = computed(() => store.locale);
 
 function getTranslation(item) {
@@ -1730,25 +1726,23 @@ function getTranslation(item) {
     return item.name;
 }
 
-watch(
-    currentLocale,
-  () => {
-      console.log(currentLocale.value);
-    sortCatalogData();
-  }
+const moduleOptions = computed(() =>
+  [...props.catalogModule].sort((a, b) =>
+    getTranslation(a).localeCompare(getTranslation(b))
+  )
 );
 
-function sortCatalogData() {
-  props.catalogModule.sort((a, b) => sortCatalogArray(a, b));
-  props.catalogFailures.sort((a, b) => sortCatalogArray(a, b));
-  props.catalogTypes.sort((a, b) => sortCatalogArray(a, b));
-}
+const failureOptions = computed(() =>
+  [...props.catalogFailures].sort((a, b) =>
+    getTranslation(a).localeCompare(getTranslation(b))
+  )
+);
 
-function sortCatalogArray(a, b) {
-  const translateA = getTranslation(a);
-  const translateB = getTranslation(b);
-  return translateA.localeCompare(translateB);
-}
+const typeOptions = computed(() =>
+  [...props.catalogTypes].sort((a, b) =>
+    getTranslation(a).localeCompare(getTranslation(b))
+  )
+);
 
 const removeItem = (item: any = null) => {
     tabs.value[selectedTab.value].service_parts = tabs.value[selectedTab.value].service_parts.filter(
