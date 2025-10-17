@@ -258,7 +258,6 @@
                                                     </label>
                                                     <select
                                                         :id="`${cfg.idPrefix}${cfg.includeTab ? selectedTab : ''}${index}${indexDetail}`"
-                                                        :name="`${cfg.idPrefix}${cfg.includeTab ? selectedTab : ''}${index}${indexDetail}`"
                                                         class="form-select text-white-dark"
                                                         v-model="detail[cfg.key]"
                                                         required
@@ -289,11 +288,6 @@
                                                 >
                                                 <input
                                                     :id="
-                                                        'formErrorDT' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    :name="
                                                         'formErrorDT' +
                                                         index +
                                                         indexDetail
@@ -393,7 +387,6 @@
                                                         <label :for="`formTransport${cfg.idx}${index}`">{{ $t(cfg.labelKey) }}</label>
                                                         <input
                                                             :id="`formTransport${cfg.idx}${index}`"
-                                                            :name="`formTransport${cfg.idx}${index}`"
                                                             v-model.number="activePostTab.machines[index][cfg.key]"
                                                             @input="transportValidation(index)"
                                                             type="number"
@@ -439,7 +432,6 @@
                                                 :id="'formReportDT' + index"
                                                 type="number"
                                                 v-model.number="activePostTab.machines[index].dt"
-                                                :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
                                                 :placeholder="$t('report.form.dtPlaceholder')"
                                                 @input="clampDt(activePostTab.machines[index])"
