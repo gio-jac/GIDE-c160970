@@ -1295,7 +1295,7 @@
                                                 v-model="item.quantity"
                                                 step="1"
                                                 max="255"
-                                                min="0"
+                                                min="1"
                                                 @input="partQtyValidation($event,i)"
                                             />
                                         </td>
