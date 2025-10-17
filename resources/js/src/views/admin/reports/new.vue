@@ -150,7 +150,7 @@
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="labelContact"
-                                :disabled="!form.selectedBranch"
+                                :disabled="!hasSelectedBranch"
                                 selected-label=""
                                 select-label=""
                                 deselect-label=""
@@ -1328,7 +1328,7 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div
-                        v-if="activeTab.selectedMachine && activePostTab"
+                        v-if="hasActiveMachine && activePostTab"
                         class="flex flex-wrap justify-evenly w-full"
                     >
                         <template
@@ -1655,6 +1655,9 @@ const ensurePostTab = (i: number): PostTab =>
 
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => postForm.tabs[selectedTab.value]);
+
+const hasSelectedBranch = computed<boolean>(() => !!form.selectedBranch);
+const hasActiveMachine  = computed<boolean>(() => !!activeTab.value?.selectedMachine);
 
 type LocalizedItem = { id: number; name?: string; es?: string; pt?: string };
 
