@@ -1657,8 +1657,9 @@ defineOptions({
     layout: [SiteLayout, AppLayout],
 });
 
+const createPostTab = (): PostTab => ({ machines: [] as PostTabMachine[] });
 const ensurePostTab = (i: number): PostTab =>
-    (postForm.tabs[i] ??= {machines: [] as PostTabMachine[]});
+    (postForm.tabs[i] ??= createPostTab());
 
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => postForm.tabs[selectedTab.value]);
@@ -1759,7 +1760,7 @@ const tabs = ref<Tab[]>([createTab()]);
 const selectedTab = ref<number>(0);
 function addTab() {
     tabs.value.push(createTab());
-    postForm.tabs.push({ machines: [] as PostTabMachine[] });
+    postForm.tabs.push(createPostTab());
 }
 
 const branchesCatalog = ref<Branch[]>([]);
@@ -1849,7 +1850,7 @@ const postForm = reactive<{
 }>({
   service_date: getCurrentDate(),
   service_timezone: tzToken(),
-  tabs: [{ machines: [] as PostTabMachine[] }],
+  tabs: [createPostTab()],
 });
 
 const machineGroup = (sm: SelectedMachine | null) =>
@@ -1905,7 +1906,7 @@ async function onClientSelect(option: { id: number }) {
     tabId = 0;
     tabs.value = [createTab()];
     selectedTab.value = 0;
-    postForm.tabs = [{ machines: [] }];
+    postForm.tabs = [createPostTab()];
 
     form.selectedBranch = null;
     form.selectedContact = null;
