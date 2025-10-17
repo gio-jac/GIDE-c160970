@@ -17,7 +17,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex px-4 mt-4" v-if="user.type === 1">
+                <div class="flex px-4 mt-4" v-if="showUserField">
                     <div class="w-full">
                         <div class="flex items-center">
                             <label
@@ -1053,6 +1053,8 @@ const store = useAppStore();
 
 const page = usePage();
 const user = computed(() => page.props.auth);
+type UserAuth = { type: number };
+const showUserField = computed(() => (user.value as UserAuth | undefined)?.type === 1);
 type Part = { id: number; num_part: string; descripcion: string };
 type ServicePart = { id?: number; num_part?: string; descripcion?: string; quantity?: number };
 type Branch = NonNullable<Tab['selectedBranch']>;
@@ -1150,11 +1152,11 @@ const labelUser = (u: { emp: string; nombre: string; apellido_paterno: string })
 const labelShift = (s: { id: number; name: string }) =>
   `${t('catalogs.shift.' + s.id, s.name)}`;
 
-const labelClient = (c: { name: string }) => `${c.name}`;
+const labelClient = (c: { name?: string }) => c.name ?? '-';
 
 const labelBranch = (b: { address?: string; city?: { name?: string } }) => `${b.city?.name ?? '-'} - ${b.address ?? '-'}`;
 
-const labelContact = (c: { name: string }) => `${c.name}`;
+const labelContact = (c: { name?: string }) => c.name ?? '-';
 
 const labelMachine = (m: { serial: string; machine_model?: { model?: string } }) =>
     `${m.machine_model?.model ?? '-'} - ${m.serial}`;
