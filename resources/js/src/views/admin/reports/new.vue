@@ -1610,45 +1610,20 @@ const ensurePostTab = (i: number) => (postForm.tabs[i] ??= { machines: [] });
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => postForm.tabs[selectedTab.value]);
 
-const props = defineProps({
-    errors: Object,
-    catalogCodes: {
-        type: Array,
-        required: true,
-    },
-    catalogUsers: {
-        type: Array,
-        required: true,
-    },
-    catalogStatus: {
-        type: Array,
-        required: true,
-    },
-    catalogShifts: {
-        type: Array,
-        required: true,
-    },
-    catalogModule: {
-        type: Array,
-        required: true,
-    },
-    catalogFailures: {
-        type: Array,
-        required: true,
-    },
-    catalogTypes: {
-        type: Array,
-        required: true,
-    },
-    catalogMachineModels: {
-        type: Array,
-        required: true,
-    },
-    catalogClients: {
-        type: Array,
-        required: true,
-    },
-});
+type LocalizedItem = { id: number; name?: string; es?: string; pt?: string };
+
+const props = defineProps<{
+    errors: Record<string, string>;
+    catalogCodes: Array<{ id: number; code: string; description?: string }>;
+    catalogUsers: Array<{ id: number; emp: string; nombre: string; apellido_paterno: string }>;
+    catalogStatus: Array<{ id: number; status: string }>;
+    catalogShifts: Array<{ id: number; name: string }>;
+    catalogModule: Array<LocalizedItem>;
+    catalogFailures: Array<LocalizedItem>;
+    catalogTypes: Array<LocalizedItem>;
+    catalogMachineModels: Array<{ id: number; model: string }>;
+    catalogClients: Array<{ id: number; name: string }>;
+}>();
 
 const dateTime: any = ref({
     enableTime: true,
