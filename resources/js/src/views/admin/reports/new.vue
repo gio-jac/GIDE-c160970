@@ -1389,7 +1389,7 @@ async function onMachineSelect(option: { serial: string }) {
     }
 }
 
-const debounce = <F extends (...args: any[]) => void>(fn: F, ms = 300) => {
+const debounce = <F extends (...args: any[]) => unknown>(fn: F, ms = 300) => {
   let id: number | undefined;
   return (...args: Parameters<F>) => {
     if (id) clearTimeout(id);
@@ -1397,19 +1397,18 @@ const debounce = <F extends (...args: any[]) => void>(fn: F, ms = 300) => {
   };
 };
 
-const runPartsAutocomplete = debounce((q: string) => {
-  loaders.parts.searching = true;
-  loaders.parts.waiting = false;
-  axios
-    .post(API.partsAutocomplete, { query: q })
-    .then(({ data }) => {
-      catalogParts.value = data ?? [];
-    })
-    .catch((error) => console.error("Error:", error))
-    .finally(() => {
-      loaders.parts.searching = false;
-      loaders.parts.waiting = true;
-    });
+const runPartsAutocomplete = debounce(async (q: string) => {
+    loaders.parts.searching = true;
+    loaders.parts.waiting = false;
+    try {
+        const { data } = await axios.post(API.partsAutocomplete, { query: q });
+        catalogParts.value = data ?? [];
+    }catch(e) {
+        console.error("Error:", e);
+    }finally {
+        loaders.parts.searching = false;
+        loaders.parts.waiting = true;
+    }
 }, AUTOCOMPLETE_DELAY_MS);
 
 function selectPartChange(searchQuery: string) {
