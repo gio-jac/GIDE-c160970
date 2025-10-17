@@ -250,7 +250,7 @@
                                 <button
                                     @click="selectedTab = index"
                                     v-for="(tab, index) in tabs"
-                                    :key="index"
+                                    :key="tab.id"
                                     type="button"
                                     class="-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-transparent text-sm text-slate-500 hover:text-slate-700 hover:border-slate-300"
                                     :class="{'-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-blue-600 text-sm font-medium text-slate-900 dark:text-slate-100': index == selectedTab}"
@@ -1648,7 +1648,6 @@ const form = reactive({
     selectedMachineModel: null,
     selectedSearchMachine: null,
     selectedMachine: null,
-    selectedMachine2: null,
     selectedBranch: null,
     selectedModule: null,
     selectedFailure: null,
@@ -1673,7 +1672,6 @@ const createTab = () => ({
     selectedMachineModel: null,
     selectedSearchMachine: null,
     selectedMachine: null,
-    selectedMachine2: null,
     selectedBranch: null,
     selectedModule: null,
     selectedFailure: null,
