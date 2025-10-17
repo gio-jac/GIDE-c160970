@@ -340,7 +340,7 @@
                                                 v-if="!toBool(machine?.only_dt) && activePostTab.machines[index]?.machine_details?.length < 5"
                                                 type="button"
                                                 class="btn btn-secondary gap-2"
-                                                @click="addMachineDetailAt(index)"
+                                                @click="activePostTab.machines[index].machine_details.push({ module_id: null, failure_id: null, failure_type_id: null, dt: null })"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -1257,14 +1257,6 @@ function selectPartChange(searchQuery: string) {
     if (!searchQuery?.length) return;
 
     runPartsAutocomplete(searchQuery);
-}
-
-function addMachineDetailAt(i: number): void {
-    const list = activePostTab.value.machines[i]?.machine_details;
-    if (!list) return;
-    if (list.length < LIMITS.MACHINE_DETAILS_MAX) {
-        list.push({ module_id: null, failure_id: null, failure_type_id: null, dt: null });
-    }
 }
 
 type ServicePartPayload = { id: number; quantity: number };
