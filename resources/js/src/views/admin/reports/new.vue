@@ -1149,8 +1149,8 @@ function onBranchSelect() {
 const labelUser = (u: { emp?: string; nombre?: string; apellido_paterno?: string }) =>
     `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`;
 
-const labelShift = (s: { id: number; name: string }) =>
-  `${t('catalogs.shift.' + s.id, s.name)}`;
+const labelShift = (s: { id?: number; name?: string }) =>
+    `${t('catalogs.shift.' + (s.id ?? ''), s.name ?? '-')}`;
 
 const labelClient = (c: { name?: string }) => c.name ?? '-';
 
