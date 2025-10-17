@@ -1778,8 +1778,6 @@ const updateMachines = (selectedMachine) => {
                     dt: null,
                 },
             ],
-            transport_time_1: null,
-            transport_time_2: null,
             transport_1: null,
             transport_2: null,
             transport_3: null,
@@ -1900,6 +1898,7 @@ function travelTimeValidation() {
 }
 
 async function selectedClientChange(selectedOption) {
+    tabId = 0;
     tabs.value = [createTab()];
     selectedTab.value = 0;
     postForm.tabs = [{ machines: [] }];
