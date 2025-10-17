@@ -1203,6 +1203,7 @@
                                     id="formReportParts"
                                     :options="catalogParts"
                                     v-model="partSearch"
+                                    track-by="id"
                                     class="custom-multiselect flex-1"
                                     :searchable="true"
                                     :placeholder="$t('report.form.partsPlaceholder')"
