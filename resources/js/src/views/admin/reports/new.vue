@@ -1259,7 +1259,8 @@ const addNewPart = () => {
         activeTab.value.service_parts.push({ ...partSearch.value, quantity: 1 });
         return;
     }
-    activeTab.value.service_parts[existingPartIndex].quantity = (activeTab.value.service_parts[existingPartIndex].quantity ?? 0) + 1;
+    const item = activeTab.value.service_parts[existingPartIndex];
+    item.quantity = (item.quantity ?? 0) + 1;
 };
 
 const updateMachines = (selectedMachine: SelectedMachine | null) => {
