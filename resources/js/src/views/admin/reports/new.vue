@@ -40,11 +40,9 @@
                             ></multiselect>
                             <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato:<br>"EMP - Nombre PrimerApellido"</tippy>
                         </div>
-                        <template v-if="errors.user_id">
-                            <p class="text-danger mt-1 text-center">
-                                {{ errors.user_id }}
-                            </p>
-                        </template>
+                        <p v-if="errors.user_id" class="text-danger mt-1 text-center">
+                            {{ errors.user_id }}
+                        </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
@@ -71,11 +69,9 @@
                             ></multiselect>
                             <tippy target="shift" trigger="focus">Usado para la selección del turno de la realización del reporte</tippy>
                         </div>
-                        <template v-if="errors.shift_id">
-                            <p class="text-danger mt-1 text-center">
-                                {{ errors.shift_id }}
-                            </p>
-                        </template>
+                        <p v-if="errors.shift_id" class="text-danger mt-1 text-center">
+                            {{ errors.shift_id }}
+                        </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
