@@ -237,7 +237,7 @@
                                             ?? '-'
                                     }}
                                 </div>
-                                <div class="w-full" v-if="activePostTab?.machines?.[index]">
+                                <div class="w-full" v-if="activePostTab.machines[index]">
                                     <div class="flex justify-evenly flex-wrap">
                                         <div
                                             v-for="(
@@ -341,7 +341,7 @@
                                         </div>
                                         <div class="w-full flex justify-center">
                                             <button
-                                                v-if="!isDTOnly(machine) && activePostTab?.machines?.[index]?.machine_details?.length < 5"
+                                                v-if="!isDTOnly(machine) && activePostTab.machines[index]?.machine_details?.length < 5"
                                                 type="button"
                                                 class="btn btn-secondary gap-2"
                                                 @click="addMachineDetailAt(index)"
@@ -399,7 +399,7 @@
                                                     </div>
                                                 </div>
                                             </template>
-                                            <template v-else-if="activePostTab?.machines?.[index]">
+                                            <template v-else-if="activePostTab.machines[index]">
                                                 <label :for="`formShiftTotal11-${index}`"
                                                     >{{ $t("report.form.transport") }}</label
                                                 >
@@ -870,7 +870,7 @@
                             :key="machineKey(machine)"
                         >
                             <div
-                                v-if="!isDTOnly(machine) && activePostTab?.machines?.[index]"
+                                v-if="!isDTOnly(machine) && activePostTab.machines[index]"
                                 class="text-center min-w-[270px]"
                             >
                                 <label
@@ -1083,7 +1083,7 @@ const getPostTab = (i: number): PostTab =>
     (report.tabs[i] ??= { machines: [] as PostTabMachine[] });
     
 const activeTab = computed(() => tabs.value[selectedTab.value]);
-const activePostTab = computed(() => report.tabs[selectedTab.value]);
+const activePostTab = computed(() => getPostTab(selectedTab.value));
 
 const hasSelectedBranch = computed<boolean>(() => !!form.selectedBranch);
 const hasActiveMachine = computed<boolean>(() => !!activeTab.value?.selectedMachine);
