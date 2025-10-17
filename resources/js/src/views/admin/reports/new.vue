@@ -1306,9 +1306,9 @@ function transportValidation(index: number) {
     const m = activePostTab.value?.machines?.[index];
     if (!m) return;
 
-    (["transport_1", "transport_2", "transport_3"] as const).forEach(k => {
-        const n = Number(m[k]) || 0;
-        m[k] = clamp(Math.round(n * 10) / 10, 0, LIMITS.TRANSPORT_MAX);
+    transportConfig.forEach(({ key }) => {
+        const n = Number(m[key]) || 0;
+        m[key] = clamp(Math.round(n * 10) / 10, 0, LIMITS.TRANSPORT_MAX);
     });
 }
 
