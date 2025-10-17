@@ -331,125 +331,35 @@
                                             :key="indexDetail"
                                             class="flex-[100%] flex justify-evenly flex-wrap"
                                         >
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                                v-if="machine.only_dt !== 1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formModule' + selectedTab +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.error") }}</label
+                                            <template v-if="machine.only_dt !== 1">
+                                                <div
+                                                    v-for="cfg in detailSelects"
+                                                    :key="cfg.key"
+                                                    class="p-2 flex-auto sm:flex-1"
                                                 >
-                                                <select
-                                                    :id="
-                                                        'formModule' + selectedTab +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formModule' + selectedTab +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="detail.module_id"
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="tmodule in moduleOptions"
-                                                        :key="tmodule.id"
-                                                        :value="tmodule.id"
+                                                    <label :for="`${cfg.idPrefix}${cfg.includeTab ? selectedTab : ''}${index}${indexDetail}`">
+                                                        {{ $t(cfg.labelKey) }}
+                                                    </label>
+                                                    <select
+                                                        :id="`${cfg.idPrefix}${cfg.includeTab ? selectedTab : ''}${index}${indexDetail}`"
+                                                        :name="`${cfg.idPrefix}${cfg.includeTab ? selectedTab : ''}${index}${indexDetail}`"
+                                                        class="form-select text-white-dark"
+                                                        v-model="detail[cfg.key]"
+                                                        required
                                                     >
-                                                        {{ getTranslation(tmodule) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                                v-if="machine.only_dt !== 1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formFailures' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.cause") }}</label
-                                                >
-                                                <select
-                                                    :id="
-                                                        'formFailures' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formFailures' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="detail.failure_id"
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="failure in failureOptions"
-                                                        :key="failure.id"
-                                                        :value="failure.id"
-                                                    >
-                                                        {{ getTranslation(failure) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                                v-if="machine.only_dt !== 1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formTypes' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.solution") }}</label
-                                                >
-                                                <select
-                                                    :id="
-                                                        'formTypes' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formTypes' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="
-                                                        detail.failure_type_id
-                                                    "
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="failuretype in typeOptions"
-                                                        :key="failuretype.id"
-                                                        :value="failuretype.id"
-                                                    >
-                                                        {{ getTranslation(failuretype) }}
-                                                    </option>
-                                                </select>
-                                            </div>
+                                                        <option :value="null">
+                                                            {{ $t("report.form.default") }}
+                                                        </option>
+                                                        <option
+                                                            v-for="opt in detailOptions[cfg.optionsKey]"
+                                                            :key="opt.id"
+                                                            :value="opt.id"
+                                                        >
+                                                            {{ getTranslation(opt) }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </template>
                                             <div
                                                 class="p-2 flex-auto sm:flex-1"
                                                 v-if="machine.only_dt !== 1"
@@ -1459,6 +1369,12 @@ const transportConfig = [
   { key: 'transport_3' as const, labelKey: 'report.form.estimatedTransport' as const, idx: 3 },
 ];
 
+const detailSelects = [
+  { key: 'module_id' as const,       labelKey: 'report.form.error'    as const, optionsKey: 'module'  as const, idPrefix: 'formModule',  includeTab: true  },
+  { key: 'failure_id' as const,      labelKey: 'report.form.cause'    as const, optionsKey: 'failure' as const, idPrefix: 'formFailures',includeTab: false },
+  { key: 'failure_type_id' as const, labelKey: 'report.form.solution' as const, optionsKey: 'type'    as const, idPrefix: 'formTypes',   includeTab: false },
+] as const;
+
 interface MachineDetail {
   module_id: number | null;
   failure_id: number | null;
@@ -1575,6 +1491,12 @@ const hasActiveMachine = computed<boolean>(() => !!activeTab.value?.selectedMach
 const branchManagers = computed(() =>
   form.selectedBranch?.branch_managers ?? []
 );
+
+const detailOptions = computed(() => ({
+  module: moduleOptions.value,
+  failure: failureOptions.value,
+  type:   typeOptions.value,
+}));
 
 type LocalizedItem = { id: number; name?: string; es?: string; pt?: string };
 
