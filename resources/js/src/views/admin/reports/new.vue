@@ -17,7 +17,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex px-4 mt-4" v-if="showUserField">
+                <div class="flex px-4 mt-4" v-if="user?.type === 1">
                     <div class="w-full">
                         <div class="flex items-center">
                             <label
@@ -119,7 +119,7 @@
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
                                 :custom-label="formatBranchLabel"
-                                :disabled="!hasBranches"
+                                :disabled="!branchesCatalog.length"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -135,14 +135,14 @@
                             >
                             <multiselect
                                 id="formCatalogContact"
-                                :options="branchManagers"
+                                :options="form.selectedBranch?.branch_managers ?? []"
                                 v-model="form.selectedContact"
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
                                 :custom-label="formatContactLabel"
-                                :disabled="!hasSelectedBranch"
+                                :disabled="!form.selectedBranch"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -174,7 +174,7 @@
                                 <button
                                     v-if="tabs.length < LIMITS.TABS_MAX"
                                     type="button"
-                                    :disabled="!canAddTab"
+                                    :disabled="!tabs.every(t => !!t.selectedMachine)"
                                     @click="addTab()"
                                     class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
                                 >
@@ -208,7 +208,7 @@
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
                                 :custom-label="formatMachineLabel"
-                                :disabled="!hasMachines"
+                                :disabled="!machinesCatalog.length"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -623,7 +623,7 @@
                     <div class="flex flex-wrap justify-evenly">
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="isStandaloneMachine"
+                            v-if="!activeTab.selectedMachine?.production_line?.id"
                         >
                             <label for="formReportReportedTime">
                                 {{ $t("report.form.reported") }}
@@ -638,7 +638,7 @@
                         </div>
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="isStandaloneMachine"
+                            v-if="!activeTab.selectedMachine?.production_line?.id"
                         >
                             <label for="formReportTimeDeparture">
                                 {{ $t("report.form.departure") }}
@@ -862,7 +862,7 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div
-                        v-if="hasActiveMachine && activePostTab"
+                        v-if="!!activeTab.selectedMachine && activePostTab"
                         class="flex flex-wrap justify-evenly w-full"
                     >
                         <template
@@ -1057,17 +1057,15 @@ const zeroPlaceholder = '0.0';
 const store = useAppStore();
 
 const page = usePage();
-const user = computed<UserAuth | undefined>(() => page.props.auth as UserAuth | undefined);
-type UserAuth = { type: number };
-const showUserField = computed(() => user.value?.type === 1);
+const user = computed<{ type: number } | undefined>(() => page.props.auth as { type: number } | undefined);
+
 type Part = { id: number; num_part: string; descripcion: string };
 type ServicePart = { id?: number; num_part?: string; descripcion?: string; quantity?: number };
 type Branch = { id: number; address?: string; city?: { name: string }; branch_managers?: Array<{ id: number; name: string }> };
-type Machine = SelectedMachine;
 
 const catalogParts = ref<Part[]>([]);
-type LoaderFlags = { waiting: boolean; searching: boolean };
-const loaders = reactive<{ parts: LoaderFlags }>({
+
+const loaders = reactive({
     parts: { waiting: true, searching: false},
 });
 defineOptions({
@@ -1084,18 +1082,10 @@ const getPostTab = (i: number): PostTab => {
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => getPostTab(selectedTab.value));
 
-const hasSelectedBranch = computed<boolean>(() => !!form.selectedBranch);
-const hasActiveMachine = computed<boolean>(() => !!activeTab.value.selectedMachine);
-const isStandaloneMachine = computed(() => !activeTab.value.selectedMachine?.production_line?.id);
-
 const isDTOnly = (m?: { only_dt?: number } | null) => toBool(m?.only_dt);
 const isMultiTransport = (
     m?: { machine_model?: { model_segment?: { is_multi_transport?: number | boolean | string } } } | null
 ) => toBool(m?.machine_model?.model_segment?.is_multi_transport);
-
-const branchManagers = computed(() =>
-  form.selectedBranch?.branch_managers ?? []
-);
 
 const detailOptions = computed(() => ({
   module: moduleOptions.value,
@@ -1124,15 +1114,17 @@ const props = defineProps<{
     catalogClients: Array<{ id: number; name: string }>;
 }>();
 
-const datePosition = computed(() => (store.rtlClass === 'rtl' ? 'auto right' : 'auto left'));
+const dateTime = computed(() => ({
+  enableTime: true,
+  dateFormat: "Y-m-d H:i",
+  position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
+}));
 
-function makePickerConfig(dateFormat: string, enableTime = false) {
-  return { enableTime, dateFormat, position: datePosition.value };
-}
-
-const dateTime = computed(() => makePickerConfig("Y-m-d H:i", true));
-
-const dateOnly = computed(() => makePickerConfig('Y-m-d'));
+const dateOnly = computed(() => ({
+  enableTime: false,
+  dateFormat: 'Y-m-d',
+  position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
+}));
 
 interface HeaderSelection {
   selectedClient: { id: number; name?: string } | null;
@@ -1154,13 +1146,13 @@ function onBranchSelect() {
     form.selectedContact = null;
 }
 
-const withPrefix = (s?: string, prefix = ' · ') => (s ? `${prefix}${s}` : '');
+const withPrefix = (s?: string | null, prefix = ' · ') => (s && s.trim() ? `${prefix}${s}` : '');
 
 const formatUserLabel = (u: { emp?: string; nombre?: string; apellido_paterno?: string }) =>
     `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`;
 
 const formatShiftLabel = (s: { id?: number; name?: string }) =>
-    `${t(`catalogs.shift.${s.id ?? ''}`, s.name ?? '-')}`;
+    t(`catalogs.shift.${s.id ?? ''}`, s.name ?? '-');
 
 const formatClientLabel = (c: { name?: string }) => c.name ?? '-';
 
@@ -1180,8 +1172,6 @@ const multiselectLabels = {
     selectLabel: '',
     deselectLabel: '',
 } as const;
-
-const canAddTab = computed(() => tabs.value.every(t => !!t.selectedMachine));
 
 const partSearch = ref<Part | null>(null);
 
@@ -1233,21 +1223,16 @@ function addTab() {
 }
 
 const branchesCatalog = ref<Branch[]>([]);
-const machinesCatalog = ref<Machine[]>([]);
-const hasBranches = computed(() => branchesCatalog.value.length > 0);
-const hasMachines = computed(() => machinesCatalog.value.length > 0);
-
-const currentLocale = computed(() => store.locale);
+const machinesCatalog = ref<SelectedMachine[]>([]);
 
 function getTranslation(item: LocalizedItem): string {
-    const { value: locale } = currentLocale;
+    const locale = store.locale;
     if (locale === 'es' && item.es) return item.es;
     if (locale === 'pt' && item.pt) return item.pt;
     return item.name ?? '';
 }
 
-type Translatable = { name?: string; es?: string; pt?: string };
-const sortByTranslation = <T extends Translatable>(arr: T[]) =>
+const sortByTranslation = (arr: LocalizedItem[]) =>
     [...arr].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b)));
 
 const moduleOptions = computed(() => sortByTranslation(props.catalogModule));
@@ -1286,26 +1271,13 @@ const updateMachines = (selectedMachine: SelectedMachine | null) => {
 const machineKey = (m: { id?: number; serial?: string }) =>
     String(m.id ?? m.serial);
 
-const tzToken = () => {
-    const m = new Date().toString().match(/([A-Z]+[\+-]\d{4})/);
-    return m?.[1] ?? 'UTC+0000';
-};
-
-const TODAY_YYYY_MM_DD = (() => {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, '0');
-  const d = String(now.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-})();
-
 const report = reactive<{
   service_date: string;
   service_timezone: string;
   tabs: PostTab[];
 }>({
-  service_date: TODAY_YYYY_MM_DD,
-  service_timezone: tzToken(),
+  service_date: (() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}` })(),
+  service_timezone: (new Date().toString().match(/([A-Z]+[\+-]\d{4})/)?.[1] ?? 'UTC+0000'),
   tabs: [],
 });
 
