@@ -1225,6 +1225,7 @@ const createTab = (): Tab => ({
 const tabs = ref<Tab[]>([createTab()]);
 const selectedTab = ref<number>(0);
 function addTab() {
+    if (tabs.value.length >= LIMITS.TABS_MAX) return;
     tabs.value.push(createTab());
 }
 
