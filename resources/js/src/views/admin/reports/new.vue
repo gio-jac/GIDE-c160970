@@ -13,7 +13,7 @@
                                 <span class="text-red-500">*</span></label
                             >
 
-                            <flat-pickr id="formServiceDate" v-model="postForm.service_date" class="form-input flex-1" :config="basic"></flat-pickr>
+                            <flat-pickr id="formServiceDate" v-model="report.service_date" class="form-input flex-1" :config="basic"></flat-pickr>
                         </div>
                     </div>
                 </div>
@@ -1064,10 +1064,10 @@ defineOptions({
 
 const createPostTab = (): PostTab => ({ machines: [] as PostTabMachine[] });
 const ensurePostTab = (i: number): PostTab =>
-    (postForm.tabs[i] ??= createPostTab());
+    (report.tabs[i] ??= createPostTab());
 
 const activeTab = computed(() => tabs.value[selectedTab.value]);
-const activePostTab = computed(() => postForm.tabs[selectedTab.value]);
+const activePostTab = computed(() => report.tabs[selectedTab.value]);
 
 const hasSelectedBranch = computed<boolean>(() => !!form.selectedBranch);
 const hasActiveMachine = computed<boolean>(() => !!activeTab.value?.selectedMachine);
@@ -1212,7 +1212,7 @@ const tabs = ref<Tab[]>([createTab()]);
 const selectedTab = ref<number>(0);
 function addTab() {
     tabs.value.push(createTab());
-    postForm.tabs.push(createPostTab());
+    report.tabs.push(createPostTab());
 }
 
 const branchesCatalog = ref<Branch[]>([]);
@@ -1282,7 +1282,7 @@ const tzToken = () => {
     return m?.[1] ?? 'UTC+0000';
 };
 
-const postForm = reactive<{
+const report = reactive<{
   service_date: string;
   service_timezone: string;
   tabs: PostTab[];
@@ -1341,7 +1341,7 @@ async function onClientSelect(option: { id: number }) {
     tabId = 0;
     tabs.value = [createTab()];
     selectedTab.value = 0;
-    postForm.tabs = [createPostTab()];
+    report.tabs = [createPostTab()];
 
     form.selectedBranch = null;
     form.selectedContact = null;
@@ -1450,8 +1450,8 @@ function buildPayload(): ReportPayload {
         shift_id: form.selectedShift?.id ?? null,
         branch_id: form.selectedBranch?.id ?? null,
         branch_manager_id: form.selectedContact?.id ?? null,
-        service_date: postForm.service_date,
-        service_timezone: postForm.service_timezone,
+        service_date: report.service_date,
+        service_timezone: report.service_timezone,
     };
 
     const tabsPayLoad: TabPayload[] = tabs.value.map((t, i) => ({
@@ -1477,7 +1477,7 @@ function buildPayload(): ReportPayload {
                 quantity: clamp(Math.trunc(Number(p.quantity ?? 1)), 1, LIMITS.PART_QTY_MAX),
             })),
         notes: t.notes ?? "",
-        machines: postForm.tabs[i]?.machines ?? [],
+        machines: report.tabs[i]?.machines ?? [],
     }));
 
     return { ...header, tabs: tabsPayLoad };
