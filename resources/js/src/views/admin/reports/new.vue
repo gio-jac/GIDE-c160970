@@ -812,7 +812,7 @@
                                         <td>
                                             <button
                                                 type="button"
-                                                @click="removeItem(i)"
+                                                @click="removePartAt(i)"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -1242,7 +1242,7 @@ const moduleOptions = computed(() => sortByTranslation(props.catalogModule));
 const failureOptions = computed(() => sortByTranslation(props.catalogFailures));
 const typeOptions = computed(() => sortByTranslation(props.catalogTypes));  
 
-const removeItem = (index: number) => {
+const removePartAt = (index: number) => {
     activeTab.value.service_parts.splice(index, 1);
 };
 
