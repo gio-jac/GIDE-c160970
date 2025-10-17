@@ -1088,6 +1088,13 @@ const detailOptions = computed(() => ({
   type:   typeOptions.value,
 }));
 
+const toMachineList = (selected: SelectedMachine | null) => {
+    if (!selected) return [];
+    const pl = selected.production_line;
+    const hasLine = pl && pl.id != null && pl.machines?.length;
+    return hasLine ? pl.machines : [selected];
+};
+
 type LocalizedItem = { id: number; name?: string; es?: string; pt?: string };
 
 const props = defineProps<{
@@ -1257,11 +1264,8 @@ const addNewPart = () => {
 
 const updateMachines = (selectedMachine: SelectedMachine | null) => {
     if (!selectedMachine) return;
-    if (selectedMachine.production_line?.id === null) selectedMachine.production_line = null;
 
-    const list = selectedMachine.production_line?.machines?.length
-        ? selectedMachine.production_line.machines
-        : [selectedMachine];
+    const list = toMachineList(selectedMachine);
 
     ensurePostTab(selectedTab.value).machines = list.map((m) => createPostTabMachine(m.id));
 };
@@ -1294,7 +1298,7 @@ const report = reactive<{
 
 const machinesListing = computed(() => {
     const sm = activeTab.value?.selectedMachine ?? null;
-    return sm?.production_line?.machines?.length ? sm.production_line.machines : (sm ? [sm] : []);
+    return toMachineList(sm);
 });
 
 function transportValidation(index: number) {
@@ -1314,13 +1318,17 @@ const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decim
     obj[key] = clamp(normalized, min, max) as any;
 };
 
+function clampActiveTab<K extends keyof Tab>(key: K, cfg: { decimals?: number; min: number; max: number }) {
+  clampField(activeTab.value as unknown as Record<string, any>, key as string, cfg);
+}
+
 function partQtyValidation(index: number) {
     const p = activeTab.value.service_parts[index]!;
     clampField(p as Record<string, unknown>, 'quantity', { min: 1, max: LIMITS.PART_QTY_MAX });
 }
 
 function machineOnValidation() {
-    clampField(activeTab.value, 'time_on', { decimals: 2, min: 0, max: LIMITS.TIME_ON_MAX });
+    clampActiveTab('time_on', { decimals: 2, min: 0, max: LIMITS.TIME_ON_MAX });
 }
 
 const clampDt = (target: { dt: number | null }) => {
@@ -1328,11 +1336,11 @@ const clampDt = (target: { dt: number | null }) => {
 };
 
 function partsValidation() {
-    clampField(activeTab.value, 'pieces', { min: 0, max: LIMITS.PIECES_MAX });
+    clampActiveTab('pieces', { min: 0, max: LIMITS.PIECES_MAX });
 }
 
 function travelTimeValidation() {
-    clampField(activeTab.value, 'travel_time', { min: 0, max: LIMITS.TRAVEL_TIME_MAX });
+    clampActiveTab('travel_time', { min: 0, max: LIMITS.TRAVEL_TIME_MAX });
 }
 
 async function onClientSelect(option: { id: number }) {
