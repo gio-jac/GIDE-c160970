@@ -1634,8 +1634,6 @@ const props = defineProps({
     },
 });
 
-console.log(props.catalogClients);
-
 const dateTime: any = ref({
     enableTime: true,
     dateFormat: "Y-m-d H:i",
@@ -1799,8 +1797,6 @@ const updateMachines = (selectedMachine) => {
             signature_client_name: null,
         };
     });
-
-    console.log(`There are ${totalMachines} machines in production line`);
 };
 
 /*watch(() => tabs.value.map(t => t.selectedMachine), (arr) => {
@@ -1916,8 +1912,6 @@ function travelTimeValidation(event) {
 }
 
 async function selectedClientChange(selectedOption) {
-    console.log(selectedOption.id);
-
     tabs.value = [createTab()];
     selectedTab.value = 0;
     postForm.tabs = [{ machines: [] }];
@@ -1937,8 +1931,6 @@ async function selectedClientChange(selectedOption) {
     } catch (e) {
         branchesCatalog.value = []
         machinesCatalog.value = []
-    } finally {
-        console.log(branchesCatalog.value, machinesCatalog.value);
     }
 }
 /*
@@ -1967,7 +1959,6 @@ function machineModelChange(selectedOption) {
 }*/
 
 async function machineChangeNew(selectedOption) {
-    console.log(selectedOption);
     try {
         const { data } = await axios.get(`/machine/${selectedOption.serial}`);
         postForm.tabs[selectedTab.value] ??= { machines: [] };
