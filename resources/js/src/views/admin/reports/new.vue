@@ -36,9 +36,7 @@
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="labelUser"
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
+                                v-bind="multiselectLabels"
                             ></multiselect>
                             <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato:<br>"EMP - Nombre PrimerApellido"</tippy>
                         </div>
@@ -69,9 +67,7 @@
                                 :searchable="false"
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="labelShift"
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
+                                v-bind="multiselectLabels"
                             ></multiselect>
                             <tippy target="shift" trigger="focus">Usado para la selección del turno de la realización del reporte</tippy>
                         </div>
@@ -100,9 +96,7 @@
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="labelClient"
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
+                                v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
                     </div>
@@ -126,9 +120,7 @@
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="labelBranch"
                                 :disabled="branchesCatalog.length === 0"
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
+                                v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
                     </div>
@@ -151,9 +143,7 @@
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="labelContact"
                                 :disabled="!hasSelectedBranch"
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
+                                v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
                     </div>
@@ -219,9 +209,7 @@
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="labelMachine"
                                 :disabled="machinesCatalog.length === 0"
-                                selected-label=""
-                                select-label=""
-                                deselect-label=""
+                                v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
                     </div>
@@ -743,9 +731,7 @@
                                     :placeholder="$t('report.form.partsPlaceholder')"
                                     :custom-label="labelPart"
                                     :preserveSearch="true"
-                                    selected-label=""
-                                    select-label=""
-                                    deselect-label=""
+                                    v-bind="multiselectLabels"
                                 ></multiselect>
                                 <button
                                     :disabled="!partSearch"
@@ -1165,6 +1151,12 @@ const labelMachine = (m: { serial: string; machine_model: { model: string } }) =
 
 const labelPart = (p: { num_part: string; descripcion: string }) =>
   `${p.num_part} - ${p.descripcion}`;
+
+const multiselectLabels = {
+    selectedLabel: '',
+    selectLabel: '',
+    deselectLabel: '',
+} as const;
 
 const canAddTab = computed(() => tabs.value.every(t => !!t.selectedMachine));
 
