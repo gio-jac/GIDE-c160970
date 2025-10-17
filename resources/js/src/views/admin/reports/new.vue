@@ -1142,10 +1142,9 @@ const labelShift = (s: { id: number; name: string }) =>
 
 const labelClient = (c: { name: string }) => `${c.name}`;
 
-const labelBranch = (b: { address: string; city: { name: string } }) =>
-  ` ${b.city.name} - ${b.address}`;
+const labelBranch = (b: { address: string; city: { name: string } }) => `${b.city.name} - ${b.address}`;
 
-const labelContact = (c: { name: string }) => ` ${c.name}`;
+const labelContact = (c: { name: string }) => `${c.name}`;
 
 const labelMachine = (m: { serial: string; machine_model: { model: string } }) =>
   `${m.machine_model.model} - ${m.serial}`;
