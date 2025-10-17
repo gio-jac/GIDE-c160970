@@ -803,9 +803,9 @@
                                                 class="form-input w-32"
                                                 placeholder="Quantity"
                                                 v-model.number="item.quantity"
-                                                step="1"
+                                                :step="LIMITS.PART_QTY_STEP"
                                                 :max="LIMITS.PART_QTY_MAX"
-                                                min="1"
+                                                :min="LIMITS.PART_QTY_MIN"
                                                 @input="partQtyValidation(i)"
                                             />
                                         </td>
@@ -945,6 +945,8 @@ const LIMITS = {
     DT_MAX: 999_999,
     TRANSPORT_MAX: 9_999.9,
     PART_QTY_MAX: 255,
+    PART_QTY_MIN: 1,
+    PART_QTY_STEP: 1,
     MACHINE_DETAILS_MAX: 5,
     TABS_MAX: 10,
     TRANSPORT_MIN: 0.0,
