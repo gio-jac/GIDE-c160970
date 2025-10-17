@@ -172,7 +172,7 @@
                                 <!-- Botón Agregar (visual, no funcional) -->
                                 <div class="ml-2 -mb-px h-9 flex items-center">
                                 <button
-                                    v-if="tabs.length < 10"
+                                    v-if="tabs.length < LIMITS.TABS_MAX"
                                     type="button"
                                     :disabled="!canAddTab"
                                     @click="addTab()"
@@ -939,13 +939,14 @@
 
 <script lang="ts" setup>
 const LIMITS = {
-  PIECES_MAX: 999_999_999_999,
-  TIME_ON_MAX: 9_999_999.99,
-  TRAVEL_TIME_MAX: 10_080,
-  DT_MAX: 999_999,
-  TRANSPORT_MAX: 9_999.9,
-  PART_QTY_MAX: 255,
-  MACHINE_DETAILS_MAX: 5,
+    PIECES_MAX: 999_999_999_999,
+    TIME_ON_MAX: 9_999_999.99,
+    TRAVEL_TIME_MAX: 10_080,
+    DT_MAX: 999_999,
+    TRANSPORT_MAX: 9_999.9,
+    PART_QTY_MAX: 255,
+    MACHINE_DETAILS_MAX: 5,
+    TABS_MAX: 10,
 };
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 
