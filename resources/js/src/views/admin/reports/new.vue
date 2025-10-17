@@ -1605,6 +1605,8 @@ defineOptions({
     layout: [SiteLayout, AppLayout],
 });
 
+const ensurePostTab = (i: number) => (postForm.tabs[i] ??= { machines: [] });
+
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => postForm.tabs[selectedTab.value]);
 
@@ -1768,7 +1770,7 @@ const updateMachines = (selectedMachine) => {
 
     const totalMachines = selectedMachine.production_line?.machines?.length ?? 1;
 
-    (postForm.tabs[selectedTab.value] ??= {machines: []}).machines = Array.from({ length: totalMachines }, (_, index) => {
+    ensurePostTab(selectedTab.value).machines = Array.from({ length: totalMachines }, (_, index) => {
         const machineId =
             totalMachines === 1
                 ? selectedMachine.id
@@ -1935,7 +1937,7 @@ function machineModelChange(selectedOption) {
 async function machineChangeNew(selectedOption) {
     try {
         const { data } = await axios.get(`/machine/${selectedOption.serial}`);
-        postForm.tabs[selectedTab.value] ??= { machines: [] };
+        ensurePostTab(selectedTab.value);
         updateMachines(data);
         tabs.value[selectedTab.value].selectedMachine = data;
     } catch (e) {
