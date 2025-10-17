@@ -1086,8 +1086,8 @@ const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => getPostTab(selectedTab.value));
 
 const hasSelectedBranch = computed<boolean>(() => !!form.selectedBranch);
-const hasActiveMachine = computed<boolean>(() => !!activeTab.value?.selectedMachine);
-const isStandaloneMachine = computed(() => !activeTab.value?.selectedMachine?.production_line?.id);
+const hasActiveMachine = computed<boolean>(() => !!activeTab.value.selectedMachine);
+const isStandaloneMachine = computed(() => !activeTab.value.selectedMachine?.production_line?.id);
 
 const isDTOnly = (m?: { only_dt?: number } | null) => toBool(m?.only_dt);
 const isMultiTransport = (
