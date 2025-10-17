@@ -2063,8 +2063,39 @@ function addMachineDetail(machine) {
     }
 }
 
-function buildPayload() {
-    const header = {
+type ServicePartPayload = { id: number; quantity: number };
+type TabPayload = {
+  selected_machine_id: number | null;
+  pieces: number;
+  sogd: string | null;
+  time_on: number;
+  travel_time: number;
+  report_type_id: 1 | 2;
+  reported_error: string;
+  code_id: number | null;
+  actions_taken: string;
+  reported: string | null;
+  departure: string | null;
+  arrival: string | null;
+  finished: string | null;
+  status_id: number | null;
+  is_tested: boolean;
+  service_parts: ServicePartPayload[];
+  notes: string;
+  machines: PostTabMachine[];
+};
+type ReportHeader = {
+  user_id: number | null;
+  shift_id: number | null;
+  branch_id: number | null;
+  branch_manager_id: number | null;
+  service_date: string;
+  service_timezone: string;
+};
+type ReportPayload = ReportHeader & { tabs: TabPayload[] };
+
+function buildPayload(): ReportPayload {
+    const header: ReportHeader = {
         user_id: form.selectedUser?.id ?? null,
         shift_id: form.selectedShift?.id ?? null,
         branch_id: form.selectedBranch?.id ?? null,
@@ -2073,7 +2104,7 @@ function buildPayload() {
         service_timezone: postForm.service_timezone,
     };
 
-    const tabsPayLoad = tabs.value.map((t, i) => ({
+    const tabsPayLoad: TabPayload[] = tabs.value.map((t, i) => ({
         selected_machine_id: t.selectedMachine?.id ?? null,
         pieces: t.pieces ?? 0,
         sogd: t.sogd ?? null,
@@ -2089,7 +2120,9 @@ function buildPayload() {
         finished: t.finished ?? null,
         status_id: t.status_id ?? null,
         is_tested: !!t.is_tested,
-        service_parts: (t.service_parts ?? []).map(p => ({ id: p.id, quantity: p.quantity })),
+        service_parts: (t.service_parts ?? []).map(
+            (p) => ({ id: Number(p.id), quantity: Number(p.quantity ?? 1) } as ServicePartPayload)
+        ),
         notes: t.notes ?? "",
         machines: postForm.tabs[i]?.machines ?? [],
     }));
