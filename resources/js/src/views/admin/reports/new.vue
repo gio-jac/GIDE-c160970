@@ -1686,15 +1686,17 @@ const props = defineProps<{
     catalogClients: Array<{ id: number; name: string }>;
 }>();
 
+const datePosition = computed(() => (store.rtlClass === 'rtl' ? 'auto right' : 'auto left'));
+
 const dateTime: any = ref({
     enableTime: true,
     dateFormat: "Y-m-d H:i",
-    position: store.rtlClass === "rtl" ? "auto right" : "auto left",
+    position: datePosition.value,
 });
 
 const basic: any = ref({
     dateFormat: 'Y-m-d',
-    position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
+    position: datePosition.value,
 });
 
 const form = reactive({
