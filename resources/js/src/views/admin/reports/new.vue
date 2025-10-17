@@ -1970,7 +1970,7 @@ const machinesListing = computed(() => {
 });
 
 function getMachines() {
-    return form.selectedMachine?.production_line?.machines || [form.selectedMachine];
+    return tabs.value[selectedTab.value].selectedMachine?.production_line?.machines || [tabs.value[selectedTab.value].selectedMachine];
 }
 
 function transportValidation(index) {
