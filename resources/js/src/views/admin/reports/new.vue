@@ -488,7 +488,7 @@
                                                         indexDetail
                                                     "
                                                     type="number"
-                                                    v-model="detail.dt"
+                                                    v-model.number="detail.dt"
                                                     @input="dtValidation(detail)"
                                                     min="0"
                                                     max="999999"
@@ -733,7 +733,7 @@
                                             <input
                                                 :id="'formReportDT' + index"
                                                 type="number"
-                                                v-model="postForm.tabs[selectedTab].machines[index].dt"
+                                                v-model.number="postForm.tabs[selectedTab].machines[index].dt"
                                                 :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
                                                 :placeholder="$t('report.form.dtPlaceholder')"
