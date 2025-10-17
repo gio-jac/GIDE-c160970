@@ -1295,7 +1295,7 @@
                                                 step="1"
                                                 max="255"
                                                 min="1"
-                                                @input="partQtyValidation($event,i)"
+                                                @input="partQtyValidation(i)"
                                             />
                                         </td>
                                         <td>
@@ -1860,12 +1860,10 @@ function transportValidation(index) {
     }
 }
 
-function partQtyValidation(event,index) {
-    event.target.value = event.target.value.replace(/^0+/, '') || '0';
-
+function partQtyValidation(index) {
     const part = tabs.value[selectedTab.value].service_parts[index];
-
-    part.quantity = Math.max(1, Math.min(Number(part.quantity), 255));
+    const n = Number(part.quantity);
+    part.quantity = Number.isFinite(n) ? Math.max(1, Math.min(255, Math.trunc(n))) : 1;
 }
 
 function machineOnValidation() {
