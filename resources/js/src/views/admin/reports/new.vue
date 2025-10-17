@@ -1675,43 +1675,10 @@ const disableAddTab = computed(() => tabs.value.some(t => !t.selectedMachine))
 
 const partSearch = ref(null);
 
-const tabs = ref([{
-    selectedClient: null,
-    selectedMachineModel: null,
-    selectedSearchMachine: null,
-    selectedMachine: null,
-    selectedMachine2: null,
-    selectedBranch: null,
-    selectedModule: null,
-    selectedFailure: null,
-    selectedContact: null,
-    selectedShift: null,
-    selectedPart: null,
-    addNewPart: [],
-    selectedCode: null,
-    selectedUser: null,
-    selectedStatus: null,
-    machines: [],
-    pieces: null,
-    sogd: null,
-    time_on: null,
-    travel_time: null,
-    report_type_id: 1,
-    reported_error: "",
-    code_id: null,
-    actions_taken: "",
-    reported: null,
-    departure: null,
-    arrival: null,
-    finished: null,
-    status_id: null,
-    is_tested: null,
-    service_parts: [],
-    notes: "",
-}]);
-const selectedTab = ref(0);
-function addTab() {
-    tabs.value.push({
+let tabId = 0;
+
+const createTab = () => ({
+    id: ++tabId,
     selectedClient: null,
     selectedMachineModel: null,
     selectedSearchMachine: null,
@@ -1745,6 +1712,11 @@ function addTab() {
     service_parts: [],
     notes: "",
 });
+
+const tabs = ref([createTab()]);
+const selectedTab = ref(0);
+function addTab() {
+    tabs.value.push(createTab());
 }
 
 const branchesCatalog = ref([]);
