@@ -1617,6 +1617,14 @@ interface Tab {
   notes: string;
 }
 
+const API = {
+  reports: '/reports',
+  partsAutocomplete: '/parts/autocomplete',
+  clientBranches: (id: number) => `/clients/${id}/branches`,
+  clientMachines: (id: number) => `/clients/${id}/machines`,
+  machineBySerial: (serial: string) => `/machine/${serial}`,
+} as const;
+
 import { ref, reactive, computed } from "vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
@@ -1907,8 +1915,8 @@ async function onClientSelect(option: { id: number }) {
     machinesCatalog.value = [];
     try {
         const [ branchesRes, machinesRes ] = await Promise.all([
-            axios.get(`/clients/${option.id}/branches`),
-            axios.get(`/clients/${option.id}/machines`)
+            axios.get(API.clientBranches(option.id)),
+            axios.get(API.clientBranches(option.id)),
         ]);
 
         branchesCatalog.value = branchesRes.data;
@@ -1945,7 +1953,7 @@ function machineModelChange(selectedOption) {
 
 async function onMachineSelect(option: { serial: string }) {
     try {
-        const { data } = await axios.get(`/machine/${option.serial}`);
+        const { data } = await axios.get(API.machineBySerial(option.serial));
         ensurePostTab(selectedTab.value);
         updateMachines(data);
         activeTab.value.selectedMachine = data;
@@ -1992,7 +2000,7 @@ const runPartsAutocomplete = debounce((q: string) => {
   loaders.parts.searching = true;
   loaders.parts.waiting = false;
   axios
-    .post("/parts/autocomplete", { query: q })
+    .post(API.partsAutocomplete, { query: q })
     .then(({ data }) => {
       catalogParts.value = data ?? [];
     })
@@ -2137,7 +2145,7 @@ function submit() {
         didOpen: () => Swal.showLoading(),
     });
 
-    router.post("/reports", payload, {
+    router.post(API.reports, payload, {
         onSuccess: () => Swal.close(),
         onError: (error) => {
             let errorMessages = "";
