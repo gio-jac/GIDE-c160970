@@ -1065,17 +1065,10 @@ const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => getPostTab(selectedTab.value));
 
 const detailOptions = computed(() => ({
-  module: moduleOptions.value,
-  failure: failureOptions.value,
-  type:   typeOptions.value,
+    module: sortByTranslation(props.catalogModule),
+    failure: sortByTranslation(props.catalogFailures),
+    type: sortByTranslation(props.catalogTypes),
 }));
-
-const toMachineList = (selected: SelectedMachine | null) => {
-    if (!selected) return [];
-    const pl = selected.production_line;
-    const hasLine = pl && pl.id != null && pl.machines?.length;
-    return hasLine ? pl.machines : [selected];
-};
 
 type LocalizedItem = { id: number; name?: string; es?: string; pt?: string };
 
@@ -1127,23 +1120,6 @@ const multiselectLabels = {
 
 const partSearch = ref<Part | null>(null);
 
-const createMachineDetail = (): MachineDetail => ({
-  module_id: null,
-  failure_id: null,
-  failure_type_id: null,
-  dt: null,
-});
-
-const createPostTabMachine = (machine_id: number): PostTabMachine => ({
-  machine_id,
-  machine_details: [createMachineDetail()],
-  transport_1: null,
-  transport_2: null,
-  transport_3: null,
-  dt: null,
-  signature_client_name: null,
-});
-
 let tabId = 0;
 
 const createTab = (): Tab => ({
@@ -1183,10 +1159,6 @@ function getTranslation(item: LocalizedItem): string {
 const sortByTranslation = (arr: LocalizedItem[]) =>
     [...arr].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b)));
 
-const moduleOptions = computed(() => sortByTranslation(props.catalogModule));
-const failureOptions = computed(() => sortByTranslation(props.catalogFailures));
-const typeOptions = computed(() => sortByTranslation(props.catalogTypes));
-
 const addNewPart = () => {
     if (!partSearch.value) return;
     const existingPartIndex = activeTab.value.service_parts.findIndex(p => p.id === partSearch.value.id);
@@ -1210,7 +1182,7 @@ const report = reactive<{
 
 const machinesListing = computed(() => {
     const sm = activeTab.value?.selectedMachine ?? null;
-    return toMachineList(sm);
+    return (sm && sm.production_line && sm.production_line.id != null && sm.production_line.machines?.length ? sm.production_line.machines : (sm ? [sm] : []));
 });
 
 const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decimals = 0, min, max }: { decimals?: number; min: number; max: number }) => {
@@ -1252,7 +1224,16 @@ async function onMachineSelect(option: { serial: string }) {
 
     try {
         const { data } = await axios.get(`/machine/${option.serial}`);
-        getPostTab(selectedTab.value).machines = toMachineList(data).map(m => createPostTabMachine(m.id));
+        getPostTab(selectedTab.value).machines = (data.production_line && data.production_line.id != null &&
+            data.production_line.machines?.length ? data.production_line.machines : [data]).map(m => ({
+                machine_id: m.id,
+                machine_details: [{ module_id: null, failure_id: null, failure_type_id: null, dt: null }],
+                transport_1: null,
+                transport_2: null,
+                transport_3: null,
+                dt: null,
+                signature_client_name: null,
+            }));
         activeTab.value.selectedMachine = data;
     } catch (e) {
         console.error("Error:", e);
@@ -1288,7 +1269,7 @@ function addMachineDetailAt(i: number): void {
     const list = activePostTab.value.machines[i]?.machine_details;
     if (!list) return;
     if (list.length < LIMITS.MACHINE_DETAILS_MAX) {
-        list.push(createMachineDetail());
+        list.push({ module_id: null, failure_id: null, failure_type_id: null, dt: null });
     }
 }
 
