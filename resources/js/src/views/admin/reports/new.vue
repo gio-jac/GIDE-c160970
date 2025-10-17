@@ -2000,33 +2000,34 @@ function machineChange(selectedOption) {
         });
 }*/
 
-let partsDebounce: number | null = null;
+const debounce = <F extends (...args: any[]) => void>(fn: F, ms = 300) => {
+  let id: number | undefined;
+  return (...args: Parameters<F>) => {
+    if (id) clearTimeout(id);
+    id = window.setTimeout(() => fn(...args), ms);
+  };
+};
 //let timeoutIdMachine = ref(null);
+const runPartsAutocomplete = debounce((q: string) => {
+  loaders.value.parts.searching = true;
+  loaders.value.parts.waiting = false;
+  axios
+    .post("/parts/autocomplete", { query: q })
+    .then(({ data }) => {
+      catalogParts.value = data ?? [];
+    })
+    .catch((error) => console.error("Error:", error))
+    .finally(() => {
+      loaders.value.parts.searching = false;
+      loaders.value.parts.waiting = true;
+    });
+}, 750);
+
 function selectPartChange(searchQuery: string) {
     catalogParts.value = [];
-    if (!searchQuery?.length) {
-        if (partsDebounce) clearTimeout(partsDebounce);
-        return;
-    }
+    if (!searchQuery?.length) return;
 
-    if (partsDebounce) clearTimeout(partsDebounce);
-    partsDebounce = window.setTimeout(() => {
-        loaders.value.parts.searching = true;
-        loaders.value.parts.waiting = false;
-
-        axios
-            .post("/parts/autocomplete", { query: searchQuery })
-            .then(({ data }) => {
-                catalogParts.value = data ?? [];
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            })
-            .finally(() => {
-                loaders.value.parts.searching = false;
-                loaders.value.parts.waiting = true;
-            });
-    }, 750);
+    runPartsAutocomplete(searchQuery);
 }
 
 /*
