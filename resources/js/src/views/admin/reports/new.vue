@@ -96,7 +96,7 @@
                             <multiselect
                                 id="formCatalogClient"
                                 :options="catalogClients"
-                                @select="selectedClientChange"
+                                @select="onClientSelect"
                                 v-model="form.selectedClient"
                                 track-by="id"
                                 class="custom-multiselect flex-1"
@@ -1915,7 +1915,7 @@ function travelTimeValidation() {
   clampIntField(activeTab.value, 'travel_time', 0, LIMITS.TRAVEL_TIME_MAX);
 }
 
-async function selectedClientChange(selectedOption) {
+async function onClientSelect(option: { id: number }) {
     tabId = 0;
     tabs.value = [createTab()];
     selectedTab.value = 0;
@@ -1927,8 +1927,8 @@ async function selectedClientChange(selectedOption) {
     machinesCatalog.value = [];
     try {
         const [ branchesRes, machinesRes ] = await Promise.all([
-            axios.get(`/clients/${selectedOption.id}/branches`),
-            axios.get(`/clients/${selectedOption.id}/machines`)
+            axios.get(`/clients/${option.id}/branches`),
+            axios.get(`/clients/${option.id}/machines`)
         ]);
 
         branchesCatalog.value = branchesRes.data;
