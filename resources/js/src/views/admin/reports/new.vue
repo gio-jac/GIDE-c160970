@@ -258,7 +258,7 @@
                                     :key="tab.id"
                                     type="button"
                                     class="-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-transparent text-sm text-slate-500 hover:text-slate-700 hover:border-slate-300"
-                                    :class="{'-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-blue-600 text-sm font-medium text-slate-900 dark:text-slate-100': index == selectedTab}"
+                                    :class="{'-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-blue-600 text-sm font-medium text-slate-900 dark:text-slate-100': index === selectedTab}"
                                 >
                                     #{{ index + 1 }}
                                 </button>
