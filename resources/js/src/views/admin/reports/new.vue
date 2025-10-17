@@ -557,120 +557,19 @@
                                             class="py-2"
                                             v-if="machine.only_dt !== 1"
                                         >
-                                            <template
-                                                v-if="machine.machine_model?.model_segment?.is_multi_transport === 1"
-                                            >
-                                                <div
-                                                    class="w-full flex justify-evenly flex-wrap"
-                                                >
+                                            <template v-if="machine.machine_model?.model_segment?.is_multi_transport === 1">
+                                                <div class="w-full flex justify-evenly flex-wrap">
                                                     <div
+                                                        v-for="cfg in transportConfig"
+                                                        :key="cfg.key"
                                                         class="p-2 flex-auto sm:flex-1"
                                                     >
-                                                        <label
-                                                            :for="
-                                                                'formTransport1' +
-                                                                index
-                                                            "
-                                                            >{{ $t("report.form.initialTransport") }}</label
-                                                        >
+                                                        <label :for="`formTransport${cfg.idx}${index}`">{{ $t(cfg.labelKey) }}</label>
                                                         <input
-                                                            :id="
-                                                                'formTransport1' +
-                                                                index
-                                                            "
-                                                            :name="
-                                                                'formTransport1' +
-                                                                index
-                                                            "
-                                                            v-model.number="
-                                                                postForm.tabs[
-                                                                    selectedTab]
-                                                                    .machines[
-                                                                    index
-                                                                ].transport_1
-                                                            "
-                                                            @input="
-                                                                transportValidation(
-                                                                    index
-                                                                )
-                                                            "
-                                                            type="number"
-                                                            class="form-input"
-                                                            min="0.0"
-                                                            :max="LIMITS.TRANSPORT_MAX"
-                                                            step="0.1"
-                                                            placeholder="0.0"
-                                                        />
-                                                    </div>
-
-                                                    <div
-                                                        class="p-2 flex-auto sm:flex-1"
-                                                    >
-                                                        <label
-                                                            :for="
-                                                                'formTransport2' +
-                                                                index
-                                                            "
-                                                            >{{ $t("report.form.finalTransport") }}</label
-                                                        >
-                                                        <input
-                                                            :id="
-                                                                'formTransport2' +
-                                                                index
-                                                            "
-                                                            :name="
-                                                                'formTransport2' +
-                                                                index
-                                                            "
-                                                            v-model.number="
-                                                                activePostTab
-                                                                    .machines[
-                                                                    index
-                                                                ].transport_2
-                                                            "
-                                                            @input="
-                                                                transportValidation(
-                                                                    index
-                                                                )
-                                                            "
-                                                            type="number"
-                                                            class="form-input"
-                                                            min="0.0"
-                                                            :max="LIMITS.TRANSPORT_MAX"
-                                                            step="0.1"
-                                                            placeholder="0.0"
-                                                        />
-                                                    </div>
-                                                    <div
-                                                        class="p-2 flex-auto sm:flex-1"
-                                                    >
-                                                        <label
-                                                            :for="
-                                                                'formTransport3' +
-                                                                index
-                                                            "
-                                                            >{{ $t("report.form.estimatedTransport") }}</label
-                                                        >
-                                                        <input
-                                                            :id="
-                                                                'formTransport3' +
-                                                                index
-                                                            "
-                                                            :name="
-                                                                'formTransport3' +
-                                                                index
-                                                            "
-                                                            v-model.number="
-                                                                activePostTab
-                                                                    .machines[
-                                                                    index
-                                                                ].transport_3
-                                                            "
-                                                            @input="
-                                                                transportValidation(
-                                                                    index
-                                                                )
-                                                            "
+                                                            :id="`formTransport${cfg.idx}${index}`"
+                                                            :name="`formTransport${cfg.idx}${index}`"
+                                                            v-model.number="activePostTab.machines[index][cfg.key]"
+                                                            @input="transportValidation(index)"
                                                             type="number"
                                                             class="form-input"
                                                             min="0.0"
@@ -1553,6 +1452,12 @@ const LIMITS = {
   MACHINE_DETAILS_MAX: 5,
 };
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+
+const transportConfig = [
+  { key: 'transport_1' as const, labelKey: 'report.form.initialTransport' as const, idx: 1 },
+  { key: 'transport_2' as const, labelKey: 'report.form.finalTransport'   as const, idx: 2 },
+  { key: 'transport_3' as const, labelKey: 'report.form.estimatedTransport' as const, idx: 3 },
+];
 
 interface MachineDetail {
   module_id: number | null;
