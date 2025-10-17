@@ -1983,9 +1983,6 @@ async function machineChangeNew(selectedOption) {
     } catch (e) {
         console.error("Error:", e);
         tabs.value[selectedTab.value].selectedMachine = null;
-        form.selectedMachine = null;
-    } finally {
-        console.log(form.selectedMachine);
     }
 }
 
