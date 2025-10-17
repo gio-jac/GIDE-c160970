@@ -1719,16 +1719,6 @@ const branchesCatalog = ref([]);
 const machinesCatalog = ref([]);
 
 onMounted(() => {
-    //set default data
-    items.value.push({
-        id: 1,
-        title: "",
-        description: "",
-        rate: 0,
-        quantity: 0,
-        amount: 0,
-    });
-    
     sortCatalogData();
 });
 
@@ -1762,68 +1752,6 @@ function sortCatalogArray(a, b) {
   const translateB = getTranslation(b);
   return translateA.localeCompare(translateB);
 }
-
-const items: any = ref([]);
-const selectedFile = ref(null);
-const params = ref({
-    title: "",
-    invoiceNo: "",
-    to: {
-        name: "",
-        email: "",
-        address: "",
-        phone: "",
-    },
-
-    invoiceDate: "",
-    dueDate: "",
-    bankInfo: {
-        no: "",
-        name: "",
-        swiftCode: "",
-        country: "",
-        ibanNo: "",
-    },
-    notes: "",
-});
-const currencyList = ref([
-    "USD - US Dollar",
-    "GBP - British Pound",
-    "IDR - Indonesian Rupiah",
-    "INR - Indian Rupee",
-    "BRL - Brazilian Real",
-    "EUR - Germany (Euro)",
-    "TRY - Turkish Lira",
-]);
-const selectedCurrency = ref("USD - US Dollar");
-const tax = ref<number>(0);
-const discount = ref<number>(0);
-const shippingCharge = ref<number>(0);
-const paymentMethod = ref("");
-
-
-const addItem = () => {
-    let maxId = 0;
-    if (items.value && items.value.length) {
-        maxId = items.value.reduce(
-            (max: number, character: any) =>
-                character.id > max ? character.id : max,
-            items.value[0].id
-        );
-    }
-    items.value.push({
-        id: maxId + 1,
-        title: "",
-        description: "",
-        rate: 0,
-        quantity: 0,
-        amount: 0,
-    });
-};
-
-const showMachineLabel = (option) => {
-    return "test";
-};
 
 const removeItem = (item: any = null) => {
     tabs.value[selectedTab.value].service_parts = tabs.value[selectedTab.value].service_parts.filter(
@@ -2069,6 +1997,7 @@ async function machineChangeNew(selectedOption) {
     }
 }
 
+/*
 function machineChange(selectedOption) {
     loaders.value.machines.searching = true;
     loaders.value.machines.waiting = false;
@@ -2091,7 +2020,7 @@ function machineChange(selectedOption) {
             loaders.value.machines.searching = false;
             loaders.value.machines.waiting = true;
         });
-}
+}*/
 
 let timeoutId = ref(null);
 let timeoutIdMachine = ref(null);
