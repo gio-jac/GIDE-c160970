@@ -339,7 +339,7 @@
                                                     detail, indexDetail
                                                 ) in postForm.tabs[selectedTab].machines[index]
                                                     .machine_details"
-                                                :key="detail"
+                                                :key="indexDetail"
                                                 class="flex-[100%] flex justify-evenly flex-wrap"
                                             >
                                                 <div
@@ -1583,7 +1583,7 @@ const user = computed(() => page.props.auth);
 const catalogParts = ref([]);
 //const catalogMachines = ref([]);
 const loaders = ref({
-    machines: { waiting: true, searching: false },
+    //machines: { waiting: true, searching: false },
     parts: { waiting: true, searching: false},
 });
 defineOptions({
