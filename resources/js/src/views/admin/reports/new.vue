@@ -1350,7 +1350,7 @@
                             name="notes"
                             class="form-textarea min-h-[130px]"
                             :placeholder="$t('report.form.remarksPlaceholder')"
-                            v-model="postForm.notes"
+                            v-model="tabs[selectedTab].notes"
                         ></textarea>
                     </div>
                 </div>
@@ -1707,6 +1707,7 @@ const tabs = ref([{
     status_id: null,
     is_tested: null,
     service_parts: [],
+    notes: "",
 }]);
 const selectedTab = ref(0);
 function addTab() {
@@ -1742,6 +1743,7 @@ function addTab() {
     status_id: null,
     is_tested: null,
     service_parts: [],
+    notes: "",
 });
 }
 
