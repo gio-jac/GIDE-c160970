@@ -1989,7 +1989,14 @@ function finalDtValidation(event, indexMachine) {
 }
 
 function partsValidation(event) {
-    postForm.pieces = Math.max(0, Math.min(Number(postForm.pieces), 999999999999));
+    const tab = tabs.value[selectedTab.value];
+    const n = Number(tab.pieces);
+
+    if(Number.isFinite(n)) {
+        tab.pieces = Math.max(0, Math.min(999999999999, Math.trunc(n)));
+    } else {
+        tab.pieces = 0;
+    }
 }
 
 function travelTimeValidation(event) {
