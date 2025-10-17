@@ -954,7 +954,7 @@ const transportConfig = [
   { key: 'transport_1' as const, labelKey: 'report.form.initialTransport' as const, idx: 1 },
   { key: 'transport_2' as const, labelKey: 'report.form.finalTransport'   as const, idx: 2 },
   { key: 'transport_3' as const, labelKey: 'report.form.estimatedTransport' as const, idx: 3 },
-];
+] as const;
 
 const detailSelects = [
   { key: 'module_id' as const,       labelKey: 'report.form.error'    as const, optionsKey: 'module'  as const, idPrefix: 'formModule',  includeTab: true  },
