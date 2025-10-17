@@ -119,7 +119,7 @@
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="labelBranch"
-                                :disabled="branchesCatalog.length === 0"
+                                :disabled="!hasBranches"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -208,7 +208,7 @@
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
                                 :custom-label="labelMachine"
-                                :disabled="machinesCatalog.length === 0"
+                                :disabled="!hasMachines"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -1222,6 +1222,8 @@ function addTab() {
 
 const branchesCatalog = ref<Branch[]>([]);
 const machinesCatalog = ref<Machine[]>([]);
+const hasBranches = computed(() => branchesCatalog.value.length > 0);
+const hasMachines = computed(() => machinesCatalog.value.length > 0);
 
 const currentLocale = computed(() => store.locale);
 
