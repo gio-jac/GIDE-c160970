@@ -1869,17 +1869,17 @@ function getMachines() {
 }
 
 function transportValidation(index) {
-    const machine = postForm.tabs[selectedTab.value].machines[index];
-    const transportFields = ["transport_1", "transport_2", "transport_3"];
+    const machine = postForm.tabs[selectedTab.value]?.machines?.[index];
+    if (!machine) return;
 
-    transportFields.forEach((field) => {
-        if (machine[field] !== null) {
-            machine[field] = Math.max(
-                0,
-                Math.min(Number(machine[field]), 99999.9)
-            );
-        }
-    });
+    const fields = ["transport_1", "transport_2", "transport_3"];
+    for (const f of fields) {
+        const n = Number(machine[f]);
+        
+        machine[f] = Number.isFinite(n)
+            ? Math.max(0, Math.min(9999.9, Math.round(n * 10) / 10))
+            : 0;
+    }
 }
 
 function partQtyValidation(event,index) {
