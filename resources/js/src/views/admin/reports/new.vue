@@ -1327,10 +1327,6 @@ const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decim
     obj[key] = clamp(normalized, min, max) as any;
 };
 
-function clampActiveTab<K extends keyof Tab>(key: K, cfg: { decimals?: number; min: number; max: number }) {
-  clampField(activeTab.value as unknown as Record<string, any>, key as string, cfg);
-}
-
 function partQtyValidation(index: number) {
     const p = activeTab.value.service_parts[index];
     if (!p) return;
@@ -1338,7 +1334,7 @@ function partQtyValidation(index: number) {
 }
 
 function machineOnValidation() {
-    clampActiveTab('time_on', { decimals: 2, min: 0, max: LIMITS.TIME_ON_MAX });
+    clampField(activeTab.value as unknown as Record<string, any>, 'time_on', { decimals: 2, min: 0, max: LIMITS.TIME_ON_MAX });
 }
 
 const clampDt = (target: { dt: number | null }) => {
@@ -1346,11 +1342,11 @@ const clampDt = (target: { dt: number | null }) => {
 };
 
 function partsValidation() {
-    clampActiveTab('pieces', { min: 0, max: LIMITS.PIECES_MAX });
+    clampField(activeTab.value as unknown as Record<string, any>, 'pieces', { min: 0, max: LIMITS.PIECES_MAX });
 }
 
 function travelTimeValidation() {
-    clampActiveTab('travel_time', { min: 0, max: LIMITS.TRAVEL_TIME_MAX });
+    clampField(activeTab.value as unknown as Record<string, any>, 'travel_time', { min: 0, max: LIMITS.TRAVEL_TIME_MAX });
 }
 
 async function onClientSelect(option: { id: number }) {
