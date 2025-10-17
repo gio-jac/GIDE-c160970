@@ -1079,8 +1079,12 @@ defineOptions({
     layout: [SiteLayout, AppLayout],
 });
 
-const getPostTab = (i: number): PostTab =>
-    (report.tabs[i] ??= { machines: [] as PostTabMachine[] });
+const getPostTab = (i: number): PostTab => {
+  if (!report.tabs[i]) {
+    report.tabs[i] = { machines: [] as PostTabMachine[] };
+  }
+  return report.tabs[i];
+};
     
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => getPostTab(selectedTab.value));
@@ -1261,7 +1265,7 @@ const removePartAt = (index: number) => {
 };
 
 function removeMachineDetailAt(i: number, j: number): void {
-    const m = activePostTab.value?.machines?.[i];
+    const m = activePostTab.value.machines[i];
     if (!m?.machine_details || m.machine_details.length <= 1) return;
     m.machine_details.splice(j, 1);
 };
@@ -1317,7 +1321,7 @@ const machinesListing = computed(() => {
 });
 
 function transportValidation(index: number) {
-    const m = activePostTab.value?.machines?.[index];
+    const m = activePostTab.value.machines[index];
     if (!m) return;
 
     transportConfig.forEach(({ key }) => {
@@ -1429,7 +1433,7 @@ function selectPartChange(searchQuery: string) {
 }
 
 function addMachineDetailAt(i: number): void {
-    const list = activePostTab.value?.machines?.[i]?.machine_details;
+    const list = activePostTab.value.machines[i]?.machine_details;
     if (!list) return;
     if (list.length < LIMITS.MACHINE_DETAILS_MAX) {
         list.push(createMachineDetail());
@@ -1500,7 +1504,7 @@ function buildPayload(): ReportPayload {
                 quantity: clamp(Math.trunc(Number(p.quantity ?? 1)), 1, LIMITS.PART_QTY_MAX),
             })),
         notes: t.notes ?? "",
-        machines: report.tabs[i]?.machines ?? [],
+        machines: getPostTab(i).machines,
     }));
 
     return { ...header, tabs: tabsPayLoad };
