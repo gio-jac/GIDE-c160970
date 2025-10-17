@@ -938,6 +938,7 @@
 </template>
 
 <script lang="ts" setup>
+const AUTOCOMPLETE_DELAY_MS = 750 as const;
 const LIMITS = {
     PIECES_MAX: 999_999_999_999,
     TIME_ON_MAX: 9_999_999.99,
@@ -1420,7 +1421,7 @@ const runPartsAutocomplete = debounce((q: string) => {
       loaders.parts.searching = false;
       loaders.parts.waiting = true;
     });
-}, 750);
+}, AUTOCOMPLETE_DELAY_MS);
 
 function selectPartChange(searchQuery: string) {
     catalogParts.value = [];
