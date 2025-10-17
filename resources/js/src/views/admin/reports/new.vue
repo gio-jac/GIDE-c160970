@@ -1649,8 +1649,6 @@ const basic: any = ref({
 const form = reactive({
     selectedClient: null,
     selectedBranch: null,
-    selectedModule: null,
-    selectedFailure: null,
     selectedContact: null,
     selectedShift: null,
     selectedPart: null,
@@ -1668,8 +1666,6 @@ const createTab = () => ({
     selectedClient: null,
     selectedMachine: null,
     selectedBranch: null,
-    selectedModule: null,
-    selectedFailure: null,
     selectedContact: null,
     selectedShift: null,
     selectedPart: null,
