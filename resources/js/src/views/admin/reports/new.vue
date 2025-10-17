@@ -1355,7 +1355,7 @@
                         class="flex flex-wrap justify-evenly w-full"
                     >
                         <template
-                            v-for="(machine,index) in getMachines()"
+                            v-for="(machine,index) in machinesListing"
                             :key="`${tabs[selectedTab].id}-${machine.id ?? machine.serial ?? index}`"
                         >
                             <div
@@ -1849,10 +1849,6 @@ const machinesListing = computed(() => {
     const list = sel?.production_line?.machines;
     return Array.isArray(list) && list.length ? list : (sel ? [sel] : []);
 });
-
-function getMachines() {
-    return tabs.value[selectedTab.value].selectedMachine?.production_line?.machines || [tabs.value[selectedTab.value].selectedMachine];
-}
 
 function transportValidation(index) {
     const machine = postForm.tabs[selectedTab.value]?.machines?.[index];
