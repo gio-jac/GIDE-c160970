@@ -1654,9 +1654,7 @@ const form = reactive({
     selectedShift: null,
     selectedPart: null,
     addNewPart: [],
-    selectedCode: null,
     selectedUser: null,
-    selectedStatus: null,
 });
 
 const disableAddTab = computed(() => tabs.value.some(t => !t.selectedMachine))
@@ -1676,9 +1674,7 @@ const createTab = () => ({
     selectedShift: null,
     selectedPart: null,
     addNewPart: [],
-    selectedCode: null,
     selectedUser: null,
-    selectedStatus: null,
     machines: [],
     pieces: null,
     sogd: null,
