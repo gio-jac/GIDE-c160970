@@ -35,7 +35,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="labelUser"
+                                :custom-label="formatUserLabel"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                             <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato:<br>"EMP - Nombre PrimerApellido"</tippy>
@@ -66,7 +66,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="labelShift"
+                                :custom-label="formatShiftLabel"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                             <tippy target="shift" trigger="focus">Usado para la selección del turno de la realización del reporte</tippy>
@@ -95,7 +95,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="labelClient"
+                                :custom-label="formatClientLabel"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -118,7 +118,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="labelBranch"
+                                :custom-label="formatBranchLabel"
                                 :disabled="!hasBranches"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -141,7 +141,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="labelContact"
+                                :custom-label="formatContactLabel"
                                 :disabled="!hasSelectedBranch"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -207,7 +207,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="labelMachine"
+                                :custom-label="formatMachineLabel"
                                 :disabled="!hasMachines"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -721,7 +721,7 @@
                                     class="custom-multiselect flex-1"
                                     :searchable="true"
                                     :placeholder="$t('report.form.partsPlaceholder')"
-                                    :custom-label="labelPart"
+                                    :custom-label="formatPartLabel"
                                     :preserveSearch="true"
                                     v-bind="multiselectLabels"
                                 ></multiselect>
@@ -1154,22 +1154,22 @@ function onBranchSelect() {
     form.selectedContact = null;
 }
 
-const labelUser = (u: { emp?: string; nombre?: string; apellido_paterno?: string }) =>
+const formatUserLabel = (u: { emp?: string; nombre?: string; apellido_paterno?: string }) =>
     `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`;
 
-const labelShift = (s: { id?: number; name?: string }) =>
+const formatShiftLabel = (s: { id?: number; name?: string }) =>
     `${t('catalogs.shift.' + (s.id ?? ''), s.name ?? '-')}`;
 
-const labelClient = (c: { name?: string }) => c.name ?? '-';
+const formatClientLabel = (c: { name?: string }) => c.name ?? '-';
 
-const labelBranch = (b: { address?: string; city?: { name?: string } }) => `${b.city?.name ?? '-'} - ${b.address ?? '-'}`;
+const formatBranchLabel = (b: { address?: string; city?: { name?: string } }) => `${b.city?.name ?? '-'} - ${b.address ?? '-'}`;
 
-const labelContact = (c: { name?: string }) => c.name ?? '-';
+const formatContactLabel = (c: { name?: string }) => c.name ?? '-';
 
-const labelMachine = (m: { serial: string; machine_model?: { model?: string } }) =>
+const formatMachineLabel = (m: { serial: string; machine_model?: { model?: string } }) =>
     `${m.machine_model?.model ?? '-'} - ${m.serial}`;
 
-const labelPart = (p: { num_part?: string; descripcion?: string }) =>
+const formatPartLabel = (p: { num_part?: string; descripcion?: string }) =>
   `${p.num_part ?? '-'} - ${p.descripcion ?? '-'}`;
 
 const multiselectLabels = {
