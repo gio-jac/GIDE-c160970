@@ -31,6 +31,7 @@
                                 id="formUser"
                                 :options="catalogUsers"
                                 v-model="form.selectedUser"
+                                track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
