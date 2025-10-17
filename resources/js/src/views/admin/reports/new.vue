@@ -1768,13 +1768,11 @@ const machinesCatalog = ref<Machine[]>([]);
 
 const currentLocale = computed(() => store.locale);
 
-function getTranslation(item) {
-    if(currentLocale.value === 'es' && item.es) {
-        return item.es;
-    }else if (currentLocale.value === 'pt' && item.pt) {
-        return item.pt;
-    }
-    return item.name;
+function getTranslation(item: LocalizedItem): string {
+    const { value: locale } = currentLocale;
+    if (locale === 'es' && item.es) return item.es;
+    if (locale === 'pt' && item.pt) return item.pt;
+    return item.name ?? '';
 }
 
 type Translatable = { name?: string; es?: string; pt?: string };
