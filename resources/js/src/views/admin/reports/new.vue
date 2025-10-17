@@ -1273,7 +1273,7 @@
                                 </template>
                                 <template
                                     v-for="(item, i) in tabs[selectedTab].service_parts"
-                                    :key="i"
+                                    :key="item.id ?? i"
                                 >
                                     <tr class="align-top">
                                         <td>
