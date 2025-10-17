@@ -372,7 +372,7 @@
                                                     </option>
                                                     <option
                                                         v-for="tmodule in props.catalogModule"
-                                                        :key="tmodule"
+                                                        :key="tmodule.id"
                                                         :value="tmodule.id"
                                                     >
                                                         {{ getTranslation(tmodule) }}
@@ -411,7 +411,7 @@
                                                     </option>
                                                     <option
                                                         v-for="failure in props.catalogFailures"
-                                                        :key="failure"
+                                                        :key="failure.id"
                                                         :value="failure.id"
                                                     >
                                                         {{ getTranslation(failure) }}
@@ -452,7 +452,7 @@
                                                     </option>
                                                     <option
                                                         v-for="failuretype in props.catalogTypes"
-                                                        :key="failuretype"
+                                                        :key="failuretype.id"
                                                         :value="failuretype.id"
                                                     >
                                                         {{ getTranslation(failuretype) }}
