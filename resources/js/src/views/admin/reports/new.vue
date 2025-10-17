@@ -958,6 +958,7 @@ const LIMITS = {
     TRAVEL_TIME_STEP: 1,
 } as const;
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+const toBool = (v: unknown): boolean => v === 1 || v === true || v === '1';
 
 const transportConfig = [
   { key: 'transport_1' as const, labelKey: 'report.form.initialTransport' as const, idx: 1 },
@@ -1087,12 +1088,12 @@ const activePostTab = computed(() => report.tabs[selectedTab.value]);
 
 const hasSelectedBranch = computed<boolean>(() => !!form.selectedBranch);
 const hasActiveMachine = computed<boolean>(() => !!activeTab.value?.selectedMachine);
-const isStandaloneMachine = computed(() => !activeTab.value?.selectedMachine?.production_line_id);
+const isStandaloneMachine = computed(() => !activeTab.value?.selectedMachine?.production_line?.id);
 
-const isDTOnly = (m?: { only_dt?: number } | null) => m?.only_dt === 1;
+const isDTOnly = (m?: { only_dt?: number } | null) => toBool(m?.only_dt);
 const isMultiTransport = (
-    m?: { machine_model?: { model_segment?: { is_multi_transport?: number } } } | null
-) => m?.machine_model?.model_segment?.is_multi_transport === 1;
+    m?: { machine_model?: { model_segment?: { is_multi_transport?: number | boolean | string } } } | null
+) => toBool(m?.machine_model?.model_segment?.is_multi_transport);
 
 const branchManagers = computed(() =>
   form.selectedBranch?.branch_managers ?? []
