@@ -1493,8 +1493,6 @@ function buildPayload(): ReportPayload {
 
 function submit() {
     const payload = buildPayload();
-
-    console.log(payload);
     
     Swal.fire({
         title: t("report.alert.processing"),
