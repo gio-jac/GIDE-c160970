@@ -957,7 +957,7 @@
                                     name="formReportStatus"
                                     class="form-radio"
                                     :value="status.id"
-                                    v-model="activeTab.status_id"
+                                    v-model.number="activeTab.status_id"
                                 />
                                 <span>{{ $t("catalogs.status."+status.id,status.status) }}</span>
                             </label>
