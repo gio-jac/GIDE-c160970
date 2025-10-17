@@ -1321,7 +1321,8 @@ function clampActiveTab<K extends keyof Tab>(key: K, cfg: { decimals?: number; m
 }
 
 function partQtyValidation(index: number) {
-    const p = activeTab.value.service_parts[index]!;
+    const p = activeTab.value.service_parts[index];
+    if (!p) return;
     clampField(p as Record<string, unknown>, 'quantity', { min: 1, max: LIMITS.PART_QTY_MAX });
 }
 
