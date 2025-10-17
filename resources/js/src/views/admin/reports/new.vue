@@ -114,7 +114,7 @@
                     <div class="w-full">
                         <div class="flex items-center">
                             <label
-                                for="formCatalogClient"
+                                for="formCatalogBranches"
                                 class="w-[140px] text-right mb-0 mr-[10px]"
                                 >Sucursal <span class="text-red-500">*</span></label
                             >
