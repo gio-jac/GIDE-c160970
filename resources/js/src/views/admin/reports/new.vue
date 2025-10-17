@@ -2022,7 +2022,7 @@ function machineChange(selectedOption) {
 }*/
 
 let timeoutId = ref(null);
-let timeoutIdMachine = ref(null);
+//let timeoutIdMachine = ref(null);
 function selectPartChange(searchQuery, id) {
     catalogParts.value = [];
     if (searchQuery.length <= 0) {
@@ -2057,6 +2057,7 @@ function selectPartChange(searchQuery, id) {
     }, 750);
 }
 
+/*
 function selectMachineChange(searchQuery, id) {
     machinesCatalog.value = [];
     if (searchQuery.length <= 0) {
@@ -2089,7 +2090,7 @@ function selectMachineChange(searchQuery, id) {
                 loaders.value.machines.waiting = true;
             });
     }, 750);
-}
+}*/
 
 function addMachineDetail(machine) {
     if (machine.length < 5) {
