@@ -1754,7 +1754,9 @@ const removeItem = (item: any = null) => {
 };
 
 function removeMachineDetail(index, indexDetail) {
-    postForm.tabs[selectedTab.value].machines[index].machine_details.splice(indexDetail, 1);
+    const m = postForm.tabs[selectedTab.value]?.machines?.[index];
+    if (!m?.machine_details || m.machine_details.length <= 1) return;
+    m.machine_details.splice(indexDetail, 1);
 };
 
 const addNewPart = () => {
