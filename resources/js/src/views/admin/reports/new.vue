@@ -623,7 +623,7 @@
                     <div class="flex flex-wrap justify-evenly">
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="!activeTab.selectedMachine?.production_line_id"
+                            v-if="isStandaloneMachine"
                         >
                             <label for="formReportReportedTime">
                                 {{ $t("report.form.reported") }}
@@ -638,7 +638,7 @@
                         </div>
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="!activeTab.selectedMachine?.production_line_id"
+                            v-if="isStandaloneMachine"
                         >
                             <label for="formReportTimeDeparture">
                                 {{ $t("report.form.departure") }}
@@ -1072,6 +1072,7 @@ const activePostTab = computed(() => report.tabs[selectedTab.value]);
 
 const hasSelectedBranch = computed<boolean>(() => !!form.selectedBranch);
 const hasActiveMachine = computed<boolean>(() => !!activeTab.value?.selectedMachine);
+const isStandaloneMachine = computed(() => !activeTab.value?.selectedMachine?.production_line_id);
 
 const isDTOnly = (m?: { only_dt?: number } | null) => m?.only_dt === 1;
 const isMultiTransport = (
