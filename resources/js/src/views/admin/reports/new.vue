@@ -35,7 +35,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="formatUserLabel"
+                                :custom-label="(u) => `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                             <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato:<br>"EMP - Nombre PrimerApellido"</tippy>
@@ -66,7 +66,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="formatShiftLabel"
+                                :custom-label="(s) => t(`catalogs.shift.${s.id ?? ''}`, s.name ?? '-')"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                             <tippy target="shift" trigger="focus">Usado para la selección del turno de la realización del reporte</tippy>
@@ -95,7 +95,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="formatClientLabel"
+                                :custom-label="(c) => c.name ?? '-'"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -110,7 +110,7 @@
                                 >Sucursal <span class="text-red-500">*</span></label
                             >
                             <multiselect
-                                @select="onBranchSelect"
+                                @select="form.selectedContact = null"
                                 id="formCatalogBranches"
                                 :options="branchesCatalog"
                                 v-model="form.selectedBranch"
@@ -118,7 +118,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="formatBranchLabel"
+                                :custom-label="(b) => `${b.address ?? '-'}${withPrefix(b.city?.name)}`"
                                 :disabled="!branchesCatalog.length"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -141,7 +141,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="formatContactLabel"
+                                :custom-label="(c) => c.name ?? '-'"
                                 :disabled="!form.selectedBranch"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -207,7 +207,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="defaultPlaceholder"
-                                :custom-label="formatMachineLabel"
+                                :custom-label="(m) => `${m.serial ?? '-'}${withPrefix(m.machine_model?.model)}`"
                                 :disabled="!machinesCatalog.length"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -220,7 +220,7 @@
                         >
                             <div
                                 v-for="(machine, index) in machinesListing"
-                                :key="machineKey(machine)"
+                                :key="String(machine.id ?? machine.serial)"
                                 :class="{
                                     'bg-[#ececf9]': !isDTOnly(machine),
                                     'bg-gray-100': isDTOnly(machine),
@@ -394,7 +394,7 @@
                                                             :min="LIMITS.TRANSPORT_MIN"
                                                             :max="LIMITS.TRANSPORT_MAX"
                                                             :step="LIMITS.TRANSPORT_STEP"
-                                                            :placeholder="zeroPlaceholder"
+                                                            :placeholder="'0.0'"
                                                         />
                                                     </div>
                                                 </div>
@@ -420,7 +420,7 @@
                                                     :min="LIMITS.TRANSPORT_MIN"
                                                     :max="LIMITS.TRANSPORT_MAX"
                                                     :step="LIMITS.TRANSPORT_STEP"
-                                                    :placeholder="zeroPlaceholder"
+                                                    :placeholder="'0.0'"
                                                 />
                                             </template>
                                         </div>
@@ -721,7 +721,7 @@
                                     class="custom-multiselect flex-1"
                                     :searchable="true"
                                     :placeholder="$t('report.form.partsPlaceholder')"
-                                    :custom-label="formatPartLabel"
+                                    :custom-label="(p) => `${p.num_part ?? '-'} - ${p.descripcion ?? '-'}`"
                                     :preserveSearch="true"
                                     v-bind="multiselectLabels"
                                 ></multiselect>
@@ -867,7 +867,7 @@
                     >
                         <template
                             v-for="(machine,index) in machinesListing"
-                            :key="machineKey(machine)"
+                            :key="String(machine.id ?? machine.serial)"
                         >
                             <div
                                 v-if="!isDTOnly(machine) && activePostTab.machines[index]"
@@ -1053,7 +1053,6 @@ import axios from 'axios';
 const { t } = useI18n();
 const defaultPlaceholder = computed(() => t('report.form.default'));
 const dtPlaceholder = computed(() => t('report.form.dtPlaceholder'));
-const zeroPlaceholder = '0.0';
 const store = useAppStore();
 
 const page = usePage();
@@ -1142,30 +1141,7 @@ const form = reactive<HeaderSelection>({
     selectedUser: null,
 });
 
-function onBranchSelect() {
-    form.selectedContact = null;
-}
-
 const withPrefix = (s?: string | null, prefix = ' · ') => (s && s.trim() ? `${prefix}${s}` : '');
-
-const formatUserLabel = (u: { emp?: string; nombre?: string; apellido_paterno?: string }) =>
-    `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`;
-
-const formatShiftLabel = (s: { id?: number; name?: string }) =>
-    t(`catalogs.shift.${s.id ?? ''}`, s.name ?? '-');
-
-const formatClientLabel = (c: { name?: string }) => c.name ?? '-';
-
-const formatBranchLabel = (b: { id?: number; address?: string; city?: { name: string } }) =>
-    `${b.address ?? '-'}${withPrefix(b.city?.name)}`;
-
-const formatContactLabel = (c: { name?: string }) => c.name ?? '-';
-
-const formatMachineLabel = (m: { serial?: string; machine_model?: { model?: string } }) =>
-    `${m.serial ?? '-'}${withPrefix(m.machine_model?.model)}`;
-
-const formatPartLabel = (p: { num_part?: string; descripcion?: string }) =>
-  `${p.num_part ?? '-'} - ${p.descripcion ?? '-'}`;
 
 const multiselectLabels = {
     selectedLabel: '',
@@ -1259,9 +1235,6 @@ const addNewPart = () => {
     const item = activeTab.value.service_parts[existingPartIndex];
     item.quantity = (item.quantity ?? 0) + 1;
 };
-
-const machineKey = (m: { id?: number; serial?: string }) =>
-    String(m.id ?? m.serial);
 
 const report = reactive<{
   service_date: string;
