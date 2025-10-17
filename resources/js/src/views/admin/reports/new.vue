@@ -394,7 +394,7 @@
                                                             min="0.0"
                                                             :max="LIMITS.TRANSPORT_MAX"
                                                             step="0.1"
-                                                            placeholder="0.0"
+                                                            :placeholder="zeroPlaceholder"
                                                         />
                                                     </div>
                                                 </div>
@@ -420,7 +420,7 @@
                                                     min="0.0"
                                                     :max="LIMITS.TRANSPORT_MAX"
                                                     step="0.1"
-                                                    placeholder="0.0"
+                                                    :placeholder="zeroPlaceholder"
                                                 />
                                             </template>
                                         </div>
@@ -1048,6 +1048,7 @@ import axios from 'axios';
 const { t } = useI18n();
 const defaultPlaceholder = computed(() => t('report.form.default'));
 const dtPlaceholder = computed(() => t('report.form.dtPlaceholder'));
+const zeroPlaceholder = '0.0';
 const store = useAppStore();
 
 const page = usePage();
