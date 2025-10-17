@@ -1947,7 +1947,7 @@ async function selectedClientChange(selectedOption) {
         console.log(branchesCatalog.value, machinesCatalog.value);
     }
 }
-
+/*
 function machineModelChange(selectedOption) {
     loaders.value.machines.searching = true;
     loaders.value.machines.waiting = false;
@@ -1970,7 +1970,7 @@ function machineModelChange(selectedOption) {
             loaders.value.machines.searching = false;
             loaders.value.machines.waiting = true;
         });
-}
+}*/
 
 async function machineChangeNew(selectedOption) {
     console.log(selectedOption);
