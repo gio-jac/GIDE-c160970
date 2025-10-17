@@ -502,13 +502,13 @@
                                 <input
                                     v-tippy:ontime
                                     id="formReportOnTime"
-                                    step="0.01"
+                                    :step="LIMITS.TIME_ON_STEP"
                                     type="number"
                                     v-model.number="activeTab.time_on"
                                     name="formReportOnTime"
                                     class="form-input flex-1"
                                     placeholder="0.00"
-                                    min="0.00"
+                                    :min="LIMITS.TIME_ON_MIN"
                                     :max="LIMITS.TIME_ON_MAX"
                                     @input="machineOnValidation"
                                 />
@@ -528,8 +528,8 @@
                                     name="formReportTravelTime"
                                     class="form-input flex-1"
                                     placeholder="0"
-                                    step="1"
-                                    min="0"
+                                    :step="LIMITS.TRAVEL_TIME_STEP"
+                                    :min="LIMITS.TRAVEL_TIME_MIN"
                                     :max="LIMITS.TRAVEL_TIME_MAX"
                                     @input="travelTimeValidation"
                                 />
@@ -949,6 +949,10 @@ const LIMITS = {
     TABS_MAX: 10,
     TRANSPORT_MIN: 0.0,
     TRANSPORT_STEP: 0.1,
+    TIME_ON_MIN: 0.00,
+    TIME_ON_STEP: 0.01,
+    TRAVEL_TIME_MIN: 0,
+    TRAVEL_TIME_STEP: 1,
 } as const;
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 
