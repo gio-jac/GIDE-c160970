@@ -1985,17 +1985,17 @@ function machineChange(selectedOption) {
         });
 }*/
 
-let timeoutId = ref(null);
+let partsDebounce: number | null = null;
 //let timeoutIdMachine = ref(null);
-function selectPartChange(searchQuery, id) {
+function selectPartChange(searchQuery: string) {
     catalogParts.value = [];
-    if (searchQuery.length <= 0) {
-        if (timeoutId.value) clearTimeout(timeoutId.value);
+    if (!searchQuery?.length) {
+        if (partsDebounce) clearTimeout(partsDebounce);
         return;
     }
 
-    if (timeoutId.value) clearTimeout(timeoutId.value);
-    timeoutId.value = setTimeout(() => {
+    if (partsDebounce) clearTimeout(partsDebounce);
+    partsDebounce = window.setTimeout(() => {
         loaders.value.parts.searching = true;
         loaders.value.parts.waiting = false;
         fetch("/parts/autocomplete", {
@@ -2003,7 +2003,6 @@ function selectPartChange(searchQuery, id) {
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRF-TOKEN": page.props.csrf,
-                // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({ query: searchQuery }),
         })
