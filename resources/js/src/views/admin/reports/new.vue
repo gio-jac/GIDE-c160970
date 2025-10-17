@@ -258,7 +258,7 @@
                                     :key="tab.id"
                                     type="button"
                                     class="-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-transparent text-sm text-slate-500 hover:text-slate-700 hover:border-slate-300"
-                                    :class="{'-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-blue-600 text-sm font-medium text-slate-900 dark:text-slate-100': index === selectedTab}"
+                                    :class="index === selectedTab ? 'border-blue-600 font-medium text-slate-900 dark:text-slate-100' : ''"
                                 >
                                     #{{ index + 1 }}
                                 </button>
@@ -489,7 +489,7 @@
                                                     "
                                                     type="number"
                                                     v-model.number="detail.dt"
-                                                    @input="dtValidation(detail)"
+                                                    @input="clampDt(detail)"
                                                     min="0"
                                                     max="999999"
                                                     step="1"
@@ -737,7 +737,7 @@
                                                 :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
                                                 :placeholder="$t('report.form.dtPlaceholder')"
-                                                @input="finalDtValidation(activePostTab.machines[index])"
+                                                @input="clampDt(activePostTab.machines[index])"
                                             />
                                         </div>
                                     </div>
@@ -1723,23 +1723,13 @@ function getTranslation(item) {
     return item.name;
 }
 
-const moduleOptions = computed(() =>
-  [...props.catalogModule].sort((a, b) =>
-    getTranslation(a).localeCompare(getTranslation(b))
-  )
-);
+type Translatable = { name?: string; es?: string; pt?: string };
+const sortByTranslation = <T extends Translatable>(arr: T[]) =>
+    [...arr].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b)));
 
-const failureOptions = computed(() =>
-  [...props.catalogFailures].sort((a, b) =>
-    getTranslation(a).localeCompare(getTranslation(b))
-  )
-);
-
-const typeOptions = computed(() =>
-  [...props.catalogTypes].sort((a, b) =>
-    getTranslation(a).localeCompare(getTranslation(b))
-  )
-);
+const moduleOptions = computed(() => sortByTranslation(props.catalogModule));
+const failureOptions = computed(() => sortByTranslation(props.catalogFailures));
+const typeOptions = computed(() => sortByTranslation(props.catalogTypes));  
 
 const removeItem = (index: number) => {
     tabs.value[selectedTab.value].service_parts.splice(index, 1);
@@ -1864,15 +1854,10 @@ function machineOnValidation() {
     tab.time_on = clamp(Math.round(n * 100) / 100, 0, LIMITS.TIME_ON_MAX);
 }
 
-function dtValidation(detail: { dt: number | null }) {
-    const n = Math.trunc(Number(detail.dt) || 0);
-    detail.dt = clamp(n, 0, LIMITS.DT_MAX);
-}
-
-function finalDtValidation(machine: { dt: number | null }) {
-    const n = Math.trunc(Number(machine.dt) || 0);
-    machine.dt = clamp(n, 0, LIMITS.DT_MAX);
-}
+const clampDt = (target: { dt: number | null }) => {
+    const n = Math.trunc(Number(target.dt) || 0);
+    target.dt = clamp(n, 0, LIMITS.DT_MAX);
+};
 
 function partsValidation() {
     const tab = activeTab.value;
