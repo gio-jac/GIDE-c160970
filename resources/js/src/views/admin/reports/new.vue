@@ -488,7 +488,7 @@
                                             >
                                                 <button
                                                     type="button"
-                                                    @click="removeMachineDetail(index,indexDetail)"
+                                                    @click="removeMachineDetailAt(index, indexDetail)"
                                                     v-if="activePostTab.machines[index]?.machine_details?.length > 1"
                                                 >
                                                     <svg
@@ -1770,10 +1770,10 @@ const removeItem = (index: number) => {
     activeTab.value.service_parts.splice(index, 1);
 };
 
-function removeMachineDetail(index, indexDetail) {
-    const m = postForm.tabs[selectedTab.value]?.machines?.[index];
+function removeMachineDetailAt(i: number, j: number): void {
+    const m = activePostTab.value?.machines?.[i];
     if (!m?.machine_details || m.machine_details.length <= 1) return;
-    m.machine_details.splice(indexDetail, 1);
+    m.machine_details.splice(j, 1);
 };
 
 const addNewPart = () => {
