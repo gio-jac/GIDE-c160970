@@ -700,7 +700,7 @@
                                                     class="form-input text-white-dark"
                                                     type="number"
                                                     min="0.0"
-                                                    max="9999.9"
+                                                    :max="LIMITS.TRANSPORT_MAX"
                                                     step="0.1"
                                                     placeholder="0.0"
                                                 />
