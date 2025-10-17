@@ -1071,7 +1071,7 @@
                                 name="formReportCode"
                                 class="form-radio"
                                 :value="code.id"
-                                v-model="activeTab.code_id"
+                                v-model.number="activeTab.code_id"
                             />
                             <div class="flex flex-col">
                                 <span>{{ code.code }}</span>
@@ -2090,7 +2090,6 @@ function submit() {
     const payload = buildPayload();
 
     console.log(payload);
-    return;
     
     Swal.fire({
         title: t("report.alert.processing"),
