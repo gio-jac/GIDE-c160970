@@ -1154,6 +1154,8 @@ function onBranchSelect() {
     form.selectedContact = null;
 }
 
+const withPrefix = (s?: string, prefix = ' · ') => (s ? `${prefix}${s}` : '');
+
 const formatUserLabel = (u: { emp?: string; nombre?: string; apellido_paterno?: string }) =>
     `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`;
 
@@ -1163,12 +1165,12 @@ const formatShiftLabel = (s: { id?: number; name?: string }) =>
 const formatClientLabel = (c: { name?: string }) => c.name ?? '-';
 
 const formatBranchLabel = (b: { id?: number; address?: string; city?: { name: string } }) =>
-    `${b.address ?? '-'}${b.city?.name ? ` · ${b.city.name}` : ''}`;
+    `${b.address ?? '-'}${withPrefix(b.city?.name)}`;
 
 const formatContactLabel = (c: { name?: string }) => c.name ?? '-';
 
 const formatMachineLabel = (m: { serial?: string; machine_model?: { model?: string } }) =>
-    `${m.serial ?? '-'}${m.machine_model?.model ? ` · ${m.machine_model.model}` : ''}`;
+    `${m.serial ?? '-'}${withPrefix(m.machine_model?.model)}`;
 
 const formatPartLabel = (p: { num_part?: string; descripcion?: string }) =>
   `${p.num_part ?? '-'} - ${p.descripcion ?? '-'}`;
