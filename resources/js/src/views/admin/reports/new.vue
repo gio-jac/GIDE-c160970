@@ -524,12 +524,7 @@
                                                 v-if="machine.only_dt !== 1 && activePostTab?.machines?.[index]?.machine_details?.length < 5"
                                                 type="button"
                                                 class="btn btn-secondary gap-2"
-                                                @click="
-                                                    addMachineDetail(
-                                                        activePostTab.machines[index]
-                                                            .machine_details
-                                                    )
-                                                "
+                                                @click="addMachineDetailAt(index)"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -2038,14 +2033,11 @@ function selectMachineChange(searchQuery, id) {
     }, 750);
 }*/
 
-function addMachineDetail(machine) {
-    if (machine.length < 5) {
-        machine.push({
-            module_id: null,
-            failure_id: null,
-            failure_type_id: null,
-            dt: null,
-        });
+function addMachineDetailAt(i: number): void {
+    const list = activePostTab.value?.machines?.[i]?.machine_details;
+    if (!list) return;
+    if (list.length < LIMITS.MACHINE_DETAILS_MAX) {
+        list.push({ module_id: null, failure_id: null, failure_type_id: null, dt: null });
     }
 }
 
