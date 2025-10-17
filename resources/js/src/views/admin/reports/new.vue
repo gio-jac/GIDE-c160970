@@ -1358,7 +1358,7 @@
                     >
                         <template
                             v-for="(machine,index) in getMachines()"
-                            :key="machine"
+                            :key="`${tabs[selectedTab].id}-${machine.id ?? machine.serial ?? index}`"
                         >
                             <div
                                 v-if="machine.only_dt !== 1"
