@@ -1563,7 +1563,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, reactive, computed, watch } from "vue";
-import { Head, usePage, router, Link } from "@inertiajs/vue3";
+import { Head, usePage, router } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
