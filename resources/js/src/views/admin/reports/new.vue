@@ -1020,7 +1020,7 @@ interface Tab {
   finished: string | null;
   status_id: number | null;
   is_tested: boolean | null;
-  service_parts: Array<{ id?: number; num_part?: string; descripcion?: string; quantity?: number }>;
+  service_parts: ServicePart[];
   notes: string;
 }
 
@@ -1054,6 +1054,7 @@ const store = useAppStore();
 const page = usePage();
 const user = computed(() => page.props.auth);
 type Part = { id: number; num_part: string; descripcion: string };
+type ServicePart = { id?: number; num_part?: string; descripcion?: string; quantity?: number };
 type Branch = NonNullable<Tab['selectedBranch']>;
 type Machine = SelectedMachine;
 
