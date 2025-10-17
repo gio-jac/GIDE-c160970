@@ -1699,7 +1699,15 @@ const basic: any = ref({
     position: datePosition.value,
 });
 
-const form = reactive({
+interface HeaderSelection {
+  selectedClient: { id: number; name?: string } | null;
+  selectedBranch: Branch | null;
+  selectedContact: { id: number; name?: string; email?: string; phone?: string } | null;
+  selectedShift: { id: number; name?: string } | null;
+  selectedUser: { id: number; emp?: string; nombre?: string; apellido_paterno?: string } | null;
+}
+
+const form = reactive<HeaderSelection>({
     selectedClient: null,
     selectedBranch: null,
     selectedContact: null,
