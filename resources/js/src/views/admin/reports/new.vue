@@ -1266,7 +1266,9 @@ const updateMachines = (selectedMachine: SelectedMachine | null) => {
     if (!selectedMachine) return;
     if (selectedMachine.production_line?.id === null) selectedMachine.production_line = null;
 
-    const list = machineGroup(selectedMachine);
+    const list = selectedMachine.production_line?.machines?.length
+        ? selectedMachine.production_line.machines
+        : [selectedMachine];
 
     ensurePostTab(selectedTab.value).machines = list.map((m) => createPostTabMachine(m.id));
 };
@@ -1297,10 +1299,10 @@ const postForm = reactive<{
   tabs: [createPostTab()],
 });
 
-const machineGroup = (sm: SelectedMachine | null) =>
-    sm?.production_line?.machines?.length ? sm.production_line!.machines : (sm ? [sm] : []);
-
-const machinesListing = computed(() => machineGroup(activeTab.value?.selectedMachine ?? null));
+const machinesListing = computed(() => {
+    const sm = activeTab.value?.selectedMachine ?? null;
+    return sm?.production_line?.machines?.length ? sm.production_line.machines : (sm ? [sm] : []);
+});
 
 function transportValidation(index: number) {
     const m = activePostTab.value?.machines?.[index];
