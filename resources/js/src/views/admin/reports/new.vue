@@ -1598,7 +1598,6 @@ interface Tab {
   selectedContact: { id: number; name?: string; email?: string; phone?: string } | null;
   selectedShift: { id: number; name?: string } | null;
   selectedUser: { id: number; emp?: string; nombre?: string; apellido_paterno?: string } | null;
-  machines: any[]; // kept for now (will clean next)
   pieces: number | null;
   sogd: string | null;
   time_on: number | null;
@@ -1738,7 +1737,6 @@ const createTab = (): Tab => ({
     selectedContact: null,
     selectedShift: null,
     selectedUser: null,
-    machines: [],
     pieces: null,
     sogd: null,
     time_on: null,
