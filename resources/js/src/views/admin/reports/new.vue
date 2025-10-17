@@ -1079,10 +1079,9 @@ defineOptions({
     layout: [SiteLayout, AppLayout],
 });
 
-const createPostTab = (): PostTab => ({ machines: [] as PostTabMachine[] });
-const ensurePostTab = (i: number): PostTab =>
-    (report.tabs[i] ??= createPostTab());
-
+const getPostTab = (i: number): PostTab =>
+    (report.tabs[i] ??= { machines: [] as PostTabMachine[] });
+    
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => report.tabs[selectedTab.value]);
 
@@ -1233,7 +1232,6 @@ const tabs = ref<Tab[]>([createTab()]);
 const selectedTab = ref<number>(0);
 function addTab() {
     tabs.value.push(createTab());
-    report.tabs.push(createPostTab());
 }
 
 const branchesCatalog = ref<Branch[]>([]);
@@ -1284,7 +1282,7 @@ const updateMachines = (selectedMachine: SelectedMachine | null) => {
 
     const list = toMachineList(selectedMachine);
 
-    ensurePostTab(selectedTab.value).machines = list.map((m) => createPostTabMachine(m.id));
+    getPostTab(selectedTab.value).machines = list.map((m) => createPostTabMachine(m.id));
 };
 
 const machineKey = (m: { id?: number; serial?: string }) =>
@@ -1310,7 +1308,7 @@ const report = reactive<{
 }>({
   service_date: TODAY_YYYY_MM_DD,
   service_timezone: tzToken(),
-  tabs: [createPostTab()],
+  tabs: [],
 });
 
 const machinesListing = computed(() => {
@@ -1367,7 +1365,7 @@ async function onClientSelect(option: { id: number }) {
     tabId = 0;
     tabs.value = [createTab()];
     selectedTab.value = 0;
-    report.tabs = [createPostTab()];
+    report.tabs = [];
 
     form.selectedBranch = null;
     form.selectedContact = null;
@@ -1392,7 +1390,6 @@ async function onMachineSelect(option: { serial: string }) {
 
     try {
         const { data } = await axios.get(API.machineBySerial(option.serial));
-        ensurePostTab(selectedTab.value);
         updateMachines(data);
         activeTab.value.selectedMachine = data;
     } catch (e) {
