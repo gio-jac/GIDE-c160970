@@ -1974,17 +1974,11 @@ function selectPartChange(searchQuery: string) {
     partsDebounce = window.setTimeout(() => {
         loaders.value.parts.searching = true;
         loaders.value.parts.waiting = false;
-        fetch("/parts/autocomplete", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": page.props.csrf,
-            },
-            body: JSON.stringify({ query: searchQuery }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                catalogParts.value = data;
+
+        axios
+            .post("/parts/autocomplete", { query: searchQuery })
+            .then(({ data }) => {
+                catalogParts.value = data ?? [];
             })
             .catch((error) => {
                 console.error("Error:", error);
