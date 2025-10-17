@@ -1206,7 +1206,7 @@
                                     @search-change="selectPartChange"
                                     id="formReportParts"
                                     :options="catalogParts"
-                                    v-model="form.selectedPart"
+                                    v-model="partSearch"
                                     class="custom-multiselect flex-1"
                                     :searchable="true"
                                     :placeholder="$t('report.form.partsPlaceholder')"
@@ -1220,7 +1220,7 @@
                                     deselect-label=""
                                 ></multiselect>
                                 <button
-                                    :disabled="!form.selectedPart"
+                                    :disabled="!partSearch"
                                     class="btn btn-secondary gap-2"
                                     @click="addNewPart"
                                 >
@@ -1269,7 +1269,7 @@
                             </thead>
                             <tbody>
                                 <template
-                                    v-if="postForm.service_parts.length <= 0"
+                                    v-if="tabs[selectedTab].service_parts.length <= 0"
                                 >
                                     <tr>
                                         <td
@@ -1281,7 +1281,7 @@
                                     </tr>
                                 </template>
                                 <template
-                                    v-for="(item, i) in postForm.service_parts"
+                                    v-for="(item, i) in tabs[selectedTab].service_parts"
                                     :key="i"
                                 >
                                     <tr class="align-top">
@@ -1673,6 +1673,8 @@ const form = reactive({
 
 const disableAddTab = computed(() => tabs.value.some(t => !t.selectedMachine))
 
+const partSearch = ref(null);
+
 const tabs = ref([{
     selectedClient: null,
     selectedMachineModel: null,
@@ -1704,6 +1706,7 @@ const tabs = ref([{
     finished: null,
     status_id: null,
     is_tested: null,
+    service_parts: [],
 }]);
 const selectedTab = ref(0);
 function addTab() {
@@ -1738,6 +1741,7 @@ function addTab() {
     finished: null,
     status_id: null,
     is_tested: null,
+    service_parts: [],
 });
 }
 
@@ -1852,7 +1856,7 @@ const showMachineLabel = (option) => {
 };
 
 const removeItem = (item: any = null) => {
-    postForm.service_parts = postForm.service_parts.filter(
+    tabs.value[selectedTab.value].service_parts = tabs.value[selectedTab.value].service_parts.filter(
         (d: any) => d.id != item.id
     );
 };
@@ -1862,12 +1866,12 @@ function removeMachineDetail(index, indexDetail) {
 };
 
 const addNewPart = () => {
-    if (!form.selectedPart) return;
-    const existingPartIndex = postForm.service_parts.findIndex(part => part.id === form.selectedPart.id);
+    if (!partSearch.value) return;
+    const existingPartIndex = tabs.value[selectedTab.value].service_parts.findIndex(part => part.id === partSearch.value.id);
     if (existingPartIndex !== -1) {
-        postForm.service_parts[existingPartIndex].quantity += 1;
+        tabs.value[selectedTab.value].service_parts[existingPartIndex].quantity += 1;
     } else {
-        postForm.service_parts.push({ ...form.selectedPart, quantity: 0 });
+        tabs.value[selectedTab.value].service_parts.push({ ...partSearch.value, quantity: 1 });
     }
 };
 
@@ -1984,9 +1988,9 @@ function transportValidation(index) {
 function partQtyValidation(event,index) {
     event.target.value = event.target.value.replace(/^0+/, '') || '0';
 
-    const part = postForm.service_parts[index];
+    const part = tabs.value[selectedTab.value].service_parts[index];
 
-    part.quantity = Math.max(0, Math.min(Number(part.quantity), 255));
+    part.quantity = Math.max(1, Math.min(Number(part.quantity), 255));
 }
 
 function machineOnValidation(event) {
