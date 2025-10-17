@@ -1254,7 +1254,7 @@ function removeMachineDetailAt(i: number, j: number): void {
 
 const addNewPart = () => {
     if (!partSearch.value) return;
-    const existingPartIndex = activeTab.value.service_parts.findIndex(p => p.id === partSearch.value!.id);
+    const existingPartIndex = activeTab.value.service_parts.findIndex(p => p.id === partSearch.value.id);
     if (existingPartIndex !== -1) {
         activeTab.value.service_parts[existingPartIndex].quantity = (activeTab.value.service_parts[existingPartIndex].quantity ?? 0) + 1;
     } else {
