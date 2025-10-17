@@ -1260,14 +1260,6 @@ const addNewPart = () => {
     item.quantity = (item.quantity ?? 0) + 1;
 };
 
-const updateMachines = (selectedMachine: SelectedMachine | null) => {
-    if (!selectedMachine) return;
-
-    const list = toMachineList(selectedMachine);
-
-    getPostTab(selectedTab.value).machines = list.map((m) => createPostTabMachine(m.id));
-};
-
 const machineKey = (m: { id?: number; serial?: string }) =>
     String(m.id ?? m.serial);
 
@@ -1356,7 +1348,7 @@ async function onMachineSelect(option: { serial: string }) {
 
     try {
         const { data } = await axios.get(API.machineBySerial(option.serial));
-        updateMachines(data);
+        getPostTab(selectedTab.value).machines = toMachineList(data).map(m => createPostTabMachine(m.id));
         activeTab.value.selectedMachine = data;
     } catch (e) {
         console.error("Error:", e);
