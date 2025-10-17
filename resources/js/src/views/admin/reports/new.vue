@@ -1916,7 +1916,7 @@ async function onClientSelect(option: { id: number }) {
     try {
         const [ branchesRes, machinesRes ] = await Promise.all([
             axios.get(API.clientBranches(option.id)),
-            axios.get(API.clientBranches(option.id)),
+            axios.get(API.clientMachines(option.id)),
         ]);
 
         branchesCatalog.value = branchesRes.data;
