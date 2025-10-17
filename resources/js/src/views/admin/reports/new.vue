@@ -34,7 +34,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="$t('report.form.default')"
+                                :placeholder="defaultPlaceholder"
                                 :custom-label="labelUser"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -65,7 +65,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
-                                :placeholder="$t('report.form.default')"
+                                :placeholder="defaultPlaceholder"
                                 :custom-label="labelShift"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -94,7 +94,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="$t('report.form.default')"
+                                :placeholder="defaultPlaceholder"
                                 :custom-label="labelClient"
                                 v-bind="multiselectLabels"
                             ></multiselect>
@@ -117,7 +117,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="$t('report.form.default')"
+                                :placeholder="defaultPlaceholder"
                                 :custom-label="labelBranch"
                                 :disabled="!hasBranches"
                                 v-bind="multiselectLabels"
@@ -140,7 +140,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="$t('report.form.default')"
+                                :placeholder="defaultPlaceholder"
                                 :custom-label="labelContact"
                                 :disabled="!hasSelectedBranch"
                                 v-bind="multiselectLabels"
@@ -206,7 +206,7 @@
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
-                                :placeholder="$t('report.form.default')"
+                                :placeholder="defaultPlaceholder"
                                 :custom-label="labelMachine"
                                 :disabled="!hasMachines"
                                 v-bind="multiselectLabels"
@@ -1046,6 +1046,7 @@ import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 
 const { t } = useI18n();
+const defaultPlaceholder = computed(() => t('report.form.default'));
 const store = useAppStore();
 
 const page = usePage();
