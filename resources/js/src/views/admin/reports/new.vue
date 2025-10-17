@@ -1061,9 +1061,9 @@ const zeroPlaceholder = '0.0';
 const store = useAppStore();
 
 const page = usePage();
-const user = computed(() => page.props.auth);
+const user = computed<UserAuth | undefined>(() => page.props.auth as UserAuth | undefined);
 type UserAuth = { type: number };
-const showUserField = computed(() => (user.value as UserAuth | undefined)?.type === 1);
+const showUserField = computed(() => user.value?.type === 1);
 type Part = { id: number; num_part: string; descripcion: string };
 type ServicePart = { id?: number; num_part?: string; descripcion?: string; quantity?: number };
 type Branch = NonNullable<Tab['selectedBranch']>;
