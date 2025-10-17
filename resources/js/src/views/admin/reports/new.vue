@@ -1063,8 +1063,8 @@
                 <div class="mt-8 px-4">
                     <div class="flex flex-wrap justify-evenly">
                         <label
-                            v-for="(code, index) in catalogCodes"
-                            :key="index"
+                            v-for="(code) in catalogCodes"
+                            :key="code.id"
                             class="inline-flex"
                         >
                             <input
@@ -1160,8 +1160,8 @@
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly py-4">
                             <label
-                                v-for="(status, index) in catalogStatus"
-                                :key="index"
+                                v-for="(status) in catalogStatus"
+                                :key="status.id"
                                 class="inline-flex"
                             >
                                 <input
