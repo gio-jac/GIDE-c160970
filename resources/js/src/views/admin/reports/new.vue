@@ -293,7 +293,7 @@
                                 >{{ $t("report.form.machines") }} <span class="text-red-500">*</span></label
                             >
                             <multiselect
-                                @select="machineChangeNew"
+                                @select="onMachineSelect"
                                 id="formCatalogMachines"
                                 :options="machinesCatalog"
                                 v-model="activeTab.selectedMachine"
@@ -1963,9 +1963,9 @@ function machineModelChange(selectedOption) {
         });
 }*/
 
-async function machineChangeNew(selectedOption) {
+async function onMachineSelect(option: { serial: string }) {
     try {
-        const { data } = await axios.get(`/machine/${selectedOption.serial}`);
+        const { data } = await axios.get(`/machine/${option.serial}`);
         ensurePostTab(selectedTab.value);
         updateMachines(data);
         tabs.value[selectedTab.value].selectedMachine = data;
