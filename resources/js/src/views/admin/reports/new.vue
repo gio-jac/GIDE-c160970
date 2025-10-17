@@ -2055,17 +2055,45 @@ function addMachineDetail(machine) {
     }
 }
 
+function buildPayload() {
+    const header = {
+        user_id: form.selectedUser?.id ?? null,
+        shift_id: form.selectedShift?.id ?? null,
+        branch_id: form.selectedBranch?.id ?? null,
+        branch_manager_id: form.selectedContact?.id ?? null,
+        service_date: postForm.service_date,
+        service_timezone: postForm.service_timezone,
+    };
+
+    const tabsPayLoad = tabs.value.map((t, i) => ({
+        selected_machine_id: t.selectedMachine?.id ?? null,
+        pieces: t.pieces ?? 0,
+        sogd: t.sogd ?? null,
+        time_on: t.time_on ?? 0,
+        travel_time: t.travel_time ?? 0,
+        report_type_id: t.report_type_id ?? 1,
+        reported_error: t.reported_error ?? "",
+        code_id: t.code_id ?? null,
+        actions_taken: t.actions_taken ?? "",
+        reported: t.reported ?? null,
+        departure: t.departure ?? null,
+        arrival: t.arrival ?? null,
+        finished: t.finished ?? null,
+        status_id: t.status_id ?? null,
+        is_tested: !!t.is_tested,
+        service_parts: (t.service_parts ?? []).map(p => ({ id: p.id, quantity: p.quantity })),
+        notes: t.notes ?? "",
+        machines: postForm.tabs[i]?.machines ?? [],
+    }));
+
+    return { ...header, tabs: tabsPayLoad };
+}
+
 function submit() {
-    if (form.selectedUser) postForm.user_id = form.selectedUser.id;
+    const payload = buildPayload();
 
-    if (form.selectedShift) postForm.shift_id = form.selectedShift.id;
-
-    if (form.selectedBranch) postForm.branch_id = form.selectedBranch.id;
-
-    if (form.selectedContact)
-        postForm.branch_manager_id = form.selectedContact.id;
-
-    console.log(postForm);
+    console.log(payload);
+    return;
     
     Swal.fire({
         title: t("report.alert.processing"),
@@ -2073,31 +2101,17 @@ function submit() {
         allowOutsideClick: false,
         showConfirmButton: false,
         customClass: "sweet-alerts",
-        didOpen: () => {
-            Swal.showLoading();
-        },
+        didOpen: () => Swal.showLoading(),
     });
-    router.post("/reports", postForm, {
-        onSuccess: () => {
-            console.log("Exitoso");
-            Swal.close();
-        },
-        onError: (error) => {
-            console.log(error);
-            let errorMessages = "";
 
-            for (const key in error) {
-                errorMessages += `<p>${error[key]}</p>`;
-            }
+    router.post("/reports", payload, {
+        onSuccess: () => Swal.close(),
+        onError: (error) => {
+            let errorMessages = "";
+            for (const key in error) errorMessages += `<p>${error[key]}</p>`;
             Swal.close();
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                html: errorMessages,
-                customClass: "sweet-alerts",
-            });
+            Swal.fire({ icon: "error", title: "Oops...", html: errorMessages, customClass: "sweet-alerts" });
         },
-        onFinish: () => {},
     });
 }
 </script>
