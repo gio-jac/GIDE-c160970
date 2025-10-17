@@ -1968,8 +1968,14 @@ function partQtyValidation(event,index) {
 }
 
 function machineOnValidation(event) {
-    postForm.time_on = parseFloat(postForm.time_on).toFixed(2);
-    postForm.time_on = Math.max(0.00, Math.min(Number(postForm.time_on), 9999999.99));
+    const tab = tabs.value[selectedTab.value];
+    const n = Number(tab.time_on);
+
+    if(Number.isFinite(n)) {
+        tab.time_on = Math.max(0, Math.min(9999999.99, Math.round(n * 100) / 100));
+    } else {
+        tab.time_on = 0;
+    }
 }
 
 function dtValidation(event, indexMachine, indexDetail) {
