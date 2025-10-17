@@ -110,7 +110,7 @@
                                 >Sucursal <span class="text-red-500">*</span></label
                             >
                             <multiselect
-                                @select="() => form.selectedContact = null"
+                                @select="onBranchSelect"
                                 id="formCatalogBranches"
                                 :options="branchesCatalog"
                                 v-model="form.selectedBranch"
@@ -1124,6 +1124,10 @@ const form = reactive<HeaderSelection>({
     selectedShift: null,
     selectedUser: null,
 });
+
+function onBranchSelect() {
+    form.selectedContact = null;
+}
 
 const labelUser = (u: { emp: string; nombre: string; apellido_paterno: string }) =>
   `${u.emp} - ${u.nombre} ${u.apellido_paterno}`;
