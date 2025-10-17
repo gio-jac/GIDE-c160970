@@ -539,6 +539,7 @@
                                         <div class="w-full flex justify-center">
                                             <button
                                                 v-if="machine.only_dt !== 1 && postForm.tabs[selectedTab]?.machines?.[index]?.machine_details?.length < 5"
+                                                type="button"
                                                 class="btn btn-secondary gap-2"
                                                 @click="
                                                     addMachineDetail(
