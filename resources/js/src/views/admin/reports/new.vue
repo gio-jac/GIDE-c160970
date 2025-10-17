@@ -13,7 +13,7 @@
                                 <span class="text-red-500">*</span></label
                             >
 
-                            <flat-pickr id="formServiceDate" v-model="report.service_date" class="form-input flex-1" :config="basic"></flat-pickr>
+                            <flat-pickr id="formServiceDate" v-model="report.service_date" class="form-input flex-1" :config="dateOnly"></flat-pickr>
                         </div>
                     </div>
                 </div>
@@ -1132,7 +1132,7 @@ function makePickerConfig(dateFormat: string, enableTime = false) {
 
 const dateTime = computed(() => makePickerConfig("Y-m-d H:i", true));
 
-const basic = computed(() => makePickerConfig('Y-m-d'));
+const dateOnly = computed(() => makePickerConfig('Y-m-d'));
 
 interface HeaderSelection {
   selectedClient: { id: number; name?: string } | null;
