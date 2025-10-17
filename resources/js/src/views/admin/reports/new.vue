@@ -705,7 +705,7 @@
                                 >
 
                                 <multiselect
-                                    @search-change="selectPartChange"
+                                    @search-change="(q) => { catalogParts = []; if (q?.length) runPartsAutocomplete(q) }"
                                     id="formReportParts"
                                     :options="catalogParts"
                                     v-model="partSearch"
@@ -1252,12 +1252,6 @@ const runPartsAutocomplete = (q: string) => {
         }
     }, 750);
 };
-function selectPartChange(searchQuery: string) {
-    catalogParts.value = [];
-    if (!searchQuery?.length) return;
-
-    runPartsAutocomplete(searchQuery);
-}
 
 type ServicePartPayload = { id: number; quantity: number };
 type TabPayload = {
