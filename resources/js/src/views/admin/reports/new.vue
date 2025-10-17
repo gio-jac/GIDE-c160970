@@ -299,7 +299,7 @@
                                                     :max="LIMITS.DT_MAX"
                                                     step="1"
                                                     class="form-input text-white-dark"
-                                                    :placeholder="$t('report.form.dtPlaceholder')"
+                                                    :placeholder="dtPlaceholder"
                                                 />
                                             </div>
                                             <div
@@ -433,7 +433,7 @@
                                                 type="number"
                                                 v-model.number="activePostTab.machines[index].dt"
                                                 class="form-input text-white-dark"
-                                                :placeholder="$t('report.form.dtPlaceholder')"
+                                                :placeholder="dtPlaceholder"
                                                 @input="clampDt(activePostTab.machines[index])"
                                             />
                                         </div>
@@ -1048,6 +1048,7 @@ import axios from 'axios';
 const { t } = useI18n();
 const defaultPlaceholder = computed(() => t('report.form.default'));
 const defaultOptionText = computed(() => t('report.form.default'));
+const dtPlaceholder = computed(() => t('report.form.dtPlaceholder'));
 const store = useAppStore();
 
 const page = usePage();
