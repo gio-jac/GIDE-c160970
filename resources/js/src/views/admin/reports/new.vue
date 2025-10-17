@@ -220,7 +220,7 @@
                         >
                             <div
                                 v-for="(machine, index) in machinesListing"
-                                :key="machineKey(machine, index)"
+                                :key="machineKey(machine)"
                                 :class="{
                                     'bg-[#ececf9]': !isDTOnly(machine),
                                     'bg-gray-100': isDTOnly(machine),
@@ -867,7 +867,7 @@
                     >
                         <template
                             v-for="(machine,index) in machinesListing"
-                            :key="machineKey(machine, index)"
+                            :key="machineKey(machine)"
                         >
                             <div
                                 v-if="!isDTOnly(machine) && activePostTab?.machines?.[index]"
@@ -1287,8 +1287,8 @@ const updateMachines = (selectedMachine: SelectedMachine | null) => {
     ensurePostTab(selectedTab.value).machines = list.map((m) => createPostTabMachine(m.id));
 };
 
-const machineKey = (m: { id?: number; serial?: string }, idx: number) =>
-    String(m.id ?? m.serial ?? idx);
+const machineKey = (m: { id?: number; serial?: string }) =>
+    String(m.id ?? m.serial);
 
 const tzToken = () => {
     const m = new Date().toString().match(/([A-Z]+[\+-]\d{4})/);
