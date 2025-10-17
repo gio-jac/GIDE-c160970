@@ -1467,7 +1467,7 @@ function buildPayload(): ReportPayload {
         service_timezone: report.service_timezone,
     };
 
-    const tabsPayLoad: TabPayload[] = tabs.value.map((t, i) => ({
+    const tabsPayload: TabPayload[] = tabs.value.map((t, i) => ({
         selected_machine_id: t.selectedMachine?.id ?? null,
         pieces: t.pieces ?? 0,
         sogd: t.sogd ?? null,
@@ -1493,7 +1493,7 @@ function buildPayload(): ReportPayload {
         machines: getPostTab(i).machines,
     }));
 
-    return { ...header, tabs: tabsPayLoad };
+    return { ...header, tabs: tabsPayload };
 }
 
 function submit() {
