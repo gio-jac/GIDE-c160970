@@ -1314,15 +1314,12 @@ function transportValidation(index: number) {
     });
 }
 
-const clampIntField = <T extends Record<string, any>>(obj: T, key: keyof T, min: number, max: number) => {
-  const n = Math.trunc(Number(obj[key]) || 0);
-  obj[key] = clamp(n, min, max) as any;
-};
-
-const clampFixedField = <T extends Record<string, any>>(obj: T, key: keyof T, decimals: number, min: number, max: number) => {
-  const factor = 10 ** decimals;
-  const n = Number(obj[key]) || 0;
-  obj[key] = clamp(Math.round(n * factor) / factor, min, max) as any;
+const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decimals = 0, min, max }: { decimals?: number; min: number; max: number }) => {
+    const raw = Number(obj[key]) || 0;
+    const normalized = decimals === 0
+        ? Math.trunc(raw)
+        : Math.round(raw * 10 ** decimals) / 10 ** decimals;
+    obj[key] = clamp(normalized, min, max) as any;
 };
 
 function partQtyValidation(index: number) {
@@ -1332,7 +1329,7 @@ function partQtyValidation(index: number) {
 }
 
 function machineOnValidation() {
-  clampFixedField(activeTab.value, 'time_on', 2, 0, LIMITS.TIME_ON_MAX);
+  clampField(activeTab.value, 'time_on', { decimals: 2, min: 0, max: LIMITS.TIME_ON_MAX });
 }
 
 const clampDt = (target: { dt: number | null }) => {
@@ -1341,11 +1338,11 @@ const clampDt = (target: { dt: number | null }) => {
 };
 
 function partsValidation() {
-  clampIntField(activeTab.value, 'pieces', 0, LIMITS.PIECES_MAX);
+  clampField(activeTab.value, 'pieces', { min: 0, max: LIMITS.PIECES_MAX });
 }
 
 function travelTimeValidation() {
-  clampIntField(activeTab.value, 'travel_time', 0, LIMITS.TRAVEL_TIME_MAX);
+  clampField(activeTab.value, 'travel_time', { min: 0, max: LIMITS.TRAVEL_TIME_MAX });
 }
 
 async function onClientSelect(option: { id: number }) {
