@@ -1268,14 +1268,6 @@ const updateMachines = (selectedMachine: SelectedMachine | null) => {
     ensurePostTab(selectedTab.value).machines = list.map((m) => createPostTabMachine(m.id));
 };
 
-function getCurrentDate() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
 const machineKey = (m: { id?: number; serial?: string }, idx: number) =>
   `${activeTab.value.id}-${m.id ?? m.serial ?? idx}`;
 
@@ -1284,12 +1276,20 @@ const tzToken = () => {
     return m?.[1] ?? 'UTC+0000';
 };
 
+const TODAY_YYYY_MM_DD = (() => {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+})();
+
 const report = reactive<{
   service_date: string;
   service_timezone: string;
   tabs: PostTab[];
 }>({
-  service_date: getCurrentDate(),
+  service_date: TODAY_YYYY_MM_DD,
   service_timezone: tzToken(),
   tabs: [createPostTab()],
 });
