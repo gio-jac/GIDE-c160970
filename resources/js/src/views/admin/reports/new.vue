@@ -291,7 +291,8 @@
                                 @select="machineChangeNew"
                                 id="formCatalogMachines"
                                 :options="machinesCatalog"
-                                v-model="tabs[selectedTab].selectedMachine2"
+                                v-model="tabs[selectedTab].selectedMachine"
+                                track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="$t('report.form.default')"
@@ -307,7 +308,7 @@
                         </div>
                     </div>
                         
-                    <template v-if="tabs[selectedTab].selectedMachine2">
+                    <template v-if="tabs[selectedTab].selectedMachine">
                         <div
                             class="flex flex-wrap justify-evenly mt-4"
                         >
@@ -323,214 +324,216 @@
                             >
                                 <div class="text-center font-semibold">
                                     Serial: {{ machine.serial }} -
-                                    {{ machine.machine_model.model }} -
+                                    {{ machine.machine_model?.model ?? '-' }} -
                                     {{
-                                        machine.line_num ? machine.line_num :
-                                        machine.machine_model.model_segment
-                                            .segment
+                                        machine.line_num
+                                            ?? machine.machine_model?.model_segment?.segment
+                                            ?? '-'
                                     }}
                                 </div>
-                                <div class="w-full">
+                                <div class="w-full" v-if="postForm.tabs[selectedTab]?.machines?.[index]">
                                     <div class="flex justify-evenly flex-wrap">
-                                        <div
-                                            v-for="(
-                                                detail, indexDetail
-                                            ) in postForm.tabs[selectedTab].machines[index]
-                                                .machine_details"
-                                            :key="detail"
-                                            class="flex-[100%] flex justify-evenly flex-wrap"
-                                        >
+                                        <template v-if="postForm.tabs[selectedTab] && postForm.tabs[selectedTab].machines && postForm.tabs[selectedTab].machines[index]">
                                             <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                                v-if="machine.only_dt !== 1"
+                                                v-for="(
+                                                    detail, indexDetail
+                                                ) in postForm.tabs[selectedTab].machines[index]
+                                                    .machine_details"
+                                                :key="detail"
+                                                class="flex-[100%] flex justify-evenly flex-wrap"
                                             >
-                                                <label
-                                                    :for="
-                                                        'formModule' + selectedTab +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.error") }}</label
+                                                <div
+                                                    class="p-2 flex-auto sm:flex-1"
+                                                    v-if="machine.only_dt !== 1"
                                                 >
-                                                <select
-                                                    :id="
-                                                        'formModule' + selectedTab +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formModule' + selectedTab +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="detail.module_id"
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="tmodule in props.catalogModule"
-                                                        :key="tmodule.id"
-                                                        :value="tmodule.id"
+                                                    <label
+                                                        :for="
+                                                            'formModule' + selectedTab +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        >{{ $t("report.form.error") }}</label
                                                     >
-                                                        {{ getTranslation(tmodule) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                                v-if="machine.only_dt !== 1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formFailures' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.cause") }}</label
-                                                >
-                                                <select
-                                                    :id="
-                                                        'formFailures' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formFailures' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="detail.failure_id"
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="failure in props.catalogFailures"
-                                                        :key="failure.id"
-                                                        :value="failure.id"
+                                                    <select
+                                                        :id="
+                                                            'formModule' + selectedTab +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        :name="
+                                                            'formModule' + selectedTab +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        class="form-select text-white-dark"
+                                                        v-model="detail.module_id"
+                                                        required
                                                     >
-                                                        {{ getTranslation(failure) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                                v-if="machine.only_dt !== 1"
-                                            >
-                                                <label
-                                                    :for="
-                                                        'formTypes' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    >{{ $t("report.form.solution") }}</label
+                                                        <option :value="null">
+                                                            {{ $t("report.form.default") }}
+                                                        </option>
+                                                        <option
+                                                            v-for="tmodule in props.catalogModule"
+                                                            :key="tmodule.id"
+                                                            :value="tmodule.id"
+                                                        >
+                                                            {{ getTranslation(tmodule) }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div
+                                                    class="p-2 flex-auto sm:flex-1"
+                                                    v-if="machine.only_dt !== 1"
                                                 >
-                                                <select
-                                                    :id="
-                                                        'formTypes' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formTypes' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    class="form-select text-white-dark"
-                                                    v-model="
-                                                        detail.failure_type_id
-                                                    "
-                                                    required
-                                                >
-                                                    <option :value="null">
-                                                        {{ $t("report.form.default") }}
-                                                    </option>
-                                                    <option
-                                                        v-for="failuretype in props.catalogTypes"
-                                                        :key="failuretype.id"
-                                                        :value="failuretype.id"
+                                                    <label
+                                                        :for="
+                                                            'formFailures' +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        >{{ $t("report.form.cause") }}</label
                                                     >
-                                                        {{ getTranslation(failuretype) }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div
-                                                class="p-2 flex-auto sm:flex-1"
-                                                v-if="machine.only_dt !== 1"
-                                            >
-                                                <label :for="
-                                                        'formErrorDT' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    >DT (Min.)</label
-                                                >
-                                                <input
-                                                    :id="
-                                                        'formErrorDT' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    :name="
-                                                        'formErrorDT' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    type="number"
-                                                    v-model="detail.dt"
-                                                    @input="dtValidation(detail)"
-                                                    min="0"
-                                                    max="999999"
-                                                    step="1"
-                                                    class="form-input text-white-dark"
-                                                    :placeholder="$t('report.form.dtPlaceholder')"
-                                                />
-                                            </div>
-                                            <div
-                                                class="flex"
-                                                v-if="machine.only_dt !== 1"
-                                            >
-                                                <button
-                                                    type="button"
-                                                    @click="removeMachineDetail(index,indexDetail)"
-                                                    v-if="postForm.tabs[selectedTab].machines[index]?.machine_details?.length > 1"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="24px"
-                                                        height="24px"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        stroke-width="1.5"
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        class="w-5 h-5"
+                                                    <select
+                                                        :id="
+                                                            'formFailures' +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        :name="
+                                                            'formFailures' +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        class="form-select text-white-dark"
+                                                        v-model="detail.failure_id"
+                                                        required
                                                     >
-                                                        <line
-                                                            x1="18"
-                                                            y1="6"
-                                                            x2="6"
-                                                            y2="18"
-                                                        ></line>
-                                                        <line
-                                                            x1="6"
-                                                            y1="6"
-                                                            x2="18"
-                                                            y2="18"
-                                                        ></line>
-                                                    </svg>
-                                                </button>
+                                                        <option :value="null">
+                                                            {{ $t("report.form.default") }}
+                                                        </option>
+                                                        <option
+                                                            v-for="failure in props.catalogFailures"
+                                                            :key="failure.id"
+                                                            :value="failure.id"
+                                                        >
+                                                            {{ getTranslation(failure) }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div
+                                                    class="p-2 flex-auto sm:flex-1"
+                                                    v-if="machine.only_dt !== 1"
+                                                >
+                                                    <label
+                                                        :for="
+                                                            'formTypes' +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        >{{ $t("report.form.solution") }}</label
+                                                    >
+                                                    <select
+                                                        :id="
+                                                            'formTypes' +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        :name="
+                                                            'formTypes' +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        class="form-select text-white-dark"
+                                                        v-model="
+                                                            detail.failure_type_id
+                                                        "
+                                                        required
+                                                    >
+                                                        <option :value="null">
+                                                            {{ $t("report.form.default") }}
+                                                        </option>
+                                                        <option
+                                                            v-for="failuretype in props.catalogTypes"
+                                                            :key="failuretype.id"
+                                                            :value="failuretype.id"
+                                                        >
+                                                            {{ getTranslation(failuretype) }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div
+                                                    class="p-2 flex-auto sm:flex-1"
+                                                    v-if="machine.only_dt !== 1"
+                                                >
+                                                    <label :for="
+                                                            'formErrorDT' +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        >DT (Min.)</label
+                                                    >
+                                                    <input
+                                                        :id="
+                                                            'formErrorDT' +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        :name="
+                                                            'formErrorDT' +
+                                                            index +
+                                                            indexDetail
+                                                        "
+                                                        type="number"
+                                                        v-model="detail.dt"
+                                                        @input="dtValidation(detail)"
+                                                        min="0"
+                                                        max="999999"
+                                                        step="1"
+                                                        class="form-input text-white-dark"
+                                                        :placeholder="$t('report.form.dtPlaceholder')"
+                                                    />
+                                                </div>
+                                                <div
+                                                    class="flex"
+                                                    v-if="machine.only_dt !== 1"
+                                                >
+                                                    <button
+                                                        type="button"
+                                                        @click="removeMachineDetail(index,indexDetail)"
+                                                        v-if="postForm.tabs[selectedTab].machines[index]?.machine_details?.length > 1"
+                                                    >
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="24px"
+                                                            height="24px"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            stroke-width="1.5"
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            class="w-5 h-5"
+                                                        >
+                                                            <line
+                                                                x1="18"
+                                                                y1="6"
+                                                                x2="6"
+                                                                y2="18"
+                                                            ></line>
+                                                            <line
+                                                                x1="6"
+                                                                y1="6"
+                                                                x2="18"
+                                                                y2="18"
+                                                            ></line>
+                                                        </svg>
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </template>
                                         <div class="w-full flex justify-center">
                                             <button
-                                                v-if="machine.only_dt !== 1 && postForm.tabs[selectedTab].machines[index]?.machine_details?.length < 5"
+                                                v-if="machine.only_dt !== 1 && postForm.tabs[selectedTab]?.machines?.[index]?.machine_details?.length < 5"
                                                 class="btn btn-secondary gap-2"
                                                 @click="
                                                     addMachineDetail(
@@ -571,12 +574,7 @@
                                             v-if="machine.only_dt !== 1"
                                         >
                                             <template
-                                                v-if="
-                                                    machine.machine_model
-                                                        .model_segment
-                                                        .is_multi_transport ===
-                                                    1
-                                                "
+                                                v-if="machine.machine_model?.model_segment?.is_multi_transport === 1"
                                             >
                                                 <div
                                                     class="w-full flex justify-evenly flex-wrap"
@@ -699,7 +697,7 @@
                                                     </div>
                                                 </div>
                                             </template>
-                                            <template v-else>
+                                            <template v-else-if="postForm.tabs[selectedTab]?.machines?.[index]">
                                                 <label for="formShiftTotal11"
                                                     >{{ $t("report.form.transport") }}</label
                                                 >
@@ -1353,7 +1351,7 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div
-                        v-if="tabs[selectedTab].selectedMachine"
+                        v-if="tabs[selectedTab].selectedMachine && postForm.tabs[selectedTab]"
                         class="flex flex-wrap justify-evenly w-full"
                     >
                         <template
@@ -1361,7 +1359,7 @@
                             :key="`${tabs[selectedTab].id}-${machine.id ?? machine.serial ?? index}`"
                         >
                             <div
-                                v-if="machine.only_dt !== 1"
+                                v-if="machine.only_dt !== 1 && postForm.tabs[selectedTab]?.machines?.[index]"
                                 class="text-center min-w-[270px]"
                             >
                                 <label
@@ -1713,6 +1711,7 @@ const tabs = ref([createTab()]);
 const selectedTab = ref(0);
 function addTab() {
     tabs.value.push(createTab());
+    postForm.tabs.push({ machines: [] });
 }
 
 const branchesCatalog = ref([]);
@@ -1853,7 +1852,7 @@ const postForm = reactive({
     status_id: null,
     is_tested: null,
     notes: "",
-    tabs: [] as Array<any>,
+    tabs: [{ machines: [] }] as Array<any>,
     machines: [] as Array<any>,
     service_parts: [],
 });
@@ -1983,11 +1982,11 @@ function machineModelChange(selectedOption) {
 async function machineChangeNew(selectedOption) {
     console.log(selectedOption);
     try {
-        const machineRes = await axios.get(`/machine/${selectedOption.serial}`);
-        form.selectedMachine = machineRes.data;
-        tabs.value[selectedTab.value].selectedMachine = machineRes.data;
-        (postForm.tabs[selectedTab.value] ??= { machines: [] });
-        updateMachines(machineRes.data);
+        const { data } = await axios.get(`/machine/${selectedOption.serial}`);
+        postForm.tabs[selectedTab.value] ??= { machines: [] };
+        updateMachines(data);
+        form.selectedMachine = data;
+        tabs.value[selectedTab.value].selectedMachine = data;
     } catch (e) {
         console.error("Error:", e);
         tabs.value[selectedTab.value].selectedMachine = null;
