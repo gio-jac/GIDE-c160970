@@ -1931,10 +1931,16 @@ function travelTimeValidation(event) {
 
 async function selectedClientChange(selectedOption) {
     console.log(selectedOption.id);
+
+    tabs.value = [createTab()];
+    selectedTab.value = 0;
+    postForm.tabs = [{ machines: [] }];
+    
     form.selectedMachine = null;
-    form.selectedMachine2 = null;
     form.selectedBranch = null;
     form.selectedContact = null;
+    branchesCatalog.value = [];
+    machinesCatalog.value = [];
     try {
         const [ branchesRes, machinesRes ] = await Promise.all([
             axios.get(`/clients/${selectedOption.id}/branches`),
