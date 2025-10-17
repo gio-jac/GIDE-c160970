@@ -1653,7 +1653,6 @@ const form = reactive({
     selectedContact: null,
     selectedShift: null,
     selectedPart: null,
-    addNewPart: [],
     selectedUser: null,
 });
 
@@ -1673,7 +1672,6 @@ const createTab = () => ({
     selectedContact: null,
     selectedShift: null,
     selectedPart: null,
-    addNewPart: [],
     selectedUser: null,
     machines: [],
     pieces: null,
