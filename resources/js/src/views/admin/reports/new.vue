@@ -1288,7 +1288,7 @@ const updateMachines = (selectedMachine: SelectedMachine | null) => {
 };
 
 const machineKey = (m: { id?: number; serial?: string }, idx: number) =>
-  `${activeTab.value.id}-${m.id ?? m.serial ?? idx}`;
+    String(m.id ?? m.serial ?? idx);
 
 const tzToken = () => {
     const m = new Date().toString().match(/([A-Z]+[\+-]\d{4})/);
