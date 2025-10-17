@@ -1766,13 +1766,6 @@ const addNewPart = () => {
     }
 };
 
-const preloadingTime: any = ref({
-    noCalendar: true,
-    enableTime: true,
-    dateFormat: "H:i",
-    position: store.rtlClass === "rtl" ? "auto right" : "auto left",
-});
-
 const updateMachines = (selectedMachine) => {
     if (!selectedMachine) return;
 
