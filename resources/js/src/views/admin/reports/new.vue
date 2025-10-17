@@ -1120,16 +1120,16 @@ const props = defineProps<{
 
 const datePosition = computed(() => (store.rtlClass === 'rtl' ? 'auto right' : 'auto left'));
 
-const dateTime: any = ref({
+const dateTime = computed(() => ({
     enableTime: true,
     dateFormat: "Y-m-d H:i",
     position: datePosition.value,
-});
+}));
 
-const basic: any = ref({
+const basic = computed(() => ({
     dateFormat: 'Y-m-d',
     position: datePosition.value,
-});
+}));
 
 interface HeaderSelection {
   selectedClient: { id: number; name?: string } | null;
