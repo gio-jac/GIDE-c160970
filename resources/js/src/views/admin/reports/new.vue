@@ -222,8 +222,8 @@
                                 v-for="(machine, index) in machinesListing"
                                 :key="machineKey(machine, index)"
                                 :class="{
-                                    'bg-[#ececf9]': machine.only_dt !== 1,
-                                    'bg-gray-100': machine.only_dt === 1,
+                                    'bg-[#ececf9]': !isDTOnly(machine),
+                                    'bg-gray-100': isDTOnly(machine),
                                     'ring-2 ring-amber-500 ring-offset-1': machinesListing.length > 1 && machine.serial === activeTab.selectedMachine?.serial
                                 }"
                                 class="rounded-md p-4 mb-4"
@@ -247,7 +247,7 @@
                                             :key="indexDetail"
                                             class="flex-[100%] flex justify-evenly flex-wrap"
                                         >
-                                            <template v-if="machine.only_dt !== 1">
+                                            <template v-if="!isDTOnly(machine)">
                                                 <div
                                                     v-for="cfg in detailSelects"
                                                     :key="cfg.key"
@@ -277,7 +277,7 @@
                                             </template>
                                             <div
                                                 class="p-2 flex-auto sm:flex-1"
-                                                v-if="machine.only_dt !== 1"
+                                                v-if="!isDTOnly(machine)"
                                             >
                                                 <label :for="
                                                         'formErrorDT' +
@@ -341,7 +341,7 @@
                                         </div>
                                         <div class="w-full flex justify-center">
                                             <button
-                                                v-if="machine.only_dt !== 1 && activePostTab?.machines?.[index]?.machine_details?.length < 5"
+                                                v-if="!isDTOnly(machine) && activePostTab?.machines?.[index]?.machine_details?.length < 5"
                                                 type="button"
                                                 class="btn btn-secondary gap-2"
                                                 @click="addMachineDetailAt(index)"
@@ -377,7 +377,7 @@
                                             class="py-2"
                                             v-if="machine.only_dt !== 1"
                                         >
-                                            <template v-if="machine.machine_model?.model_segment?.is_multi_transport === 1">
+                                            <template v-if="isMultiTransport(machine)">
                                                 <div class="w-full flex justify-evenly flex-wrap">
                                                     <div
                                                         v-for="cfg in transportConfig"
@@ -870,7 +870,7 @@
                             :key="machineKey(machine, index)"
                         >
                             <div
-                                v-if="machine.only_dt !== 1 && activePostTab?.machines?.[index]"
+                                v-if="!isDTOnly(machine) && activePostTab?.machines?.[index]"
                                 class="text-center min-w-[270px]"
                             >
                                 <label
@@ -1071,6 +1071,11 @@ const activePostTab = computed(() => postForm.tabs[selectedTab.value]);
 
 const hasSelectedBranch = computed<boolean>(() => !!form.selectedBranch);
 const hasActiveMachine = computed<boolean>(() => !!activeTab.value?.selectedMachine);
+
+const isDTOnly = (m?: { only_dt?: number } | null) => m?.only_dt === 1;
+const isMultiTransport = (
+    m?: { machine_model?: { model_segment?: { is_multi_transport?: number } } } | null
+) => m?.machine_model?.model_segment?.is_multi_transport === 1;
 
 const branchManagers = computed(() =>
   form.selectedBranch?.branch_managers ?? []
