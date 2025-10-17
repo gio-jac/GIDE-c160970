@@ -1868,7 +1868,7 @@ function partQtyValidation(event,index) {
     part.quantity = Math.max(1, Math.min(Number(part.quantity), 255));
 }
 
-function machineOnValidation(event) {
+function machineOnValidation() {
     const tab = tabs.value[selectedTab.value];
     const n = Number(tab.time_on);
 
@@ -1889,7 +1889,7 @@ function finalDtValidation(machine) {
     machine.dt = Number.isFinite(n) ? Math.max(0, Math.min(999999, Math.trunc(n))) : 0;
 }
 
-function partsValidation(event) {
+function partsValidation() {
     const tab = tabs.value[selectedTab.value];
     const n = Number(tab.pieces);
 
@@ -1900,7 +1900,7 @@ function partsValidation(event) {
     }
 }
 
-function travelTimeValidation(event) {
+function travelTimeValidation() {
     const tab = tabs.value[selectedTab.value];
     const n = Number(tab.travel_time);
 
