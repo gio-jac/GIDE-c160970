@@ -1029,12 +1029,12 @@
                                 <select
                                     id="formReportType"
                                     name="formReportType"
-                                    v-model="activeTab.report_type_id"
+                                    v-model.number="activeTab.report_type_id"
                                     class="form-select text-white-dark flex-1"
                                     required
                                 >
-                                    <option value="1" selected>{{ $t("catalogs.typeReport.1") }}</option>
-                                    <option value="2">{{ $t("catalogs.typeReport.2") }}</option>
+                                    <option :value="1" selected>{{ $t("catalogs.typeReport.1") }}</option>
+                                    <option :value="2">{{ $t("catalogs.typeReport.2") }}</option>
                                 </select>
                             </div>
                         </div>
