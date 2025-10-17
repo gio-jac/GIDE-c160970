@@ -1793,36 +1793,19 @@ const addNewPart = () => {
 
 const updateMachines = (selectedMachine: SelectedMachine | null) => {
     if (!selectedMachine) return;
+    if (selectedMachine.production_line?.id === null) selectedMachine.production_line = null;
 
-    if (selectedMachine.production_line?.id === null) {
-        selectedMachine.production_line = null;
-    }
+    const list = machineGroup(selectedMachine);
 
-    const totalMachines = selectedMachine.production_line?.machines?.length ?? 1;
-
-    ensurePostTab(selectedTab.value).machines = Array.from({ length: totalMachines }, (_, index): PostTabMachine => {
-        const machineId =
-            totalMachines === 1
-                ? selectedMachine.id
-                : selectedMachine.production_line!.machines[index].id;
-
-        return {
-            machine_id: machineId,
-            machine_details: [
-                {
-                    module_id: null,
-                    failure_id: null,
-                    failure_type_id: null,
-                    dt: null,
-                },
-            ],
-            transport_1: null,
-            transport_2: null,
-            transport_3: null,
-            dt: null,
-            signature_client_name: null,
-        };
-    });
+    ensurePostTab(selectedTab.value).machines = list.map<PostTabMachine>((m) => ({
+        machine_id: m.id,
+        machine_details: [{ module_id: null, failure_id: null, failure_type_id: null, dt: null }],
+        transport_1: null,
+        transport_2: null,
+        transport_3: null,
+        dt: null,
+        signature_client_name: null,
+    }));
 };
 
 /*watch(() => tabs.value.map(t => t.selectedMachine), (arr) => {
@@ -1856,12 +1839,10 @@ const postForm = reactive<{
   tabs: [{ machines: [] as PostTabMachine[] }],
 });
 
-const machinesListing = computed(() => {
-    const tab = tabs.value?.[selectedTab.value];
-    const sel = tab?.selectedMachine;
-    const list = sel?.production_line?.machines;
-    return Array.isArray(list) && list.length ? list : (sel ? [sel] : []);
-});
+const machineGroup = (sm: SelectedMachine | null) =>
+    sm?.production_line?.machines?.length ? sm.production_line!.machines : (sm ? [sm] : []);
+
+const machinesListing = computed(() => machineGroup(activeTab.value?.selectedMachine ?? null));
 
 function transportValidation(index: number) {
     const m = activePostTab.value?.machines?.[index];
