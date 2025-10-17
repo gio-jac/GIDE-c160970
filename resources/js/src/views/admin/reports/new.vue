@@ -731,13 +731,11 @@
                                             <input
                                                 :id="'formReportDT' + index"
                                                 type="number"
-                                                v-model="
-                                                    postForm.tabs[selectedTab].machines[index].dt
-                                                "
+                                                v-model="postForm.tabs[selectedTab].machines[index].dt"
                                                 :name="'formReportDT' + index"
                                                 class="form-input text-white-dark"
                                                 :placeholder="$t('report.form.dtPlaceholder')"
-                                                @input="finalDtValidation($event,index)"
+                                                @input="finalDtValidation(postForm.tabs[selectedTab].machines[index])"
                                             />
                                         </div>
                                     </div>
@@ -1981,9 +1979,9 @@ function dtValidation(detail) {
     detail.dt = Number.isFinite(n) ? Math.max(0, Math.min(999999, Math.trunc(n))) : 0;
 }
 
-function finalDtValidation(event, indexMachine) {
-    postForm.tabs[selectedTab.value].machines[indexMachine].dt = parseInt(postForm.tabs[selectedTab.value].machines[indexMachine].dt);
-    postForm.tabs[selectedTab.value].machines[indexMachine].dt = Math.max(0, Math.min(Number(postForm.tabs[selectedTab.value].machines[indexMachine].dt), 999999));
+function finalDtValidation(machine) {
+    const n = Number(machine.dt);
+    machine.dt = Number.isFinite(n) ? Math.max(0, Math.min(999999, Math.trunc(n))) : 0;
 }
 
 function partsValidation(event) {
