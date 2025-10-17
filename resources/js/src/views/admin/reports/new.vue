@@ -1077,7 +1077,7 @@
                                                 type="number"
                                                 class="form-input w-32"
                                                 placeholder="Quantity"
-                                                v-model="item.quantity"
+                                                v-model.number="item.quantity"
                                                 step="1"
                                                 :max="LIMITS.PART_QTY_MAX"
                                                 min="1"
@@ -1748,7 +1748,7 @@ function travelTimeValidation() {
 
 async function onClientSelect(option: { id: number }) {
     if (form.selectedClient?.id === option.id) return;
-    
+
     tabId = 0;
     tabs.value = [createTab()];
     selectedTab.value = 0;
