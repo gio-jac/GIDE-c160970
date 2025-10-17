@@ -549,7 +549,7 @@
                                     class="form-select text-white-dark flex-1"
                                     required
                                 >
-                                    <option :value="1" selected>{{ $t("catalogs.typeReport.1") }}</option>
+                                    <option :value="1">{{ $t("catalogs.typeReport.1") }}</option>
                                     <option :value="2">{{ $t("catalogs.typeReport.2") }}</option>
                                 </select>
                             </div>
