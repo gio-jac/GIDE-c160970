@@ -142,7 +142,7 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                                     <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                </svg>2
+                                                </svg>
                                             </button>
                                         </div>
                                         <div class="py-2" v-if="!isOnlyDT(machine)">
@@ -848,7 +848,7 @@ function buildPayload(): ReportPayload {
 function submit() {
     const payload = buildPayload();
     console.log(payload);
-    return;
+    
     Swal.fire({
         title: t("report.alert.processing"),
         text: t("report.alert.processingText"),
