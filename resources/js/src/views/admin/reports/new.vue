@@ -138,11 +138,11 @@
                                             </template>
                                         </div>
                                         <div class="w-full flex justify-center">
-                                            <button v-if="canAddDetail(index)" type="button" class="btn btn-secondary gap-2" @click="machineAt(index).machine_details.push({ ...DEFAULT_DETAIL })">
+                                            <button v-if="!isOnlyDT(machine) && (machineAt(index)?.machine_details?.length ?? 0) < LIMITS.MACHINE_DETAILS_MAX" type="button" class="btn btn-secondary gap-2" @click="machineAt(index).machine_details.push({ ...DEFAULT_DETAIL })">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                                     <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                </svg>
+                                                </svg>2
                                             </button>
                                         </div>
                                         <div class="py-2" v-if="!isOnlyDT(machine)">
@@ -633,11 +633,6 @@ const uid = (...parts: Array<string | number>) =>
   parts.filter(p => p != null && String(p).length).join('-');
 
 const machineAt = (i: number) => getPostTab(selectedTab.value).machines[i];
-
-const canAddDetail = (i: number) => {
-  const m = machineAt(i);
-  return !isOnlyDT(m) && ((m?.machine_details?.length ?? 0) < LIMITS.MACHINE_DETAILS_MAX);
-};
 
 const machineCardClass = (m: any) => {
   const onlyDT = isOnlyDT(m);
