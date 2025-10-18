@@ -816,6 +816,7 @@ function buildPayload(): ReportPayload {
         service_timezone: report.service_timezone,
     };
 
+    const nz = (s: string | null | undefined) => (s && s.trim().length ? s : null);
     const tabsPayload: TabPayload[] = tabs.value.map((t, i) => ({
         selected_machine_id: t.selectedMachine?.id ?? null,
         pieces: t.pieces ?? 0,
@@ -826,10 +827,10 @@ function buildPayload(): ReportPayload {
         reported_error: t.reported_error ?? "",
         code_id: t.code_id ?? null,
         actions_taken: t.actions_taken ?? "",
-        reported: t.reported ?? null,
-        departure: t.departure ?? null,
-        arrival: t.arrival ?? null,
-        finished: t.finished ?? null,
+        reported: nz(t.reported),
+        departure: nz(t.departure),
+        arrival: nz(t.arrival),
+        finished: nz(t.finished),
         status_id: t.status_id ?? null,
         is_tested: !!t.is_tested,
         service_parts: (t.service_parts ?? [])
