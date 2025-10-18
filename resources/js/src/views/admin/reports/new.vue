@@ -35,7 +35,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="t('report.form.default')"
-                                :custom-label="(u) => `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`"
+                                :custom-label="userLabel"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                             <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato:<br>"EMP - Nombre PrimerApellido"</tippy>
@@ -64,7 +64,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="false"
                                 :placeholder="t('report.form.default')"
-                                :custom-label="(s) => t(`catalogs.shift.${s.id ?? ''}`, s.name ?? '-')"
+                                :custom-label="shiftLabel"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                             <tippy target="shift" trigger="focus">Usado para la selección del turno de la realización del reporte</tippy>
@@ -91,7 +91,7 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="t('report.form.default')"
-                                :custom-label="(c) => c.name ?? '-'"
+                                :custom-label="clientLabel"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -106,7 +106,7 @@
                                 >Sucursal <span class="text-red-500">*</span></label
                             >
                             <multiselect
-                                @select="form.selectedContact = null"
+                                @select="onBranchSelect"
                                 id="formCatalogBranches"
                                 :options="branchesCatalog"
                                 v-model="form.selectedBranch"
@@ -114,8 +114,8 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="t('report.form.default')"
-                                :custom-label="(b) => `${b.address ?? '-'}${(b.city?.name && b.city.name.trim()) ? ' · ' + b.city.name : ''}`"
-                                :disabled="!branchesCatalog.length"
+                                :custom-label="branchLabel"
+                                :disabled="!branchesCatalog.length || loadingClient"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -131,14 +131,14 @@
                             >
                             <multiselect
                                 id="formCatalogContact"
-                                :options="form.selectedBranch?.branch_managers ?? []"
+                                :options="branchManagers"
                                 v-model="form.selectedContact"
                                 track-by="id"
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="t('report.form.default')"
-                                :custom-label="(c) => c.name ?? '-'"
-                                :disabled="!form.selectedBranch"
+                                :custom-label="contactLabel"
+                                :disabled="!form.selectedBranch || loadingClient"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -170,8 +170,8 @@
                                 <button
                                     v-if="tabs.length < LIMITS.TABS_MAX"
                                     type="button"
-                                    :disabled="!tabs.every(t => !!t.selectedMachine)"
-                                    @click="tabs.length < LIMITS.TABS_MAX && tabs.push(createTab())"
+                                    :disabled="!canAddTab"
+                                    @click="addTab"
                                     class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
                                 >
                                     <!-- plus icon -->
@@ -203,8 +203,8 @@
                                 class="custom-multiselect flex-1"
                                 :searchable="true"
                                 :placeholder="t('report.form.default')"
-                                :custom-label="(m) => `${m.serial ?? '-'}${(m.machine_model?.model && m.machine_model.model.trim()) ? ' · ' + m.machine_model.model : ''}`"
-                                :disabled="!machinesCatalog.length"
+                                :custom-label="machineLabel"
+                                :disabled="!machinesCatalog.length || loadingClient"
                                 v-bind="multiselectLabels"
                             ></multiselect>
                         </div>
@@ -218,9 +218,9 @@
                                 v-for="(machine, index) in machinesListing"
                                 :key="String(machine.id ?? machine.serial)"
                                 :class="{
-                                    'bg-[#ececf9]': !toBool(machine?.only_dt),
-                                    'bg-gray-100': toBool(machine?.only_dt),
-                                    'ring-2 ring-amber-500 ring-offset-1': machinesListing.length > 1 && machine.serial === activeTab.selectedMachine?.serial
+                                    'bg-[#ececf9]': !isOnlyDT(machine),
+                                    'bg-gray-100': isOnlyDT(machine),
+                                    'ring-2 ring-amber-500 ring-offset-1': machinesListing.length > 1 && machine.serial === selectedMachine?.serial
                                 }"
                                 class="rounded-md p-4 mb-4"
                             >
@@ -233,27 +233,24 @@
                                             ?? '-'
                                     }}
                                 </div>
-                                <div class="w-full" v-if="activePostTab.machines[index]">
+                                <div class="w-full" v-if="machineAt(index)">
                                     <div class="flex justify-evenly flex-wrap">
                                         <div
-                                            v-for="(
-                                                detail, indexDetail
-                                            ) in activePostTab.machines[index]
-                                                .machine_details"
+                                            v-for="(detail, indexDetail) in machineAt(index).machine_details"
                                             :key="indexDetail"
                                             class="flex-[100%] flex justify-evenly flex-wrap"
                                         >
-                                            <template v-if="!toBool(machine?.only_dt)">
+                                            <template v-if="!isOnlyDT(machine)">
                                                 <div
                                                     v-for="cfg in detailSelects"
                                                     :key="cfg.key"
                                                     class="p-2 flex-auto sm:flex-1"
                                                 >
-                                                    <label :for="`${cfg.idPrefix}${cfg.includeTab ? selectedTab : ''}${index}${indexDetail}`">
+                                                    <label :for="uid(cfg.idPrefix, cfg.includeTab ? selectedTab : '', index, indexDetail)">
                                                         {{ $t(cfg.labelKey) }}
                                                     </label>
                                                     <select
-                                                        :id="`${cfg.idPrefix}${cfg.includeTab ? selectedTab : ''}${index}${indexDetail}`"
+                                                        :id="uid(cfg.idPrefix, cfg.includeTab ? selectedTab : '', index, indexDetail)"
                                                         class="form-select text-white-dark"
                                                         v-model="detail[cfg.key]"
                                                         required
@@ -273,24 +270,14 @@
                                             </template>
                                             <div
                                                 class="p-2 flex-auto sm:flex-1"
-                                                v-if="!toBool(machine?.only_dt)"
+                                                v-if="!isOnlyDT(machine)"
                                             >
-                                                <label :for="
-                                                        'formErrorDT' +
-                                                        index +
-                                                        indexDetail
-                                                    "
-                                                    >DT (Min.)</label
-                                                >
+                                                <label :for="uid('formErrorDT', selectedTab, index, indexDetail)">DT (Min.)</label>
                                                 <input
-                                                    :id="
-                                                        'formErrorDT' +
-                                                        index +
-                                                        indexDetail
-                                                    "
+                                                    :id="uid('formErrorDT', selectedTab, index, indexDetail)"
                                                     type="number"
                                                     v-model.number="detail.dt"
-                                                    @input="clampField(detail as any, 'dt', { min: 0, max: LIMITS.DT_MAX })"
+                                                    @input="clampNumber(detail as any, 'dt', DT_SPEC)"
                                                     min="0"
                                                     :max="LIMITS.DT_MAX"
                                                     step="1"
@@ -300,12 +287,12 @@
                                             </div>
                                             <div
                                                 class="flex"
-                                                v-if="!toBool(machine?.only_dt)"
+                                                v-if="!isOnlyDT(machine)"
                                             >
                                                 <button
                                                     type="button"
-                                                    @click="activePostTab.machines[index].machine_details.splice(indexDetail, 1)"
-                                                    v-if="activePostTab.machines[index]?.machine_details?.length > 1"
+                                                    @click="removeDetail(index, indexDetail)"
+                                                    v-if="machineAt(index)?.machine_details?.length > 1"
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -337,10 +324,10 @@
                                         </div>
                                         <div class="w-full flex justify-center">
                                             <button
-                                                v-if="!toBool(machine?.only_dt) && activePostTab.machines[index]?.machine_details?.length < 5"
+                                                v-if="canAddDetail(index)"
                                                 type="button"
                                                 class="btn btn-secondary gap-2"
-                                                @click="activePostTab.machines[index].machine_details.push({ module_id: null, failure_id: null, failure_type_id: null, dt: null })"
+                                                @click="addDetail(index)"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -371,20 +358,20 @@
                                         </div>
                                         <div
                                             class="py-2"
-                                            v-if="!toBool(machine?.only_dt)"
+                                            v-if="!isOnlyDT(machine)"
                                         >
-                                            <template v-if="toBool(machine?.machine_model?.model_segment?.is_multi_transport)">
+                                            <template v-if="isMultiTransport(machine)">
                                                 <div class="w-full flex justify-evenly flex-wrap">
                                                     <div
                                                         v-for="cfg in transportConfig"
                                                         :key="cfg.key"
                                                         class="p-2 flex-auto sm:flex-1"
                                                     >
-                                                        <label :for="`formTransport${cfg.idx}${index}`">{{ $t(cfg.labelKey) }}</label>
+                                                        <label :for="uid('formTransport', selectedTab, cfg.idx, index)">{{ $t(cfg.labelKey) }}</label>
                                                         <input
-                                                            :id="`formTransport${cfg.idx}${index}`"
-                                                            v-model.number="activePostTab.machines[index][cfg.key]"
-                                                            @input="clampField(activePostTab.machines[index] as any, 'transport_1', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX }); clampField(activePostTab.machines[index] as any, 'transport_2', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX }); clampField(activePostTab.machines[index] as any, 'transport_3', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX })"
+                                                            :id="uid('formTransport', selectedTab, cfg.idx, index)"
+                                                            v-model.number="machineAt(index)[cfg.key]"
+                                                            @input="clampTransports(machineAt(index))"
                                                             type="number"
                                                             class="form-input"
                                                             :min="LIMITS.TRANSPORT_MIN"
@@ -395,17 +382,12 @@
                                                     </div>
                                                 </div>
                                             </template>
-                                            <template v-else-if="activePostTab.machines[index]">
-                                                <label :for="`formShiftTotal11-${index}`"
-                                                    >{{ $t("report.form.transport") }}</label
-                                                >
+                                            <template v-else-if="machineAt(index)">
+                                                <label :for="uid('formShiftTotal11', selectedTab, index)">{{ $t("report.form.transport") }}</label>
                                                 <input
-                                                    :id="`formShiftTotal11-${index}`"
-                                                    v-model="
-                                                        activePostTab.machines[index]
-                                                            .transport_1
-                                                    "
-                                                    @input="clampField(activePostTab.machines[index] as any, 'transport_1', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX }); clampField(activePostTab.machines[index] as any, 'transport_2', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX }); clampField(activePostTab.machines[index] as any, 'transport_3', { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX })"
+                                                    :id="uid('formShiftTotal11', selectedTab, index)"
+                                                    v-model="machineAt(index).transport_1"
+                                                    @input="clampTransports(machineAt(index))"
                                                     name="formShiftTotal11"
                                                     class="form-input text-white-dark"
                                                     type="number"
@@ -417,16 +399,14 @@
                                             </template>
                                         </div>
                                         <div class="py-2">
-                                            <label :for="'formReportDT' + index"
-                                                >DT Final (Min.)</label
-                                            >
+                                            <label :for="uid('formReportDT', selectedTab, index)">DT Final (Min.)</label>
                                             <input
-                                                :id="'formReportDT' + index"
+                                                :id="uid('formReportDT', selectedTab, index)"
                                                 type="number"
-                                                v-model.number="activePostTab.machines[index].dt"
+                                                v-model.number="machineAt(index).dt"
                                                 class="form-input text-white-dark"
                                                 :placeholder="t('report.form.dtPlaceholder')"
-                                                @input="clampField(activePostTab.machines[index] as any, 'dt', { min: 0, max: LIMITS.DT_MAX })"
+                                                @input="clampNumber(machineAt(index) as any, 'dt', DT_SPEC)"
                                             />
                                         </div>
                                     </div>
@@ -462,7 +442,7 @@
                                     placeholder="0"
                                     min="0"
                                     :max="LIMITS.PIECES_MAX"
-                                    @input="clampField(activeTab as any, 'pieces', { min: 0, max: LIMITS.PIECES_MAX })"
+                                    @input="clampNumber(activeTab as any, 'pieces', PIECES_SPEC)"
                                 />
                                 <tippy target="pieces" trigger="focus">Utilizado como contador de billetes<br> Máximo: 999 999 999 999</tippy>
                             </div>
@@ -502,7 +482,7 @@
                                     placeholder="0.00"
                                     :min="LIMITS.TIME_ON_MIN"
                                     :max="LIMITS.TIME_ON_MAX"
-                                    @input="clampField(activeTab as any, 'time_on', { decimals: 2, min: LIMITS.TIME_ON_MIN, max: LIMITS.TIME_ON_MAX })"
+                                    @input="clampNumber(activeTab as any, 'time_on', TIME_ON_SPEC)"
                                 />
                                 <tippy target="ontime" trigger="focus">Utilizado para registrar el tiempo de funcionamiento de la máquina<br> Máximo: 9 999 999.99</tippy>
                             </div>
@@ -523,7 +503,7 @@
                                     :step="LIMITS.TRAVEL_TIME_STEP"
                                     :min="LIMITS.TRAVEL_TIME_MIN"
                                     :max="LIMITS.TRAVEL_TIME_MAX"
-                                    @input="clampField(activeTab as any, 'travel_time', { min: LIMITS.TRAVEL_TIME_MIN, max: LIMITS.TRAVEL_TIME_MAX })"
+                                    @input="clampNumber(activeTab as any, 'travel_time', TRAVEL_TIME_SPEC)"
                                 />
                                 <tippy target="traveltime" trigger="focus">Utilizado para registrar el tiempo de traslado<br> Máximo: 10 080 minutos</tippy>
                             </div>
@@ -586,7 +566,7 @@
                                 <span
                                     v-if="activeTab.code_id === code.id"
                                     class="text-xs"
-                                    >{{ $t("catalogs.codes."+code.id, code.description) }}</span
+                                    >{{ codeLabel(code) }}</span
                                 >
                             </div>
                         </label>
@@ -615,7 +595,7 @@
                     <div class="flex flex-wrap justify-evenly">
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="!activeTab.selectedMachine?.production_line?.id"
+                            v-if="!hasProductionLine(selectedMachine)"
                         >
                             <label for="formReportReportedTime">
                                 {{ $t("report.form.reported") }}
@@ -630,7 +610,7 @@
                         </div>
                         <div
                             class="px-2 max-w-[180px]"
-                            v-if="!activeTab.selectedMachine?.production_line?.id"
+                            v-if="!hasProductionLine(selectedMachine)"
                         >
                             <label for="formReportTimeDeparture">
                                 {{ $t("report.form.departure") }}
@@ -678,7 +658,7 @@
                                     :value="status.id"
                                     v-model.number="activeTab.status_id"
                                 />
-                                <span>{{ $t("catalogs.status."+status.id,status.status) }}</span>
+                                <span>{{ statusLabel(status) }}</span>
                             </label>
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly">
@@ -705,7 +685,7 @@
                                 >
 
                                 <multiselect
-                                    @search-change="(q) => { catalogParts = []; if (q?.length) runPartsAutocomplete(q) }"
+                                    @search-change="onPartsSearch"
                                     id="formReportParts"
                                     :options="catalogParts"
                                     v-model="partSearch"
@@ -713,7 +693,7 @@
                                     class="custom-multiselect flex-1"
                                     :searchable="true"
                                     :placeholder="$t('report.form.partsPlaceholder')"
-                                    :custom-label="(p) => `${p.num_part ?? '-'} - ${p.descripcion ?? '-'}`"
+                                    :custom-label="partLabel"
                                     :preserveSearch="true"
                                     v-bind="multiselectLabels"
                                 ></multiselect>
@@ -798,13 +778,13 @@
                                                 :step="LIMITS.PART_QTY_STEP"
                                                 :max="LIMITS.PART_QTY_MAX"
                                                 :min="LIMITS.PART_QTY_MIN"
-                                                @input="clampField(item as any, 'quantity', { min: LIMITS.PART_QTY_MIN, max: LIMITS.PART_QTY_MAX })"
+                                                @input="clampNumber(item as any, 'quantity', PART_QTY_SPEC)"
                                             />
                                         </td>
                                         <td>
                                             <button
                                                 type="button"
-                                                @click="activeTab.service_parts.splice(i, 1)"
+                                                @click="removePart(i)"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -862,20 +842,17 @@
                             :key="String(machine.id ?? machine.serial)"
                         >
                             <div
-                                v-if="!toBool(machine?.only_dt) && activePostTab.machines[index]"
+                                v-if="!isOnlyDT(machine) && machineAt(index)"
                                 class="text-center min-w-[270px]"
                             >
-                                <label
-                                    :for="`formSignatureName-${machine.serial}`"
-                                    class="mb-0"
-                                >
+                                <label :for="uid('formSignatureName', selectedTab, machine.serial)" class="mb-0">
                                     {{ machine.serial }}
                                 </label>
                                 <input
-                                    :id="`formSignatureName-${machine.serial}`"
+                                    :id="uid('formSignatureName', selectedTab, machine.serial)"
                                     type="text"
-                                    :name="`formSignatureName-${machine.serial}`"
-                                    v-model="activePostTab.machines[index].signature_client_name"
+                                    :name="uid('formSignatureName', selectedTab, machine.serial)"
+                                    v-model="machineAt(index).signature_client_name"
                                     class="form-input flex-1"
                                     :placeholder="$t('report.form.signatureNamePlaceholder')"
                                 />
@@ -948,6 +925,14 @@ const LIMITS = {
     TRAVEL_TIME_MIN: 0,
     TRAVEL_TIME_STEP: 1,
 } as const;
+const PIECES_SPEC      = {               min: 0,                    max: LIMITS.PIECES_MAX };
+const TIME_ON_SPEC     = { decimals: 2, min: LIMITS.TIME_ON_MIN,   max: LIMITS.TIME_ON_MAX };
+const TRAVEL_TIME_SPEC = {              min: LIMITS.TRAVEL_TIME_MIN, max: LIMITS.TRAVEL_TIME_MAX };
+const DT_SPEC          = {              min: 0,                     max: LIMITS.DT_MAX };
+const TRANSPORT_SPEC   = { decimals: 1, min: LIMITS.TRANSPORT_MIN, max: LIMITS.TRANSPORT_MAX };
+const PART_QTY_SPEC = { min: LIMITS.PART_QTY_MIN, max: LIMITS.PART_QTY_MAX };
+const TRANSPORT_FIELDS = ['transport_1', 'transport_2', 'transport_3'] as const;
+type TransportField = typeof TRANSPORT_FIELDS[number];
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 const toBool = (v: unknown): boolean => v === 1 || v === true || v === '1';
 
@@ -959,8 +944,8 @@ const transportConfig = [
 
 const detailSelects = [
   { key: 'module_id' as const,       labelKey: 'report.form.error'    as const, optionsKey: 'module'  as const, idPrefix: 'formModule',  includeTab: true  },
-  { key: 'failure_id' as const,      labelKey: 'report.form.cause'    as const, optionsKey: 'failure' as const, idPrefix: 'formFailures',includeTab: false },
-  { key: 'failure_type_id' as const, labelKey: 'report.form.solution' as const, optionsKey: 'type'    as const, idPrefix: 'formTypes',   includeTab: false },
+  { key: 'failure_id' as const,      labelKey: 'report.form.cause'    as const, optionsKey: 'failure' as const, idPrefix: 'formFailures',includeTab: true },
+  { key: 'failure_type_id' as const, labelKey: 'report.form.solution' as const, optionsKey: 'type'    as const, idPrefix: 'formTypes',   includeTab: true },
 ] as const;
 
 interface MachineDetail {
@@ -969,6 +954,7 @@ interface MachineDetail {
   failure_type_id: number | null;
   dt: number | null;
 }
+const DEFAULT_DETAIL: MachineDetail = { module_id: null, failure_id: null, failure_type_id: null, dt: null };
 
 interface PostTabMachine {
   machine_id: number;
@@ -1060,11 +1046,12 @@ const getPostTab = (i: number): PostTab => {
     
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 const activePostTab = computed(() => getPostTab(selectedTab.value));
+const selectedMachine = computed(() => activeTab.value?.selectedMachine ?? null);
 
 const detailOptions = computed(() => ({
-    module: [...props.catalogModule].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b))),
-    failure: [...props.catalogFailures].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b))),
-    type:   [...props.catalogTypes].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b))),
+    module: [...props.catalogModule].sort(byLocalizedName),
+    failure: [...props.catalogFailures].sort(byLocalizedName),
+    type:   [...props.catalogTypes].sort(byLocalizedName),
 }));
 
 type LocalizedItem = { id: number; name?: string; es?: string; pt?: string };
@@ -1081,16 +1068,18 @@ const props = defineProps<{
     catalogClients: Array<{ id: number; name: string }>;
 }>();
 
+const pickerPosition = computed(() => store.rtlClass === 'rtl' ? 'auto right' : 'auto left');
+
 const dateTime = computed(() => ({
   enableTime: true,
   dateFormat: "Y-m-d H:i",
-  position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
+  position: pickerPosition.value,
 }));
 
 const dateOnly = computed(() => ({
   enableTime: false,
   dateFormat: 'Y-m-d',
-  position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
+  position: pickerPosition.value,
 }));
 
 interface HeaderSelection {
@@ -1141,6 +1130,16 @@ const createTab = (): Tab => ({
 });
 
 const tabs = ref([createTab()]);
+const canAddTab = computed(() => tabs.value.every(t => !!t.selectedMachine));
+const loadingClient = ref(false);
+const lastClientId = ref<number | null>(null);
+let clientLoadSeq = 0;
+let partsTimer: ReturnType<typeof setTimeout> | null = null;
+const partsCache = new Map<string, any[]>();
+const PARTS_DEBOUNCE_MS = 250;
+const addTab = () => {
+  if (tabs.value.length < LIMITS.TABS_MAX) tabs.value.push(createTab());
+};
 const selectedTab = ref(0);
 
 const branchesCatalog = ref<Branch[]>([]);
@@ -1152,6 +1151,67 @@ function getTranslation(item: LocalizedItem): string {
     if (locale === 'pt' && item.pt) return item.pt;
     return item.name ?? '';
 }
+
+const byLocalizedName = (a: LocalizedItem, b: LocalizedItem) =>
+  getTranslation(a).localeCompare(getTranslation(b));
+
+const branchLabel = (b: Branch) =>
+    `${b.address ?? '-'}${(b.city?.name && b.city.name.trim()) ? ' · ' + b.city.name : ''}`;
+
+const machineLabel = (m: SelectedMachine) =>
+    `${m.serial ?? '-'}${(m.machine_model?.model && m.machine_model.model.trim()) ? ' · ' + m.machine_model.model : ''}`;
+
+const isMultiTransport = (m: any) =>
+  toBool(m?.machine_model?.model_segment?.is_multi_transport);
+
+const lineMachines = (sm: SelectedMachine | null) => {
+  if (!sm) return [];
+  const pl = sm.production_line;
+  return (pl && pl.id != null && pl.machines?.length) ? pl.machines : [sm];
+};
+
+const isOnlyDT = (m: any) => toBool(m?.only_dt);
+
+const hasProductionLine = (sm: SelectedMachine | null | undefined) =>
+  sm?.production_line?.id != null;
+
+const userLabel = (u: { emp?: string; nombre?: string; apellido_paterno?: string }) =>
+    `${u.emp ?? '-'} - ${([u.nombre, u.apellido_paterno].filter(Boolean).join(' ') || '-')}`;
+
+const codeLabel = (c: { id: number; description?: string }) =>
+    t(`catalogs.codes.${c.id}`, c.description);
+
+const statusLabel = (s: { id: number; status?: string }) =>
+    t(`catalogs.status.${s.id}`, s.status);
+
+const shiftLabel = (s: { id?: number; name?: string }) =>
+    t(`catalogs.shift.${s.id ?? ''}`, s.name ?? '-');
+
+const partLabel = (p: { num_part?: string; descripcion?: string }) =>
+  `${p?.num_part ?? '-'} - ${p?.descripcion ?? '-'}`;
+
+const contactLabel = (c: { name?: string }) => c?.name ?? '-';
+const clientLabel = (c: { name?: string }) => c?.name ?? '-';
+
+const uid = (...parts: Array<string | number>) =>
+  parts.filter(p => p !== undefined && p !== null && `${p}`.length).join('-');
+
+const machineAt = (i: number) => activePostTab.value.machines[i];
+
+const canAddDetail = (i: number) =>
+  !isOnlyDT(machineAt(i)) &&
+  ((machineAt(i)?.machine_details?.length ?? 0) < LIMITS.MACHINE_DETAILS_MAX);
+
+const fetchClientBranches = async (clientId: number) => {
+  const { data } = await axios.get(`/clients/${clientId}/branches`);
+  return data;
+};
+const fetchClientMachines = async (clientId: number) => {
+  const { data } = await axios.get(`/clients/${clientId}/machines`);
+  return data;
+};
+
+const branchManagers = computed(() => form.selectedBranch?.branch_managers ?? []);
 
 const addNewPart = () => {
     if (!partSearch.value) return;
@@ -1170,16 +1230,20 @@ const report = reactive<{
   tabs: PostTab[];
 }>({
   service_date: (() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}` })(),
-  service_timezone: (new Date().toString().match(/([A-Z]+[\+-]\d{4})/)?.[1] ?? 'UTC+0000'),
+  service_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   tabs: [],
 });
 
-const machinesListing = computed(() => {
-    const sm = activeTab.value?.selectedMachine ?? null;
-    return (sm && sm.production_line && sm.production_line.id != null && sm.production_line.machines?.length ? sm.production_line.machines : (sm ? [sm] : []));
-});
+const machinesListing = computed(() =>
+  lineMachines(selectedMachine.value)
+);
 
-const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decimals = 0, min, max }: { decimals?: number; min: number; max: number }) => {
+type ClampSpec = { decimals?: number; min: number; max: number };
+const clampNumber = <T extends Record<string, any>>(obj: T, key: keyof T, spec: ClampSpec) => {
+  clampField(obj as any, key, spec);
+};
+
+const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decimals = 0, min, max }: ClampSpec) => {
     const raw = Number(obj[key]) || 0;
     const normalized = decimals === 0
         ? Math.trunc(raw)
@@ -1187,31 +1251,64 @@ const clampField = <T extends Record<string, any>>(obj: T, key: keyof T, { decim
     obj[key] = clamp(normalized, min, max) as any;
 };
 
-async function onClientSelect(option: { id: number }) {
-    if (form.selectedClient?.id === option.id) return;
+const clampTransports = (m: PostTabMachine) => {
+  TRANSPORT_FIELDS.forEach((f) => clampField(m as any, f, TRANSPORT_SPEC));
+};
 
+const removeDetail = (i: number, j: number) => {
+  machineAt(i).machine_details.splice(j, 1);
+};
+
+const addDetail = (i: number) => {
+  machineAt(i).machine_details.push({ ...DEFAULT_DETAIL });
+};
+
+const removePart = (i: number) => {
+  activeTab.value.service_parts.splice(i, 1);
+};
+
+const clearClientDependentState = () => {
     tabId = 0;
     tabs.value = [createTab()];
     selectedTab.value = 0;
     report.tabs = [];
-
     form.selectedBranch = null;
     form.selectedContact = null;
+    activeTab.value.selectedMachine = null;
     branchesCatalog.value = [];
     machinesCatalog.value = [];
-    try {
-        const [ branchesRes, machinesRes ] = await Promise.all([
-            axios.get(`/clients/${option.id}/branches`),
-            axios.get(`/clients/${option.id}/machines`),
-        ]);
+    partSearch.value = null;
+    catalogParts.value = [];
+    partsCache.clear();
+};
 
-        branchesCatalog.value = branchesRes.data;
-        machinesCatalog.value = machinesRes.data;
+async function onClientSelect(option: { id: number }) {
+    if (option.id === lastClientId.value) return;
+    const seq = ++clientLoadSeq;
+
+    clearClientDependentState();
+    loadingClient.value = true;
+    try {
+        const [ branches, machines ] = await Promise.all([
+            fetchClientBranches(option.id),
+            fetchClientMachines(option.id),
+        ]);
+        if (seq !== clientLoadSeq) return;
+
+        branchesCatalog.value = branches ?? [];
+        machinesCatalog.value = machines ?? [];
+        lastClientId.value = option.id;
     } catch (e) {
-        branchesCatalog.value = []
-        machinesCatalog.value = []
+        console.error('Failed loading client data', e);
+        lastClientId.value = null;
+    }finally {
+        if (seq === clientLoadSeq) loadingClient.value = false;
     }
 }
+
+const onBranchSelect = () => {
+  form.selectedContact = null;
+};
 
 async function onMachineSelect(option: { serial: string }) {
     if (activeTab.value?.selectedMachine?.serial === option.serial) return;
@@ -1221,7 +1318,7 @@ async function onMachineSelect(option: { serial: string }) {
         getPostTab(selectedTab.value).machines = (data.production_line && data.production_line.id != null &&
             data.production_line.machines?.length ? data.production_line.machines : [data]).map(m => ({
                 machine_id: m.id,
-                machine_details: [{ module_id: null, failure_id: null, failure_type_id: null, dt: null }],
+                machine_details: [{ ...DEFAULT_DETAIL }],
                 transport_1: null,
                 transport_2: null,
                 transport_3: null,
@@ -1235,22 +1332,31 @@ async function onMachineSelect(option: { serial: string }) {
     }
 }
 
-let partsAutocompleteTimer: number | undefined;
-const runPartsAutocomplete = (q: string) => {
-    if (partsAutocompleteTimer) clearTimeout(partsAutocompleteTimer);
-    partsAutocompleteTimer = window.setTimeout(async () => {
-        loaders.parts.searching = true;
-        loaders.parts.waiting = false;
-        try {
-            const { data } = await axios.post('/parts/autocomplete', { query: q });
-            catalogParts.value = data ?? [];
-        }catch(e) {
-            console.error("Error:", e);
-        }finally {
-            loaders.parts.searching = false;
-            loaders.parts.waiting = true;
-        }
-    }, 750);
+const onPartsSearch = (q: string) => {
+    catalogParts.value = [];
+    const s = (q ?? '').trim();
+    if (partsTimer) clearTimeout(partsTimer);
+    if (!s.length) return;
+    partsTimer = setTimeout(() => runPartsAutocomplete(s), PARTS_DEBOUNCE_MS);
+};
+const runPartsAutocomplete = async (q: string) => {
+    if (partsCache.has(q)) {
+        catalogParts.value = partsCache.get(q)!;
+        return;
+    }
+    loaders.parts.searching = true;
+    loaders.parts.waiting = false;
+    try {
+        const { data } = await axios.post('/parts/autocomplete', { query: q });
+        const list = data ?? [];
+        partsCache.set(q, list);
+        catalogParts.value = list;
+    }catch(e) {
+        console.error("Error:", e);
+    }finally {
+        loaders.parts.searching = false;
+        loaders.parts.waiting = true;
+    }
 };
 
 type ServicePartPayload = { id: number; quantity: number };
@@ -1338,8 +1444,7 @@ function submit() {
     router.post('/reports', payload, {
         onSuccess: () => Swal.close(),
         onError: (error) => {
-            let errorMessages = "";
-            for (const key in error) errorMessages += `<p>${error[key]}</p>`;
+            const errorMessages = Object.values(error).map((e) => `<p>${e}</p>`).join('');
             Swal.close();
             Swal.fire({ icon: "error", title: "Oops...", html: errorMessages, customClass: "sweet-alerts" });
         },
