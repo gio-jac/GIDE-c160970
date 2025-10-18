@@ -6,13 +6,9 @@
                 <div class="flex px-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label
-                                for="formServiceDate"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >{{ $t("report.form.serviceDate") }}
-                                <span class="text-red-500">*</span></label
-                            >
-
+                            <label for="formServiceDate" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("report.form.serviceDate") }}
+                                <span class="text-red-500">*</span>
+                            </label>
                             <flat-pickr id="formServiceDate" v-model="report.service_date" class="form-input flex-1" :config="dateOnly"></flat-pickr>
                         </div>
                     </div>
@@ -20,25 +16,11 @@
                 <div class="flex px-4 mt-4" v-if="usePage().props.auth?.type === 1">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label
-                                for="formUser"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >{{ $t("report.form.user") }} <span class="text-red-500">*</span></label
-                            >
-
-                            <multiselect
-                                v-tippy:user
-                                id="formUser"
-                                :options="catalogUsers"
-                                v-model="form.selectedUser"
-                                track-by="id"
-                                class="custom-multiselect flex-1"
-                                searchable
-                                :placeholder="DEFAULT_PLACEHOLDER"
-                                :custom-label="userLabel"
-                                v-bind="multiselectLabels"
-                            ></multiselect>
-                            <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato:<br>"EMP - Nombre PrimerApellido"</tippy>
+                            <label for="formUser" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("report.form.user") }}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <multiselect v-tippy:user id="formUser" :options="catalogUsers" v-model="form.selectedUser" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="userLabel" v-bind="multiselectLabels"></multiselect>
+                            <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato: <br>"EMP - Nombre PrimerApellido" </tippy>
                         </div>
                         <p v-if="errors.user_id" class="text-danger mt-1 text-center">
                             {{ errors.user_id }}
@@ -48,25 +30,10 @@
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label
-                                for="formShift"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >{{ $t("report.form.shift") }}
-                                <span class="text-red-500">*</span></label
-                            >
-
-                            <multiselect
-                                v-tippy:shift
-                                id="formShift"
-                                :options="props.catalogShifts"
-                                v-model="form.selectedShift"
-                                track-by="id"
-                                class="custom-multiselect flex-1"
-                                :searchable="false"
-                                :placeholder="DEFAULT_PLACEHOLDER"
-                                :custom-label="shiftCustomLabel"
-                                v-bind="multiselectLabels"
-                            ></multiselect>
+                            <label for="formShift" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("report.form.shift") }}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <multiselect v-tippy:shift id="formShift" :options="props.catalogShifts" v-model="form.selectedShift" track-by="id" class="custom-multiselect flex-1" :searchable="false" :placeholder="DEFAULT_PLACEHOLDER" :custom-label="shiftCustomLabel" v-bind="multiselectLabels"></multiselect>
                             <tippy target="shift" trigger="focus">Usado para la selección del turno de la realización del reporte</tippy>
                         </div>
                         <p v-if="errors.shift_id" class="text-danger mt-1 text-center">
@@ -77,331 +44,124 @@
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label
-                                for="formCatalogClient"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >Cliente <span class="text-red-500">*</span></label
-                            >
-                            <multiselect
-                                id="formCatalogClient"
-                                :options="catalogClients"
-                                @select="onClientSelect"
-                                v-model="form.selectedClient"
-                                track-by="id"
-                                class="custom-multiselect flex-1"
-                                searchable
-                                :placeholder="DEFAULT_PLACEHOLDER"
-                                :custom-label="nameOrDash"
-                                v-bind="multiselectLabels"
-                            ></multiselect>
+                            <label for="formCatalogClient" class="w-[140px] text-right mb-0 mr-[10px]">Cliente <span class="text-red-500">*</span>
+                            </label>
+                            <multiselect id="formCatalogClient" :options="catalogClients" @select="onClientSelect" v-model="form.selectedClient" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
                         </div>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label
-                                for="formCatalogBranches"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >Sucursal <span class="text-red-500">*</span></label
-                            >
-                            <multiselect
-                                @select="form.selectedContact = null"
-                                id="formCatalogBranches"
-                                :options="branchesCatalog"
-                                v-model="form.selectedBranch"
-                                track-by="id"
-                                class="custom-multiselect flex-1"
-                                searchable
-                                :placeholder="DEFAULT_PLACEHOLDER"
-                                :custom-label="branchLabel"
-                                :disabled="!branchesCatalog.length || loadingClient"
-                                v-bind="multiselectLabels"
-                            ></multiselect>
+                            <label for="formCatalogBranches" class="w-[140px] text-right mb-0 mr-[10px]">Sucursal <span class="text-red-500">*</span>
+                            </label>
+                            <multiselect @select="form.selectedContact = null" id="formCatalogBranches" :options="branchesCatalog" v-model="form.selectedBranch" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="branchLabel" :disabled="!branchesCatalog.length || loadingClient" v-bind="multiselectLabels"></multiselect>
                         </div>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label
-                                for="formCatalogContact"
-                                class="w-[140px] text-right mb-0 mr-[10px]"
-                                >Contacto <span class="text-red-500">*</span></label
-                            >
-                            <multiselect
-                                id="formCatalogContact"
-                                :options="form.selectedBranch?.branch_managers ?? []"
-                                v-model="form.selectedContact"
-                                track-by="id"
-                                class="custom-multiselect flex-1"
-                                searchable
-                                :placeholder="DEFAULT_PLACEHOLDER"
-                                :custom-label="nameOrDash"
-                                :disabled="!form.selectedBranch || loadingClient"
-                                v-bind="multiselectLabels"
-                            ></multiselect>
+                            <label for="formCatalogContact" class="w-[140px] text-right mb-0 mr-[10px]">Contacto <span class="text-red-500">*</span>
+                            </label>
+                            <multiselect id="formCatalogContact" :options="form.selectedBranch?.branch_managers ?? []" v-model="form.selectedContact" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" :disabled="!form.selectedBranch || loadingClient" v-bind="multiselectLabels"></multiselect>
                         </div>
                     </div>
                 </div>
-                
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
-
                 <div class="mt-6 px-4">
                     <div class="flex items-center">
                         <div id="dataset-tabs" class="flex-1">
-                            <div
-                                class="flex items-end gap-1 overflow-x-auto border-b border-[#e0e6ed] dark:border-[#1b2e4b] pb-0.5"
-                            >
+                            <div class="flex items-end gap-1 overflow-x-auto border-b border-[#e0e6ed] dark:border-[#1b2e4b] pb-0.5">
                                 <!-- Active tab -->
-                                <button
-                                    @click="selectedTab = index"
-                                    v-for="(tab, index) in tabs"
-                                    :key="index"
-                                    type="button"
-                                    class="-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-transparent text-sm text-slate-500 hover:text-slate-700 hover:border-slate-300"
-                                    :class="tabButtonClass(index)"
-                                >
-                                    #{{ index + 1 }}
+                                <button @click="selectedTab = index" v-for="(tab, index) in tabs" :key="index" type="button" class="-mb-px px-3 h-9 inline-flex items-center rounded-t border-b-2 border-transparent text-sm text-slate-500 hover:text-slate-700 hover:border-slate-300" :class="tabButtonClass(index)"> #{{ index + 1 }}
                                 </button>
-
                                 <!-- Botón Agregar (visual, no funcional) -->
                                 <div class="ml-2 -mb-px h-9 flex items-center">
-                                <button
-                                    v-if="tabs.length < LIMITS.TABS_MAX"
-                                    type="button"
-                                    :disabled="!tabs.every(t => !!t.selectedMachine)"
-                                    @click="tabs.push(createTab())"
-                                    class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
-                                >
-                                    <!-- plus icon -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/>
-                                    </svg>
-                                </button>
+                                    <button v-if="tabs.length < LIMITS.TABS_MAX" type="button" :disabled="!tabs.every(t => !!t.selectedMachine)" @click="tabs.push(createTab())" class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400">
+                                        <!-- plus icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
                 <div class="mt-8 px-4">
-                    
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label
-                                for="formCatalogMachines"
-                                class="text-lg font-normal mb-0 mr-[10px]"
-                                >{{ $t("report.form.machines") }} <span class="text-red-500">*</span></label
-                            >
-                            <multiselect
-                                @select="onMachineSelect"
-                                id="formCatalogMachines"
-                                :options="machinesCatalog"
-                                v-model="activeTab.selectedMachine"
-                                track-by="id"
-                                class="custom-multiselect flex-1"
-                                searchable
-                                :placeholder="DEFAULT_PLACEHOLDER"
-                                :custom-label="machineLabel"
-                                :disabled="!machinesCatalog.length || loadingClient"
-                                v-bind="multiselectLabels"
-                            ></multiselect>
+                            <label for="formCatalogMachines" class="text-lg font-normal mb-0 mr-[10px]">{{ $t("report.form.machines") }}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <multiselect @select="onMachineSelect" id="formCatalogMachines" :options="machinesCatalog" v-model="activeTab.selectedMachine" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="machineLabel" :disabled="!machinesCatalog.length || loadingClient" v-bind="multiselectLabels"></multiselect>
                         </div>
                     </div>
-                        
                     <template v-if="activeTab.selectedMachine">
-                        <div
-                            class="flex flex-wrap justify-evenly mt-4"
-                        >
-                            <div
-                                v-for="(machine, index) in machinesListing"
-                                :key="machine.id ?? machine.serial"
-                                :class="machineCardClass(machine)"
-                                class="rounded-md p-4 mb-4"
-                            >
-                                <div class="text-center font-semibold">
-                                    Serial: {{ machine.serial }} -
-                                    {{ machine.machine_model?.model ?? '-' }} -
-                                    {{
-                                        machine.line_num
+                        <div class="flex flex-wrap justify-evenly mt-4">
+                            <div v-for="(machine, index) in machinesListing" :key="machine.id ?? machine.serial" :class="machineCardClass(machine)" class="rounded-md p-4 mb-4">
+                                <div class="text-center font-semibold"> Serial: {{ machine.serial }} - {{ machine.machine_model?.model ?? '-' }} - {{ machine.line_num
                                             ?? machine.machine_model?.model_segment?.segment
                                             ?? '-'
                                     }}
                                 </div>
                                 <div class="w-full" v-if="machineAt(index)">
                                     <div class="flex justify-evenly flex-wrap">
-                                        <div
-                                            v-for="(detail, indexDetail) in machineAt(index).machine_details"
-                                            :key="indexDetail"
-                                            class="flex-[100%] flex justify-evenly flex-wrap"
-                                        >
+                                        <div v-for="(detail, indexDetail) in machineAt(index).machine_details" :key="indexDetail" class="flex-[100%] flex justify-evenly flex-wrap">
                                             <template v-if="!isOnlyDT(machine)">
-                                                <div
-                                                    v-for="cfg in detailSelects"
-                                                    :key="cfg.key"
-                                                    class="p-2 flex-auto sm:flex-1"
-                                                >
+                                                <div v-for="cfg in detailSelects" :key="cfg.key" class="p-2 flex-auto sm:flex-1">
                                                     <label :for="uid(cfg.idPrefix, selectedTab, index, indexDetail)">
                                                         {{ $t(cfg.labelKey) }}
                                                     </label>
-                                                    <select
-                                                        :id="uid(cfg.idPrefix, selectedTab, index, indexDetail)"
-                                                        class="form-select text-white-dark"
-                                                        v-model="detail[cfg.key]"
-                                                        required
-                                                    >
+                                                    <select :id="uid(cfg.idPrefix, selectedTab, index, indexDetail)" class="form-select text-white-dark" v-model="detail[cfg.key]" required>
                                                         <option :value="null">
                                                             {{ DEFAULT_PLACEHOLDER }}
                                                         </option>
-                                                        <option
-                                                            v-for="opt in detailOptions[cfg.optionsKey]"
-                                                            :key="opt.id"
-                                                            :value="opt.id"
-                                                        >
+                                                        <option v-for="opt in detailOptions[cfg.optionsKey]" :key="opt.id" :value="opt.id">
                                                             {{ getTranslation(opt) }}
                                                         </option>
                                                     </select>
                                                 </div>
-                                                <div
-                                                    class="p-2 flex-auto sm:flex-1"
-                                                >
+                                                <div class="p-2 flex-auto sm:flex-1">
                                                     <label :for="uid('formErrorDT', selectedTab, index, indexDetail)">DT (Min.)</label>
-                                                    <input
-                                                        :id="uid('formErrorDT', selectedTab, index, indexDetail)"
-                                                        type="number"
-                                                        v-model.number="detail.dt"
-                                                        @input="clampField(detail as any, 'dt', DT_SPEC)"
-                                                        min="0"
-                                                        :max="LIMITS.DT_MAX"
-                                                        step="1"
-                                                        class="form-input text-white-dark"
-                                                        :placeholder="DT_PLACEHOLDER"
-                                                    />
+                                                    <input :id="uid('formErrorDT', selectedTab, index, indexDetail)" type="number" v-model.number="detail.dt" @input="clampField(detail as any, 'dt', DT_SPEC)" min="0" :max="LIMITS.DT_MAX" step="1" class="form-input text-white-dark" :placeholder="DT_PLACEHOLDER" />
                                                 </div>
-                                                <div
-                                                    class="flex"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        @click="machineAt(index).machine_details.splice(indexDetail, 1)"
-                                                        v-if="machineAt(index)?.machine_details?.length > 1"
-                                                    >
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="24px"
-                                                            height="24px"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="1.5"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            class="w-5 h-5"
-                                                        >
-                                                            <line
-                                                                x1="18"
-                                                                y1="6"
-                                                                x2="6"
-                                                                y2="18"
-                                                            ></line>
-                                                            <line
-                                                                x1="6"
-                                                                y1="6"
-                                                                x2="18"
-                                                                y2="18"
-                                                            ></line>
+                                                <div class="flex">
+                                                    <button type="button" @click="machineAt(index).machine_details.splice(indexDetail, 1)" v-if="machineAt(index)?.machine_details?.length > 1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                            <line x1="6" y1="6" x2="18" y2="18"></line>
                                                         </svg>
                                                     </button>
                                                 </div>
                                             </template>
                                         </div>
                                         <div class="w-full flex justify-center">
-                                            <button
-                                                v-if="canAddDetail(index)"
-                                                type="button"
-                                                class="btn btn-secondary gap-2"
-                                                @click="machineAt(index).machine_details.push({ ...DEFAULT_DETAIL })"
-                                            >
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="24px"
-                                                    height="24px"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="1.5"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    class="w-5 h-5"
-                                                >
-                                                    <line
-                                                        x1="12"
-                                                        y1="5"
-                                                        x2="12"
-                                                        y2="19"
-                                                    ></line>
-                                                    <line
-                                                        x1="5"
-                                                        y1="12"
-                                                        x2="19"
-                                                        y2="12"
-                                                    ></line>
+                                            <button v-if="canAddDetail(index)" type="button" class="btn btn-secondary gap-2" @click="machineAt(index).machine_details.push({ ...DEFAULT_DETAIL })">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
                                                 </svg>
                                             </button>
                                         </div>
-                                        <div
-                                            class="py-2"
-                                            v-if="!isOnlyDT(machine)"
-                                        >
+                                        <div class="py-2" v-if="!isOnlyDT(machine)">
                                             <template v-if="toBool(machine?.machine_model?.model_segment?.is_multi_transport)">
                                                 <div class="w-full flex justify-evenly flex-wrap">
-                                                    <div
-                                                        v-for="(cfg, tIndex) in transportConfig"
-                                                        :key="cfg.key"
-                                                        class="p-2 flex-auto sm:flex-1"
-                                                    >
+                                                    <div v-for="(cfg, tIndex) in transportConfig" :key="cfg.key" class="p-2 flex-auto sm:flex-1">
                                                         <label :for="uid('formTransport', selectedTab, tIndex + 1, index)">{{ $t(cfg.labelKey) }}</label>
-                                                        <input
-                                                            :id="uid('formTransport', selectedTab, tIndex + 1, index)"
-                                                            v-model.number="machineAt(index)[cfg.key]"
-                                                            @input="clampTransports(machineAt(index))"
-                                                            type="number"
-                                                            class="form-input"
-                                                            :min="LIMITS.TRANSPORT_MIN"
-                                                            :max="LIMITS.TRANSPORT_MAX"
-                                                            :step="LIMITS.TRANSPORT_STEP"
-                                                            placeholder="0.0"
-                                                        />
+                                                        <input :id="uid('formTransport', selectedTab, tIndex + 1, index)" v-model.number="machineAt(index)[cfg.key]" @input="clampTransports(machineAt(index))" type="number" class="form-input" :min="LIMITS.TRANSPORT_MIN" :max="LIMITS.TRANSPORT_MAX" :step="LIMITS.TRANSPORT_STEP" placeholder="0.0" />
                                                     </div>
                                                 </div>
                                             </template>
                                             <template v-else-if="machineAt(index)">
                                                 <label :for="uid('formShiftTotal11', selectedTab, index)">{{ $t("report.form.transport") }}</label>
-                                                <input
-                                                    :id="uid('formShiftTotal11', selectedTab, index)"
-                                                    v-model="machineAt(index).transport_1"
-                                                    @input="clampTransports(machineAt(index))"
-                                                    name="formShiftTotal11"
-                                                    class="form-input text-white-dark"
-                                                    type="number"
-                                                    :min="LIMITS.TRANSPORT_MIN"
-                                                    :max="LIMITS.TRANSPORT_MAX"
-                                                    :step="LIMITS.TRANSPORT_STEP"
-                                                    placeholder="0.0"
-                                                />
+                                                <input :id="uid('formShiftTotal11', selectedTab, index)" v-model="machineAt(index).transport_1" @input="clampTransports(machineAt(index))" name="formShiftTotal11" class="form-input text-white-dark" type="number" :min="LIMITS.TRANSPORT_MIN" :max="LIMITS.TRANSPORT_MAX" :step="LIMITS.TRANSPORT_STEP" placeholder="0.0" />
                                             </template>
                                         </div>
                                         <div class="py-2">
                                             <label :for="uid('formReportDT', selectedTab, index)">DT Final (Min.)</label>
-                                            <input
-                                                :id="uid('formReportDT', selectedTab, index)"
-                                                type="number"
-                                                v-model.number="machineAt(index).dt"
-                                                class="form-input text-white-dark"
-                                                :placeholder="DT_PLACEHOLDER"
-                                                @input="clampField(machineAt(index) as any, 'dt', DT_SPEC)"
-                                            />
+                                            <input :id="uid('formReportDT', selectedTab, index)" type="number" v-model.number="machineAt(index).dt" class="form-input text-white-dark" :placeholder="DT_PLACEHOLDER" @input="clampField(machineAt(index) as any, 'dt', DT_SPEC)" />
                                         </div>
                                     </div>
                                 </div>
@@ -409,112 +169,35 @@
                         </div>
                     </template>
                 </div>
-
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
-
                 <div class="mt-8 px-4">
-                    <div
-                        class="flex justify-between lg:flex-row flex-col flex-wrap"
-                    >
-                        <div
-                            class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6"
-                        >
+                    <div class="flex justify-between lg:flex-row flex-col flex-wrap">
+                        <div class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6">
                             <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportPieces"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.pieces") }}</label
-                                >
-                                <input
-                                    v-tippy:pieces
-                                    id="formReportPieces"
-                                    type="number"
-                                    v-model.number="activeTab.pieces"
-                                    name="formReportPieces"
-                                    step="1"
-                                    class="form-input flex-1"
-                                    placeholder="0"
-                                    min="0"
-                                    :max="LIMITS.PIECES_MAX"
-                                    @input="clampField(activeTab as any, 'pieces', PIECES_SPEC)"
-                                />
-                                <tippy target="pieces" trigger="focus">Utilizado como contador de billetes<br> Máximo: 999 999 999 999</tippy>
+                                <label for="formReportPieces" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.pieces") }}</label>
+                                <input v-tippy:pieces id="formReportPieces" type="number" v-model.number="activeTab.pieces" name="formReportPieces" step="1" class="form-input flex-1" placeholder="0" min="0" :max="LIMITS.PIECES_MAX" @input="clampField(activeTab as any, 'pieces', PIECES_SPEC)" />
+                                <tippy target="pieces" trigger="focus">Utilizado como contador de billetes <br> Máximo: 999 999 999 999 </tippy>
                             </div>
                             <div class="mt-4 flex items-center">
-                                <label
-                                    for="formReportSOGD"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.SOGD") }}</label
-                                >
-                                <input
-                                    v-tippy:sogd
-                                    id="formReportSOGD"
-                                    type="text"
-                                    v-model="activeTab.sogd"
-                                    name="formReportSOGD"
-                                    class="form-input flex-1"
-                                    :placeholder="$t('report.form.SOGDPlaceholder')"
-                                />
+                                <label for="formReportSOGD" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.SOGD") }}</label>
+                                <input v-tippy:sogd id="formReportSOGD" type="text" v-model="activeTab.sogd" name="formReportSOGD" class="form-input flex-1" :placeholder="$t('report.form.SOGDPlaceholder')" />
                                 <tippy target="sogd" trigger="focus">Utilizado para capturar la orden de servicio de GD</tippy>
                             </div>
                         </div>
                         <div class="lg:w-1/2 w-full">
                             <div class="flex items-center mt-4">
-                                <label
-                                    for="formReportOnTime"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.machineOn") }}</label
-                                >
-                                <input
-                                    v-tippy:ontime
-                                    id="formReportOnTime"
-                                    :step="LIMITS.TIME_ON_STEP"
-                                    type="number"
-                                    v-model.number="activeTab.time_on"
-                                    name="formReportOnTime"
-                                    class="form-input flex-1"
-                                    placeholder="0.00"
-                                    :min="LIMITS.TIME_ON_MIN"
-                                    :max="LIMITS.TIME_ON_MAX"
-                                    @input="clampField(activeTab as any, 'time_on', TIME_ON_SPEC)"
-                                />
-                                <tippy target="ontime" trigger="focus">Utilizado para registrar el tiempo de funcionamiento de la máquina<br> Máximo: 9 999 999.99</tippy>
+                                <label for="formReportOnTime" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.machineOn") }}</label>
+                                <input v-tippy:ontime id="formReportOnTime" :step="LIMITS.TIME_ON_STEP" type="number" v-model.number="activeTab.time_on" name="formReportOnTime" class="form-input flex-1" placeholder="0.00" :min="LIMITS.TIME_ON_MIN" :max="LIMITS.TIME_ON_MAX" @input="clampField(activeTab as any, 'time_on', TIME_ON_SPEC)" />
+                                <tippy target="ontime" trigger="focus">Utilizado para registrar el tiempo de funcionamiento de la máquina <br> Máximo: 9 999 999.99 </tippy>
                             </div>
                             <div class="flex items-center mt-4">
-                                <label
-                                    for="formReportTravelTime"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.travelTime") }}</label
-                                >
-                                <input
-                                    v-tippy:traveltime
-                                    id="formReportTravelTime"
-                                    type="number"
-                                    v-model.number="activeTab.travel_time"
-                                    name="formReportTravelTime"
-                                    class="form-input flex-1"
-                                    placeholder="0"
-                                    :step="LIMITS.TRAVEL_TIME_STEP"
-                                    :min="LIMITS.TRAVEL_TIME_MIN"
-                                    :max="LIMITS.TRAVEL_TIME_MAX"
-                                    @input="clampField(activeTab as any, 'travel_time', TRAVEL_TIME_SPEC)"
-                                />
-                                <tippy target="traveltime" trigger="focus">Utilizado para registrar el tiempo de traslado<br> Máximo: 10 080 minutos</tippy>
+                                <label for="formReportTravelTime" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.travelTime") }}</label>
+                                <input v-tippy:traveltime id="formReportTravelTime" type="number" v-model.number="activeTab.travel_time" name="formReportTravelTime" class="form-input flex-1" placeholder="0" :step="LIMITS.TRAVEL_TIME_STEP" :min="LIMITS.TRAVEL_TIME_MIN" :max="LIMITS.TRAVEL_TIME_MAX" @input="clampField(activeTab as any, 'travel_time', TRAVEL_TIME_SPEC)" />
+                                <tippy target="traveltime" trigger="focus">Utilizado para registrar el tiempo de traslado <br> Máximo: 10 080 minutos </tippy>
                             </div>
                             <div class="flex items-center mt-4">
-                                <label
-                                    for="formReportType"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0"
-                                    >{{ $t("report.form.type") }}</label
-                                >
-
-                                <select
-                                    id="formReportType"
-                                    name="formReportType"
-                                    v-model.number="activeTab.report_type_id"
-                                    class="form-select text-white-dark flex-1"
-                                    required
-                                >
+                                <label for="formReportType" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.type") }}</label>
+                                <select id="formReportType" name="formReportType" v-model.number="activeTab.report_type_id" class="form-select text-white-dark flex-1" required>
                                     <option :value="1">{{ $t("catalogs.typeReport.1") }}</option>
                                     <option :value="2">{{ $t("catalogs.typeReport.2") }}</option>
                                 </select>
@@ -522,20 +205,8 @@
                         </div>
                         <div class="w-full mt-4">
                             <div class="flex items-center">
-                                <label
-                                    for="formReportedError"
-                                    class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                    >{{ $t("report.form.reportedError") }}</label
-                                >
-                                <textarea
-                                    id="formReportedError"
-                                    name="formReportedError"
-                                    rows="3"
-                                    v-model="activeTab.reported_error"
-                                    class="form-textarea flex-1"
-                                    :placeholder="$t('report.form.reportedErrorPlaceholder')"
-                                    required
-                                ></textarea>
+                                <label for="formReportedError" class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0">{{ $t("report.form.reportedError") }}</label>
+                                <textarea id="formReportedError" name="formReportedError" rows="3" v-model="activeTab.reported_error" class="form-textarea flex-1" :placeholder="$t('report.form.reportedErrorPlaceholder')" required></textarea>
                             </div>
                         </div>
                     </div>
@@ -543,44 +214,18 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="flex flex-wrap justify-evenly">
-                        <label
-                            v-for="code in catalogCodes"
-                            :key="code.id"
-                            class="inline-flex"
-                        >
-                            <input
-                                type="radio"
-                                name="formReportCode"
-                                class="form-radio"
-                                :value="code.id"
-                                v-model.number="activeTab.code_id"
-                            />
+                        <label v-for="code in catalogCodes" :key="code.id" class="inline-flex">
+                            <input type="radio" name="formReportCode" class="form-radio" :value="code.id" v-model.number="activeTab.code_id" />
                             <div class="flex flex-col">
                                 <span>{{ code.code }}</span>
-                                <span
-                                    v-if="activeTab.code_id === code.id"
-                                    class="text-xs"
-                                    >{{ catalogI18n('catalogs.codes', code.id, code.description) }}</span
-                                >
+                                <span v-if="activeTab.code_id === code.id" class="text-xs">{{ catalogI18n('catalogs.codes', code.id, code.description) }}</span>
                             </div>
                         </label>
                     </div>
                     <div class="w-full">
                         <div class="mt-4 flex items-center">
-                            <label
-                                for="formReportActions"
-                                class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0"
-                                >{{ $t("report.form.actionsTaken") }}</label
-                            >
-                            <textarea
-                                id="formReportActions"
-                                name="formReportActions"
-                                v-model="activeTab.actions_taken"
-                                rows="3"
-                                class="form-textarea flex-1"
-                                :placeholder="$t('report.form.actionsTakenPlaceholder')"
-                                required
-                            ></textarea>
+                            <label for="formReportActions" class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0">{{ $t("report.form.actionsTaken") }}</label>
+                            <textarea id="formReportActions" name="formReportActions" v-model="activeTab.actions_taken" rows="3" class="form-textarea flex-1" :placeholder="$t('report.form.actionsTakenPlaceholder')" required></textarea>
                         </div>
                     </div>
                 </div>
@@ -592,72 +237,34 @@
                                 <label for="formReportReportedTime">
                                     {{ $t("report.form.reported") }}
                                 </label>
-                                <flat-pickr
-                                    id="formReportReportedTime"
-                                    name="formReportReportedTime"
-                                    v-model="activeTab.reported"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
+                                <flat-pickr id="formReportReportedTime" name="formReportReportedTime" v-model="activeTab.reported" class="form-input flex-1" :config="dateTime"></flat-pickr>
                             </div>
                             <div class="px-2 max-w-[180px]">
                                 <label for="formReportTimeDeparture">
                                     {{ $t("report.form.departure") }}
                                 </label>
-                                <flat-pickr
-                                    id="formReportTimeDeparture"
-                                    name="formReportTimeDeparture"
-                                    v-model="activeTab.departure"
-                                    class="form-input flex-1"
-                                    :config="dateTime"
-                                ></flat-pickr>
+                                <flat-pickr id="formReportTimeDeparture" name="formReportTimeDeparture" v-model="activeTab.departure" class="form-input flex-1" :config="dateTime"></flat-pickr>
                             </div>
                         </template>
                         <div class="px-2 max-w-[180px]">
                             <label for="formReportTimeArrival">{{ $t("report.form.arrival") }}</label>
-                            <flat-pickr
-                                id="formReportTimeArrival"
-                                name="formReportTimeArrival"
-                                v-model="activeTab.arrival"
-                                class="form-input flex-1"
-                                :config="dateTime"
-                            ></flat-pickr>
+                            <flat-pickr id="formReportTimeArrival" name="formReportTimeArrival" v-model="activeTab.arrival" class="form-input flex-1" :config="dateTime"></flat-pickr>
                         </div>
                         <div class="px-2 max-w-[180px]">
                             <label for="formReportTimeFinished">
                                 {{ $t("report.form.finished") }}
                             </label>
-                            <flat-pickr
-                                id="formReportTimeFinished"
-                                name="formReportTimeFinished"
-                                v-model="activeTab.finished"
-                                class="form-input flex-1"
-                                :config="dateTime"
-                            ></flat-pickr>
+                            <flat-pickr id="formReportTimeFinished" name="formReportTimeFinished" v-model="activeTab.finished" class="form-input flex-1" :config="dateTime"></flat-pickr>
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly py-4">
-                            <label
-                                v-for="status in catalogStatus"
-                                :key="status.id"
-                                class="inline-flex"
-                            >
-                                <input
-                                    type="radio"
-                                    name="formReportStatus"
-                                    class="form-radio"
-                                    :value="status.id"
-                                    v-model.number="activeTab.status_id"
-                                />
+                            <label v-for="status in catalogStatus" :key="status.id" class="inline-flex">
+                                <input type="radio" name="formReportStatus" class="form-radio" :value="status.id" v-model.number="activeTab.status_id" />
                                 <span>{{ catalogI18n('catalogs.status', status.id, status.status) }}</span>
                             </label>
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly">
                             <label class="inline-flex">
-                                <input
-                                    type="checkbox"
-                                    v-model="activeTab.is_tested"
-                                    class="form-checkbox rounded-full"
-                                />
+                                <input type="checkbox" v-model="activeTab.is_tested" class="form-checkbox rounded-full" />
                                 <span>Test OK</span>
                             </label>
                         </div>
@@ -668,54 +275,12 @@
                     <div class="flex px-4">
                         <div class="w-full">
                             <div class="flex items-center">
-                                <label
-                                    for="formReportParts"
-                                    class="w-[100px] text-right mb-0 mr-[10px]"
-                                    >{{ $t("report.form.parts") }}</label
-                                >
-
-                                <multiselect
-                                    @search-change="onPartsSearch"
-                                    id="formReportParts"
-                                    :options="catalogParts"
-                                    v-model="partSearch"
-                                    track-by="id"
-                                    class="custom-multiselect flex-1"
-                                    searchable
-                                    :placeholder="$t('report.form.partsPlaceholder')"
-                                    :custom-label="partLabel"
-                                    preserveSearch
-                                    v-bind="multiselectLabels"
-                                ></multiselect>
-                                <button
-                                    :disabled="!partSearch"
-                                    class="btn btn-secondary gap-2"
-                                    @click="addNewPart"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24px"
-                                        height="24px"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        class="w-5 h-5"
-                                    >
-                                        <line
-                                            x1="12"
-                                            y1="5"
-                                            x2="12"
-                                            y2="19"
-                                        ></line>
-                                        <line
-                                            x1="5"
-                                            y1="12"
-                                            x2="19"
-                                            y2="12"
-                                        ></line>
+                                <label for="formReportParts" class="w-[100px] text-right mb-0 mr-[10px]">{{ $t("report.form.parts") }}</label>
+                                <multiselect @search-change="onPartsSearch" id="formReportParts" :options="catalogParts" v-model="partSearch" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="$t('report.form.partsPlaceholder')" :custom-label="partLabel" preserveSearch v-bind="multiselectLabels"></multiselect>
+                                <button :disabled="!partSearch" class="btn btn-secondary gap-2" @click="addNewPart">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
                                     </svg>
                                 </button>
                                 <div class="w-[50px] flex justify-end pr-[15px]">
@@ -736,22 +301,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <template
-                                    v-if="activeTab.service_parts.length <= 0"
-                                >
+                                <template v-if="activeTab.service_parts.length <= 0">
                                     <tr>
-                                        <td
-                                            colspan="5"
-                                            class="!text-center font-semibold"
-                                        >
+                                        <td colspan="5" class="!text-center font-semibold">
                                             {{ $t("report.form.noItems") }}
                                         </td>
                                     </tr>
                                 </template>
-                                <template
-                                    v-for="(item, i) in activeTab.service_parts"
-                                    :key="item.id ?? i"
-                                >
+                                <template v-for="(item, i) in activeTab.service_parts" :key="item.id ?? i">
                                     <tr class="align-top">
                                         <td>
                                             {{ item.num_part }}
@@ -760,46 +317,13 @@
                                             {{ item.descripcion }}
                                         </td>
                                         <td>
-                                            <input
-                                                type="number"
-                                                class="form-input w-32"
-                                                placeholder="Quantity"
-                                                v-model.number="item.quantity"
-                                                :step="LIMITS.PART_QTY_STEP"
-                                                :max="LIMITS.PART_QTY_MAX"
-                                                :min="LIMITS.PART_QTY_MIN"
-                                                @input="clampField(item as any, 'quantity', PART_QTY_SPEC)"
-                                            />
+                                            <input type="number" class="form-input w-32" placeholder="Quantity" v-model.number="item.quantity" :step="LIMITS.PART_QTY_STEP" :max="LIMITS.PART_QTY_MAX" :min="LIMITS.PART_QTY_MIN" @input="clampField(item as any, 'quantity', PART_QTY_SPEC)" />
                                         </td>
                                         <td>
-                                            <button
-                                                type="button"
-                                                @click="activeTab.service_parts.splice(i, 1)"
-                                            >
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="24px"
-                                                    height="24px"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="1.5"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    class="w-5 h-5"
-                                                >
-                                                    <line
-                                                        x1="18"
-                                                        y1="6"
-                                                        x2="6"
-                                                        y2="18"
-                                                    ></line>
-                                                    <line
-                                                        x1="6"
-                                                        y1="6"
-                                                        x2="18"
-                                                        y2="18"
-                                                    ></line>
+                                            <button type="button" @click="activeTab.service_parts.splice(i, 1)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
                                                 </svg>
                                             </button>
                                         </td>
@@ -812,40 +336,18 @@
                 <div class="mt-8 px-4">
                     <div>
                         <label for="notes">{{ $t("report.form.remarks") }}</label>
-                        <textarea
-                            id="notes"
-                            name="notes"
-                            class="form-textarea min-h-[130px]"
-                            :placeholder="$t('report.form.remarksPlaceholder')"
-                            v-model="activeTab.notes"
-                        ></textarea>
+                        <textarea id="notes" name="notes" class="form-textarea min-h-[130px]" :placeholder="$t('report.form.remarksPlaceholder')" v-model="activeTab.notes"></textarea>
                     </div>
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
-                    <div
-                        v-if="activeTab.selectedMachine"
-                        class="flex flex-wrap justify-evenly w-full"
-                    >
-                        <template
-                            v-for="(machine,index) in machinesListing"
-                            :key="machine.id ?? machine.serial"
-                        >
-                            <div
-                                v-if="!isOnlyDT(machine) && machineAt(index)"
-                                class="text-center min-w-[270px]"
-                            >
+                    <div v-if="activeTab.selectedMachine" class="flex flex-wrap justify-evenly w-full">
+                        <template v-for="(machine,index) in machinesListing" :key="machine.id ?? machine.serial">
+                            <div v-if="!isOnlyDT(machine) && machineAt(index)" class="text-center min-w-[270px]">
                                 <label :for="uid('formSignatureName', selectedTab, machine.serial)" class="mb-0">
                                     {{ machine.serial }}
                                 </label>
-                                <input
-                                    :id="uid('formSignatureName', selectedTab, machine.serial)"
-                                    type="text"
-                                    :name="uid('formSignatureName', selectedTab, machine.serial)"
-                                    v-model="machineAt(index).signature_client_name"
-                                    class="form-input flex-1"
-                                    :placeholder="$t('report.form.signatureNamePlaceholder')"
-                                />
+                                <input :id="uid('formSignatureName', selectedTab, machine.serial)" type="text" :name="uid('formSignatureName', selectedTab, machine.serial)" v-model="machineAt(index).signature_client_name" class="form-input flex-1" :placeholder="$t('report.form.signatureNamePlaceholder')" />
                             </div>
                         </template>
                     </div>
@@ -853,39 +355,12 @@
             </div>
             <div class="xl:w-96 w-full xl:mt-0 mt-6">
                 <div class="panel sticky top-[75px] left-0">
-                    <div
-                        class="grid xl:grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4"
-                    >
-                        <button
-                            type="button"
-                            class="btn btn-success w-full gap-2"
-                            @click="submit"
-                        >
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0"
-                            >
-                                <path
-                                    d="M3.46447 20.5355C4.92893 22 7.28595 22 12 22C16.714 22 19.0711 22 20.5355 20.5355C22 19.0711 22 16.714 22 12C22 11.6585 22 11.4878 21.9848 11.3142C21.9142 10.5049 21.586 9.71257 21.0637 9.09034C20.9516 8.95687 20.828 8.83317 20.5806 8.58578L15.4142 3.41944C15.1668 3.17206 15.0431 3.04835 14.9097 2.93631C14.2874 2.414 13.4951 2.08581 12.6858 2.01515C12.5122 2 12.3415 2 12 2C7.28595 2 4.92893 2 3.46447 3.46447C2 4.92893 2 7.28595 2 12C2 16.714 2 19.0711 3.46447 20.5355Z"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                />
-                                <path
-                                    d="M17 22V21C17 19.1144 17 18.1716 16.4142 17.5858C15.8284 17 14.8856 17 13 17H11C9.11438 17 8.17157 17 7.58579 17.5858C7 18.1716 7 19.1144 7 21V22"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                />
-                                <path
-                                    opacity="0.5"
-                                    d="M7 8H13"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                    stroke-linecap="round"
-                                />
+                    <div class="grid xl:grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4">
+                        <button type="button" class="btn btn-success w-full gap-2" @click="submit">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0">
+                                <path d="M3.46447 20.5355C4.92893 22 7.28595 22 12 22C16.714 22 19.0711 22 20.5355 20.5355C22 19.0711 22 16.714 22 12C22 11.6585 22 11.4878 21.9848 11.3142C21.9142 10.5049 21.586 9.71257 21.0637 9.09034C20.9516 8.95687 20.828 8.83317 20.5806 8.58578L15.4142 3.41944C15.1668 3.17206 15.0431 3.04835 14.9097 2.93631C14.2874 2.414 13.4951 2.08581 12.6858 2.01515C12.5122 2 12.3415 2 12 2C7.28595 2 4.92893 2 3.46447 3.46447C2 4.92893 2 7.28595 2 12C2 16.714 2 19.0711 3.46447 20.5355Z" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M17 22V21C17 19.1144 17 18.1716 16.4142 17.5858C15.8284 17 14.8856 17 13 17H11C9.11438 17 8.17157 17 7.58579 17.5858C7 18.1716 7 19.1144 7 21V22" stroke="currentColor" stroke-width="1.5" />
+                                <path opacity="0.5" d="M7 8H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
                             {{ $t('report.form.saveReport') }}
                         </button>
@@ -1377,7 +852,8 @@ function buildPayload(): ReportPayload {
 
 function submit() {
     const payload = buildPayload();
-    
+    console.log(payload);
+    return;
     Swal.fire({
         title: t("report.alert.processing"),
         text: t("report.alert.processingText"),
