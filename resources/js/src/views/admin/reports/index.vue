@@ -368,9 +368,11 @@ const selectedCountry = ref("");
 const loadingData = ref(false);
 const filterDate = ref("3months");
 
+console.log(props.reports);
+
 const transformReport = (report) => ({
     ...report,
-    machines: report.machines.filter((machine) => machine.only_dt === 0).map((machine) => machine.serial).join(', '),
+    //machines: report.machines.filter((machine) => machine.only_dt === 0).map((machine) => machine.serial).join(', '),
 });
 
 const currentData = computed(() => { 
@@ -406,8 +408,8 @@ const cols = computed(() => {
     let baseCols = [
         { field: "id", title: "ID" },
         { field: "complete_id", title: t("report.index.col.fileName") },
-        { field: "status", title: t("report.index.col.status") },
-        { field: "machines", title: t("report.index.col.idmachines") },
+        //{ field: "status", title: t("report.index.col.status") },
+        { field: "service_reports_count", title: "# Servicios" },
         { field: "created_at", title: t("report.index.col.creationDate") },
         {
             field: "actions",

@@ -7,7 +7,9 @@ use Illuminate\Support\Arr;
 use App\Http\Controllers\Controller;
 use App\Models\machine_reports\ServiceVisit;
 use App\Models\machine_reports\ServiceReportMachine;
+use App\Models\machine_reports\Country;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\machine_reports\Branch;
@@ -19,7 +21,49 @@ class ServiceVisitController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $threeMonthsAgo = now()->subMonthsNoOverflow(3);
+
+        $visits = ServiceVisit::query()
+            ->where('is_active', true)
+            ->where('created_at', '>=', $threeMonthsAgo)
+            ->when($user->user_type_id !== 1, fn ($q) => $q->where('user_id', $user->id))
+            ->select([
+                'id',
+                'complete_id',
+                'user_id',
+                'branch_id',
+                'created_at',
+            ])
+            ->with([
+                'user:id,nombre,apellido_paterno,apellido_materno',
+                'branch:id,city_id',
+                'branch.city:id,name,country_id',
+            ])
+            ->withCount('serviceReports')
+            ->latest('created_at')
+            ->get()
+            ->each(fn ($report) => $report->setAttribute('user_full_name', $report->user->full_name));
+
+        $catalogCountry = Country::query()
+            ->where('is_active', 1)
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
+
+        $catalogYearReports = ServiceVisit::query()
+            ->where('is_active', true)
+            ->when($user->user_type_id !== 1, fn ($q) => $q->where('user_id', $user->id))
+            ->selectRaw('YEAR(created_at) as year')
+            ->groupBy('year')
+            ->orderByDesc('year')
+            ->get();
+
+        return Inertia::render('admin/reports/index', [
+            'reports'             => $visits,
+            'catalogCountry'      => $catalogCountry,
+            'catalogYearReports'  => $catalogYearReports,
+        ]);
     }
 
     /**
@@ -209,10 +253,7 @@ class ServiceVisitController extends Controller
             }
 
             DB::commit();
-
-            return response()->json([
-                'message' => 'Service visit created',
-            ], 201);
+            return to_route('service-visit.index');
         }catch (\Throwable $e) {
             DB::rollBack();
             throw $e;
