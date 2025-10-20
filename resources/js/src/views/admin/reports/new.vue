@@ -11,6 +11,9 @@
                             </label>
                             <flat-pickr id="formServiceDate" v-model="report.service_date" class="form-input flex-1" :config="dateOnly"></flat-pickr>
                         </div>
+                        <p v-if="errors.service_date" class="text-danger mt-1 text-center">
+                            {{ errors.service_date }}
+                        </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4" v-if="usePage().props.auth?.type === 1">
@@ -48,6 +51,9 @@
                             </label>
                             <multiselect id="formCatalogClient" :options="catalogClients" @select="onClientSelect" v-model="form.selectedClient" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
                         </div>
+                        <p v-if="errors.client_id" class="text-danger mt-1 text-center">
+                            {{ errors.client_id }}
+                        </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
@@ -57,6 +63,9 @@
                             </label>
                             <multiselect @select="form.selectedContact = null" id="formCatalogBranches" :options="branchesCatalog" v-model="form.selectedBranch" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="branchLabel" :disabled="!branchesCatalog.length || loadingClient" v-bind="multiselectLabels"></multiselect>
                         </div>
+                        <p v-if="errors.branch_id" class="text-danger mt-1 text-center">
+                            {{ errors.branch_id }}
+                        </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
@@ -66,6 +75,9 @@
                             </label>
                             <multiselect id="formCatalogContact" :options="form.selectedBranch?.branch_managers ?? []" v-model="form.selectedContact" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" :disabled="!form.selectedBranch || loadingClient" v-bind="multiselectLabels"></multiselect>
                         </div>
+                        <p v-if="errors.branch_manager_id" class="text-danger mt-1 text-center">
+                            {{ errors.branch_manager_id }}
+                        </p>
                     </div>
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
@@ -97,6 +109,9 @@
                             </label>
                             <multiselect @select="onMachineSelect" id="formCatalogMachines" :options="machinesCatalog" v-model="activeTab.selectedMachine" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="machineLabel" :disabled="!machinesCatalog.length || loadingClient" v-bind="multiselectLabels"></multiselect>
                         </div>
+                        <p v-if="errors['tabs.' + selectedTab + '.machines']" class="text-danger mt-1 text-center">
+                            {{ errors['tabs.' + selectedTab + '.machines'] }}
+                        </p>
                     </div>
                     <template v-if="activeTab.selectedMachine">
                         <div class="flex flex-wrap justify-evenly mt-4">
@@ -639,8 +654,6 @@ const machineCardClass = (m: any) => {
   return {
     'bg-[#ececf9]': !onlyDT,
     'bg-gray-100': onlyDT,
-    'ring-2 ring-amber-500 ring-offset-1':
-      machinesListing.value.length > 1 && m?.serial === selectedMachine.value?.serial,
   };
 };
 
@@ -735,9 +748,9 @@ async function onMachineSelect(option: { serial: string }) {
         getPostTab(tabIndex).machines = machines.map(m => ({
             machine_id: m.id,
             machine_details: [{ ...DEFAULT_DETAIL }],
-            transport_1: null,
-            transport_2: null,
-            transport_3: null,
+            transport_1: 0.0,
+            transport_2: 0.0,
+            transport_3: 0.0,
             dt: null,
             signature_client_name: null,
         }));
@@ -777,32 +790,33 @@ const runPartsAutocomplete = async (q: string) => {
 
 type ServicePartPayload = { id: number; quantity: number };
 type TabPayload = {
-  selected_machine_id: number | null;
-  pieces: number;
-  sogd: string | null;
-  time_on: number;
-  travel_time: number;
-  report_type_id: 1 | 2;
-  reported_error: string;
-  code_id: number | null;
-  actions_taken: string;
-  reported: string | null;
-  departure: string | null;
-  arrival: string | null;
-  finished: string | null;
-  status_id: number | null;
-  is_tested: boolean;
-  service_parts: ServicePartPayload[];
-  notes: string;
-  machines: PostTabMachine[];
+    selected_machine_id: number | null;
+    pieces: number;
+    sogd: string | null;
+    time_on: number;
+    travel_time: number;
+    report_type_id: 1 | 2;
+    reported_error: string;
+    code_id: number | null;
+    actions_taken: string;
+    reported: string | null;
+    departure: string | null;
+    arrival: string | null;
+    finished: string | null;
+    status_id: number | null;
+    is_tested: boolean;
+    service_parts: ServicePartPayload[];
+    notes: string;
+    machines: PostTabMachine[];
 };
 type ReportHeader = {
-  user_id: number | null;
-  shift_id: number | null;
-  branch_id: number | null;
-  branch_manager_id: number | null;
-  service_date: string;
-  service_timezone: string;
+    user_id: number | null;
+    shift_id: number | null;
+    client_id: number | null;
+    branch_id: number | null;
+    branch_manager_id: number | null;
+    service_date: string;
+    service_timezone: string;
 };
 type ReportPayload = ReportHeader & { tabs: TabPayload[] };
 
@@ -810,6 +824,7 @@ function buildPayload(): ReportPayload {
     const header: ReportHeader = {
         user_id: form.selectedUser?.id ?? null,
         shift_id: form.selectedShift?.id ?? null,
+        client_id: form.selectedClient?.id ?? null,
         branch_id: form.selectedBranch?.id ?? null,
         branch_manager_id: form.selectedContact?.id ?? null,
         service_date: report.service_date,
@@ -859,7 +874,7 @@ function submit() {
         didOpen: () => Swal.showLoading(),
     });
 
-    router.post('/reports', payload, {
+    router.post('/service-visit', payload, {
         onSuccess: () => Swal.close(),
         onError: (error) => {
             const errorMessages = Object.values(error).map((e) => `<p>${e}</p>`).join('');

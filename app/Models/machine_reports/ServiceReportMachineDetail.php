@@ -17,6 +17,12 @@ class ServiceReportMachineDetail extends Model
         'dt'
     ];
 
+    protected $casts = [
+        'module_id' => 'integer',
+        'failure_id' => 'integer',
+        'failure_type_id' => 'integer',
+    ];
+
     public $timestamps = true;
 
     public function serviceReportMachine()

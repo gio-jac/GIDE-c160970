@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\machine_reports;
 
+use App\Models\machine_reports\ServiceReport;
+use Illuminate\Support\Arr;
 use App\Http\Controllers\Controller;
 use App\Models\machine_reports\ServiceVisit;
+use App\Models\machine_reports\ServiceReportMachine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\machine_reports\Branch;
 
 class ServiceVisitController extends Controller
 {
@@ -29,7 +35,188 @@ class ServiceVisitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $auth = Auth::user();
+
+        $tabs = collect((array) $request->input('tabs', []));
+
+        if ($tabs->count() > 1) {
+            $tabs = $tabs->filter(function ($tab) {
+                $machines = $tab['machines'] ?? [];
+                return is_array($machines) && !empty($machines);
+            });
+        }
+
+        $tabs = $tabs->map(function ($tab) {
+            $machines = $tab['machines'] ?? null;
+
+            if (!is_array($machines) || empty($machines)) {
+                return $tab;
+            }
+
+            $tab['machines'] = collect($machines)->map(function ($machine) {
+                $details = $machine['machine_details'] ?? [];
+
+                if (!is_array($details) || empty($details)) {
+                    $machine['machine_details'] = [];
+                    return $machine;
+                }
+                
+                $machine['machine_details'] = collect($details)
+                    ->filter(function ($d) {
+                        return filled($d['module_id'] ?? null)
+                            || filled($d['failure_id'] ?? null)
+                            || filled($d['failure_type_id'] ?? null)
+                            || filled($d['dt'] ?? null);
+                    })
+                    ->values()
+                    ->all();
+
+                return $machine;
+            })->values()->all();
+
+            return $tab;
+        })->values()->all();
+
+        $payload = ['tabs' => $tabs];
+
+        if ((int) ($auth->user_type_id ?? 0) === 2) {
+            $payload['user_id'] = $auth->id;
+        }
+
+        $request->merge($payload);
+
+        $validatedData = $request->validate([
+            'user_id' => ['bail','required', 'integer', 'exists:users,id'],
+            'shift_id' => ['bail','required', 'integer', 'exists:shifts,id'],
+            'client_id' => ['bail','required', 'integer', 'exists:clients,id'],
+            'branch_id' => ['bail','required', 'integer', 'exists:branches,id'],
+            'branch_manager_id' => ['bail','required', 'integer', 'exists:branch_managers,id'],
+            'service_date' => ['bail','required', 'date_format:Y-m-d'],
+            'service_timezone' => ['bail','required', 'timezone'],
+            
+            'tabs' => ['bail','required', 'array', 'min:1'],
+            'tabs.*.pieces' => ['bail','nullable', 'integer', 'min:0', 'max:999999999999'],
+            'tabs.*.sogd' => ['bail','nullable', 'string', 'max:255'],
+            'tabs.*.travel_time' => ['bail','nullable', 'integer', 'min:0', 'max:10080'],
+            'tabs.*.report_type_id' => ['bail','required', 'integer', 'min:1', 'max:2'],
+            'tabs.*.reported_error' => ['bail','nullable', 'string', 'max:255'],
+            'tabs.*.code_id' => ['bail','nullable', 'integer', 'exists:codes,id'],
+            'tabs.*.actions_taken' => ['bail','nullable', 'string', 'max:255'],
+            'tabs.*.reported' => ['bail','nullable', 'date_format:Y-m-d H:i'],
+            'tabs.*.arrival' => ['bail','nullable', 'date_format:Y-m-d H:i'],
+            'tabs.*.departure' => ['bail','nullable', 'date_format:Y-m-d H:i'],
+            'tabs.*.finished' => ['bail','nullable', 'date_format:Y-m-d H:i'],
+            'tabs.*.status_id' => ['bail','nullable', 'integer', 'exists:statuses,id'],
+            'tabs.*.is_tested' => ['bail','nullable', 'boolean'],
+            'tabs.*.notes' => ['bail','nullable', 'string', 'max:255'],
+            
+            'tabs.*.service_parts' => ['bail','present', 'array'],
+            'tabs.*.service_parts.*.id' => ['bail','required', 'integer', 'exists:parts,id'],
+            'tabs.*.service_parts.*.quantity' => ['bail','required', 'integer', 'min:0', 'max:999999999999'],
+
+            'tabs.*.machines' => ['bail','required','array','min:1'],
+            'tabs.*.machines.*.machine_id' => ['bail','required', 'integer', 'exists:machines,id'],
+            'tabs.*.machines.*.transport_1' => ['bail','nullable', 'decimal:0,1', 'gte:0', 'lte:9999.9'],
+            'tabs.*.machines.*.transport_2' => ['bail','nullable', 'decimal:0,1', 'gte:0', 'lte:9999.9'],
+            'tabs.*.machines.*.transport_3' => ['bail','nullable', 'decimal:0,1', 'gte:0', 'lte:9999.9'],
+            'tabs.*.machines.*.dt' => ['bail','nullable', 'integer', 'min:0', 'max:999999'],
+            'tabs.*.machines.*.signature_client_name' => ['bail','nullable', 'string', 'max:255'],
+
+            'tabs.*.machines.*.machine_details'  => ['bail','present', 'array'],
+            'tabs.*.machines.*.machine_details.*.module_id'  => ['bail','nullable', 'integer', 'exists:modules,id'],
+            'tabs.*.machines.*.machine_details.*.failure_id'  => ['bail','nullable', 'integer', 'exists:failures,id'],
+            'tabs.*.machines.*.machine_details.*.failure_type_id'  => ['bail','nullable', 'integer', 'exists:failure_types,id'],
+            'tabs.*.machines.*.machine_details.*.dt' => ['bail','nullable', 'integer', 'min:0', 'max:999999'],
+        ]);
+        
+        DB::beginTransaction();
+        try {
+            $branch = Branch::with(['city.country', 'client.branches.reports'])->findOrFail($validatedData['branch_id']);
+
+            $nextId = ServiceVisit::max('id') + 1;
+            $currentDate = $validatedData['service_date'];
+
+            $completeId = implode('-', [
+                $branch->city->country->code,
+                $nextId,
+                $currentDate,
+                str_replace(' ', '-', strtoupper($branch->client->name)),
+            ]);
+
+            $validatedData['complete_id'] = $completeId;
+            
+            $serviceVisit = ServiceVisit::create([
+                'complete_id' => $completeId,
+                'user_id' => $validatedData['user_id'],
+                'shift_id' => $validatedData['shift_id'],
+                'client_id' => $validatedData['client_id'],
+                'branch_id' => $validatedData['branch_id'],
+                'branch_manager_id' => $validatedData['branch_manager_id'],
+                'service_date' => $validatedData['service_date'],
+                'service_timezone' => $validatedData['service_timezone'],
+            ]);
+
+            foreach($validatedData['tabs'] as $index => $tab) {
+                $reportAttrs = Arr::only($tab, [
+                    'pieces','sogd','time_on','travel_time','report_type_id','reported_error',
+                    'code_id','actions_taken','reported','arrival','finished','departure',
+                    'status_id','is_tested','notes',
+                ]);
+                $report = $serviceVisit->serviceReports()->create(array_merge($reportAttrs, [
+                    'complete_id' => $completeId . '-' . ($index + 1),
+                    'branch_manager_id' => $validatedData['branch_manager_id'],
+                    'user_id' => $validatedData['user_id'],
+                    'service_date' => $validatedData['service_date'],
+                    'service_timezone' => "N/A",
+                    'shift_id' => $validatedData['shift_id'],
+                    'branch_id' => $validatedData['branch_id'],
+                    'is_active' => true,
+                ]));
+
+                if(!empty($tab['service_parts'])) {
+                    $partRows = [];
+                    foreach($tab['service_parts'] as $p) {
+                        $partRows[] = [
+                            'part_id' => $p['id'],
+                            'quantity' => $p['quantity'],
+                        ];
+                    }
+                    if($partRows) {
+                        $report->parts()->createMany($partRows);
+                    }
+                }
+
+                foreach($tab['machines'] as $m) {
+                    $pivot = ServiceReportMachine::create(array_merge(
+                        Arr::only($m, [
+                            'machine_id',
+                            'transport_1', 'transport_2', 'transport_3',
+                            'dt',
+                            'signature_client_name',
+                        ]),
+                        ['service_report_id' => $report->id],
+                    ));
+
+                    $detailRows = [];
+                    foreach(($m['machine_details'] ?? []) as $d) {
+                        $detailRows[] = Arr::only($d, ['module_id', 'failure_id', 'failure_type_id', 'dt']);
+                    }
+
+                    if($detailRows) {
+                        $pivot->details()->createMany($detailRows);
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Service visit created',
+            ], 201);
+        }catch (\Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     /**
