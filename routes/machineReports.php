@@ -14,6 +14,7 @@ use App\Http\Controllers\machine_reports\BranchManagerController;
 use App\Http\Controllers\machine_reports\FailureController;
 use App\Http\Controllers\machine_reports\FailureTypeController;
 use App\Http\Controllers\machine_reports\ModuleController;
+use App\Http\Controllers\machine_reports\ServiceVisitController;
 
 Route::middleware('auth')->group(function () {
     // User routes
@@ -52,4 +53,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/clients/{id}/branches', [ReportController::class, 'getBranches'])->name('clients.getBranches');
     Route::get('/clients/{id}/machines', [ReportController::class, 'getMachines'])->name('clients.getMachines');
+
+    Route::resource('/service-visit', ServiceVisitController::class);
 });

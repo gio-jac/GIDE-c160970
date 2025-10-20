@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\machine_reports;
 
-use App\Models\ServiceVisit;
+use App\Http\Controllers\Controller;
+use App\Models\machine_reports\ServiceVisit;
 use Illuminate\Http\Request;
 
 class ServiceVisitController extends Controller
