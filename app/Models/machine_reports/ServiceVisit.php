@@ -25,8 +25,9 @@ class ServiceVisit extends Model
     ];
 
     protected $casts = [
+        'closed' => 'bool',
         'service_date' => 'date',
-        'is_active'    => 'bool',
+        'is_active' => 'bool',
     ];
 
     public function user(): HasOne
