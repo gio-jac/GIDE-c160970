@@ -186,11 +186,11 @@
                                 </li>
                                 <li class="nav-item">
                                     <Link
-                                        href="/reports"
+                                        href="/service-visit"
                                         :class="{
                                             active:
-                                                $page.url === '/reports' ||
-                                                $page.url === '/reports/create',
+                                                $page.url === '/service-visit' ||
+                                                $page.url === '/service-visit/create',
                                         }"
                                         class="group"
                                         @click="toggleMobileMenu"

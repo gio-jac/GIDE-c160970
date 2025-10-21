@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\User;
 class ServiceReport extends Model
 {
@@ -19,6 +20,7 @@ class ServiceReport extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'service_visit_id',
         'user_id',
         'complete_id',
         'service_date',
@@ -94,5 +96,10 @@ class ServiceReport extends Model
             'id', // Local key on ServiceReport table
             'id' // Local key on ServiceReportMachine table
         );
+    }
+
+    public function serviceVisit(): BelongsTo
+    {
+        return $this->belongsTo(ServiceVisit::class, 'service_visit_id');
     }
 }
