@@ -291,4 +291,49 @@ class ServiceVisitController extends Controller
     {
         //
     }
+
+    public function filterReports(Request $request)
+    {
+        $user = Auth::user();
+        $filter = $request->input('filter');
+
+        $baseQuery = ServiceVisit::query()
+            ->where('is_active', true)
+            ->tap(fn ($q) => $this->applyDateFilter($q, $filter))
+            ->when($user->user_type_id !== 1, fn ($q) => $q->where('user_id', $user->id))
+            ->select([
+                'id',
+                'complete_id',
+                'user_id',
+                'branch_id',
+                'created_at',
+            ])
+            ->with([
+                'user:id,nombre,apellido_paterno,apellido_materno',
+                'branch:id,city_id',
+                'branch.city:id,name,country_id',
+            ])
+            ->withCount('serviceReports')
+            ->latest('created_at')
+            ->get()
+            ->each(fn ($report) => $report->setAttribute('user_full_name', $report->user->full_name))
+            ->values();
+
+        return Inertia::render('admin/reports/index', [
+            'reports' => $baseQuery,
+        ]);
+    }
+
+    protected function applyDateFilter($query, $filter){
+        switch ($filter) {
+            case '3months':
+                $query->where('created_at', '>=', now()->subMonths(3));
+            break;
+            case 'all':
+            break;
+            default:
+                $query->whereYear('created_at', $filter);
+            break;
+        }
+    }
 }

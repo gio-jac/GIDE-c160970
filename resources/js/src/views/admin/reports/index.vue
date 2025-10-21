@@ -385,7 +385,7 @@ const currentData = computed(() => {
 
 const selectFilterReportsDate = (event) => {
     loadingData.value = true;
-    router.get('/reports/filterByDate', { filter: event.target.value }, {
+    router.get('/service-visit/filterByDate', { filter: event.target.value }, {
         preserveState: true,
         replace: true,
         only: ['reports'],

@@ -54,5 +54,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/clients/{id}/branches', [ReportController::class, 'getBranches'])->name('clients.getBranches');
     Route::get('/clients/{id}/machines', [ReportController::class, 'getMachines'])->name('clients.getMachines');
 
+    Route::get('/service-visit/filterByDate', [ServiceVisitController::class, 'filterReports'])->name('service-visit.filterByDate');
     Route::resource('/service-visit', ServiceVisitController::class);
 });
