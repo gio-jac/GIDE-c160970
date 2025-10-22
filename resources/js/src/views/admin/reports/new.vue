@@ -16,13 +16,13 @@
                         </p>
                     </div>
                 </div>
-                <div class="flex px-4 mt-4" v-if="usePage().props.auth?.type === 1">
+                <div class="flex px-4 mt-4" v-if="isAdmin">
                     <div class="w-full">
                         <div class="flex items-center">
                             <label for="formUser" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("report.form.user") }}
                                 <span class="text-red-500">*</span>
                             </label>
-                            <multiselect v-tippy:user id="formUser" :options="catalogUsers" v-model="form.selectedUser" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="userLabel" v-bind="multiselectLabels"></multiselect>
+                            <multiselect v-tippy:user id="formUser" :options="props.catalogUsers" v-model="form.selectedUser" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="userLabel" v-bind="multiselectLabels"></multiselect>
                             <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato: <br>"EMP - Nombre PrimerApellido" </tippy>
                         </div>
                         <p v-if="errors.user_id" class="text-danger mt-1 text-center">
@@ -49,7 +49,7 @@
                         <div class="flex items-center">
                             <label for="formCatalogClient" class="w-[140px] text-right mb-0 mr-[10px]">Cliente <span class="text-red-500">*</span>
                             </label>
-                            <multiselect id="formCatalogClient" :options="catalogClients" @select="onClientSelect" v-model="form.selectedClient" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
+                            <multiselect id="formCatalogClient" :options="props.catalogClients" @select="onClientSelect" v-model="form.selectedClient" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.client_id" class="text-danger mt-1 text-center">
                             {{ errors.client_id }}
@@ -229,7 +229,7 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="flex flex-wrap justify-evenly">
-                        <label v-for="code in catalogCodes" :key="code.id" class="inline-flex">
+                        <label v-for="code in props.catalogCodes" :key="code.id" class="inline-flex">
                             <input type="radio" name="formReportCode" class="form-radio" :value="code.id" v-model.number="activeTab.code_id" />
                             <div class="flex flex-col">
                                 <span>{{ code.code }}</span>
@@ -272,7 +272,7 @@
                             <flat-pickr id="formReportTimeFinished" name="formReportTimeFinished" v-model="activeTab.finished" class="form-input flex-1" :config="dateTime"></flat-pickr>
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly py-4">
-                            <label v-for="status in catalogStatus" :key="status.id" class="inline-flex">
+                            <label v-for="status in props.catalogStatus" :key="status.id" class="inline-flex">
                                 <input type="radio" name="formReportStatus" class="form-radio" :value="status.id" v-model.number="activeTab.status_id" />
                                 <span>{{ catalogI18n('catalogs.status', status.id, status.status) }}</span>
                             </label>
@@ -456,6 +456,7 @@ type SelectedMachine = {
     machines: Array<{
       id: number;
       serial?: string;
+      line_num?: number | string;
       only_dt?: number;
       machine_model?: { model?: string; model_segment?: { segment?: string; is_multi_transport?: number } };
     }>;
@@ -525,6 +526,8 @@ const getPostTab = (i: number): PostTab => {
     
 const activeTab = computed(() => tabs.value[selectedTab.value]);
 
+const isAdmin = computed(() => usePage().props.auth?.type === 1);
+
 const selectedMachine = computed(() => activeTab.value?.selectedMachine);
 
 const detailOptions = computed(() => ({
@@ -550,16 +553,18 @@ const props = defineProps<{
     catalogClients: Array<{ id: number; name: string }>;
 }>();
 
+const isRtl = computed(() => store.rtlClass === 'rtl');
+
 const dateTime = computed(() => ({
   enableTime: true,
   dateFormat: "Y-m-d H:i",
-  position: (store.rtlClass === 'rtl' ? 'auto right' : 'auto left'),
+  position: (isRtl.value ? 'auto right' : 'auto left'),
 }));
 
 const dateOnly = computed(() => ({
   enableTime: false,
   dateFormat: 'Y-m-d',
-  position: (store.rtlClass === 'rtl' ? 'auto right' : 'auto left'),
+  position: (isRtl.value ? 'auto right' : 'auto left'),
 }));
 
 interface HeaderSelection {
@@ -630,7 +635,7 @@ const branchLabel = (b: Branch) =>
 const machineLabel = (m: SelectedMachine) =>
     `${m.serial?.trim() || '-'}${m.machine_model?.model?.trim() ? ' · ' + m.machine_model.model : ''}`;
 
-const isOnlyDT = (m: any) => toBool(m?.only_dt);
+const isOnlyDT = (m: { only_dt?: number | boolean | string } | null | undefined) => toBool(m?.only_dt);
 
 const hasProductionLine = (sm: SelectedMachine | null | undefined) =>
   sm?.production_line?.id != null;
@@ -662,8 +667,12 @@ const addNewPart = () => {
     if (!ps) return;
     const list = activeTab.value.service_parts;
     const i = list.findIndex(p => p.id === ps.id);
-    if (i < 0) list.push({ ...ps, quantity: 1 });
-    else list[i].quantity = (list[i].quantity ?? 0) + 1;
+    if (i < 0) {
+        list.push({ ...ps, quantity: LIMITS.PART_QTY_MIN });
+    } else {
+        const next = Math.trunc((list[i].quantity ?? 0) + 1);
+        list[i].quantity = clamp(next, LIMITS.PART_QTY_MIN, LIMITS.PART_QTY_MAX);
+    }
 };
 
 const report = reactive<{

@@ -13,7 +13,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex px-4 mt-4" v-if="usePage().props.auth?.type === 1">
+                <div class="flex px-4 mt-4" v-if="isAdmin">
                     <div class="w-full">
                         <div class="flex items-center">
                             <label for="formUser" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("report.form.user") }}
@@ -79,7 +79,7 @@
                                 </button>
                                 <!-- Botón Agregar (visual, no funcional) -->
                                 <div class="ml-2 -mb-px h-9 flex items-center">
-                                    <button v-if="tabs.length < LIMITS.TABS_MAX" type="button" :disabled="!tabs.every(t => !!t.selectedMachine)" @click="tabs.push(createTab())" class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400">
+                                    <button v-if="tabs.length < LIMITS.TABS_MAX" type="button" :disabled="!canAddTab" @click="addTab" class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400">
                                         <!-- plus icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div class="mt-8 px-4">
-                    <div class="w-full">
+                    <div class="w-full" v-if="isNewTab(selectedTab)">
                         <div class="flex items-center">
                             <label for="formCatalogMachines" class="text-lg font-normal mb-0 mr-[10px]">{{ $t("report.form.machines") }}
                                 <span class="text-red-500">*</span>
@@ -102,7 +102,7 @@
                             {{ errors['tabs.' + selectedTab + '.machines'] }}
                         </p>
                     </div>
-                    <template v-if="activeTab.selectedMachine">
+                    <template v-if="machinesListing.length">
                         <div class="flex flex-wrap justify-evenly mt-4">
                             <div v-for="(machine, index) in machinesListing" :key="machine.id ?? machine.serial" :class="machineCardClass(machine)" class="rounded-md p-4 mb-4">
                                 <div class="text-center font-semibold"> Serial: {{ machine.serial }} - {{ machine.machine_model?.model ?? '-' }} - {{ machine.line_num
@@ -345,7 +345,7 @@
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
-                    <div v-if="activeTab.selectedMachine" class="flex flex-wrap justify-evenly w-full">
+                    <div v-if="machinesListing.length" class="flex flex-wrap justify-evenly w-full">
                         <template v-for="(machine,index) in machinesListing" :key="machine.id ?? machine.serial">
                             <div v-if="!isOnlyDT(machine) && machineAt(index)" class="text-center min-w-[270px]">
                                 <label :for="uid('formSignatureName', selectedTab, machine.serial)" class="mb-0">
@@ -639,6 +639,17 @@ const catalogParts = ref<Part[]>([]);
 const loaders = reactive({
     parts: { waiting: true, searching: false},
 });
+
+const report = reactive<{
+  service_date: string;
+  service_timezone: string;
+  tabs: PostTab[];
+}>({
+  service_date: (() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}` })(),
+  service_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  tabs: [],
+});
+
 defineOptions({
     layout: [SiteLayout, AppLayout],
 });
@@ -649,8 +660,10 @@ const getPostTab = (i: number): PostTab => {
   }
   return report.tabs[i];
 };
-    
+
 const activeTab = computed(() => tabs.value[selectedTab.value]);
+
+const isAdmin = computed(() => usePage().props.auth?.type === 1);
 
 const selectedMachine = computed(() => activeTab.value?.selectedMachine);
 
@@ -700,7 +713,23 @@ interface HeaderSelection {
 
 onMounted(() => {
     console.log(props.report);
+    if (form.selectedClient?.id) preloadClientData(form.selectedClient.id);
 });
+
+async function preloadClientData(clientId: number) {
+    loadingClient.value = true;
+    try {
+        const [branches, machines] = await Promise.all([
+            axios.get(`/clients/${clientId}/branches`).then((r) => r.data),
+            axios.get(`/clients/${clientId}/machines`).then((r) => r.data),
+        ]);
+        branchesCatalog.value = branches ?? [];
+        machinesCatalog.value = machines ?? [];
+        lastClientId.value = clientId;
+    } finally {
+        loadingClient.value = false;
+    }
+}
 
 const form = reactive<HeaderSelection>({
     selectedClient: (props.report?.branch.client ?? props.catalogClients?.[0] ?? null),
@@ -750,12 +779,50 @@ const tabs = ref<Tab[]>(Array.from({ length: initialTabsLen }, createTab));
 const existingReports =
     (props.report?.service_reports ?? props.report?.serviceReports ?? []) as Array<{ pieces?: number }>;
 
-existingReports
-  .slice(0, LIMITS.TABS_MAX)
-  .forEach((r, i) => {
-    if (!tabs.value[i]) tabs.value[i] = createTab();
-    tabs.value[i].pieces = (r?.pieces ?? null) as any;
+existingReports.slice(0, LIMITS.TABS_MAX).forEach((r, i) => {
+  const srMachines = r?.machines ?? [];
+  const lineMachines =
+    srMachines?.[0]?.production_line?.machines?.length
+      ? srMachines[0].production_line.machines
+      : srMachines;
+
+    const details = (r?.machine_details ?? r?.machineDetails ?? []) as any[];
+  
+  const byPivot: Record<number, any[]> = {};
+  details.forEach((d) => {
+    const k = Number(d?.service_report_machine_id);
+    if (Number.isFinite(k)) (byPivot[k] ||= []).push(d);
   });
+
+const pivotIdByMachineId: Record<number, number> = {};
+const pivotDataByMachineId: Record<number, any> = {};
+    srMachines.forEach((m: any) => {
+        pivotIdByMachineId[m.id] = Number(m?.pivot?.id);
+        pivotDataByMachineId[m.id] = m?.pivot ?? {};
+});
+  
+getPostTab(i).machines = (lineMachines ?? []).map((m: any) => {
+    const pid = pivotIdByMachineId[m.id];
+    const p   = pivotDataByMachineId[m.id] ?? {};
+    const md = pid ? (byPivot[pid] ?? []) : [];
+    return {
+      machine_id: m.id,
+      machine_details: md.length
+        ? md.map((d: any) => ({
+            module_id: d.module_id,
+            failure_id: d.failure_id,
+            failure_type_id: d.failure_type_id,
+            dt: d.dt,
+          }))
+        : [{ ...DEFAULT_DETAIL }],
+      transport_1:  p.transport_1 ?? 0.0,
+      transport_2: p.transport_2 ?? 0.0,
+      transport_3: p.transport_3 ?? 0.0,
+      dt: p.dt ?? null,
+      signature_client_name: p.signature_client_name ?? null,
+    } as PostTabMachine;
+  });
+});
 
 
 const loadingClient = ref(false);
@@ -798,7 +865,28 @@ const tabButtonClass = (i: number) =>
 const uid = (...parts: Array<string | number>) =>
   parts.filter(p => p != null && String(p).length).join('-');
 
-const machineAt = (i: number) => getPostTab(selectedTab.value).machines[i];
+const machineAt = (i: number) => {
+    const tab = getPostTab(selectedTab.value);
+
+    if (!tab.machines[i] && machinesListing.value[i]?.id != null) { 
+        tab.machines[i] = {
+            machine_id: machinesListing.value[i].id,
+            machine_details: [{ ...DEFAULT_DETAIL }],
+            transport_1: 0.0,
+            transport_2: 0.0,
+            transport_3: 0.0,
+            dt: null,
+            signature_client_name: null,
+        };
+    }
+
+    return tab.machines[i];
+};
+
+const serverMachineForTab = computed(() => {
+  const reports = (props.report?.service_reports ?? props.report?.serviceReports ?? []);
+  return reports[selectedTab.value]?.machines?.[0] ?? null;
+});
 
 const machineCardClass = (m: any) => {
   const onlyDT = isOnlyDT(m);
@@ -817,18 +905,8 @@ const addNewPart = () => {
     else list[i].quantity = (list[i].quantity ?? 0) + 1;
 };
 
-const report = reactive<{
-  service_date: string;
-  service_timezone: string;
-  tabs: PostTab[];
-}>({
-  service_date: (() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}` })(),
-  service_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  tabs: [],
-});
-
 const machinesListing = computed(() => {
-    const sm = selectedMachine.value;
+    const sm = selectedMachine.value ?? serverMachineForTab.value;
     if (!sm) return [];
     const pl = sm.production_line;
     return (pl?.id != null && pl.machines?.length) ? pl.machines : [sm];
@@ -860,6 +938,21 @@ const clearClientDependentState = () => {
     partSearch.value = null;
     catalogParts.value = [];
     partsCache.clear();
+};
+
+const initialServerTabs =
+    (props.report?.service_reports ?? props.report?.serviceReports ?? []).length;
+
+const isNewTab = (i: number) => i >= initialServerTabs;
+
+const canAddTab = computed(() =>
+  tabs.value.length < LIMITS.TABS_MAX &&
+  tabs.value.every((t, i) => !isNewTab(i) || !!t.selectedMachine)
+);
+
+const addTab = () => {
+    tabs.value.push(createTab());
+    selectedTab.value = tabs.value.length - 1;
 };
 
 async function onClientSelect(option: { id: number }) {
