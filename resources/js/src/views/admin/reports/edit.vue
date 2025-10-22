@@ -13,7 +13,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex px-4 mt-4" v-if="usePage().props.auth?.type === 1">
+                <div class="flex px-4 mt-4" v-if="isAdmin">
                     <div class="w-full">
                         <div class="flex items-center">
                             <label for="formUser" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("report.form.user") }}
@@ -651,6 +651,8 @@ const getPostTab = (i: number): PostTab => {
 };
     
 const activeTab = computed(() => tabs.value[selectedTab.value]);
+
+const isAdmin = computed(() => usePage().props.auth?.type === 1);
 
 const selectedMachine = computed(() => activeTab.value?.selectedMachine);
 
