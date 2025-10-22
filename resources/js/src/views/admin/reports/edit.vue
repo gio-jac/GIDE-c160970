@@ -678,10 +678,6 @@ const props = defineProps<{
     report: any;
 }>();
 
-const formEdit = useForm<any>({
-    
-});
-
 const dateTime = computed(() => ({
   enableTime: true,
   dateFormat: "Y-m-d H:i",
@@ -742,7 +738,26 @@ const createTab = (): Tab => ({
     notes: "",
 });
 
-const tabs = ref([createTab()]);
+const initialTabsLen = Math.max(
+    1,
+    Math.min(LIMITS.TABS_MAX,
+        props.report?.service_reports?.length ??
+        props.report?.serviceReports?.length ??
+        1),
+);
+const tabs = ref<Tab[]>(Array.from({ length: initialTabsLen }, createTab));
+
+const existingReports =
+    (props.report?.service_reports ?? props.report?.serviceReports ?? []) as Array<{ pieces?: number }>;
+
+existingReports
+  .slice(0, LIMITS.TABS_MAX)
+  .forEach((r, i) => {
+    if (!tabs.value[i]) tabs.value[i] = createTab();
+    tabs.value[i].pieces = (r?.pieces ?? null) as any;
+  });
+
+
 const loadingClient = ref(false);
 const lastClientId = ref<number | null>(null);
 let clientLoadSeq = 0;
