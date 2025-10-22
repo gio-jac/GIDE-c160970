@@ -13,6 +13,9 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\machine_reports\Branch;
+use App\Models\machine_reports\Module;
+use App\Models\machine_reports\Failure;
+use App\Models\machine_reports\FailureType;
 
 class ServiceVisitController extends Controller
 {
@@ -283,18 +286,29 @@ class ServiceVisitController extends Controller
             'branch.client.branches.city:id,name',
             'branch.client.branches.branchManagers:id,name,email,phone,branch_id',
             'branchManager:id,name,email,phone,branch_id',
-            'serviceReports'
+            'serviceReports',
+            'serviceReports.machines' => function ($q) {
+                $q->withPivot(['id','transport_1','transport_2','transport_3','dt','signature_client_name'])->with('machine_model');
+            },
+            'serviceReports.machines.machine_model.model_segment',
+            'serviceReports.machines.production_line',
+            'serviceReports.machines.production_line.machines' => function($query){
+                $query->orderBy('position', 'asc')->with('machine_model.model_segment');;
+            },
+            'serviceReports.machineDetails',
         ]);
-
-
-
+        
+        $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
+        $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
+        $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
+        
         return Inertia::render('admin/reports/edit',[
             'catalogCodes' => [],
             'catalogStatus' => [],
             'catalogShifts' => [],
-            'catalogModule' => [],
-            'catalogFailures' => [],
-            'catalogTypes' => [],
+            'catalogModule' => $catalogModule,
+            'catalogFailures' => $catalogFailures,
+            'catalogTypes' => $catalogTypes,
             'report' => $serviceVisit->toArray(),
             'latestReports' => [],
         ]);
