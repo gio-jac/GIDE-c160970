@@ -273,7 +273,31 @@ class ServiceVisitController extends Controller
      */
     public function edit(ServiceVisit $serviceVisit)
     {
-        //
+        $serviceVisit->load([
+            'user:id,emp,nombre,apellido_paterno',
+            'shift:id',
+            'branch:id,city_id,client_id,address',
+            'branch.city:id,name',
+            'branch.client:id,name',
+            'branch.client.branches:id,city_id,client_id,address',
+            'branch.client.branches.city:id,name',
+            'branch.client.branches.branchManagers:id,name,email,phone,branch_id',
+            'branchManager:id,name,email,phone,branch_id',
+            'serviceReports'
+        ]);
+
+
+
+        return Inertia::render('admin/reports/edit',[
+            'catalogCodes' => [],
+            'catalogStatus' => [],
+            'catalogShifts' => [],
+            'catalogModule' => [],
+            'catalogFailures' => [],
+            'catalogTypes' => [],
+            'report' => $serviceVisit->toArray(),
+            'latestReports' => [],
+        ]);
     }
 
     /**

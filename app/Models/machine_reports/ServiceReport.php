@@ -46,6 +46,10 @@ class ServiceReport extends Model
         'branch_id',
     ];
 
+    protected $casts = [
+        'closed' => 'bool',
+    ];
+
     public function status(): HasOne
     {
         return $this->hasOne(Status::class, 'id', 'status_id');
