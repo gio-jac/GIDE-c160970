@@ -4,6 +4,7 @@ namespace App\Models\machine_reports;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\machine_reports\Pivots\ServiceReportMachinePivot;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -87,7 +88,15 @@ class ServiceReport extends Model
 
     public function machines(): BelongsToMany
     {
-        return $this->belongsToMany(Machine::class, ServiceReportMachine::class)->withTimestamps()->withPivot('id','transport_time_1','transport_time_2','transport_1','transport_2','transport_3','dt','signature_client_name');
+        return $this->belongsToMany(
+            Machine::class,
+            'service_report_machine',
+            'service_report_id',
+            'machine_id'
+        )
+        ->using(ServiceReportMachinePivot::class)
+        ->withPivot('id','transport_1','transport_2','transport_3','dt','signature_client_name')
+        ->withTimestamps();
     }
 
     public function machineDetails(): HasManyThrough

@@ -17,6 +17,7 @@ use App\Models\machine_reports\Module;
 use App\Models\machine_reports\Failure;
 use App\Models\machine_reports\FailureType;
 use App\Models\machine_reports\Code;
+use Illuminate\Support\Facades\Cache;
 
 class ServiceVisitController extends Controller
 {
@@ -278,44 +279,36 @@ class ServiceVisitController extends Controller
      */
     public function edit(ServiceVisit $serviceVisit)
     {
-        $serviceVisit->load([
-            'user:id,emp,nombre,apellido_paterno',
-            'shift:id,name',
-            'branch:id,city_id,client_id,address',
-            'branch.city:id,name',
-            'branch.client:id,name',
-            'branchManager:id,name,email,phone,branch_id',
-            'serviceReports:id,service_visit_id,pieces,sogd,time_on,travel_time,report_type_id,reported_error,code_id,actions_taken,reported,arrival,finished,departure,status_id,is_tested,notes,branch_id',
-            'serviceReports.machines:id,serial,line_num,only_dt,production_line_id,machine_model_id',
-            'serviceReports.machines.machine_model:id,model,model_segment_id',
-            'serviceReports.machines.machine_model.model_segment:id,segment,is_multi_transport',
-            'serviceReports.machines.production_line:id',
-            'serviceReports.machines.production_line.machines' => function ($q) {
-                $q->select('id','serial','line_num','only_dt','machine_model_id','production_line_id','position')
-                ->orderBy('position','asc')
-                ->with([
-                    'machine_model:id,model,model_segment_id',
-                    'machine_model.model_segment:id,segment,is_multi_transport',
-                ]);
-            },
-            'serviceReports.machineDetails' => function ($q) {
-                $q->select(
-                    'service_report_machine_details.id',
-                    'service_report_machine_details.service_report_machine_id',
-                    'service_report_machine_details.module_id',
-                    'service_report_machine_details.failure_id',
-                    'service_report_machine_details.failure_type_id',
-                    'service_report_machine_details.dt'
-                );
-            },
-            'serviceReports.parts:id,service_report_id,part_id,quantity',
-            'serviceReports.parts.part:id,num_part,descripcion',
-        ]);
+        $serviceVisit = ServiceVisit::withEditGraph()->findOrFail($serviceVisit->id);
 
-        $catalogCodes = Code::where('is_active', 1)->get();
-        $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
-        $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
-        $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
+        $catalogCodes = Cache::remember('catalog:codes:v1', 3600, fn () =>
+            Code::query()
+                ->where('is_active', 1)
+                ->select('id', 'code', 'description')
+                ->orderBy('code')
+                ->get()
+        );
+        $catalogModule = Cache::remember('catalog:modules:v1', 3600, fn () =>
+            Module::query()
+                ->where('is_active', 1)
+                ->select('id', 'name', 'es', 'pt')
+                ->orderBy('name')
+                ->get()
+        );
+        $catalogFailures = Cache::remember('catalog:failures:v1', 3600, fn () =>
+            Failure::query()
+                ->where('is_active', 1)
+                ->select('id', 'name', 'es', 'pt')
+                ->orderBy('name')
+                ->get()
+        );
+        $catalogTypes = Cache::remember('catalog:failure_types:v1', 3600, fn () =>
+            FailureType::query()
+                ->where('is_active', 1)
+                ->select('id', 'name', 'es', 'pt')
+                ->orderBy('name')
+                ->get()
+        );
         
         return Inertia::render('admin/reports/edit',[
             'catalogCodes' => $catalogCodes,

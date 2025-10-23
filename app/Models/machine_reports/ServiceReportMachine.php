@@ -14,8 +14,6 @@ class ServiceReportMachine extends Model
     protected $fillable = [
         'service_report_id',
         'machine_id',
-        'transport_time_1',
-        'transport_time_2',
         'transport_1',
         'transport_2',
         'transport_3',
@@ -35,6 +33,6 @@ class ServiceReportMachine extends Model
 
     public function details()
     {
-        return $this->hasMany(ServiceReportMachineDetail::class);
+        return $this->hasMany(ServiceReportMachineDetail::class, 'service_report_machine_id');
     }
 }
