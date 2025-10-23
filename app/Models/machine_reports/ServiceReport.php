@@ -4,6 +4,7 @@ namespace App\Models\machine_reports;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\machine_reports\Pivots\ServiceReportMachinePivot;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -50,24 +51,24 @@ class ServiceReport extends Model
         'closed' => 'bool',
     ];
 
-    public function status(): HasOne
+    public function status(): BelongsTo
     {
-        return $this->hasOne(Status::class, 'id', 'status_id');
+        return $this->belongsTo(Status::class, 'status_id');
     }
 
-    public function shift(): HasOne
+    public function shift(): BelongsTo
     {
-        return $this->hasOne(Shift::class, 'id', 'shift_id');
+        return $this->belongsTo(Shift::class, 'shift_id');
     }
 
-    public function code(): HasOne
+    public function code(): BelongsTo
     {
-        return $this->hasOne(Code::class, 'id', 'code_id');
+        return $this->belongsTo(Code::class, 'code_id');
     }
 
-    public function branchManager(): HasOne
+    public function branchManager(): BelongsTo
     {
-        return $this->hasOne(BranchManager::class, 'id', 'branch_manager_id');
+        return $this->belongsTo(BranchManager::class, 'branch_manager_id');
     }
 
     public function parts(): HasMany
@@ -75,19 +76,27 @@ class ServiceReport extends Model
         return $this->hasMany(ServiceParts::class, 'service_report_id', 'id');
     }
 
-    public function branch(): HasOne
+    public function branch(): BelongsTo
     {
-        return $this->hasOne(Branch::class, 'id', 'branch_id');
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
-    public function user(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function machines(): BelongsToMany
     {
-        return $this->belongsToMany(Machine::class, ServiceReportMachine::class)->withTimestamps()->withPivot('id','transport_time_1','transport_time_2','transport_1','transport_2','transport_3','dt','signature_client_name');
+        return $this->belongsToMany(
+            Machine::class,
+            'service_report_machine',
+            'service_report_id',
+            'machine_id'
+        )
+        ->using(ServiceReportMachinePivot::class)
+        ->withPivot('id','transport_1','transport_2','transport_3','dt','signature_client_name')
+        ->withTimestamps();
     }
 
     public function machineDetails(): HasManyThrough

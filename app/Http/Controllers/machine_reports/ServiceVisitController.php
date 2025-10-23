@@ -17,6 +17,7 @@ use App\Models\machine_reports\Module;
 use App\Models\machine_reports\Failure;
 use App\Models\machine_reports\FailureType;
 use App\Models\machine_reports\Code;
+use Illuminate\Support\Facades\Cache;
 
 class ServiceVisitController extends Controller
 {
@@ -278,34 +279,36 @@ class ServiceVisitController extends Controller
      */
     public function edit(ServiceVisit $serviceVisit)
     {
-        $serviceVisit->load([
-            'user:id,emp,nombre,apellido_paterno',
-            'shift:id',
-            'branch:id,city_id,client_id,address',
-            'branch.city:id,name',
-            'branch.client:id,name',
-            'branch.client.branches:id,city_id,client_id,address',
-            'branch.client.branches.city:id,name',
-            'branch.client.branches.branchManagers:id,name,email,phone,branch_id',
-            'branchManager:id,name,email,phone,branch_id',
-            'serviceReports',
-            'serviceReports.machines' => function ($q) {
-                $q->withPivot(['id','transport_1','transport_2','transport_3','dt','signature_client_name'])->with('machine_model');
-            },
-            'serviceReports.machines.machine_model.model_segment',
-            'serviceReports.machines.production_line',
-            'serviceReports.machines.production_line.machines' => function($query){
-                $query->orderBy('position', 'asc')->with('machine_model.model_segment');;
-            },
-            'serviceReports.machineDetails',
-            'serviceReports.parts',
-            'serviceReports.parts.part',
-        ]);
+        $serviceVisit = ServiceVisit::withEditGraph()->findOrFail($serviceVisit->id);
 
-        $catalogCodes = Code::where('is_active', 1)->get();
-        $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
-        $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
-        $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
+        $catalogCodes = Cache::remember('catalog:codes:v1', 3600, fn () =>
+            Code::query()
+                ->where('is_active', 1)
+                ->select('id', 'code', 'description')
+                ->orderBy('code')
+                ->get()
+        );
+        $catalogModule = Cache::remember('catalog:modules:v1', 3600, fn () =>
+            Module::query()
+                ->where('is_active', 1)
+                ->select('id', 'name', 'es', 'pt')
+                ->orderBy('name')
+                ->get()
+        );
+        $catalogFailures = Cache::remember('catalog:failures:v1', 3600, fn () =>
+            Failure::query()
+                ->where('is_active', 1)
+                ->select('id', 'name', 'es', 'pt')
+                ->orderBy('name')
+                ->get()
+        );
+        $catalogTypes = Cache::remember('catalog:failure_types:v1', 3600, fn () =>
+            FailureType::query()
+                ->where('is_active', 1)
+                ->select('id', 'name', 'es', 'pt')
+                ->orderBy('name')
+                ->get()
+        );
         
         return Inertia::render('admin/reports/edit',[
             'catalogCodes' => $catalogCodes,
