@@ -280,26 +280,36 @@ class ServiceVisitController extends Controller
     {
         $serviceVisit->load([
             'user:id,emp,nombre,apellido_paterno',
-            'shift:id',
+            'shift:id,name',
             'branch:id,city_id,client_id,address',
             'branch.city:id,name',
             'branch.client:id,name',
-            'branch.client.branches:id,city_id,client_id,address',
-            'branch.client.branches.city:id,name',
-            'branch.client.branches.branchManagers:id,name,email,phone,branch_id',
             'branchManager:id,name,email,phone,branch_id',
-            'serviceReports',
-            'serviceReports.machines' => function ($q) {
-                $q->withPivot(['id','transport_1','transport_2','transport_3','dt','signature_client_name'])->with('machine_model');
+            'serviceReports:id,service_visit_id,pieces,sogd,time_on,travel_time,report_type_id,reported_error,code_id,actions_taken,reported,arrival,finished,departure,status_id,is_tested,notes,branch_id',
+            'serviceReports.machines:id,serial,line_num,only_dt,production_line_id,machine_model_id',
+            'serviceReports.machines.machine_model:id,model,model_segment_id',
+            'serviceReports.machines.machine_model.model_segment:id,segment,is_multi_transport',
+            'serviceReports.machines.production_line:id',
+            'serviceReports.machines.production_line.machines' => function ($q) {
+                $q->select('id','serial','line_num','only_dt','machine_model_id','production_line_id','position')
+                ->orderBy('position','asc')
+                ->with([
+                    'machine_model:id,model,model_segment_id',
+                    'machine_model.model_segment:id,segment,is_multi_transport',
+                ]);
             },
-            'serviceReports.machines.machine_model.model_segment',
-            'serviceReports.machines.production_line',
-            'serviceReports.machines.production_line.machines' => function($query){
-                $query->orderBy('position', 'asc')->with('machine_model.model_segment');;
+            'serviceReports.machineDetails' => function ($q) {
+                $q->select(
+                    'service_report_machine_details.id',
+                    'service_report_machine_details.service_report_machine_id',
+                    'service_report_machine_details.module_id',
+                    'service_report_machine_details.failure_id',
+                    'service_report_machine_details.failure_type_id',
+                    'service_report_machine_details.dt'
+                );
             },
-            'serviceReports.machineDetails',
-            'serviceReports.parts',
-            'serviceReports.parts.part',
+            'serviceReports.parts:id,service_report_id,part_id,quantity',
+            'serviceReports.parts.part:id,num_part,descripcion',
         ]);
 
         $catalogCodes = Code::where('is_active', 1)->get();

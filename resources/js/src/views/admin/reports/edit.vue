@@ -50,7 +50,7 @@
                         <div class="flex items-center">
                             <label for="formCatalogBranches" class="w-[140px] text-right mb-0 mr-[10px]">Sucursal <span class="text-red-500">*</span>
                             </label>
-                            <multiselect @select="form.selectedContact = null" id="formCatalogBranches" :options="props.report.branch.client.branches" v-model="form.selectedBranch" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="branchLabel" :disabled="!props.report.branch.client.branches.length" v-bind="multiselectLabels"></multiselect>
+                            <multiselect @select="form.selectedContact = null" id="formCatalogBranches" :options="branchesCatalog" v-model="form.selectedBranch" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="branchLabel" :disabled="!branchesCatalog.length" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.branch_id" class="text-danger mt-1 text-center">
                             {{ errors.branch_id }}
@@ -62,7 +62,7 @@
                         <div class="flex items-center">
                             <label for="formCatalogContact" class="w-[140px] text-right mb-0 mr-[10px]">Contacto <span class="text-red-500">*</span>
                             </label>
-                            <multiselect :key="form.selectedBranch?.id || 'no-branch'" id="formCatalogContact" :options="(props.report.branch.client.branches.find(b => b.id === form.selectedBranch?.id)?.branch_managers) ?? []" v-model="form.selectedContact" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
+                            <multiselect :key="form.selectedBranch?.id || 'no-branch'" id="formCatalogContact" :options="(branchesCatalog.find(b => b.id === form.selectedBranch?.id)?.branch_managers) ?? []" v-model="form.selectedContact" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.branch_manager_id" class="text-danger mt-1 text-center">
                             {{ errors.branch_manager_id }}
@@ -863,7 +863,16 @@ let partsTimer: ReturnType<typeof setTimeout> | null = null;
 const partsCache = new Map<string, Part[]>();
 const selectedTab = ref(0);
 
-const branchesCatalog = ref<Branch[]>([]);
+const branchesCatalog = ref<Branch[]>(
+    props.report?.branch
+    ? [{
+        ...props.report.branch,
+        branch_managers:
+            props.report?.branch?.branch_managers
+            ?? (props.report?.branch_manager ? [props.report.branch_manager] : [])
+    }]
+    : []
+);
 const machinesCatalog = ref<SelectedMachine[]>([]);
 
 function getTranslation(item: LocalizedItem): string {

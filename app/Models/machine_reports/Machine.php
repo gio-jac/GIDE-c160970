@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Machine extends Model
 {
@@ -22,25 +23,25 @@ class Machine extends Model
         'is_active',
     ];
 
-    public function machine_model(): HasOne
+    public function machine_model(): BelongsTo
     {
-        return $this->hasOne(MachineModels::class, 'id', 'machine_model_id');
+        return $this->belongsTo(MachineModels::class, 'machine_model_id');
     }
 
-    public function client(): HasOne
+    public function client(): BelongsTo
     {
-        return $this->hasOne(Client::class, 'id', 'client_id');
+        return $this->belongsTo(Client::class, 'client_id');
     }
 
-    public function production_line(): HasOne
+    public function production_line(): BelongsTo
     {
-        return $this->hasOne(ProductionLine::class, 'id', 'production_line_id')->withDefault([
+        return $this->belongsTo(ProductionLine::class, 'production_line_id')->withDefault([
             'name' => 'N/A'
         ]);
     }
 
     public function serviceReports(): BelongsToMany
     {
-        return $this->belongsToMany(ServiceReport::class, ServiceReportMachine::class)->withTimestamps()->withPivot('transport_time_1','transport_time_2','transport_1','transport_2','transport_3','dt','signature_client_name');
+        return $this->belongsToMany(ServiceReport::class, ServiceReportMachine::class)->withTimestamps()->withPivot('transport_1','transport_2','transport_3','dt','signature_client_name');
     }
 }
