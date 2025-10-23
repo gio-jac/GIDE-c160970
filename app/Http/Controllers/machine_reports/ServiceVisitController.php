@@ -18,6 +18,7 @@ use App\Models\machine_reports\Failure;
 use App\Models\machine_reports\FailureType;
 use App\Models\machine_reports\Code;
 use Illuminate\Support\Facades\Cache;
+use App\Models\machine_reports\Status;
 
 class ServiceVisitController extends Controller
 {
@@ -309,10 +310,18 @@ class ServiceVisitController extends Controller
                 ->orderBy('name')
                 ->get()
         );
+
+        $catalogStatus = Cache::remember('catalog:status:v1', 3600, fn () =>
+            Status::query()
+                ->where('is_active', 1)
+                ->select('id', 'status')
+                ->orderBy('status')
+                ->get()
+        );
         
         return Inertia::render('admin/reports/edit',[
             'catalogCodes' => $catalogCodes,
-            'catalogStatus' => [],
+            'catalogStatus' => $catalogStatus,
             'catalogShifts' => [],
             'catalogModule' => $catalogModule,
             'catalogFailures' => $catalogFailures,
@@ -620,6 +629,28 @@ class ServiceVisitController extends Controller
         return Inertia::render('admin/reports/index', [
             'reports' => $baseQuery,
         ]);
+    }
+
+    public function closeReportVisit(ServiceVisit $serviceVisit){
+        if($serviceVisit->closed) {
+            return;
+        }
+
+        $serviceVisit->closed = true;
+        $serviceVisit->save();
+
+        return to_route('service-visit.edit', ['service_visit' => $serviceVisit->id]);
+    }
+
+    public function reOpenReportVisit(ServiceVisit $serviceVisit){
+        if(!$serviceVisit->closed) {
+            return;
+        }
+
+        $serviceVisit->closed = false;
+        $serviceVisit->save();
+
+        return to_route('service-visit.edit', ['service_visit' => $serviceVisit->id]);
     }
 
     protected function applyDateFilter($query, $filter){

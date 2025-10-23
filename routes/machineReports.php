@@ -54,6 +54,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/clients/{id}/branches', [ReportController::class, 'getBranches'])->name('clients.getBranches');
     Route::get('/clients/{id}/machines', [ReportController::class, 'getMachines'])->name('clients.getMachines');
 
+    Route::patch('/service-visit/{service_visit}/close', [ServiceVisitController::class, 'closeReportVisit'])->name('service-visit.close');
+    Route::patch('/service-visit/{service_visit}/reopen', [ServiceVisitController::class, 'reOpenReportVisit'])->name('service-visit.reopen');
     Route::get('/service-visit/filterByDate', [ServiceVisitController::class, 'filterReports'])->name('service-visit.filterByDate');
     Route::resource('/service-visit', ServiceVisitController::class);
 });
