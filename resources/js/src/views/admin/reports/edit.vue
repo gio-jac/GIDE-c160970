@@ -839,7 +839,7 @@ getPostTab(i).machines = (lineMachines ?? []).map((m: any) => {
         arrival:        r?.arrival        ?? null,
         finished:       r?.finished       ?? null,
         status_id:      r?.status_id      ?? null,
-        is_tested: !!r?.is_tested,
+        is_tested:      !!r?.is_tested,
         
         service_parts: Array.isArray(r?.parts)
         ? r.parts.map((p: any) => ({
