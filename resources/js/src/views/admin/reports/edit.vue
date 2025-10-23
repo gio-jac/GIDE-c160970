@@ -236,7 +236,7 @@
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8 px-4">
                     <div class="flex flex-wrap justify-evenly">
-                        <template v-if="!hasProductionLine(selectedMachine)">
+                        <template v-if="!hasProductionLine(selectedMachine ?? serverMachineForTab)">
                             <div class="px-2 max-w-[180px]">
                                 <label for="formReportReportedTime">
                                     {{ $t("report.form.reported") }}
@@ -307,7 +307,7 @@
                             <tbody>
                                 <template v-if="activeTab.service_parts.length <= 0">
                                     <tr>
-                                        <td colspan="5" class="!text-center font-semibold">
+                                        <td colspan="4" class="!text-center font-semibold">
                                             {{ $t("report.form.noItems") }}
                                         </td>
                                     </tr>
@@ -793,6 +793,7 @@ existingReports.slice(0, LIMITS.TABS_MAX).forEach((r, i) => {
     const k = Number(d?.service_report_machine_id);
     if (Number.isFinite(k)) (byPivot[k] ||= []).push(d);
   });
+});
 
 const pivotIdByMachineId: Record<number, number> = {};
 const pivotDataByMachineId: Record<number, any> = {};
@@ -822,6 +823,37 @@ getPostTab(i).machines = (lineMachines ?? []).map((m: any) => {
       signature_client_name: p.signature_client_name ?? null,
     } as PostTabMachine;
   });
+
+    Object.assign(tabs.value[i], {
+        pieces:        r?.pieces        ?? null,
+        sogd:          r?.sogd          ?? null,
+        time_on:       r?.time_on       ?? null,
+        travel_time:   r?.travel_time   ?? null,
+        report_type_id: (r?.report_type_id === 2 || r?.type === 2) ? 2 : 1,
+
+        reported_error: r?.reported_error ?? "",
+        code_id:        r?.code_id        ?? null,
+        actions_taken:  r?.actions_taken  ?? "",
+        reported:       r?.reported       ?? null,
+        departure:      r?.departure      ?? null,
+        arrival:        r?.arrival        ?? null,
+        finished:       r?.finished       ?? null,
+        status_id:      r?.status_id      ?? null,
+        is_tested: !!r?.is_tested,
+        
+        service_parts: Array.isArray(r?.parts)
+        ? r.parts.map((p: any) => ({
+            id:          p.part?.id ?? p.part_id ?? p.id,
+            num_part:    p.part?.num_part ?? p.num_part ?? '',
+            descripcion: p.part?.descripcion ?? p.descripcion ?? '',
+            quantity:    p.quantity ?? 1,
+            }))
+        : Array.isArray(r?.service_parts ?? r?.serviceParts)
+            ? (r?.service_parts ?? r?.serviceParts)
+            : [],
+
+        notes: r?.notes ?? "",
+    });
 });
 
 
@@ -859,8 +891,10 @@ const userLabel = (u: { emp?: string; nombre?: string; apellido_paterno?: string
 const partLabel = (p: { num_part?: string; descripcion?: string }) =>
   `${p?.num_part?.trim() || '-'} - ${p?.descripcion?.trim() || '-'}`;
 
-const tabButtonClass = (i: number) =>
-  i === selectedTab.value ? 'border-blue-600 font-medium text-slate-900 dark:text-slate-100' : '';
+const tabButtonClass = (i: number) => ({
+  'border-b-transparent text-slate-500': i !== selectedTab.value,
+  '!border-b-blue-600 font-medium text-slate-900 dark:text-slate-100': i === selectedTab.value,
+});
 
 const uid = (...parts: Array<string | number>) =>
   parts.filter(p => p != null && String(p).length).join('-');
@@ -1071,13 +1105,13 @@ function buildPayload(): ReportPayload {
         client_id: form.selectedClient?.id ?? null,
         branch_id: form.selectedBranch?.id ?? null,
         branch_manager_id: form.selectedContact?.id ?? null,
-        service_date: report.service_date,
-        service_timezone: report.service_timezone,
+        service_date: props.report?.service_date ?? report.service_date,
+        service_timezone: props.report?.service_timezone ?? report.service_timezone,
     };
 
     const nz = (s: string | null | undefined) => (s && s.trim().length ? s : null);
     const tabsPayload: TabPayload[] = tabs.value.map((t, i) => ({
-        selected_machine_id: t.selectedMachine?.id ?? null,
+        selected_machine_id: t.selectedMachine?.id ?? getPostTab(i).machines?.[0]?.machine_id ?? null,
         pieces: t.pieces ?? 0,
         sogd: t.sogd ?? null,
         time_on: t.time_on ?? 0,

@@ -28,6 +28,7 @@ class ServiceVisit extends Model
         'closed' => 'bool',
         'service_date' => 'date',
         'is_active' => 'bool',
+        'service_timezone' => 'string',
     ];
 
     public function user(): HasOne

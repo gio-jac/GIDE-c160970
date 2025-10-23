@@ -16,6 +16,7 @@ use App\Models\machine_reports\Branch;
 use App\Models\machine_reports\Module;
 use App\Models\machine_reports\Failure;
 use App\Models\machine_reports\FailureType;
+use App\Models\machine_reports\Code;
 
 class ServiceVisitController extends Controller
 {
@@ -145,6 +146,7 @@ class ServiceVisitController extends Controller
             'tabs.*.pieces' => ['bail','nullable', 'integer', 'min:0', 'max:999999999999'],
             'tabs.*.sogd' => ['bail','nullable', 'string', 'max:255'],
             'tabs.*.travel_time' => ['bail','nullable', 'integer', 'min:0', 'max:10080'],
+            'tabs.*.time_on' => ['bail', 'nullable', 'numeric', 'decimal:0,2', 'gte:0', 'lte:9999999.99'],
             'tabs.*.report_type_id' => ['bail','required', 'integer', 'min:1', 'max:2'],
             'tabs.*.reported_error' => ['bail','nullable', 'string', 'max:255'],
             'tabs.*.code_id' => ['bail','nullable', 'integer', 'exists:codes,id'],
@@ -296,14 +298,17 @@ class ServiceVisitController extends Controller
                 $query->orderBy('position', 'asc')->with('machine_model.model_segment');;
             },
             'serviceReports.machineDetails',
+            'serviceReports.parts',
+            'serviceReports.parts.part',
         ]);
-        
+
+        $catalogCodes = Code::where('is_active', 1)->get();
         $catalogModule = Module::where('is_active', 1)->orderBy('name')->get();
         $catalogFailures = Failure::where('is_active', 1)->orderBy('name')->get();
         $catalogTypes = FailureType::where('is_active', 1)->orderBy('name')->get();
         
         return Inertia::render('admin/reports/edit',[
-            'catalogCodes' => [],
+            'catalogCodes' => $catalogCodes,
             'catalogStatus' => [],
             'catalogShifts' => [],
             'catalogModule' => $catalogModule,
