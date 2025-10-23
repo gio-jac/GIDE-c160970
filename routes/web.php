@@ -21,7 +21,7 @@ Route::get('/', function () {
         $user = Auth::user();
         return $user->user_type_id == 1
             ? redirect()->route('users.index')
-            : redirect()->route('reports.index');
+            : redirect()->route('service-visit.index');
     }
 
     return Inertia::render('auth/login');

@@ -39,11 +39,13 @@ class ServiceVisitController extends Controller
                 'complete_id',
                 'user_id',
                 'branch_id',
+                'closed as status',
                 'created_at',
             ])
             ->with([
                 'user:id,nombre,apellido_paterno,apellido_materno',
                 'branch:id,city_id',
+                'branch.client:id,name',
                 'branch.city:id,name,country_id',
             ])
             ->withCount('serviceReports')
