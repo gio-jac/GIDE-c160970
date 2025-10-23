@@ -50,7 +50,7 @@
                         <div class="flex items-center">
                             <label for="formCatalogBranches" class="w-[140px] text-right mb-0 mr-[10px]">Sucursal <span class="text-red-500">*</span>
                             </label>
-                            <multiselect @select="form.selectedContact = null" id="formCatalogBranches" :options="branchesCatalog" v-model="form.selectedBranch" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="branchLabel" :disabled="!branchesCatalog.length" v-bind="multiselectLabels"></multiselect>
+                            <multiselect @select="form.selectedContact = null" id="formCatalogBranches" :options="branchesCatalog" v-model="form.selectedBranch" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="branchLabel" :disabled="!branchesCatalog.length || isClosed" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.branch_id" class="text-danger mt-1 text-center">
                             {{ errors.branch_id }}
@@ -62,7 +62,7 @@
                         <div class="flex items-center">
                             <label for="formCatalogContact" class="w-[140px] text-right mb-0 mr-[10px]">Contacto <span class="text-red-500">*</span>
                             </label>
-                            <multiselect :key="form.selectedBranch?.id || 'no-branch'" id="formCatalogContact" :options="(branchesCatalog.find(b => b.id === form.selectedBranch?.id)?.branch_managers) ?? []" v-model="form.selectedContact" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
+                            <multiselect :key="form.selectedBranch?.id || 'no-branch'" id="formCatalogContact" :options="(branchesCatalog.find(b => b.id === form.selectedBranch?.id)?.branch_managers) ?? []" v-model="form.selectedContact" track-by="id" :disabled="isClosed" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.branch_manager_id" class="text-danger mt-1 text-center">
                             {{ errors.branch_manager_id }}
@@ -79,7 +79,7 @@
                                 </button>
                                 <!-- Botón Agregar (visual, no funcional) -->
                                 <div class="ml-2 -mb-px h-9 flex items-center">
-                                    <button v-if="tabs.length < LIMITS.TABS_MAX" type="button" :disabled="!canAddTab" @click="addTab" class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400">
+                                    <button v-if="tabs.length < LIMITS.TABS_MAX && !isClosed" type="button" :disabled="!canAddTab" @click="addTab" class="h-8 px-2 inline-flex items-center gap-1 rounded border border-dashed border-slate-300 dark:border-slate-600 text-xs text-slate-600 hover:border-slate-400 hover:text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400">
                                         <!-- plus icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
@@ -96,7 +96,7 @@
                             <label for="formCatalogMachines" class="text-lg font-normal mb-0 mr-[10px]">{{ $t("report.form.machines") }}
                                 <span class="text-red-500">*</span>
                             </label>
-                            <multiselect @select="onMachineSelect" id="formCatalogMachines" :options="machinesCatalog" v-model="activeTab.selectedMachine" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="machineLabel" :disabled="!machinesCatalog.length || loadingClient" v-bind="multiselectLabels"></multiselect>
+                            <multiselect @select="onMachineSelect" id="formCatalogMachines" :options="machinesCatalog" v-model="activeTab.selectedMachine" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="machineLabel" :disabled="!machinesCatalog.length || loadingClient || isClosed" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors['tabs.' + selectedTab + '.machines']" class="text-danger mt-1 text-center">
                             {{ errors['tabs.' + selectedTab + '.machines'] }}
@@ -118,7 +118,7 @@
                                                     <label :for="uid(cfg.idPrefix, selectedTab, index, indexDetail)">
                                                         {{ $t(cfg.labelKey) }}
                                                     </label>
-                                                    <select :id="uid(cfg.idPrefix, selectedTab, index, indexDetail)" class="form-select text-white-dark" v-model="detail[cfg.key]" required>
+                                                    <select :id="uid(cfg.idPrefix, selectedTab, index, indexDetail)" :disabled="isClosed" class="form-select text-white-dark" v-model="detail[cfg.key]" required>
                                                         <option :value="null">
                                                             {{ DEFAULT_PLACEHOLDER }}
                                                         </option>
@@ -129,10 +129,10 @@
                                                 </div>
                                                 <div class="p-2 flex-auto sm:flex-1">
                                                     <label :for="uid('formErrorDT', selectedTab, index, indexDetail)">DT (Min.)</label>
-                                                    <input :id="uid('formErrorDT', selectedTab, index, indexDetail)" type="number" v-model.number="detail.dt" @input="clampField(detail as any, 'dt', DT_SPEC)" min="0" :max="LIMITS.DT_MAX" step="1" class="form-input text-white-dark" :placeholder="DT_PLACEHOLDER" />
+                                                    <input :id="uid('formErrorDT', selectedTab, index, indexDetail)" :disabled="isClosed" type="number" v-model.number="detail.dt" @input="clampField(detail as any, 'dt', DT_SPEC)" min="0" :max="LIMITS.DT_MAX" step="1" class="form-input text-white-dark" :placeholder="DT_PLACEHOLDER" />
                                                 </div>
                                                 <div class="flex">
-                                                    <button type="button" @click="machineAt(index).machine_details.splice(indexDetail, 1)" v-if="machineAt(index)?.machine_details?.length > 1">
+                                                    <button type="button" @click="machineAt(index).machine_details.splice(indexDetail, 1)" v-if="machineAt(index)?.machine_details?.length > 1 && !isClosed">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                                             <line x1="18" y1="6" x2="6" y2="18"></line>
                                                             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -142,7 +142,7 @@
                                             </template>
                                         </div>
                                         <div class="w-full flex justify-center">
-                                            <button v-if="!isOnlyDT(machine) && (machineAt(index)?.machine_details?.length ?? 0) < LIMITS.MACHINE_DETAILS_MAX" type="button" class="btn btn-secondary gap-2" @click="machineAt(index).machine_details.push({ ...DEFAULT_DETAIL })">
+                                            <button v-if="!isOnlyDT(machine) && (machineAt(index)?.machine_details?.length ?? 0) < LIMITS.MACHINE_DETAILS_MAX && !isClosed" type="button" class="btn btn-secondary gap-2" @click="machineAt(index).machine_details.push({ ...DEFAULT_DETAIL })">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -154,18 +154,18 @@
                                                 <div class="w-full flex justify-evenly flex-wrap">
                                                     <div v-for="(cfg, tIndex) in transportConfig" :key="cfg.key" class="p-2 flex-auto sm:flex-1">
                                                         <label :for="uid('formTransport', selectedTab, tIndex + 1, index)">{{ $t(cfg.labelKey) }}</label>
-                                                        <input :id="uid('formTransport', selectedTab, tIndex + 1, index)" v-model.number="machineAt(index)[cfg.key]" @input="clampTransports(machineAt(index))" type="number" class="form-input" :min="LIMITS.TRANSPORT_MIN" :max="LIMITS.TRANSPORT_MAX" :step="LIMITS.TRANSPORT_STEP" placeholder="0.0" />
+                                                        <input :id="uid('formTransport', selectedTab, tIndex + 1, index)" v-model.number="machineAt(index)[cfg.key]" :disabled="isClosed" @input="clampTransports(machineAt(index))" type="number" class="form-input" :min="LIMITS.TRANSPORT_MIN" :max="LIMITS.TRANSPORT_MAX" :step="LIMITS.TRANSPORT_STEP" placeholder="0.0" />
                                                     </div>
                                                 </div>
                                             </template>
                                             <template v-else-if="machineAt(index)">
                                                 <label :for="uid('formShiftTotal11', selectedTab, index)">{{ $t("report.form.transport") }}</label>
-                                                <input :id="uid('formShiftTotal11', selectedTab, index)" v-model="machineAt(index).transport_1" @input="clampTransports(machineAt(index))" name="formShiftTotal11" class="form-input text-white-dark" type="number" :min="LIMITS.TRANSPORT_MIN" :max="LIMITS.TRANSPORT_MAX" :step="LIMITS.TRANSPORT_STEP" placeholder="0.0" />
+                                                <input :id="uid('formShiftTotal11', selectedTab, index)" v-model="machineAt(index).transport_1" :disabled="isClosed" @input="clampTransports(machineAt(index))" name="formShiftTotal11" class="form-input text-white-dark" type="number" :min="LIMITS.TRANSPORT_MIN" :max="LIMITS.TRANSPORT_MAX" :step="LIMITS.TRANSPORT_STEP" placeholder="0.0" />
                                             </template>
                                         </div>
                                         <div class="py-2">
                                             <label :for="uid('formReportDT', selectedTab, index)">DT Final (Min.)</label>
-                                            <input :id="uid('formReportDT', selectedTab, index)" type="number" v-model.number="machineAt(index).dt" class="form-input text-white-dark" :placeholder="DT_PLACEHOLDER" @input="clampField(machineAt(index) as any, 'dt', DT_SPEC)" />
+                                            <input :id="uid('formReportDT', selectedTab, index)" type="number" v-model.number="machineAt(index).dt" :disabled="isClosed" class="form-input text-white-dark" :placeholder="DT_PLACEHOLDER" @input="clampField(machineAt(index) as any, 'dt', DT_SPEC)" />
                                         </div>
                                     </div>
                                 </div>
@@ -179,29 +179,29 @@
                         <div class="lg:w-1/2 w-full ltr:lg:pr-6 rtl:lg:pl-6 mb-6">
                             <div class="mt-4 flex items-center">
                                 <label for="formReportPieces" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.pieces") }}</label>
-                                <input v-tippy:pieces id="formReportPieces" type="number" v-model.number="activeTab.pieces" name="formReportPieces" step="1" class="form-input flex-1" placeholder="0" min="0" :max="LIMITS.PIECES_MAX" @input="clampField(activeTab as any, 'pieces', PIECES_SPEC)" />
+                                <input v-tippy:pieces id="formReportPieces" :disabled="isClosed" type="number" v-model.number="activeTab.pieces" name="formReportPieces" step="1" class="form-input flex-1" placeholder="0" min="0" :max="LIMITS.PIECES_MAX" @input="clampField(activeTab as any, 'pieces', PIECES_SPEC)" />
                                 <tippy target="pieces" trigger="focus">Utilizado como contador de billetes <br> Máximo: 999 999 999 999 </tippy>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label for="formReportSOGD" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.SOGD") }}</label>
-                                <input v-tippy:sogd id="formReportSOGD" type="text" v-model="activeTab.sogd" name="formReportSOGD" class="form-input flex-1" :placeholder="$t('report.form.SOGDPlaceholder')" />
+                                <input v-tippy:sogd id="formReportSOGD" type="text" :disabled="isClosed" v-model="activeTab.sogd" name="formReportSOGD" class="form-input flex-1" :placeholder="$t('report.form.SOGDPlaceholder')" />
                                 <tippy target="sogd" trigger="focus">Utilizado para capturar la orden de servicio de GD</tippy>
                             </div>
                         </div>
                         <div class="lg:w-1/2 w-full">
                             <div class="flex items-center mt-4">
                                 <label for="formReportOnTime" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.machineOn") }}</label>
-                                <input v-tippy:ontime id="formReportOnTime" :step="LIMITS.TIME_ON_STEP" type="number" v-model.number="activeTab.time_on" name="formReportOnTime" class="form-input flex-1" placeholder="0.00" :min="LIMITS.TIME_ON_MIN" :max="LIMITS.TIME_ON_MAX" @input="clampField(activeTab as any, 'time_on', TIME_ON_SPEC)" />
+                                <input v-tippy:ontime id="formReportOnTime" :disabled="isClosed" :step="LIMITS.TIME_ON_STEP" type="number" v-model.number="activeTab.time_on" name="formReportOnTime" class="form-input flex-1" placeholder="0.00" :min="LIMITS.TIME_ON_MIN" :max="LIMITS.TIME_ON_MAX" @input="clampField(activeTab as any, 'time_on', TIME_ON_SPEC)" />
                                 <tippy target="ontime" trigger="focus">Utilizado para registrar el tiempo de funcionamiento de la máquina <br> Máximo: 9 999 999.99 </tippy>
                             </div>
                             <div class="flex items-center mt-4">
                                 <label for="formReportTravelTime" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.travelTime") }}</label>
-                                <input v-tippy:traveltime id="formReportTravelTime" type="number" v-model.number="activeTab.travel_time" name="formReportTravelTime" class="form-input flex-1" placeholder="0" :step="LIMITS.TRAVEL_TIME_STEP" :min="LIMITS.TRAVEL_TIME_MIN" :max="LIMITS.TRAVEL_TIME_MAX" @input="clampField(activeTab as any, 'travel_time', TRAVEL_TIME_SPEC)" />
+                                <input v-tippy:traveltime id="formReportTravelTime" :disabled="isClosed" type="number" v-model.number="activeTab.travel_time" name="formReportTravelTime" class="form-input flex-1" placeholder="0" :step="LIMITS.TRAVEL_TIME_STEP" :min="LIMITS.TRAVEL_TIME_MIN" :max="LIMITS.TRAVEL_TIME_MAX" @input="clampField(activeTab as any, 'travel_time', TRAVEL_TIME_SPEC)" />
                                 <tippy target="traveltime" trigger="focus">Utilizado para registrar el tiempo de traslado <br> Máximo: 10 080 minutos </tippy>
                             </div>
                             <div class="flex items-center mt-4">
                                 <label for="formReportType" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t("report.form.type") }}</label>
-                                <select id="formReportType" name="formReportType" v-model.number="activeTab.report_type_id" class="form-select text-white-dark flex-1" required>
+                                <select id="formReportType" name="formReportType" :disabled="isClosed" v-model.number="activeTab.report_type_id" class="form-select text-white-dark flex-1" required>
                                     <option :value="1">{{ $t("catalogs.typeReport.1") }}</option>
                                     <option :value="2">{{ $t("catalogs.typeReport.2") }}</option>
                                 </select>
@@ -210,7 +210,7 @@
                         <div class="w-full mt-4">
                             <div class="flex items-center">
                                 <label for="formReportedError" class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0">{{ $t("report.form.reportedError") }}</label>
-                                <textarea id="formReportedError" name="formReportedError" rows="3" v-model="activeTab.reported_error" class="form-textarea flex-1" :placeholder="$t('report.form.reportedErrorPlaceholder')" required></textarea>
+                                <textarea id="formReportedError" :disabled="isClosed" name="formReportedError" rows="3" v-model="activeTab.reported_error" class="form-textarea flex-1" :placeholder="$t('report.form.reportedErrorPlaceholder')" required></textarea>
                             </div>
                         </div>
                     </div>
@@ -219,7 +219,7 @@
                 <div class="mt-8 px-4">
                     <div class="flex flex-wrap justify-evenly">
                         <label v-for="code in catalogCodes" :key="code.id" class="inline-flex">
-                            <input type="radio" name="formReportCode" class="form-radio" :value="code.id" v-model.number="activeTab.code_id" />
+                            <input type="radio" name="formReportCode" :disabled="isClosed" class="form-radio" :value="code.id" v-model.number="activeTab.code_id" />
                             <div class="flex flex-col">
                                 <span>{{ code.code }}</span>
                                 <span v-if="activeTab.code_id === code.id" class="text-xs">{{ catalogI18n('catalogs.codes', code.id, code.description) }}</span>
@@ -229,7 +229,7 @@
                     <div class="w-full">
                         <div class="mt-4 flex items-center">
                             <label for="formReportActions" class="ltr:mr-2 rtl:ml-2 w-1/6 mb-0">{{ $t("report.form.actionsTaken") }}</label>
-                            <textarea id="formReportActions" name="formReportActions" v-model="activeTab.actions_taken" rows="3" class="form-textarea flex-1" :placeholder="$t('report.form.actionsTakenPlaceholder')" required></textarea>
+                            <textarea id="formReportActions" name="formReportActions" :disabled="isClosed" v-model="activeTab.actions_taken" rows="3" class="form-textarea flex-1" :placeholder="$t('report.form.actionsTakenPlaceholder')" required></textarea>
                         </div>
                     </div>
                 </div>
@@ -241,34 +241,34 @@
                                 <label for="formReportReportedTime">
                                     {{ $t("report.form.reported") }}
                                 </label>
-                                <flat-pickr id="formReportReportedTime" name="formReportReportedTime" v-model="activeTab.reported" class="form-input flex-1" :config="dateTime"></flat-pickr>
+                                <flat-pickr :disabled="isClosed" id="formReportReportedTime" name="formReportReportedTime" v-model="activeTab.reported" class="form-input flex-1" :config="dateTime"></flat-pickr>
                             </div>
                             <div class="px-2 max-w-[180px]">
                                 <label for="formReportTimeDeparture">
                                     {{ $t("report.form.departure") }}
                                 </label>
-                                <flat-pickr id="formReportTimeDeparture" name="formReportTimeDeparture" v-model="activeTab.departure" class="form-input flex-1" :config="dateTime"></flat-pickr>
+                                <flat-pickr :disabled="isClosed" id="formReportTimeDeparture" name="formReportTimeDeparture" v-model="activeTab.departure" class="form-input flex-1" :config="dateTime"></flat-pickr>
                             </div>
                         </template>
                         <div class="px-2 max-w-[180px]">
                             <label for="formReportTimeArrival">{{ $t("report.form.arrival") }}</label>
-                            <flat-pickr id="formReportTimeArrival" name="formReportTimeArrival" v-model="activeTab.arrival" class="form-input flex-1" :config="dateTime"></flat-pickr>
+                            <flat-pickr :disabled="isClosed" id="formReportTimeArrival" name="formReportTimeArrival" v-model="activeTab.arrival" class="form-input flex-1" :config="dateTime"></flat-pickr>
                         </div>
                         <div class="px-2 max-w-[180px]">
                             <label for="formReportTimeFinished">
                                 {{ $t("report.form.finished") }}
                             </label>
-                            <flat-pickr id="formReportTimeFinished" name="formReportTimeFinished" v-model="activeTab.finished" class="form-input flex-1" :config="dateTime"></flat-pickr>
+                            <flat-pickr :disabled="isClosed" id="formReportTimeFinished" name="formReportTimeFinished" v-model="activeTab.finished" class="form-input flex-1" :config="dateTime"></flat-pickr>
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly py-4">
                             <label v-for="status in catalogStatus" :key="status.id" class="inline-flex">
-                                <input type="radio" name="formReportStatus" class="form-radio" :value="status.id" v-model.number="activeTab.status_id" />
+                                <input type="radio" name="formReportStatus" class="form-radio" :disabled="isClosed" :value="status.id" v-model.number="activeTab.status_id" />
                                 <span>{{ catalogI18n('catalogs.status', status.id, status.status) }}</span>
                             </label>
                         </div>
                         <div class="w-full flex flex-wrap justify-evenly">
                             <label class="inline-flex">
-                                <input type="checkbox" v-model="activeTab.is_tested" class="form-checkbox rounded-full" />
+                                <input type="checkbox" v-model="activeTab.is_tested" :disabled="isClosed" class="form-checkbox rounded-full" />
                                 <span>Test OK</span>
                             </label>
                         </div>
@@ -276,7 +276,7 @@
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div class="mt-8">
-                    <div class="flex px-4">
+                    <div class="flex px-4" v-if="!isClosed">
                         <div class="w-full">
                             <div class="flex items-center">
                                 <label for="formReportParts" class="w-[100px] text-right mb-0 mr-[10px]">{{ $t("report.form.parts") }}</label>
@@ -321,10 +321,10 @@
                                             {{ item.descripcion }}
                                         </td>
                                         <td>
-                                            <input type="number" class="form-input w-32" placeholder="Quantity" v-model.number="item.quantity" :step="LIMITS.PART_QTY_STEP" :max="LIMITS.PART_QTY_MAX" :min="LIMITS.PART_QTY_MIN" @input="clampField(item as any, 'quantity', PART_QTY_SPEC)" />
+                                            <input type="number" :disabled="isClosed" class="form-input w-32" placeholder="Quantity" v-model.number="item.quantity" :step="LIMITS.PART_QTY_STEP" :max="LIMITS.PART_QTY_MAX" :min="LIMITS.PART_QTY_MIN" @input="clampField(item as any, 'quantity', PART_QTY_SPEC)" />
                                         </td>
                                         <td>
-                                            <button type="button" @click="activeTab.service_parts.splice(i, 1)">
+                                            <button v-if="!isClosed" type="button" @click="activeTab.service_parts.splice(i, 1)">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                                     <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -340,7 +340,7 @@
                 <div class="mt-8 px-4">
                     <div>
                         <label for="notes">{{ $t("report.form.remarks") }}</label>
-                        <textarea id="notes" name="notes" class="form-textarea min-h-[130px]" :placeholder="$t('report.form.remarksPlaceholder')" v-model="activeTab.notes"></textarea>
+                        <textarea id="notes" name="notes" :disabled="isClosed" class="form-textarea min-h-[130px]" :placeholder="$t('report.form.remarksPlaceholder')" v-model="activeTab.notes"></textarea>
                     </div>
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
@@ -351,7 +351,7 @@
                                 <label :for="uid('formSignatureName', selectedTab, machine.serial)" class="mb-0">
                                     {{ machine.serial }}
                                 </label>
-                                <input :id="uid('formSignatureName', selectedTab, machine.serial)" type="text" :name="uid('formSignatureName', selectedTab, machine.serial)" v-model="machineAt(index).signature_client_name" class="form-input flex-1" :placeholder="$t('report.form.signatureNamePlaceholder')" />
+                                <input :id="uid('formSignatureName', selectedTab, machine.serial)" type="text" :disabled="isClosed" :name="uid('formSignatureName', selectedTab, machine.serial)" v-model="machineAt(index).signature_client_name" class="form-input flex-1" :placeholder="$t('report.form.signatureNamePlaceholder')" />
                             </div>
                         </template>
                     </div>
@@ -479,7 +479,7 @@
                         <button
                             type="button"
                             @click="reOpenReport"
-                            v-if="props.report.closed === 1 && user.type === 1"
+                            v-if="canReopen"
                             class="btn btn-info w-full gap-2"
                         >
                             <svg
@@ -1218,7 +1218,7 @@ function closeReport() {
                     Swal.showLoading();
                 },
             });
-            router.get(`/reports/${props.report.id}/close`, undefined, {
+            router.patch(`/service-visit/${props.report.id}/close`, undefined, {
                 onSuccess: () => {
                     Swal.fire({
                         icon: "success",
@@ -1259,7 +1259,7 @@ function reOpenReport() {
                     Swal.showLoading();
                 },
             });
-            router.get(`/reports/${props.report.id}/reopen`, undefined, {
+            router.patch(`/service-visit/${props.report.id}/reopen`, undefined, {
                 onSuccess: () => {
                     Swal.fire({
                         icon: "success",

@@ -92,15 +92,7 @@
                             {{ data.value.complete_id }}
                         </template>
                         <template #status="data">
-                            {{
-                                $t(
-                                    "catalogs.status." + data.value.status_id,
-                                    data.value.status &&
-                                        data.value.status.status
-                                        ? data.value.status.status
-                                        : "N/A"
-                                )
-                            }}
+                            {{ data.value.status ? 'Cerrado' : 'Abierto' }}
                         </template>
                         <template #machines="data">
                             {{
@@ -408,7 +400,8 @@ const cols = computed(() => {
     let baseCols = [
         { field: "id", title: "ID" },
         { field: "complete_id", title: t("report.index.col.fileName") },
-        //{ field: "status", title: t("report.index.col.status") },
+        { field: "status", title: t("report.index.col.status") },
+        { field: "branch.city.name", title: 'Ciudad' },
         { field: "service_reports_count", title: "# Servicios" },
         { field: "created_at", title: t("report.index.col.creationDate") },
         {
