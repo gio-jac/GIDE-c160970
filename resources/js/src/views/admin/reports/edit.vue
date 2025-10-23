@@ -366,7 +366,7 @@
                             type="button"
                             class="btn btn-success w-full gap-2"
                             @click="submit"
-                            v-if="props.report.closed === 0"
+                            v-if="!isClosed"
                         >
                             <svg
                                 width="24"
@@ -400,7 +400,7 @@
                         <button
                             type="button"
                             @click="closeReport"
-                            v-if="props.report.closed === 0"
+                            v-if="!isClosed"
                             class="btn btn-info w-full gap-2"
                         >
                             <svg
@@ -448,7 +448,7 @@
                         <a
                             :href="`/reports/${props.report.id}/${store.locale}/file`"
                             class="btn btn-secondary w-full gap-2"
-                            v-if="props.report.closed === 1"
+                            v-if="isClosed"
                             @click="showDownloadMessage"
                         >
                             <svg
@@ -611,7 +611,7 @@ interface Tab {
 }
 
 import { ref, reactive, computed, onMounted } from "vue";
-import { Head, usePage, router, useForm } from "@inertiajs/vue3";
+import { Head, usePage, router } from "@inertiajs/vue3";
 import { useAppStore } from "@/stores/index";
 import AppLayout from "@/layouts/app-layout.vue";
 import SiteLayout from "@/layouts/app.vue";
@@ -666,6 +666,10 @@ const activeTab = computed(() => tabs.value[selectedTab.value]);
 const isAdmin = computed(() => usePage().props.auth?.type === 1);
 
 const selectedMachine = computed(() => activeTab.value?.selectedMachine);
+
+const isClosed = computed(() => toBool(props.report?.closed));
+
+const canReopen = computed(() => isClosed.value && isAdmin.value);
 
 const detailOptions = computed(() => ({
     module: [...props.catalogModule].sort((a, b) => getTranslation(a).localeCompare(getTranslation(b))),
@@ -1149,9 +1153,7 @@ function buildPayload(): ReportPayload {
 
 function submit() {
     const payload = buildPayload();
-
-    console.log(payload);
-
+    
     Swal.fire({
         title: t("report.alert.processing"),
         text: t("report.alert.updateText"),
