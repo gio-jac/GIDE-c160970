@@ -318,7 +318,7 @@
                             <tbody>
                                 <template v-if="activeTab.service_parts.length <= 0">
                                     <tr>
-                                        <td colspan="5" class="!text-center font-semibold">
+                                        <td colspan="4" class="!text-center font-semibold">
                                             {{ $t("report.form.noItems") }}
                                         </td>
                                     </tr>
