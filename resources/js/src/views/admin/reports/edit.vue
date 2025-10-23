@@ -793,6 +793,7 @@ existingReports.slice(0, LIMITS.TABS_MAX).forEach((r, i) => {
     const k = Number(d?.service_report_machine_id);
     if (Number.isFinite(k)) (byPivot[k] ||= []).push(d);
   });
+});
 
 const pivotIdByMachineId: Record<number, number> = {};
 const pivotDataByMachineId: Record<number, any> = {};
