@@ -26,7 +26,7 @@ class ServiceVisit extends Model
 
     protected $casts = [
         'closed' => 'bool',
-        'service_date' => 'date',
+        'service_date' => 'date:Y-m-d',
         'is_active' => 'bool',
         'service_timezone' => 'string',
     ];

@@ -49,6 +49,10 @@ class ServiceReport extends Model
 
     protected $casts = [
         'closed' => 'bool',
+        'reported'  => 'datetime:Y-m-d H:i',
+        'arrival'   => 'datetime:Y-m-d H:i',
+        'departure' => 'datetime:Y-m-d H:i',
+        'finished'  => 'datetime:Y-m-d H:i',
     ];
 
     public function status(): BelongsTo
