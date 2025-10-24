@@ -4,6 +4,7 @@ namespace App\Http\Controllers\machine_reports;
 
 use App\Models\machine_reports\ServiceReport;
 use Illuminate\Support\Arr;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Models\machine_reports\ServiceVisit;
 use App\Models\machine_reports\ServiceReportMachine;
@@ -282,7 +283,7 @@ class ServiceVisitController extends Controller
      */
     public function edit(ServiceVisit $serviceVisit)
     {
-        $serviceVisit = ServiceVisit::withEditGraph()->findOrFail($serviceVisit->id);
+        $serviceVisit = ServiceVisit::withEditGraph()->findOrFail($serviceVisit->getKey());
 
         $catalogCodes = Cache::remember('catalog:codes:v1', 3600, fn () =>
             Code::query()
@@ -653,6 +654,28 @@ class ServiceVisitController extends Controller
         $serviceVisit->save();
 
         return to_route('service-visit.edit', ['service_visit' => $serviceVisit->id]);
+    }
+
+    public function pdfReport(ServiceVisit $serviceVisit, string $lang = 'en'){
+        $serviceVisit = ServiceVisit::withEditGraphCompleteId()->findOrFail($serviceVisit->getKey());
+
+        if (!$serviceVisit->closed) {
+            abort(403, 'Report is not closed');
+        }
+
+        $isBanxico = ($serviceVisit->branch?->client?->id === 3);
+        $viewBase = $isBanxico ? 'reporte-banxico' : 'reporte';
+        $lang = $isBanxico ? 'es' : substr($lang, 0, 2);
+        
+        $view = view()->exists("{$viewBase}-{$lang}")
+            ? "{$viewBase}-{$lang}"
+            : "{$viewBase}-en";
+            
+        $catalogCodes = Code::where('is_active', 1)->get();
+        
+        $pdf = Pdf::loadView($view, compact('catalogCodes', 'serviceVisit'));
+
+        return $pdf->download("{$serviceVisit->completeid}.pdf");
     }
 
     protected function applyDateFilter($query, $filter){

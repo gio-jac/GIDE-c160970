@@ -37,10 +37,13 @@
         .highlighted {
             background-color: #9e9e9e;
         }
+
+        .page-break { page-break-after: always; }
     </style>
 </head>
 
 <body>
+    @foreach ( $serviceVisit->serviceReports as $idx => $report )
     <table>
         <tr>
             <td style="width:20%; text-align:left;">
@@ -48,11 +51,11 @@
             </td>
             <td style="width:80%;text-align: left;">
                 <p style="font-weight: normal;">REPORT ID:
-                    {{ $report->complete_id }}
+                    {{ $serviceVisit->completeid }}
                 </p>
             </td>
-            <td style="font-weight: normal;font-size:15px;width:175px;">
-                REPORTE DE SERVICIO
+            <td style="font-weight: normal;font-size:15px;width:226px;">
+                REPORTE DE SERVICIO @if($loop->count>1) ({{ $loop->iteration }}/{{ $loop->count }}) @endif
             </td>
         </tr>
     </table>
@@ -60,11 +63,11 @@
     <table class="tblStyle" style="float: left;width: 56%;">
         <tr>
             <td style="min-width:100px;text-align:center;">Cliente:</td>
-            <td>{{ $report->branch->client->name === "BANXICO" ? "Banco de México" : $report->branch->client->name }}</td>
+            <td>{{ $serviceVisit->branch->client->name === "BANXICO" ? "Banco de México" : $report->branch->client->name }}</td>
         </tr>
         <tr>
             <td style="text-align:center;">Direccion:</td>
-            <td>{{ $report->branch->address }}</td>
+            <td>{{ $serviceVisit->branch->address }}</td>
         </tr>
         <tr>
             <td style="text-align:center;">Reportado por:</td>
@@ -72,7 +75,7 @@
         </tr>
         <tr>
             <td style="text-align:center;">Telefono:</td>
-            <td>{{ $report->branch->branchManagers[0]->phone }}</td>
+            <td>{{ $serviceVisit->branchManager->phone }}</td>
         </tr>
         <tr>
             <td style="text-align:center;">No. serie:</td>
@@ -88,7 +91,7 @@
         </tr>
         <tr>
             <td style="text-align:center;">FE de G+D:</td>
-            <td>{{ $report->user->nombre }} {{ $report->user->apellido_paterno }} {{ $report->user->apellido_materno }}</td>
+            <td>{{ $serviceVisit->user->nombre }} {{ $serviceVisit->user->apellido_paterno }} {{ $serviceVisit->user->apellido_materno }}</td>
         </tr>
     </table>
 
@@ -293,6 +296,10 @@
         @endforeach
         <div style="clear: both;"></div>
     </div>
+        @unless ($loop->last)
+            <div class="page-break"></div>
+        @endunless
+    @endforeach
 </body>
 
 </html>
