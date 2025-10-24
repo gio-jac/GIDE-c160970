@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 class ServiceVisit extends Model
@@ -96,4 +97,11 @@ class ServiceVisit extends Model
             'serviceReports.parts.part:id,num_part,descripcion',
         ]);
     }
+
+    public function scopeWithEditGraphCompleteId(Builder $q): Builder
+    {
+        return $q->withEditGraph()
+            ->addSelect(DB::raw('complete_id as completeid')); // alias
+    }
+    
 }

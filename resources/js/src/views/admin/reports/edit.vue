@@ -446,7 +446,7 @@
                         </router-link>
                         -->
                         <a
-                            :href="`/reports/${props.report.id}/${store.locale}/file`"
+                            :href="`/service-visit/${props.report.id}/${store.locale}/file`"
                             class="btn btn-secondary w-full gap-2"
                             v-if="isClosed"
                             @click="showDownloadMessage"
