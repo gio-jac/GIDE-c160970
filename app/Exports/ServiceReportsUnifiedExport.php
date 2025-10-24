@@ -57,7 +57,7 @@ class ServiceReportsUnifiedExport implements FromCollection, WithHeadings, WithC
             break;
         }
 
-        $reports = $baseQuery->orderBy('id')
+        $reports = $baseQuery->orderBy($table . '.service_visit_id')
             ->get();
 
         return $reports->map(function ($r) {
