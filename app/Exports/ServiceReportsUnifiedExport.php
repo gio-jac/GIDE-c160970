@@ -19,13 +19,15 @@ class ServiceReportsUnifiedExport implements FromCollection, WithHeadings, WithC
     */
     public function collection()
     {
+        $table = (new ServiceReport)->getTable();
         $baseQuery = ServiceReport::query()->with([
-            'user',
-            'shift',
+            'serviceVisit',
+            'serviceVisit.user',
+            'serviceVisit.shift',
             'code',
-            'branch',
-            'branch.city',
-            'branchManager',
+            'serviceVisit.branch',
+            'serviceVisit.branch.city',
+            'serviceVisit.branchManager',
             'status',
             'machines',
             'machineDetails',
@@ -36,7 +38,13 @@ class ServiceReportsUnifiedExport implements FromCollection, WithHeadings, WithC
             'machineDetails.failureType',
             'parts',
             'parts.part',
-        ]);
+        ])->select($table . '.*')
+            ->selectSub(function ($q) use ($table) {
+                $q->from($table . ' as sr2')
+                  ->selectRaw('COUNT(*)')
+                  ->whereColumn('sr2.service_visit_id', $table . '.service_visit_id')
+                  ->whereColumn('sr2.id', '<=', $table . '.id');
+            }, 'visit_position');
 
         switch ($this->span) {
             case '3months':
@@ -77,12 +85,13 @@ class ServiceReportsUnifiedExport implements FromCollection, WithHeadings, WithC
             })->implode(' | ');
 
             return [
-                $r->id,
-                $r->complete_id,
-                $r->service_date,
-                $r->closed ? 'Si' : 'No',
-                trim(($r->user->nombre ?? '') . ' ' . ($r->user->apellido_paterno ?? '') . ' ' . ($r->user->apellido_materno ?? '')),
-                $r->shift->name ?? 'N/A',
+                $r->serviceVisit->id,
+                $r->serviceVisit->complete_id,
+                (int) $r->visit_position,
+                $r->serviceVisit->service_date,
+                $r->serviceVisit->closed ? 'Si' : 'No',
+                trim(($r->serviceVisit->user->nombre ?? '') . ' ' . ($r->serviceVisit->user->apellido_paterno ?? '') . ' ' . ($r->serviceVisit->user->apellido_materno ?? '')),
+                $r->serviceVisit->shift->name ?? 'N/A',
                 $r->pieces,
                 $r->sogd,
                 $r->time_on,
@@ -114,6 +123,7 @@ class ServiceReportsUnifiedExport implements FromCollection, WithHeadings, WithC
         return [
             'ID',
             'Nombre Archivo',
+            'Numero de Visita',
             'Fecha de Servicio',
             'Cerrado',
             'Ingeniero Asignado',
