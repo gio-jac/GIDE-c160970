@@ -91,6 +91,7 @@
     "report.form.branches": "Sucursales",
     "report.form.branchPlaceholder": "Ingrese (Calle, Ciudad, Etc.)",
     "report.form.contacts": "Contactos",
+    "report.form.contact": "Contacto",
     "report.form.client": "Cliente",
     "report.form.name": "Nombre",
     "report.form.email": "Email",
@@ -200,9 +201,15 @@
     "solutions.new.nameSolutionPlaceholderPT": "Ingrese Nombre de la Solución (PT)",
     "solutions.edit.activeSolution": "Solución Habilitada",
 
-
-
-
+    "reports.index.last3months": "Últimos 3 meses",
+    "reports.index.alltime": "Todos",
+    "report.index.col.noservices": "# Servicios",
+    "error.user.required": "El campo de usuario es obligatorio.",
+    "error.shift.required": "El campo de turno es obligatorio.",
+    "error.client.required": "El campo de cliente es obligatorio.",
+    "error.branch.required": "El campo de sucursal es obligatorio.",
+    "error.branchManager.required": "El campo de contacto es obligatorio.",
+    "error.machine.required": "El campo de máquina es obligatorio en el reporte #{n}.",
 
 
     "catalogs.shift.1":"Mañana",

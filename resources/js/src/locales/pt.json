@@ -90,6 +90,7 @@
     "report.form.branches": "Filiais",
     "report.form.branchPlaceholder": "Digite (Rua, Cidade, Etc.)",
     "report.form.contacts": "Contatos",
+    "report.form.contact": "Contato",
     "report.form.client": "Cliente",
     "report.form.name": "Nome",
     "report.form.email": "Email",
@@ -157,7 +158,7 @@
     "machine.new.form.serial": "Serial",
     "machine.new.serialPlaceholder": "Digite Serial da Máquina",
     "machine.new.form.machineModel": "Modelo da Máquina",
-    "machine.new.form.client": "Creport.form.branchesliente",
+    "machine.new.form.client": "Cliente",
     "machine.new.form.productionLine": "Linha de produção",
     "machine.new.form.none": "Nenhum",
     "machine.edit.form.activeMachine": "Máquina Ativa",
@@ -196,7 +197,16 @@
     "solutions.new.nameSolutionPlaceholderPT": "Digite Nome da Solução (PT)",
     "solutions.edit.activeSolution": "Solução Habilitada",
 
-
+    "reports.index.last3months": "Últimos 3 meses",
+    "reports.index.alltime": "Sempre",
+    "report.index.col.noservices": "# Serviços",
+    "error.user.required": "O campo usuário é obrigatório.",
+    "error.shift.required": "O campo turno é obrigatório.",
+    "error.client.required": "O campo cliente é obrigatório.",
+    "error.branch.required": "O campo filial é obrigatório.",
+    "error.branchManager.required": "O campo contato é obrigatório.",
+    "error.machine.required": "O campo máquina é obrigatório no relatório #{n}.",
+    
 
 
     "catalogs.shift.1":"Manhã",
