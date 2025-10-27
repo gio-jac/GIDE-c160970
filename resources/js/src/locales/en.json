@@ -91,6 +91,7 @@
     "report.form.branches": "Branches",
     "report.form.branchPlaceholder": "Type (Street, City, Etc.)",
     "report.form.contacts": "Contacts",
+    "report.form.contact": "Contact",
     "report.form.client": "Client",
     "report.form.name": "Name",
     "report.form.email": "Email",
@@ -197,7 +198,15 @@
     "solutions.new.nameSolutionPlaceholderPT": "Enter Solution Name (PT)",
     "solutions.edit.activeSolution": "Active Solution",
 
-
+    "reports.index.last3months": "Last 3 months",
+    "reports.index.alltime": "All time",
+    "report.index.col.noservices": "# Services",
+    "error.user.required": "The user field is required.",
+    "error.shift.required": "The shift field is required.",
+    "error.client.required": "The client field is required.",
+    "error.branch.required": "The branch field is required.",
+    "error.branchManager.required": "The contact field is required.",
+    "error.machine.required": "The machine field is required in report #{n}.",
 
 
     "catalogs.shift.1": "Morning",

@@ -36,36 +36,51 @@
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label for="formCatalogClient" class="w-[140px] text-right mb-0 mr-[10px]">Cliente <span class="text-red-500">*</span>
+                            <label for="formCatalogClient" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("machine.new.form.client") }} <span class="text-red-500">*</span>
                             </label>
                             <multiselect id="formCatalogClient" :options="[props.report.branch.client]" v-model="form.selectedClient" track-by="id" class="custom-multiselect flex-1" disabled :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.client_id" class="text-danger mt-1 text-center">
-                            {{ errors.client_id }}
+                            <template v-if="errors.client_id === 'The client id field is required.'">
+                                {{ $t("error.client.required") }}
+                            </template>
+                            <templante v-else>
+                                {{ errors.client_id }}
+                            </templante>
                         </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label for="formCatalogBranches" class="w-[140px] text-right mb-0 mr-[10px]">Sucursal <span class="text-red-500">*</span>
+                            <label for="formCatalogBranches" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("branch.edit.breadcrumb.branch") }} <span class="text-red-500">*</span>
                             </label>
                             <multiselect @select="form.selectedContact = null" id="formCatalogBranches" :options="branchesCatalog" v-model="form.selectedBranch" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="branchLabel" :disabled="!branchesCatalog.length || isClosed" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.branch_id" class="text-danger mt-1 text-center">
-                            {{ errors.branch_id }}
+                            <template v-if="errors.branch_id === 'The branch id field is required.'">
+                                {{ $t("error.branch.required") }}
+                            </template>
+                            <templante v-else>
+                                {{ errors.branch_id }}
+                            </templante>
                         </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label for="formCatalogContact" class="w-[140px] text-right mb-0 mr-[10px]">Contacto <span class="text-red-500">*</span>
+                            <label for="formCatalogContact" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("report.form.contact") }} <span class="text-red-500">*</span>
                             </label>
                             <multiselect :key="form.selectedBranch?.id || 'no-branch'" id="formCatalogContact" :options="(branchesCatalog.find(b => b.id === form.selectedBranch?.id)?.branch_managers) ?? []" v-model="form.selectedContact" track-by="id" :disabled="isClosed" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.branch_manager_id" class="text-danger mt-1 text-center">
-                            {{ errors.branch_manager_id }}
+                            <template v-if="errors.branch_manager_id === 'The branch manager id field is required.'">
+                                {{ $t("error.branchManager.required") }}
+                            </template>
+                            <templante v-else>
+                                {{ errors.branch_manager_id }}
+                            </templante>
                         </p>
                     </div>
                 </div>
@@ -99,7 +114,12 @@
                             <multiselect @select="onMachineSelect" id="formCatalogMachines" :options="machinesCatalog" v-model="activeTab.selectedMachine" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="machineLabel" :disabled="!machinesCatalog.length || loadingClient || isClosed" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors['tabs.' + selectedTab + '.machines']" class="text-danger mt-1 text-center">
-                            {{ errors['tabs.' + selectedTab + '.machines'] }}
+                            <template v-if="errors['tabs.' + selectedTab + '.machines'] === 'The tabs.' + selectedTab + '.machines field is required.'">
+                                {{ $t("error.machine.required", { n: Number(selectedTab) + 1 }) }}
+                            </template>
+                            <templante v-else>
+                                {{ errors['tabs.' + selectedTab + '.machines'] }}
+                            </templante>
                         </p>
                     </div>
                     <template v-if="machinesListing.length">

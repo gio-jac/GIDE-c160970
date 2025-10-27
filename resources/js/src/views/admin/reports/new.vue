@@ -26,7 +26,12 @@
                             <tippy target="user" trigger="focus">Usado para la búsqueda y selección de usuarios, utiliza el siguiente formato: <br>"EMP - Nombre PrimerApellido" </tippy>
                         </div>
                         <p v-if="errors.user_id" class="text-danger mt-1 text-center">
-                            {{ errors.user_id }}
+                            <template v-if="errors.user_id === 'The user id field is required.'">
+                                {{ $t("error.user.required") }}
+                            </template>
+                            <templante v-else>
+                                {{ errors.user_id }}
+                            </templante>
                         </p>
                     </div>
                 </div>
@@ -40,43 +45,63 @@
                             <tippy target="shift" trigger="focus">Usado para la selección del turno de la realización del reporte</tippy>
                         </div>
                         <p v-if="errors.shift_id" class="text-danger mt-1 text-center">
-                            {{ errors.shift_id }}
+                            <template v-if="errors.shift_id === 'The shift id field is required.'">
+                                {{ $t("error.shift.required") }}
+                            </template>
+                            <templante v-else>
+                                {{ errors.shift_id }}
+                            </templante>
                         </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label for="formCatalogClient" class="w-[140px] text-right mb-0 mr-[10px]">Cliente <span class="text-red-500">*</span>
+                            <label for="formCatalogClient" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("machine.new.form.client") }} <span class="text-red-500">*</span>
                             </label>
                             <multiselect id="formCatalogClient" :options="props.catalogClients" @select="onClientSelect" v-model="form.selectedClient" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.client_id" class="text-danger mt-1 text-center">
-                            {{ errors.client_id }}
+                            <template v-if="errors.client_id === 'The client id field is required.'">
+                                {{ $t("error.client.required") }}
+                            </template>
+                            <templante v-else>
+                                {{ errors.client_id }}
+                            </templante>
                         </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label for="formCatalogBranches" class="w-[140px] text-right mb-0 mr-[10px]">Sucursal <span class="text-red-500">*</span>
+                            <label for="formCatalogBranches" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("branch.edit.breadcrumb.branch") }} <span class="text-red-500">*</span>
                             </label>
                             <multiselect @select="form.selectedContact = null" id="formCatalogBranches" :options="branchesCatalog" v-model="form.selectedBranch" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="branchLabel" :disabled="!branchesCatalog.length || loadingClient" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.branch_id" class="text-danger mt-1 text-center">
-                            {{ errors.branch_id }}
+                            <template v-if="errors.branch_id === 'The branch id field is required.'">
+                                {{ $t("error.branch.required") }}
+                            </template>
+                            <templante v-else>
+                                {{ errors.branch_id }}
+                            </templante>
                         </p>
                     </div>
                 </div>
                 <div class="flex px-4 mt-4">
                     <div class="w-full">
                         <div class="flex items-center">
-                            <label for="formCatalogContact" class="w-[140px] text-right mb-0 mr-[10px]">Contacto <span class="text-red-500">*</span>
+                            <label for="formCatalogContact" class="w-[140px] text-right mb-0 mr-[10px]">{{ $t("report.form.contact") }} <span class="text-red-500">*</span>
                             </label>
                             <multiselect id="formCatalogContact" :options="form.selectedBranch?.branch_managers ?? []" v-model="form.selectedContact" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="nameOrDash" :disabled="!form.selectedBranch || loadingClient" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors.branch_manager_id" class="text-danger mt-1 text-center">
-                            {{ errors.branch_manager_id }}
+                            <template v-if="errors.branch_manager_id === 'The branch manager id field is required.'">
+                                {{ $t("error.branchManager.required") }}
+                            </template>
+                            <templante v-else>
+                                {{ errors.branch_manager_id }}
+                            </templante>
                         </p>
                     </div>
                 </div>
@@ -110,7 +135,12 @@
                             <multiselect @select="onMachineSelect" id="formCatalogMachines" :options="machinesCatalog" v-model="activeTab.selectedMachine" track-by="id" class="custom-multiselect flex-1" searchable :placeholder="DEFAULT_PLACEHOLDER" :custom-label="machineLabel" :disabled="!machinesCatalog.length || loadingClient" v-bind="multiselectLabels"></multiselect>
                         </div>
                         <p v-if="errors['tabs.' + selectedTab + '.machines']" class="text-danger mt-1 text-center">
-                            {{ errors['tabs.' + selectedTab + '.machines'] }}
+                            <template v-if="errors['tabs.' + selectedTab + '.machines'] === 'The tabs.' + selectedTab + '.machines field is required.'">
+                                {{ $t("error.machine.required", { n: Number(selectedTab) + 1 }) }}
+                            </template>
+                            <templante v-else>
+                                {{ errors['tabs.' + selectedTab + '.machines'] }}
+                            </templante>
                         </p>
                     </div>
                     <template v-if="activeTab.selectedMachine">
@@ -885,7 +915,30 @@ function submit() {
     router.post('/service-visit', payload, {
         onSuccess: () => Swal.close(),
         onError: (error) => {
-            const errorMessages = Object.values(error).map((e) => `<p>${e}</p>`).join('');
+            const errorMessages = Object.values(error).map((e) => {
+                if (e === 'The user id field is required.') {
+                    return `<p>${t("error.user.required")}</p>`;
+                }
+                if (e === 'The shift id field is required.') {
+                    return `<p>${t("error.shift.required")}</p>`;
+                }
+                if (e === 'The client id field is required.') {
+                    return `<p>${t("error.client.required")}</p>`;
+                }
+                if (e === 'The branch id field is required.') {
+                    return `<p>${t("error.branch.required")}</p>`;
+                }
+                if (e === 'The branch manager id field is required.') {
+                    return `<p>${t("error.branchManager.required")}</p>`;
+                }
+                const m = typeof e === 'string' && e.match(/^The tabs\.(\d+)\.machines field is required\.$/);
+                if (m) {
+                const n = Number(m[1]) + 1;
+                return `<p>${t('error.machine.required', { n })}</p>`;
+                }
+
+                return `<p>${e}</p>`;
+            }).join('');
             Swal.close();
             Swal.fire({ icon: "error", title: "Oops...", html: errorMessages, customClass: "sweet-alerts" });
         },
